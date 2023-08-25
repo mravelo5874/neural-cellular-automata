@@ -1,5 +1,6 @@
 import argparse
 import pathlib
+import datetime
 
 import numpy as np
 import torch
@@ -8,7 +9,7 @@ from PIL import Image
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
-from models import NCA_model
+from model import NCA_model
 
 def load_image(path, size=40):
     """
@@ -87,7 +88,7 @@ def main(argv=None):
     parser.add_argument(
         '-b', '--batch-size',
         type=int,
-        default=8,
+        default=4,
         help='Batch size. Samples will always be taken randomly from the pool.'
     )
     parser.add_argument(
@@ -106,13 +107,13 @@ def main(argv=None):
     parser.add_argument(
         '-i', '--eval-iterations',
         type=int,
-        default=300,
+        default=256,
         help='Number of iterations when evaluating.'
     )
     parser.add_argument(
         '-n', '--n-batches',
         type=int,
-        default=5000,
+        default=10000,
         help='Number of batches to train for.'
     )
     parser.add_argument(
@@ -142,8 +143,26 @@ def main(argv=None):
     parser.add_argument(
         '-s', '--size',
         type=int,
-        default=40,
+        default=32,
         help='Image size.'
+    )
+    parser.add_argument(
+        '-save', "--save-model",
+        type=bool,
+        default=True,
+        help='Save the model after training as .pt file.'
+    )
+    parser.add_argument(
+        '-m', '--modeldir',
+        type=str,
+        default='models',
+        help='Where to save the model after training.'
+    )
+    parser.add_argument(
+        '-name', '--name',
+        type=str,
+        default=None,
+        help='Where to save the model after training.'
     )
     # parse arguments
     args = parser.parse_args()
@@ -211,6 +230,15 @@ def main(argv=None):
                 eval_video[0, it_eval] = x_eval_out
                 
             writer.add_video('eval', eval_video, it, fps=60)
+            
+    # save model
+    if args.save_model:
+        model_path = pathlib.Path(args.modeldir)
+        model_path.mkdir(parents=True, exist_ok=True)
+        if args.name == None:
+            ts = str(datetime.datetime.now()).replace(' ', '_').replace(':', '-').replace('.', '-')
+            args.name = 'model_' + ts
+        torch.save(model, args.modeldir + '\\' + args.name + '.pt')
 
 if __name__ == "__main__":
     main()

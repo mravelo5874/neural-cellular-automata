@@ -72,7 +72,7 @@ class NCA_model(nn.Module):
         """
         Approximates channel-wise gradient and combines it with the input.
         
-        This is the only place where we include information on he neighboring cells.
+        This is the only place where we include information on the neighboring cells.
         However, we are not using any learnable parameters here.
         
         Parameters
