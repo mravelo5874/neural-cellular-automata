@@ -202,6 +202,7 @@ def main(argv=None):
         ).tolist()
         
         x = pool[batch_ixs]
+        print ('x.shape: ', x.shape)
         for i in range(np.random.randint(64, 96)):
             x = model(x)
         
