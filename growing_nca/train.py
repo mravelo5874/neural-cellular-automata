@@ -1,17 +1,29 @@
 import argparse
 import pathlib
 import datetime
-
+import random
 import numpy as np
+import json
 import torch
 import torch.nn as nn
 from PIL import Image
 from torch.utils.tensorboard import SummaryWriter
+from matplotlib import pyplot as plt
 from tqdm import tqdm
-
 from model import NCA_model
 
-def load_image(path, size=40):
+def create_circular_mask(h, w, center, radius):
+    Y, X = np.ogrid[:h, :w]
+    dist_from_center = np.sqrt((X - center[0])**2 + (Y-center[1])**2)
+    mask = dist_from_center >= radius
+    return mask
+
+def create_erase_mask(size, radius, pos):
+    pos = pos * size
+    mask = create_circular_mask(size, size, pos, radius)
+    return mask
+
+def load_image(path, size):
     """
     Loads an image from a specified path and converts to torch.Tensor
     
@@ -164,6 +176,12 @@ def main(argv=None):
         default=None,
         help='Where to save the model after training.'
     )
+    parser.add_argument(
+        '-dam', '--damage',
+        type=float,
+        default=0.25,
+        help='Chance that a training step will be damaged to train for regeneration.'
+    )
     # parse arguments
     args = parser.parse_args()
     print (vars(args))
@@ -191,6 +209,7 @@ def main(argv=None):
     optimizer = torch.optim.Adam(model.parameters(), lr=2e-3)
     
     # pool init
+    full_size = args.size + (2 * p)
     seed = make_seed(args.size, args.n_channels).to(device)
     seed = nn.functional.pad(seed, (p, p, p, p), 'constant', 0)
     pool = seed.clone().repeat(args.pool_size, 1, 1, 1)
@@ -201,8 +220,18 @@ def main(argv=None):
             args.pool_size, args.batch_size, replace=False
         ).tolist()
         
+        # get training batch
         x = pool[batch_ixs]
-        print ('x.shape: ', x.shape)
+        
+        # damage examples in batch
+        for i in range(args.batch_size): 
+            if random.uniform(0, 1) < args.damage:
+                radius = random.uniform(full_size*0.1, full_size*0.6)
+                u = random.uniform(0, 1) * args.size + p
+                v = random.uniform(0, 1) * args.size + p
+                mask = create_erase_mask(full_size, radius, [u, v])
+                x[i, ...] = x[i, ...] * torch.tensor(mask).to(device)
+            
         for i in range(np.random.randint(64, 96)):
             x = model(x)
         
@@ -240,6 +269,18 @@ def main(argv=None):
             ts = str(datetime.datetime.now()).replace(' ', '_').replace(':', '-').replace('.', '-')
             args.name = 'model_' + ts
         torch.save(model, args.modeldir + '\\' + args.name + '.pt')
+        
+        # save model parameters
+        dict = {
+            'name' : args.name,
+            'size' : args.size,
+            'n_channels' : args.n_channels,
+            'padding' : args.padding,
+            'device' : args.device
+        }
+        json_object = json.dumps(dict, indent=4)
+        with open(args.modeldir + '\\' + args.name + '_params.json', 'w') as outfile:
+            outfile.write(json_object)
 
 if __name__ == "__main__":
     main()

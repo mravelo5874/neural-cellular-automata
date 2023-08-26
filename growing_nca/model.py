@@ -105,8 +105,8 @@ class NCA_model(nn.Module):
         """
         return self.update_module(x)
     
-    @staticmethod
-    def stochastic_update(x, fire_rate):
+    #@staticmethod
+    def stochastic_update(self, x, fire_rate):
         """
         Runs pixel-wise dropout.
         
@@ -129,8 +129,8 @@ class NCA_model(nn.Module):
         mask = (torch.rand(x[:, :1, :, :].shape) <= fire_rate).to(device, torch.float32)
         return x * mask
     
-    @staticmethod
-    def get_living_mask(x):
+    #@staticmethod
+    def get_living_mask(self, x):
         """
         Identifies living cells.
         

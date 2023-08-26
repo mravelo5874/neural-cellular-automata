@@ -1,0 +1,7 @@
+{
+    "name": "frog",
+    "size": 32,
+    "n_channels": 16,
+    "padding": 16,
+    "device": "cuda"
+}
