@@ -185,12 +185,12 @@ def main(argv=None):
     # parse arguments
     args = parser.parse_args()
     print (vars(args))
-    
     print('cuda available:', torch.cuda.is_available())
     
     # misc
-    device = torch.device(args.device)
+    p = args.padding
     full_size = args.size + (2 * p)
+    device = torch.device(args.device)
     
     # create log
     log_path = pathlib.Path(args.logdir)
@@ -199,7 +199,6 @@ def main(argv=None):
     
     # target image
     target_img_ = load_image(args.img, size=args.size)
-    p = args.padding
     target_img_ = nn.functional.pad(target_img_, (p, p, p, p), 'constant', 0)
     target_img = target_img_.to(device)
     target_img = target_img.repeat(args.batch_size, 1, 1, 1)
@@ -226,7 +225,7 @@ def main(argv=None):
         # damage examples in batch
         for i in range(args.batch_size): 
             if random.uniform(0, 1) < args.damage:
-                radius = random.uniform(full_size*0.1, full_size*0.6)
+                radius = random.uniform(full_size*0.05, full_size*0.2)
                 u = random.uniform(0, 1) * args.size + p
                 v = random.uniform(0, 1) * args.size + p
                 mask = create_erase_mask(full_size, radius, [u, v])
