@@ -85,7 +85,9 @@ class NCA_model(nn.Module):
         torch.Tensor
             Shape `(n_samples, 3 * n_channels, grid_size, grid_size)`.
         """
-        return nn.functional.conv2d(x, self.filters, padding=1, groups=self.n_channels)
+        return (
+            nn.functional.conv2d(x, self.filters, padding=1, groups=self.n_channels)
+        )
     
     def update(self, x):
         """

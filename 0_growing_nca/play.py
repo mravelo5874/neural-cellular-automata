@@ -58,7 +58,10 @@ def main(argv=None):
     running = True
     mouse_down = False
     while running:
-        # Handle events
+        # empty cache
+        torch.cuda.empty_cache()
+        
+        # handle events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -84,15 +87,14 @@ def main(argv=None):
                     mask = create_erase_mask(size, radius, pos)
                     tensor *= torch.tensor(mask).to(device)
                
-            
         # update tensor
-        tensor = model(tensor)
+        with torch.no_grad():
+            tensor = model(tensor)
         
         # draw tensor to window
         window.fill((255, 255, 255))
         vis = to_rgb(tensor[:, :4].detach().cpu()).squeeze(0).detach().numpy() * 255
         pixel = pygame.Surface((scale, scale))
-        
         for j in range(size):
             for i in range(size):
                 color = vis[:, i, j]
@@ -100,6 +102,7 @@ def main(argv=None):
                 draw_me = pygame.Rect(j*scale, i*scale, scale, scale)
                 window.blit(pixel, draw_me)
         pygame.display.flip()
+        
     pygame.quit()
 
 if __name__ == "__main__":
