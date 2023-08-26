@@ -119,7 +119,7 @@ def main(argv=None):
     parser.add_argument(
         '-i', '--eval-iterations',
         type=int,
-        default=256,
+        default=300,
         help='Number of iterations when evaluating.'
     )
     parser.add_argument(
@@ -179,7 +179,7 @@ def main(argv=None):
     parser.add_argument(
         '-dam', '--damage',
         type=float,
-        default=0.25,
+        default=0.0,
         help='Chance that a training step will be damaged to train for regeneration.'
     )
     # parse arguments
@@ -190,7 +190,9 @@ def main(argv=None):
     
     # misc
     device = torch.device(args.device)
+    full_size = args.size + (2 * p)
     
+    # create log
     log_path = pathlib.Path(args.logdir)
     log_path.mkdir(parents=True, exist_ok=True)
     writer = SummaryWriter(log_path)
@@ -201,7 +203,6 @@ def main(argv=None):
     target_img_ = nn.functional.pad(target_img_, (p, p, p, p), 'constant', 0)
     target_img = target_img_.to(device)
     target_img = target_img.repeat(args.batch_size, 1, 1, 1)
-    
     writer.add_image('ground truth', to_rgb(target_img_)[0])
     
     # model and optimizer
@@ -209,7 +210,6 @@ def main(argv=None):
     optimizer = torch.optim.Adam(model.parameters(), lr=2e-3)
     
     # pool init
-    full_size = args.size + (2 * p)
     seed = make_seed(args.size, args.n_channels).to(device)
     seed = nn.functional.pad(seed, (p, p, p, p), 'constant', 0)
     pool = seed.clone().repeat(args.pool_size, 1, 1, 1)
@@ -231,7 +231,8 @@ def main(argv=None):
                 v = random.uniform(0, 1) * args.size + p
                 mask = create_erase_mask(full_size, radius, [u, v])
                 x[i, ...] = x[i, ...] * torch.tensor(mask).to(device)
-            
+        
+        # forward pass
         for i in range(np.random.randint(64, 96)):
             x = model(x)
         
@@ -243,6 +244,7 @@ def main(argv=None):
         optimizer.step()
         writer.add_scalar('train/loss', loss, it)
         
+        # find best in batch
         argmax_batch = loss_batch.argmax().item()
         argmax_pool = batch_ixs[argmax_batch]
         remaining_batch = [i for i in range(args.batch_size) if i != argmax_batch]

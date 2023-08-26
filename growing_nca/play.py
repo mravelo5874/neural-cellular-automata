@@ -52,7 +52,7 @@ def main(argv=None):
     scale = args.scale
     window_size = size * scale
     window = pygame.display.set_mode((window_size, window_size))
-    pygame.display.set_caption("neural cellular automata")
+    pygame.display.set_caption('nca play - ' + params['name'])
 
     # infinite game loop
     running = True
@@ -62,6 +62,10 @@ def main(argv=None):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:
+                    tensor = make_seed(params['size'], params['n_channels']).to(device)
+                    tensor = nn.functional.pad(tensor, (p, p, p, p), 'constant', 0)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_down = True
                 if pygame.mouse.get_pressed(3)[2]:
