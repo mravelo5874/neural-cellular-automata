@@ -24,7 +24,7 @@ def main(argv=None):
     parser.add_argument(
         '-a', '--scale', 
         type=int,
-        default=12,
+        default=8,
         help='How much to scale the window. Window size will be (size * scale, size * scale).'
     )
     # parse arguments
@@ -76,7 +76,7 @@ def main(argv=None):
                     pos = mouse / window_size
                     pos = pos * size
                     dot = np.zeros_like(tensor.detach().cpu().numpy())
-                    dot[:, :4, int(pos[1]), int(pos[0])] = 255.0
+                    dot[:, 3:, int(pos[1]), int(pos[0])] = 1.0
                     tensor += torch.tensor(dot).to(device)
             if event.type == pygame.MOUSEBUTTONUP:
                 mouse_down = False
