@@ -100,13 +100,13 @@ def main(argv=None):
     parser.add_argument(
         '-b', '--batch-size',
         type=int,
-        default=4,
+        default=8,
         help='Batch size. Samples will always be taken randomly from the pool.'
     )
     parser.add_argument(
         '-d', '--device',
         type=str,
-        default='cpu',
+        default='cuda',
         help='Device to use during training.',
         choices=('cpu', 'cuda')
     )
@@ -178,9 +178,9 @@ def main(argv=None):
     )
     parser.add_argument(
         '-dam', '--damage',
-        type=float,
-        default=0.0,
-        help='Chance that a training step will be damaged to train for regeneration.'
+        type=int,
+        default=3,
+        help='Number of examples in a batch to damage.'
     )
     # parse arguments
     args = parser.parse_args()
@@ -223,13 +223,12 @@ def main(argv=None):
         x = pool[batch_ixs]
         
         # damage examples in batch
-        for i in range(args.batch_size): 
-            if random.uniform(0, 1) < args.damage:
-                radius = random.uniform(full_size*0.05, full_size*0.2)
-                u = random.uniform(0, 1) * args.size + p
-                v = random.uniform(0, 1) * args.size + p
-                mask = create_erase_mask(full_size, radius, [u, v])
-                x[i, ...] = x[i, ...] * torch.tensor(mask).to(device)
+        if args.damage > 0:
+            radius = random.uniform(args.size*0.1, args.size*0.4)
+            u = random.uniform(0, 1) * args.size + p
+            v = random.uniform(0, 1) * args.size + p
+            mask = create_erase_mask(full_size, radius, [u, v])
+            x[-args.damage:] *= torch.tensor(mask).to(device)
         
         # forward pass
         for i in range(np.random.randint(64, 96)):
@@ -271,14 +270,8 @@ def main(argv=None):
             args.name = 'model_' + ts
         torch.save(model, args.modeldir + '\\' + args.name + '.pt')
         
-        # save model parameters
-        dict = {
-            'name' : args.name,
-            'size' : args.size,
-            'n_channels' : args.n_channels,
-            'padding' : args.padding,
-            'device' : args.device
-        }
+        # save model arguments
+        dict = vars(args)
         json_object = json.dumps(dict, indent=4)
         with open(args.modeldir + '\\' + args.name + '_params.json', 'w') as outfile:
             outfile.write(json_object)

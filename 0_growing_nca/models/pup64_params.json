@@ -1,0 +1,7 @@
+{
+    "name": "pup64",
+    "size": 64,
+    "n_channels": 16,
+    "padding": 16,
+    "device": "cuda"
+}
