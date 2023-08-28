@@ -4,6 +4,8 @@ import torch.nn as nn
 import numpy as np
 import pygame
 import json
+
+from model import NCA_model
 from train import make_seed, to_rgb, create_erase_mask
     
 def main(argv=None):
@@ -40,11 +42,14 @@ def main(argv=None):
     # prepare model
     radius = args.radius
     p = params['padding']
-    device = torch.device(params['device'])
+    
+    device = torch.device('cpu')
+    model = NCA_model()
+    model.load_state_dict(torch.load(args.model, map_location=device))
+    model.eval()
+
     tensor = make_seed(params['size'], params['n_channels']).to(device)
     tensor = nn.functional.pad(tensor, (p, p, p, p), 'constant', 0)
-    model = torch.load(args.model)
-    model.eval()
 
     # prepare pygame instance
     pygame.init()

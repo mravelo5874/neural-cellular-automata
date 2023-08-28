@@ -268,7 +268,7 @@ def main(argv=None):
         if args.name == None:
             ts = str(datetime.datetime.now()).replace(' ', '_').replace(':', '-').replace('.', '-')
             args.name = 'model_' + ts
-        torch.save(model, args.modeldir + '\\' + args.name + '.pt')
+        torch.save(model.state_dict(), args.modeldir + '\\' + args.name + '.pt')
         
         # save model arguments
         dict = vars(args)
