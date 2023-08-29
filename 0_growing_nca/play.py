@@ -90,7 +90,7 @@ def main(argv=None):
                 pos = mouse / window_size
                 if pygame.mouse.get_pressed(3)[0]:
                     mask = create_erase_mask(size, radius, pos)
-                    tensor[:, 3:] *= torch.tensor(mask).to(device)
+                    tensor *= torch.tensor(mask).to(device)
                
         # update tensor
         with torch.no_grad():
