@@ -41,7 +41,7 @@ def main(argv=None):
         
     # prepare model
     radius = args.radius
-    p = params['padding']
+    p = params['pad']
     
     device = torch.device('cpu')
     model = NCA_model()
