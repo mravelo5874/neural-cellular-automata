@@ -21,10 +21,15 @@ class Utils:
         img[..., :3] *= img[..., 3:]
         return torch.from_numpy(img).permute(2, 0, 1)[None, ...]
 
-    # converts an RGBA image to a RGB image
+    # converts an RGBA image (tensor) to an RGB image (tensor)
     def to_rgb(img_rgba):
         rgb, a = img_rgba[:, :3, ...], torch.clamp(img_rgba[:, 3:, ...], 0, 1)
         return torch.clamp(1.0 - a + rgb, 0, 1)
+    
+    # converts a tensor to a RGBA image (tensor)
+    def to_rgba(x):
+        x = x[:, :4, ...]
+        return x
 
     # Create a starting tensor for training
     # Only the active pixels are goin to be in the middle

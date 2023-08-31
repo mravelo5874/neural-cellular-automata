@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 import torch.nn as nn
 
@@ -36,21 +37,10 @@ class NCA_model(nn.Module):
         self.fire_rate = _fire_rate
         self.device = _device or torch.device('cpu')
         
-        # perceieve step - manually create filters
-        sobel_filter = torch.tensor([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
-        scalar = 8.0
-
-        sobel_filter_x = sobel_filter / scalar
-        sobel_filter_y = sobel_filter.t() / scalar
-        identity_filter = torch.tensor([[0, 0, 0], [0, 1, 0], [0, 0, 0]], dtype=torch.float)
-        filters = torch.stack([identity_filter, sobel_filter_x, sobel_filter_y]) # (3, 3, 3)
-        filters = filters.repeat((_n_channels, 1, 1)) # (3 * n_channels, 3, 3)
-        self.filters = filters[:, None, ...].to(self.device) # (3 * n_channels, 1, 3, 3)
-        
         # update step
         self.update_module = nn.Sequential(
             nn.Conv2d(
-                3 * _n_channels,
+                3*_n_channels,
                 _hid_channels,
                 kernel_size=1
             ),
@@ -68,7 +58,7 @@ class NCA_model(nn.Module):
             
         self.to(self.device)
         
-    def percieve(self, x):
+    def percieve(self, x, angle=0.0):
         """
         Approximates channel-wise gradient and combines it with the input.
         
@@ -85,9 +75,24 @@ class NCA_model(nn.Module):
         torch.Tensor
             Shape `(n_samples, 3 * n_channels, grid_size, grid_size)`.
         """
-        return (
-            nn.functional.conv2d(x, self.filters, padding=1, groups=self.n_channels)
-        )
+        # identity vector
+        identity_filter = torch.tensor([[0, 0, 0], [0, 1, 0], [0, 0, 0]], dtype=torch.float32)
+        
+        # create sobel filters
+        scalar = 8.0
+        dx = np.outer([1, 2, 1], [-1, 0, 1]) / scalar # Sobel filter
+        dy = dx.T
+        c, s = np.cos(angle), np.sin(angle)
+        sobel_filter_x = torch.tensor(c*dx-s*dy, dtype=torch.float32)
+        sobel_filter_y = torch.tensor(s*dx+c*dy, dtype=torch.float32)
+        
+        # stack filters together
+        filters = torch.stack([identity_filter, sobel_filter_x, sobel_filter_y]) # (3, 3, 3)
+        filters = filters.repeat((self.n_channels, 1, 1)) # (3 * n_channels, 3, 3)
+        self.filters = filters[:, None, ...].to(self.device) # (3 * n_channels, 1, 3, 3)
+        
+        return nn.functional.conv2d(x, self.filters, padding=1, groups=self.n_channels)
+        
     
     def update(self, x):
         """
@@ -152,7 +157,7 @@ class NCA_model(nn.Module):
             ) > 0.1
         )
         
-    def forward(self, x):
+    def forward(self, x, angle=0.0):
         """
         Run the forward pass. One iteration of the rule.
         
@@ -168,13 +173,13 @@ class NCA_model(nn.Module):
         """
         pre_life_mask = self.get_living_mask(x)
         
-        y = self.percieve(x)
+        y = self.percieve(x, angle)
         dx = self.update(y)
         dx = self.stochastic_update(dx, fire_rate=self.fire_rate)
         
         x = x + dx
         
         post_life_mask = self.get_living_mask(x)
-        life_mask = (pre_life_mask & post_life_mask).to(torch.float32)
+        life_mask = (pre_life_mask).to(torch.float32)
         
         return x * life_mask

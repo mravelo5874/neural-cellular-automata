@@ -40,6 +40,7 @@ def main(argv=None):
         params = json.load(openfile)
         
     # prepare model
+    angle = 0.0
     radius = args.radius
     p = params['pad']
     
@@ -58,6 +59,9 @@ def main(argv=None):
     window_size = size * scale
     window = pygame.display.set_mode((window_size, window_size))
     pygame.display.set_caption('nca play - ' + params['name'])
+    
+    my_font = pygame.font.SysFont('consolas', 16)
+    text_surface = my_font.render('angle: ' + str(angle), False, (0, 0, 0))
 
     # infinite game loop
     running = True
@@ -74,6 +78,9 @@ def main(argv=None):
                 if event.key == pygame.K_r:
                     tensor = make_seed(params['size'], params['n_channels']).to(device)
                     tensor = nn.functional.pad(tensor, (p, p, p, p), 'constant', 0)
+            if event.type == pygame.MOUSEWHEEL:
+                angle += event.y * 0.5
+                text_surface = my_font.render('angle: ' + str(angle), False, (0, 0, 0))
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_down = True
                 if pygame.mouse.get_pressed(3)[2]:
@@ -94,7 +101,7 @@ def main(argv=None):
                
         # update tensor
         with torch.no_grad():
-            tensor = model(tensor)
+            tensor = model(tensor, angle)
         
         # draw tensor to window
         window.fill((255, 255, 255))
@@ -106,6 +113,10 @@ def main(argv=None):
                 pixel.fill(color)
                 draw_me = pygame.Rect(j*scale, i*scale, scale, scale)
                 window.blit(pixel, draw_me)
+                
+        # show text
+        window.blit(text_surface, (0,0))
+        
         pygame.display.flip()
         
     pygame.quit()

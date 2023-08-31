@@ -1,0 +1,17 @@
+{
+    "img": "imgs\\frog.png",
+    "batch_size": 8,
+    "device": "cuda",
+    "eval_freq": 500,
+    "eval_iter": 300,
+    "n_train_iter": 4000,
+    "n_channels": 16,
+    "log_dir": "logs",
+    "pad": 16,
+    "pool_size": 1024,
+    "size": 40,
+    "save_model": true,
+    "model_dir": "models",
+    "name": "frog40",
+    "damage": 3
+}

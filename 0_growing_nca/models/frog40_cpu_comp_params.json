@@ -7,7 +7,7 @@
     "n_batches": 10000,
     "n_channels": 16,
     "logdir": "logs",
-    "padding": 16,
+    "pad": 16,
     "pool_size": 1024,
     "size": 40,
     "save_model": true,
