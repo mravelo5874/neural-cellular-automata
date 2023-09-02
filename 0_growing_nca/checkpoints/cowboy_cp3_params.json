@@ -1,0 +1,16 @@
+{
+    "img": "imgs\\cowboy.png",
+    "batch_size": 4,
+    "device": "cuda",
+    "eval_freq": 500,
+    "eval_iter": 300,
+    "n_train_iter": 5000,
+    "n_channels": 16,
+    "log_dir": "logs",
+    "pad": 24,
+    "pool_size": 1024,
+    "size": 40,
+    "model_dir": "checkpoints",
+    "name": "cowboy_cp3",
+    "damage": 2
+}

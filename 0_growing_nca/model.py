@@ -180,6 +180,6 @@ class NCA_model(nn.Module):
         x = x + dx
         
         post_life_mask = self.get_living_mask(x)
-        life_mask = (pre_life_mask).to(torch.float32)
+        life_mask = (pre_life_mask & post_life_mask).to(torch.float32)
         
         return x * life_mask

@@ -18,6 +18,7 @@ class Utils:
         img = PIL.Image.open(path)
         img = img.resize((size, size), PIL.Image.Resampling.BILINEAR)
         img = np.float32(img) / 255.0
+        print ('img.shape: ', img.shape)
         img[..., :3] *= img[..., 3:]
         return torch.from_numpy(img).permute(2, 0, 1)[None, ...]
 

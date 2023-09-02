@@ -4,6 +4,7 @@ import torch.nn as nn
 import numpy as np
 import pygame
 import json
+import datetime
 
 from model import NCA_model
 from train import make_seed, to_rgb, create_erase_mask
@@ -20,13 +21,13 @@ def main(argv=None):
     parser.add_argument(
         '-r', '--radius', 
         type=int,
-        default=4,
+        default=8,
         help='Radius of the erase circle when mouse input detected.'
     )
     parser.add_argument(
         '-a', '--scale', 
         type=int,
-        default=8,
+        default=10,
         help='How much to scale the window. Window size will be (size * scale, size * scale).'
     )
     # parse arguments
@@ -41,6 +42,7 @@ def main(argv=None):
         
     # prepare model
     angle = 0.0
+    fps = 0
     radius = args.radius
     p = params['pad']
     
@@ -59,9 +61,12 @@ def main(argv=None):
     window_size = size * scale
     window = pygame.display.set_mode((window_size, window_size))
     pygame.display.set_caption('nca play - ' + params['name'])
+    prev_time = datetime.datetime.now()
     
-    my_font = pygame.font.SysFont('consolas', 16)
-    text_surface = my_font.render('angle: ' + str(angle), False, (0, 0, 0))
+    font_size = 24
+    my_font = pygame.font.SysFont('consolas', font_size)
+    text_surface = my_font.render('angle: ' + str(angle) + 'π', False, (0, 0, 0))
+    fps_surface = my_font.render('fps: ' + str(int(fps)), False, (0, 0, 0))
 
     # infinite game loop
     running = True
@@ -79,8 +84,8 @@ def main(argv=None):
                     tensor = make_seed(params['size'], params['n_channels']).to(device)
                     tensor = nn.functional.pad(tensor, (p, p, p, p), 'constant', 0)
             if event.type == pygame.MOUSEWHEEL:
-                angle += event.y * 0.5
-                text_surface = my_font.render('angle: ' + str(angle), False, (0, 0, 0))
+                angle = np.round((event.y * 0.01) + angle, decimals=2)
+                text_surface = my_font.render('angle: ' + str(angle) + 'π', False, (0, 0, 0))
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_down = True
                 if pygame.mouse.get_pressed(3)[2]:
@@ -101,7 +106,7 @@ def main(argv=None):
                
         # update tensor
         with torch.no_grad():
-            tensor = model(tensor, angle)
+            tensor = model(tensor, angle * np.pi)
         
         # draw tensor to window
         window.fill((255, 255, 255))
@@ -113,9 +118,19 @@ def main(argv=None):
                 pixel.fill(color)
                 draw_me = pygame.Rect(j*scale, i*scale, scale, scale)
                 window.blit(pixel, draw_me)
-                
+        
+        # calculate fps
+        now = datetime.datetime.now()
+        if (now - prev_time).seconds >= 1.0:
+            prev_time = now
+            fps_surface = my_font.render('fps: ' + str(int(fps)), False, (0, 0, 0))
+            fps = 0
+        else:
+            fps += 1       
+        
         # show text
         window.blit(text_surface, (0,0))
+        window.blit(fps_surface, (0,window_size-font_size))
         
         pygame.display.flip()
         
