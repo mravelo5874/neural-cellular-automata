@@ -84,7 +84,7 @@ def main(argv=None):
                     tensor = make_seed(params['size'], params['n_channels']).to(device)
                     tensor = nn.functional.pad(tensor, (p, p, p, p), 'constant', 0)
             if event.type == pygame.MOUSEWHEEL:
-                angle = np.round((event.y * 0.01) + angle, decimals=2)
+                angle = np.round((event.y * 0.25) + angle, decimals=2)
                 text_surface = my_font.render('angle: ' + str(angle) + 'π', False, (0, 0, 0))
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_down = True
