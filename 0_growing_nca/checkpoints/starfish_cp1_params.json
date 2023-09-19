@@ -1,0 +1,16 @@
+{
+    "img": "imgs\\starfish.png",
+    "batch_size": 8,
+    "device": "cuda",
+    "eval_freq": 500,
+    "eval_iter": 300,
+    "n_train_iter": 5000,
+    "n_channels": 16,
+    "log_dir": "logs",
+    "pad": 0,
+    "pool_size": 64,
+    "size": 64,
+    "model_dir": "checkpoints",
+    "name": "starfish_cp1",
+    "damage": 3
+}
