@@ -5,18 +5,41 @@ import numpy as np
 import pygame
 import json
 import datetime
+import os
 
-from model import NCA_model
-from train import make_seed, to_rgb, create_erase_mask
+from models import NCA_grow_laplace, NCA_grow_sobel
+from utils import Utils
+
+def load_model(_model, _dir, _device):
+    print ('loading model: ' + _model)
+    # open params json file
+    params = {}
+    with open(_dir +'\\'+ _model + '_params.json', 'r') as openfile:
+        # Reading from json file
+        params = json.load(openfile)
+    
+    if params['model_type'] == 'laplace':
+        model = NCA_grow_laplace()
+    elif params['model_type']  == 'sobel':
+        model = NCA_grow_sobel()
+    model.load_state_dict(torch.load(_dir +'\\'+_model + '.pt', map_location=_device))
+    model.eval()
+    
+    p = params['pad']
+    tensor = Utils.make_seed(params['size'], params['n_channels']).to(_device)
+    tensor = nn.functional.pad(tensor, (p, p, p, p), 'constant', 0)
+    
+    return model, tensor, params
     
 def main(argv=None):
     parser = argparse.ArgumentParser(
         description='Interact with a neural cellular automata trained model.'
     )
     parser.add_argument(
-        'model', 
+        '-m', '--models',
         type=str,
-        help='Path to the model we want to use.'
+        default='models',
+        help='Path to the model directory we want to use.'
     )
     parser.add_argument(
         '-r', '--radius', 
@@ -30,61 +53,78 @@ def main(argv=None):
         default=10,
         help='How much to scale the window. Window size will be (size * scale, size * scale).'
     )
-    # parse arguments
+    # * parse arguments
     args = parser.parse_args()
-    print (vars(args))
+    print ('args: ', vars(args))
     
-    # open params json file
-    params = {}
-    with open(args.model.replace('.pt', '') + '_params.json', 'r') as openfile:
-        # Reading from json file
-        params = json.load(openfile)
-        
-    # prepare model
+    # * get list of models
+    model_list = os.listdir(args.models)
+    model_list = [item.replace('.pt', '') for item in model_list if item.endswith('.pt')]
+    print ('models: ', model_list)
+    curr = 0
+    
+    # * load current model
+    device = torch.device('cpu')
+    model, tensor, params = load_model(model_list[curr], args.models, device)
+
+    # * misc params
     angle = 0.0
     fps = 0
     radius = args.radius
-    p = params['pad']
+    prev_time = datetime.datetime.now()
     
-    device = torch.device('cpu')
-    model = NCA_model()
-    model.load_state_dict(torch.load(args.model, map_location=device))
-    model.eval()
-
-    tensor = make_seed(params['size'], params['n_channels']).to(device)
-    tensor = nn.functional.pad(tensor, (p, p, p, p), 'constant', 0)
-
-    # prepare pygame instance
+    # * start pygame
     pygame.init()
+    pygame.display.set_caption('nca play - ' + model_list[curr])
+    
+    # * model dependent params
+    p = params['pad']
     size = params['size'] + (2 * p)
     scale = args.scale
     window_size = size * scale
     window = pygame.display.set_mode((window_size, window_size))
-    pygame.display.set_caption('nca play - ' + params['name'])
-    prev_time = datetime.datetime.now()
     
+    # * text renders
     font_size = 24
     my_font = pygame.font.SysFont('consolas', font_size)
+    model_surface = my_font.render('model: ' + model_list[curr], False, (0, 0, 0))
     text_surface = my_font.render('angle: ' + str(angle) + 'π', False, (0, 0, 0))
     fps_surface = my_font.render('fps: ' + str(int(fps)), False, (0, 0, 0))
 
-    # infinite game loop
+    # * start infinite game loop
     running = True
     mouse_down = False
     while running:
         # empty cache
         torch.cuda.empty_cache()
-        
         # handle events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
-                    tensor = make_seed(params['size'], params['n_channels']).to(device)
+                    tensor = Utils.make_seed(params['size'], params['n_channels']).to(device)
                     tensor = nn.functional.pad(tensor, (p, p, p, p), 'constant', 0)
+                if event.key == pygame.K_UP:
+                    curr += 1
+                    if curr >= len(model_list):
+                        curr = 0
+                if event.key == pygame.K_DOWN:
+                    curr -= 1
+                    if curr < 0:
+                        curr = len(model_list)-1
+                if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                    # load new model
+                    model, tensor, params = load_model(model_list[curr], args.models, device)
+                    p = params['pad']
+                    pygame.display.set_caption('nca play - ' + model_list[curr])
+                    size = params['size'] + (2 * p)
+                    scale = args.scale
+                    window_size = size * scale
+                    window = pygame.display.set_mode((window_size, window_size))
+                    model_surface = my_font.render('model: ' + model_list[curr], False, (0, 0, 0))
             if event.type == pygame.MOUSEWHEEL:
-                angle = np.round((event.y * 0.25) + angle, decimals=2)
+                angle = np.round((event.y * 0.1) + angle, decimals=1)
                 text_surface = my_font.render('angle: ' + str(angle) + 'π', False, (0, 0, 0))
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_down = True
@@ -101,16 +141,16 @@ def main(argv=None):
                 mouse = np.array(pygame.mouse.get_pos(), dtype=float)
                 pos = mouse / window_size
                 if pygame.mouse.get_pressed(3)[0]:
-                    mask = create_erase_mask(size, radius, pos)
+                    mask = Utils.create_erase_mask(size, radius, pos)
                     tensor *= torch.tensor(mask).to(device)
                
-        # update tensor
+        # * update tensor
         with torch.no_grad():
             tensor = model(tensor, angle * np.pi)
         
-        # draw tensor to window
+        # * draw tensor to window
         window.fill((255, 255, 255))
-        vis = to_rgb(tensor[:, :4].detach().cpu()).squeeze(0).detach().numpy() * 255
+        vis = Utils.to_rgb(tensor[:, :4].detach().cpu()).squeeze(0).detach().numpy() * 255
         pixel = pygame.Surface((scale, scale))
         for j in range(size):
             for i in range(size):
@@ -119,7 +159,7 @@ def main(argv=None):
                 draw_me = pygame.Rect(j*scale, i*scale, scale, scale)
                 window.blit(pixel, draw_me)
         
-        # calculate fps
+        # * calculate fps
         now = datetime.datetime.now()
         if (now - prev_time).seconds >= 1.0:
             prev_time = now
@@ -128,10 +168,12 @@ def main(argv=None):
         else:
             fps += 1       
         
-        # show text
-        window.blit(text_surface, (0,0))
-        window.blit(fps_surface, (0,window_size-font_size))
+        # * render text
+        window.blit(model_surface, (0, 0))
+        window.blit(text_surface, (window_size-font_size-150, window_size-font_size))
+        window.blit(fps_surface, (0, window_size-font_size))
         
+        # * flip it!
         pygame.display.flip()
         
     pygame.quit()

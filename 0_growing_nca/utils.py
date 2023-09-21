@@ -7,10 +7,14 @@ import PIL.Image, PIL.ImageDraw
 class Utils:
     # creates a circle mask given a size, radius and position
     def create_circle_mask(size, radius, pos):
-        pos = pos * size
         Y, X = np.ogrid[:size, :size]
         dist_from_center = np.sqrt((X - pos[0])**2 + (Y-pos[1])**2)
         mask = dist_from_center >= radius
+        return mask
+    
+    def create_erase_mask(size, radius, pos):
+        pos = pos * size
+        mask = Utils.create_circle_mask(size, radius, pos)
         return mask
 
     # Loads an image from a specified path and converts to torch.Tensor
@@ -18,7 +22,6 @@ class Utils:
         img = PIL.Image.open(path)
         img = img.resize((size, size), PIL.Image.Resampling.BILINEAR)
         img = np.float32(img) / 255.0
-        print ('img.shape: ', img.shape)
         img[..., :3] *= img[..., 3:]
         return torch.from_numpy(img).permute(2, 0, 1)[None, ...]
 

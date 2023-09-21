@@ -12,5 +12,6 @@
     "size": 40,
     "model_dir": "models",
     "name": "bonzai",
-    "damage": 2
+    "damage": 2,
+    "model_type": "sobel"
 }

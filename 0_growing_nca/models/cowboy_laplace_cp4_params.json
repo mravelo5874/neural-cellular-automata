@@ -12,5 +12,6 @@
     "size": 40,
     "model_dir": "checkpoints",
     "name": "cowboy_laplace_cp4",
-    "damage": 3
+    "damage": 3,
+    "model_type": "laplace"
 }

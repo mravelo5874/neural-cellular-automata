@@ -13,5 +13,6 @@
     "save_model": true,
     "model_dir": "models",
     "name": "pup40",
-    "damage": 2
+    "damage": 2,
+    "model_type": "sobel"
 }

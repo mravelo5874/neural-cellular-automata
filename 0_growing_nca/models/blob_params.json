@@ -12,5 +12,6 @@
     "size": 40,
     "model_dir": "models",
     "name": "blob",
-    "damage": 3
+    "damage": 3,
+    "model_type": "sobel"
 }

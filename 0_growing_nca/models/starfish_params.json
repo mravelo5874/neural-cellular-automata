@@ -12,5 +12,6 @@
     "size": 64,
     "model_dir": "models",
     "name": "starfish",
-    "damage": 3
+    "damage": 3,
+    "model_type": "laplace"
 }
