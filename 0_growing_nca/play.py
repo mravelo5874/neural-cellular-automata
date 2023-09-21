@@ -48,7 +48,7 @@ def main(argv=None):
         help='Radius of the erase circle when mouse input detected.'
     )
     parser.add_argument(
-        '-a', '--scale', 
+        '-s', '--scale', 
         type=int,
         default=10,
         help='How much to scale the window. Window size will be (size * scale, size * scale).'
