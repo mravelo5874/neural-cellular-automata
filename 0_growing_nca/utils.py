@@ -28,7 +28,7 @@ class Utils:
     # converts an RGBA image (tensor) to an RGB image (tensor)
     def to_rgb(img_rgba):
         rgb, a = img_rgba[:, :3, ...], torch.clamp(img_rgba[:, 3:, ...], 0, 1)
-        return torch.clamp(1.0 - a + rgb, 0, 1)
+        return torch.clamp(rgb, 0, 1)
     
     # converts a tensor to a RGBA image (tensor)
     def to_rgba(x):
