@@ -7,7 +7,7 @@ import json
 import datetime
 import os
 
-from models import NCA_grow_laplace, NCA_grow_sobel
+from models import NCA_grow_learnable, NCA_grow_laplace, NCA_grow_sobel
 from utils import Utils
 
 def load_model(_model, _dir, _device):
@@ -18,7 +18,9 @@ def load_model(_model, _dir, _device):
         # Reading from json file
         params = json.load(openfile)
     
-    if params['model_type'] == 'laplace':
+    if params['model_type'] == 'learnable':
+        model = NCA_grow_learnable()
+    elif params['model_type'] == 'laplace':
         model = NCA_grow_laplace()
     elif params['model_type']  == 'sobel':
         model = NCA_grow_sobel()
@@ -86,10 +88,11 @@ def main(argv=None):
     
     # * text renders
     font_size = 24
+    font_color = (255, 255, 255)
     my_font = pygame.font.SysFont('consolas', font_size)
-    model_surface = my_font.render('model: ' + model_list[curr], False, (0, 0, 0))
-    text_surface = my_font.render('angle: ' + str(angle) + 'π', False, (0, 0, 0))
-    fps_surface = my_font.render('fps: ' + str(int(fps)), False, (0, 0, 0))
+    model_surface = my_font.render('model: ' + model_list[curr], False, font_color)
+    text_surface = my_font.render('angle: ' + str(angle) + 'π', False, font_color)
+    fps_surface = my_font.render('fps: ' + str(int(fps)), False, font_color)
 
     # * start infinite game loop
     running = True
@@ -122,10 +125,10 @@ def main(argv=None):
                     scale = args.scale
                     window_size = size * scale
                     window = pygame.display.set_mode((window_size, window_size))
-                    model_surface = my_font.render('model: ' + model_list[curr], False, (0, 0, 0))
+                    model_surface = my_font.render('model: ' + model_list[curr], False, font_color)
             if event.type == pygame.MOUSEWHEEL:
                 angle = np.round((event.y * 0.1) + angle, decimals=1)
-                text_surface = my_font.render('angle: ' + str(angle) + 'π', False, (0, 0, 0))
+                text_surface = my_font.render('angle: ' + str(angle) + 'π', False, font_color)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_down = True
                 if pygame.mouse.get_pressed(3)[2]:
@@ -163,7 +166,7 @@ def main(argv=None):
         now = datetime.datetime.now()
         if (now - prev_time).seconds >= 1.0:
             prev_time = now
-            fps_surface = my_font.render('fps: ' + str(int(fps)), False, (0, 0, 0))
+            fps_surface = my_font.render('fps: ' + str(int(fps)), False, font_color)
             fps = 0
         else:
             fps += 1       
