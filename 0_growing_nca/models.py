@@ -3,7 +3,6 @@ import torch
 import torch.nn as nn
 
 """
-TODO
 LEARNABLE MODEL - uses a learnable 2d convolution within preception
 """
 class NCA_grow_learnable(nn.Module):
@@ -245,7 +244,6 @@ class NCA_grow_laplace(nn.Module):
         c, s = np.cos(angle), np.sin(angle)
         sobel_filter_x = torch.tensor(c*dx-s*dy, dtype=torch.float32)
         sobel_filter_y = torch.tensor(s*dx+c*dy, dtype=torch.float32)
-        laplace_filter /= scalar
         
         # stack filters together
         filters = torch.stack([identity_filter, sobel_filter_x, sobel_filter_y, laplace_filter]) # (filter_num, 3, 3)
