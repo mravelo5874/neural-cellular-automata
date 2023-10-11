@@ -70,6 +70,7 @@ def main(argv=None):
     model, tensor, params = load_model(model_list[curr], args.models, device)
 
     # * misc params
+    c = 0
     angle = 0.0
     fps = 0
     radius = args.radius
@@ -153,7 +154,15 @@ def main(argv=None):
         
         # * draw tensor to window
         window.fill((255, 255, 255))
-        vis = Utils.to_rgb(tensor[:, :4].detach().cpu()).squeeze(0).detach().numpy() * 255
+        img = Utils.to_rgb(tensor[:, :4].detach().cpu()).squeeze(0)
+        vis = img.detach().numpy() * 255
+        c += 1
+        if c == 64:
+            torch.set_printoptions(threshold=10_000)
+            torch.set_printoptions(profile="full")
+            img = img.permute(1, 2, 0)
+            print ('img.shape: ', img.shape)
+            print ('img @ step 64: ', img)
         pixel = pygame.Surface((scale, scale))
         for j in range(size):
             for i in range(size):
