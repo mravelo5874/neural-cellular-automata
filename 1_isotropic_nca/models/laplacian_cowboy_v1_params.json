@@ -1,9 +1,12 @@
 {
     "_SEED_FILE_": "_3_seeds_64.png",
     "_SIZE_": 64,
+    "_SEED_ANGLE_RAD_": 0,
     "_TARGET_FILE_": "cowboy.png",
     "_TARGET_SIZE_": 40,
     "_PAD_": 12,
+    "_SOBEL_DIV_": 1,
+    "_LAP_DIV_": 1,
     "_CHANNELS_": 16,
     "_HIDDEN_": 128,
     "_MODEL_TYPE_": "LAPLACIAN",
