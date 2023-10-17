@@ -16,7 +16,7 @@
     "_LOWER_LR_": 1e-05,
     "_UPPER_LR_": 0.001,
     "_DEVICE_": "cuda",
-    "_NAME_": "gard_steer_earth_3_seeds_v1",
+    "_NAME_": "grad_steer_earth_3_seeds_v1",
     "_EPOCHS_": 20000,
     "_POOL_SIZE_": 256,
     "_BATCH_SIZE_": 8,
