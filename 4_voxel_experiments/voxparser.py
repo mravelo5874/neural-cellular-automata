@@ -22,7 +22,7 @@ class Chunk(object):
             self.size = Size(*unpack('iii', content))
         elif id == b'XYZI':
             n = unpack('i', content)[0]
-            print(f'xyzi block with {n} voxels (len {len(content)})')
+            #print(f'xyzi block with {n} voxels (len {len(content)})')
             self.voxels = []
             self.voxels = [ Voxel(*unpack('BBBB', content, 4+4*i)) for i in range(n) ]
         elif id == b'RGBA':
@@ -48,38 +48,32 @@ class Chunk(object):
             self.material = Material(_id, _type, weight, props)
             
         elif id == b'nTRN':
-            print ('found nTRN chunk!')
+            pass
+            #print ('found nTRN chunk!')
         elif id == b'nGRP':
-            print ('found nGRP chunk!')
+            pass
+            #print ('found nGRP chunk!')
         elif id == b'nSHP':
-            print ('found nSHP chunk!')
+            pass
+            #print ('found nSHP chunk!')
         elif id == b'MATL':
-            print ('found MATL chunk!')
-            _id, _type, weight, flags = unpack('iifi', content)
-            props = {}
-            offset = 16
-            for b,field in [ (0, 'plastic'),
-                             (1, 'roughness'),
-                             (2, 'specular'),
-                             (3, 'IOR'),
-                             (4, 'attenuation'),
-                             (5, 'power'),
-                             (6, 'glow'),
-                             (7, 'isTotalPower') ]:
-                if bit(flags, b) and b<7: # no value for 7 / isTotalPower
-                    props[field] = unpack('f', content, offset)
-                    offset += 4
-            self.material = Material(_id, _type, weight, props)
+            pass
+            #print ('found MATL chunk!')
         elif id == b'LAYR':
-            print ('found LAYR chunk!')
+            pass
+            #print ('found LAYR chunk!')
         elif id == b'rOBJ':
-            print ('found rOBJ chunk!')
+            pass
+            #print ('found rOBJ chunk!')
         elif id == b'rCAM':
-            print ('found rCAM chunk!')
+            pass
+            #print ('found rCAM chunk!')
         elif id == b'NOTE':
-            print ('found NOTE chunk!')
+            pass
+            #print ('found NOTE chunk!')
         elif id == b'IMAP':
-            print ('found IMAP chunk!')
+            pass
+            #print ('found IMAP chunk!')
         else:
             raise ParsingException('Unknown chunk type: %s'%self.id)
         
@@ -96,7 +90,7 @@ class voxparser(object):
 
     def _parseChunk(self):
         _id, N, M = self.unpack('4sii')
-        print(f'Found chunk id {_id} / len {N} / children {M}')
+        #print(f'Found chunk id {_id} / len {N} / children {M}')
         content = self.unpack('%ds'%N)[0]
         start = self.offset
         chunks = [ ]
