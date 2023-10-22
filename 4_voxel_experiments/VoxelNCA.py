@@ -3,6 +3,36 @@ import torch.nn.functional as func
 from VoxelPerception import perception
 from numpy import pi as PI
 
+def create_seed(_size=16, _channels=16, _dist=5, _points=4):
+    x = torch.zeros([_size, _size, _size, _channels])
+    half = _size//2
+    # * red
+    if _points > 0:
+        x[half, half, half, 3:_channels] = 1.0
+        x[half, half, half, 0] = 1.0
+    # * green
+    if _points > 1:
+        x[half, half+_dist, half, 3:_channels] = 1.0
+        x[half, half+_dist, half, 1] = 1.0
+    # * blue
+    if _points > 2:
+        x[half+_dist, half, half, 3:_channels] = 1.0
+        x[half+_dist, half, half, 2] = 1.0
+    # * yellow
+    if _points > 3:
+        x[half, half, half+_dist, 3:_channels] = 1.0
+        x[half, half, half+_dist, 0:2] = 1.0
+    # * magenta
+    if _points > 4:
+        x[half, half-_dist, half, 3:_channels] = 1.0
+        x[half, half-_dist, half, 0] = 1.0
+        x[half, half-_dist, half, 2] = 1.0
+    # * cyan
+    if _points > 5:
+        x[half-_dist, half, half, 3:_channels] = 1.0
+        x[half-_dist, half, half, 1:3] = 1.0
+    return x
+    
 class VoxelNCA(torch.nn.Module):
     def __init__(self, _channels=16, _hidden=128, _device='cuda', _model_type='STEERABLE', _update_rate=0.5):
         super().__init__()

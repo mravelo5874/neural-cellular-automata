@@ -1,11 +1,20 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
 import voxparser
-from Video import VideoWriter, zoom, tile2d
+from Video import VideoWriter, zoom
 
 class Vox(object):
-    def __init__(self, _filename):
+    def __init__(self):
+        self.name = 'unnamed_vox'
+        
+    def load_from_array(self, _array, _name=None):
+        if _name != None: self.name = _name
+        self.rgba = _array
+        self.rgb = self.rgba[:, : , :, 0:3]
+        self.voxels = self.rgba[:, :, :, 3] > 0.0
+        return self
+            
+    def load_from_file(self, _filename):
         prts = _filename.split('/')
         self.name = prts[len(prts)-1].replace('.vox', '')
         self.vox_obj = voxparser.voxparser(_filename).parse()
@@ -19,19 +28,20 @@ class Vox(object):
         
         # * create binary voxel
         self.voxels = self.rgba[:, :, :, 3] > 0.0
+        return self
     
     def shape(self):
         return self.voxels.shape
     
-    def render(self, _pitch=10, _yaw=280, _show=True):
+    def render(self, _pitch=10, _yaw=280, _show_grid=False, _print=True):
         # * render using plt
         fig = plt.figure()
         ax = fig.add_subplot(projection='3d')
         ax.voxels(self.voxels, facecolors=self.rgb, edgecolors=self.rgb)
         ax.view_init(elev=_pitch, azim=_yaw)
-        plt.axis('off')
+        if not _show_grid: plt.axis('off')
         
-        if _show: plt.show()
+        if _print: plt.show()
         else: plt.close()
 
         # * convert figure to numpy array RGB
@@ -40,11 +50,11 @@ class Vox(object):
         data = data.reshape(fig.canvas.get_width_height()[::-1] + (3,))
         return data
         
-    def orbit(self, _filename=None, _turn=360, _delta=10, _zoom=1, _show=True):
+    def orbit(self, _filename=None, _turn=360, _delta=10, _zoom=1, _show_grid=False, _print=True):
         if _filename == None:
             _filename = self.name+'.mp4'
         with VideoWriter(filename=_filename) as vid:
             for i in range(0,_turn,_delta):
-                img = self.render(_yaw=i, _show=False)
+                img = self.render(_yaw=i, _show_grid=_show_grid, _print=False)
                 vid.add(zoom(img, _zoom))
-            if _show: vid.show()
+            if _print: vid.show()
