@@ -1,5 +1,5 @@
 from struct import unpack_from as unpack, calcsize
-from voxmodels import Vox, Size, Voxel, Color, Model, Material
+from voxmodels import VoxObj, Size, Voxel, Color, Model, Material
 
 def bit(val, offset):
     mask = 1 << offset
@@ -106,9 +106,8 @@ class voxparser(object):
         return Model(size.size, xyzi.voxels)
             
     def parse(self):
-        header, version = self.unpack('4si')
-        print ('header:',header)
-        print ('version:',version)
+        _, version = self.unpack('4si')
+        
         if version != 200 and version != 150: raise ParsingException("Unknown vox version: %s expected 150"%version)
         
         main = self._parseChunk()
@@ -120,8 +119,6 @@ class voxparser(object):
         else:
             models = 1
 
-        print (f'file has {models} models')
-
         models = [self._parseModel(chunks.pop(), chunks.pop()) for _ in range(models)]
 
         if chunks and chunks[0].id == b'RGBA':
@@ -131,4 +128,4 @@ class voxparser(object):
 
         materials = [ c.material for c in chunks ]
 
-        return Vox(models, palette, materials)
+        return VoxObj(models, palette, materials)

@@ -15,7 +15,7 @@ def chunks(l, n):
     for i in range(0, len(l), n):
         yield l[i:i + n]
 
-class Vox(object):
+class VoxObj(object):
 
     def __init__(self, models, palette=None, materials=None):
         self.models = models
@@ -86,4 +86,4 @@ class Vox(object):
 
         voxels = [ Voxel( nz[2][i], nz[0][i], z-nz[1][i]-1, a[nz[0][i], nz[1][i], nz[2][i]] ) for i in range(nz[0].shape[0]) ]
 
-        return Vox([ Model(Size(x,y,z), voxels)], palette)
+        return VoxObj([ Model(Size(x,y,z), voxels)], palette)
