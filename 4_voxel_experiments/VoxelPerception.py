@@ -1,18 +1,55 @@
 import torch
 import torch.nn.functional as func
 
-SOBEL_KERN = torch.tensor([
-    [-1., 0., 1.], 
+# 3D filters
+X_SOBEL_KERN = torch.tensor([
+   [[-1., 0., 1.], 
     [-2., 0., 2.], 
-    [-1., 0., 1.]])
-LAP_KERN = torch.tensor([
-    [1.,   2., 1.], 
-    [2., -12., 2.], 
-    [1.,   2., 1.]])
-ID_KERN = torch.tensor([
+    [-1., 0., 1.]],
+   
+   [[-2., 0., 2.], 
+    [-4., 0., 4.], 
+    [-2., 0., 2.]],
+   
+   [[-1., 0., 1.], 
+    [-2., 0., 2.], 
+    [-1., 0., 1.]]])
+Y_SOBEL_KERN = torch.tensor([
+   [[1., 2., 1.], 
     [0., 0., 0.], 
-    [0., 1., 0.], 
-    [0., 0., 0.]])
+    [-1., -2., -1.]],
+   
+   [[2., 4., 2.], 
+    [0., 0., 0.], 
+    [-2., -4., -2.]],
+   
+   [[1., 0., 1.], 
+    [0., 0., 0.], 
+    [-1., -2., -1.]]])
+Z_SOBEL_KERN = torch.tensor([
+   [[1., 2., 1.], 
+    [2., 4., 2.], 
+    [1., 2., 1.]],
+   
+   [[0., 0., 0.], 
+    [0., 0., 0.], 
+    [0., 0., 0.]],
+   
+   [[-1., -2., -1.], 
+    [-2., -4., -2.], 
+    [-1., -2., -1.]]])
+LAP_KERN = torch.tensor([
+   [[2., 3., 2.], 
+    [3., 6., 3.], 
+    [2., 3., 2.]],
+   
+   [[3., 6., 3.], 
+    [6.,-88., 6.], 
+    [3., 6., 3.]],
+   
+   [[2., 3., 2.], 
+    [3., 6., 3.], 
+    [2., 3., 2.]]])/26.0
 
 # * performs a convolution per filter per channel
 def per_channel_conv(_x, _filters):
@@ -23,25 +60,6 @@ def per_channel_conv(_x, _filters):
     # * perform per-channel convolutions
     y = func.conv2d(y, _filters[:, None])
     y = y.reshape(batch_size, -1, height, width)
-    return y
-
-# * only uses laplacian operator for local perception
-def laplacian_perception(_x):
-    # * add an extra dimention to account for batch size
-    lap_conv = per_channel_conv(_x, LAP_KERN[None, :])
-    # * concat perception w/ self (identity)
-    y = torch.cat([_x, lap_conv], 1)
-    return y
-
-# * uses laplacian operator and sobel-magnitude (G) for local perception
-def sobel_mag_perception(_x):
-    # * add an extra dimention to account for batch size
-    lap_conv = per_channel_conv(_x, LAP_KERN[None, :])
-    # * compute sobel-magnitude (G)
-    sobel_conv = per_channel_conv(_x, torch.stack([SOBEL_KERN, SOBEL_KERN.T]))
-    gx, gy = sobel_conv[:, ::2], sobel_conv[:, 1::2]
-    # * concat perceptions w/ self (identity)
-    y = torch.cat([_x, lap_conv, (gx*gx+gy*gy+1e-8).sqrt()], 1)
     return y
 
 def angle_steerable_perception(_x):
@@ -76,8 +94,6 @@ def gradient_steerable_perception(_x):
     return y
     
 perception = {
-    'LAPLACIAN': laplacian_perception,
-    'SOBEL_MAG': sobel_mag_perception,
     'STEERABLE': angle_steerable_perception,
     'GRADIENT': gradient_steerable_perception,
 }
