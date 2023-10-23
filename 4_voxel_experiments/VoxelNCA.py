@@ -4,9 +4,35 @@ from Vox import Vox
 from VoxelPerception import VoxelPerception as vp
 from numpy import pi as PI
 from Video import VideoWriter, zoom
+from matplotlib import pyplot as plt
+import matplotlib.gridspec as gridspec
 
 def voxel_wise_loss_function(_x, _target, _scale=1e3, _dims=[]):
     return _scale * torch.mean(torch.square(_x[:, :4] - _target), _dims)
+
+# * shows a batch before and after a forward pass given two (2) tensors
+def show_batch(_batch_size, _before, _after, _dpi=256):
+    fig = plt.figure(figsize=(_batch_size, 2), dpi=_dpi)
+    axarr = fig.subplots(nrows=2, ncols=_batch_size)
+    gspec = gridspec.GridSpec(2, _batch_size)
+    gspec.update(wspace=0, hspace=0) # set the spacing between axes.
+    plt.clf()
+    for i in range(_batch_size):
+        vox = Vox().load_from_tensor(_before[i, ...])
+        img = vox.render(_print=False)
+        axarr[0, i] = plt.subplot(gspec[i])
+        axarr[0, i].set_xticks([])
+        axarr[0, i].set_yticks([])
+        axarr[0, i].imshow(img, aspect='equal')
+        axarr[0, i].set_title(str(i), fontsize=8)   
+    for i in range(_batch_size):
+        vox = Vox().load_from_tensor(_after[i, ...])
+        img = vox.render(_print=False)
+        axarr[1, i] = plt.subplot(gspec[i+_batch_size])
+        axarr[1, i].set_xticks([])
+        axarr[1, i].set_yticks([])
+        axarr[1, i].imshow(img, aspect='equal')
+    plt.show()
 
 def create_seed(_size=16, _channels=16, _dist=5, _points=4):
     x = torch.zeros([_channels, _size, _size, _size])
@@ -72,10 +98,13 @@ class VoxelNCA(torch.nn.Module):
         assert _seed != None
         with VideoWriter(filename=_filename) as vid:
             x = _seed
+            v = Vox().load_from_tensor(x)
+            img = v.render(_yaw=_delta*i, _show_grid=_show_grid, _print=False)
+            vid.add(zoom(img, _zoom))
             for i in range(_steps):
                 x = self.forward(x)
                 v = Vox().load_from_tensor(x)
-                img = v.render(_yaw=_delta*i, _show_grid=_show_grid, _print=_print)
+                img = v.render(_yaw=_delta*i, _show_grid=_show_grid, _print=False)
                 vid.add(zoom(img, _zoom))
             if _print: vid.show()
         
