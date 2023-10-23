@@ -1,3 +1,4 @@
+import torch
 import numpy as np
 import matplotlib.pyplot as plt
 import voxparser
@@ -6,7 +7,17 @@ from Video import VideoWriter, zoom
 class Vox(object):
     def __init__(self):
         self.name = 'unnamed_vox'
-        
+    
+    def load_from_tensor(self, _tensor, _name=None):
+        if _name != None: self.name = _name
+        if len(_tensor.shape) == 5:
+            _tensor = _tensor.squeeze(0)
+        _tensor = torch.clamp(_tensor.permute(1, 2, 3, 0), min=0.0, max=1.0)
+        self.rgba = np.array(_tensor)
+        self.rgb = self.rgba[:, : , :, 0:3]
+        self.voxels = self.rgba[:, :, :, 3] > 0.0
+        return self
+    
     def load_from_array(self, _array, _name=None):
         if _name != None: self.name = _name
         self.rgba = _array
@@ -32,6 +43,9 @@ class Vox(object):
     
     def shape(self):
         return self.voxels.shape
+    
+    def tensor(self):
+        return torch.tensor(self.rgba, dtype=torch.float32).permute(3, 0, 1, 2).unsqueeze(0)
     
     def render(self, _pitch=10, _yaw=280, _show_grid=False, _print=True):
         # * render using plt

@@ -53,13 +53,13 @@ LAP_KERN = torch.tensor([
 
 # * performs a convolution per filter per channel
 def per_channel_conv(_x, _filters):
-    batch_size, channels, height, width = _x.shape
+    batch_size, channels, height, width, depth = _x.shape
     # * reshape x to make per-channel convolution possible + pad 1 on each side
-    y = _x.reshape(batch_size*channels, 1, height, width)
-    y = func.pad(y, (1, 1, 1, 1), 'circular')
+    y = _x.reshape(batch_size*channels, 1, height, width, depth)
+    y = func.pad(y, (1, 1, 1, 1, 1, 1), 'constant')
     # * perform per-channel convolutions
-    y = func.conv2d(y, _filters[:, None])
-    y = y.reshape(batch_size, -1, height, width)
+    y = func.conv3d(y, _filters[:, None])
+    y = y.reshape(batch_size, -1, height, width, depth)
     return y
 
 def angle_steerable_perception(_x):
