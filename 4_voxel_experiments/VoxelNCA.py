@@ -34,22 +34,22 @@ def create_seed(_size=16, _channels=16, _dist=5, _points=4):
     return x
     
 class VoxelNCA(torch.nn.Module):
-    def __init__(self, _channels=16, _hidden=128, _device='cuda', _model_type='STEERABLE', _update_rate=0.5):
+    def __init__(self, _channels=16, _hidden=128, _device='cuda', _model_type='ANISOTROPIC', _update_rate=0.5):
         super().__init__()
         self.device = _device
         self.model_type = _model_type
         self.update_rate = _update_rate
 
         # * determine number of perceived channels
-        perception_channels = perception[self.model_type](torch.zeros([1, _channels, 8, 8]).to(_device)).shape[1]
+        perception_channels = perception[self.model_type](torch.zeros([1, _channels, 8, 8, 8])).shape[1]
         
         # * determine hidden channels (equalize the parameter count btwn model types)
         hidden_channels = 8*1024 // (perception_channels+_channels)
         hidden_channels = (_hidden+31) // 32*32
         
         # * model layers
-        self.conv1 = torch.nn.Conv2d(perception_channels, hidden_channels, 1)
-        self.conv2 = torch.nn.Conv2d(hidden_channels, _channels, 1, bias=False)
+        self.conv1 = torch.nn.Conv3d(perception_channels, hidden_channels, 1)
+        self.conv2 = torch.nn.Conv3d(hidden_channels, _channels, 1, bias=False)
         with torch.no_grad():
             self.conv2.weight.data.zero_()
         
