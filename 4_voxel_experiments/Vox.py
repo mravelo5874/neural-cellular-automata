@@ -10,16 +10,16 @@ class Vox(object):
     
     def load_from_tensor(self, _tensor, _name=None):
         if _name != None: self.name = _name
+        _tensor = _tensor.cpu()
         if len(_tensor.shape) == 5:
-            _tensor = _tensor.squeeze(0)
-        _tensor = torch.clamp(_tensor.permute(1, 2, 3, 0), min=0.0, max=1.0)
-        self.rgba = np.array(_tensor)
-        self.rgb = self.rgba[:, : , :, 0:3]
-        self.voxels = self.rgba[:, :, :, 3] > 0.0
+            _tensor = _tensor[0, ...]
+        _tensor = torch.clamp(_tensor, min=0.0, max=1.0)
+        self.load_from_array(np.array(_tensor))
         return self
     
     def load_from_array(self, _array, _name=None):
         if _name != None: self.name = _name
+        _array = _array.transpose(1, 2, 3, 0)
         self.rgba = _array
         self.rgb = self.rgba[:, : , :, 0:3]
         self.voxels = self.rgba[:, :, :, 3] > 0.0
@@ -45,7 +45,7 @@ class Vox(object):
         return self.voxels.shape
     
     def tensor(self):
-        return torch.tensor(self.rgba, dtype=torch.float32).permute(3, 0, 1, 2).unsqueeze(0)
+        return torch.tensor(self.rgba, dtype=torch.float32).permute(3, 0, 1, 2)[None, ...]
     
     def render(self, _pitch=10, _yaw=280, _show_grid=False, _print=True):
         # * render using plt
