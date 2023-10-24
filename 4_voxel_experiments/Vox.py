@@ -22,7 +22,7 @@ class Vox(object):
         _array = _array.transpose(1, 2, 3, 0)
         self.rgba = _array
         self.rgb = self.rgba[:, : , :, 0:3]
-        self.voxels = self.rgba[:, :, :, 3] > 0.0
+        self.voxels = self.rgba[:, :, :, 3] > 0.1
         return self
             
     def load_from_file(self, _filename):
@@ -38,7 +38,7 @@ class Vox(object):
         self.rgb = self.rgba[:, : , :, 0:3]
         
         # * create binary voxel
-        self.voxels = self.rgba[:, :, :, 3] > 0.0
+        self.voxels = self.rgba[:, :, :, 3] > 0.1
         return self
     
     def shape(self):
