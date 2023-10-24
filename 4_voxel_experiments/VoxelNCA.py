@@ -99,12 +99,12 @@ class VoxelNCA(torch.nn.Module):
         with VideoWriter(filename=_filename) as vid:
             x = _seed
             v = Vox().load_from_tensor(x)
-            img = v.render(_yaw=_delta*i, _show_grid=_show_grid, _print=False)
+            img = v.render(_yaw=_delta, _show_grid=_show_grid, _print=False)
             vid.add(zoom(img, _zoom))
             for i in range(_steps):
                 x = self.forward(x)
                 v = Vox().load_from_tensor(x)
-                img = v.render(_yaw=_delta*i, _show_grid=_show_grid, _print=False)
+                img = v.render(_yaw=_delta*(i+1), _show_grid=_show_grid, _print=False)
                 vid.add(zoom(img, _zoom))
             if _print: vid.show()
         
