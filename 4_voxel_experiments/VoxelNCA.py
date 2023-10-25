@@ -2,67 +2,9 @@ import torch
 import torch.nn.functional as func
 from Vox import Vox
 from VoxelPerception import VoxelPerception as vp
+from VoxelUtil import half_volume_mask
 from numpy import pi as PI
 from Video import VideoWriter, zoom
-from matplotlib import pyplot as plt
-import matplotlib.gridspec as gridspec
-
-def voxel_wise_loss_function(_x, _target, _scale=1e3, _dims=[]):
-    return _scale * torch.mean(torch.square(_x[:, :4] - _target), _dims)
-
-# * shows a batch before and after a forward pass given two (2) tensors
-def show_batch(_batch_size, _before, _after, _dpi=256):
-    fig = plt.figure(figsize=(_batch_size, 2), dpi=_dpi)
-    axarr = fig.subplots(nrows=2, ncols=_batch_size)
-    gspec = gridspec.GridSpec(2, _batch_size)
-    gspec.update(wspace=0, hspace=0) # set the spacing between axes.
-    plt.clf()
-    for i in range(_batch_size):
-        vox = Vox().load_from_tensor(_before[i, ...])
-        img = vox.render(_print=False)
-        axarr[0, i] = plt.subplot(gspec[i])
-        axarr[0, i].set_xticks([])
-        axarr[0, i].set_yticks([])
-        axarr[0, i].imshow(img, aspect='equal')
-        axarr[0, i].set_title(str(i), fontsize=8)   
-    for i in range(_batch_size):
-        vox = Vox().load_from_tensor(_after[i, ...])
-        img = vox.render(_print=False)
-        axarr[1, i] = plt.subplot(gspec[i+_batch_size])
-        axarr[1, i].set_xticks([])
-        axarr[1, i].set_yticks([])
-        axarr[1, i].imshow(img, aspect='equal')
-    plt.show()
-
-def create_seed(_size=16, _channels=16, _dist=5, _points=4):
-    x = torch.zeros([_channels, _size, _size, _size])
-    half = _size//2
-    # * red
-    if _points > 0:
-        x[3:_channels, half, half, half] = 1.0
-        x[0, half, half, half] = 1.0
-    # * green
-    if _points > 1:
-        x[3:_channels, half, half+_dist, half] = 1.0
-        x[1, half, half+_dist, half] = 1.0
-    # * blue
-    if _points > 2:
-        x[3:_channels, half+_dist, half, half] = 1.0
-        x[2, half+_dist, half, half] = 1.0
-    # * yellow
-    if _points > 3:
-        x[3:_channels, half, half, half+_dist] = 1.0
-        x[0:2, half, half, half+_dist] = 1.0
-    # * magenta
-    if _points > 4:
-        x[3:_channels, half, half-_dist, half] = 1.0
-        x[0, half, half-_dist, half] = 1.0
-        x[2, half, half-_dist, half] = 1.0
-    # * cyan
-    if _points > 5:
-        x[3:_channels, half-_dist, half, half] = 1.0
-        x[1:3, half-_dist, half, half] = 1.0
-    return x
     
 class VoxelNCA(torch.nn.Module):
     def __init__(self, _channels=16, _hidden=128, _device='cuda', _model_type='ANISOTROPIC', _update_rate=0.5):
@@ -93,7 +35,7 @@ class VoxelNCA(torch.nn.Module):
         param_n = sum(p.numel() for p in self.parameters())
         print('VoxelNCA param count:', param_n)
         
-    def generate_video(self, _filename, _seed, _steps=128, _delta=0, _zoom=1, _show_grid=False, _print=True):
+    def generate_video(self, _filename, _seed, _delta=1, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
         assert _seed != None
         with VideoWriter(filename=_filename) as vid:
@@ -101,13 +43,48 @@ class VoxelNCA(torch.nn.Module):
             v = Vox().load_from_tensor(x)
             img = v.render(_yaw=_delta, _show_grid=_show_grid, _print=False)
             vid.add(zoom(img, _zoom))
-            for i in range(_steps):
+            for i in range(0, 360, _delta):
                 x = self.forward(x)
                 v = Vox().load_from_tensor(x)
-                img = v.render(_yaw=_delta*(i+1), _show_grid=_show_grid, _print=False)
+                img = v.render(_yaw=i, _show_grid=_show_grid, _print=False)
                 vid.add(zoom(img, _zoom))
             if _print: vid.show()
-        
+    
+    def regen_video(self, _filename, _seed, _size, _mask_types=['x+'], _zoom=1, _show_grid=False, _print=True):
+        assert _filename != None
+        assert _seed != None
+        assert _size != None
+        with VideoWriter(filename=_filename) as vid:
+            x = _seed
+            v = Vox().load_from_tensor(x)
+            img = v.render(_yaw=0, _show_grid=_show_grid, _print=False)
+            vid.add(zoom(img, _zoom))
+            for i in range(0, 285, 2):
+                x = self.forward(x)
+                v = Vox().load_from_tensor(x)
+                img = v.render(_yaw=i, _show_grid=_show_grid, _print=False)
+                vid.add(zoom(img, _zoom))
+            for m in range(len(_mask_types)):
+                # * still frames
+                for i in range(20):
+                    img = v.render(_yaw=285, _show_grid=_show_grid, _print=False)
+                    vid.add(zoom(img, _zoom))
+                # * apply mask
+                mask = half_volume_mask(_size, _mask_types[m])
+                x *= torch.tensor(mask)
+                v = Vox().load_from_tensor(x)
+                # * still frames
+                for i in range(20):
+                    img = v.render(_yaw=285, _show_grid=_show_grid, _print=False)
+                    vid.add(zoom(img, _zoom))
+                # * 360 orbit of regen
+                for i in range(0, 360, 2):
+                    x = self.forward(x)
+                    v = Vox().load_from_tensor(x)
+                    img = v.render(_yaw=i+285, _show_grid=_show_grid, _print=False)
+                    vid.add(zoom(img, _zoom))
+            if _print: vid.show()
+            
     def get_alive_mask(self, _x):
         return func.max_pool3d(_x[:, 3:4, :, :, :], kernel_size=3, stride=1, padding=1) > 0.1
         

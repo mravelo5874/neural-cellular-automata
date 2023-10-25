@@ -13,16 +13,24 @@ class Vox(object):
         _tensor = _tensor.cpu()
         if len(_tensor.shape) == 5:
             _tensor = _tensor[0, ...]
-        _tensor = torch.clamp(_tensor, min=0.0, max=1.0)
         self.load_from_array(np.array(_tensor))
         return self
     
     def load_from_array(self, _array, _name=None):
         if _name != None: self.name = _name
         _array = _array.transpose(1, 2, 3, 0)
-        self.rgba = _array
-        self.rgb = self.rgba[:, : , :, 0:3]
+        rgba = _array
+        self.rgba = np.clip(rgba, 0.0, 1.0)
+        self.rgb = self.rgba[:, :, :, :3]
         self.voxels = self.rgba[:, :, :, 3] > 0.1
+        
+        # self.voxels = self.explode(voxels)
+        # colors = self.rgba_to_hex(rgba)
+        # colors = self.explode(colors)
+        # x, y, z = self.expand_coordinates(np.indices(np.array(self.voxels)+1))
+        # self.x = x
+        # self.x = y
+        # self.x = z
         return self
             
     def load_from_file(self, _filename):
@@ -34,11 +42,18 @@ class Vox(object):
         rgba = self.vox_obj.to_dense_rgba()
         rgba = np.transpose(rgba, (2, 0, 1, 3))
         rgba = np.flip(rgba, axis=2)
-        self.rgba = rgba/255.0
-        self.rgb = self.rgba[:, : , :, 0:3]
-        
-        # * create binary voxel
+        rgba = rgba/255.0
+        self.rgba = np.clip(rgba, 0.0, 1.0)
+        self.rgb = self.rgba[:, :, :, :3]
         self.voxels = self.rgba[:, :, :, 3] > 0.1
+
+        # self.voxels = self.explode(voxels)
+        # colors = self.rgba_to_hex(rgba)
+        # colors = self.explode(colors)
+        # x, y, z = self.expand_coordinates(np.indices(np.array(self.voxels)+1))
+        # self.x = x
+        # self.x = y
+        # self.x = z
         return self
     
     def shape(self):
@@ -47,12 +62,30 @@ class Vox(object):
     def tensor(self):
         return torch.tensor(self.rgba, dtype=torch.float32).permute(3, 0, 1, 2)[None, ...]
     
-    def render(self, _pitch=10, _yaw=280, _show_grid=False, _print=True):
+    def expand_coordinates(self, _indices):
+        x, y, z = _indices
+        x[1::2, :, :] += 1
+        y[:, 1::2, :] += 1
+        z[:, :, 1::2] += 1
+        return x, y, z
+    
+    def rgba_to_hex(self, _data):
+        return '#{:02x}{:02x}{:02x}'.format(_data)
+    
+    def explode(self, _data):
+        shape_arr = np.array(_data.shape)
+        size = shape_arr[:3]*2 - 1
+        exploded = np.zeros(np.concatenate([size, shape_arr[3:]]), dtype=_data.dtype)
+        exploded[::2, ::2, ::2] = _data
+        return exploded
+    
+    def render(self, _pitch=10, _yaw=285, _show_grid=False, _print=True):
         # * render using plt
         fig = plt.figure()
-        ax = fig.add_subplot(projection='3d')
+        ax = fig.add_subplot(projection='3d')    
         ax.voxels(self.voxels, facecolors=self.rgb, edgecolors=self.rgb)
         ax.view_init(elev=_pitch, azim=_yaw)
+        ax.set(xlabel='x', ylabel='y', zlabel='z')
         if not _show_grid: plt.axis('off')
         
         if _print: plt.show()
