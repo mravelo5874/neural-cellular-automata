@@ -1,6 +1,7 @@
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.colors import to_hex
 import voxparser
 from Video import VideoWriter, zoom
 
@@ -20,17 +21,11 @@ class Vox(object):
         if _name != None: self.name = _name
         _array = _array.transpose(1, 2, 3, 0)
         rgba = _array
-        self.rgba = np.clip(rgba, 0.0, 1.0)
+        rgba = np.clip(rgba, 0.0, 1.0)
+        self.rgba = rgba[:, :, :, :4]
         self.rgb = self.rgba[:, :, :, :3]
         self.voxels = self.rgba[:, :, :, 3] > 0.1
-        
-        # self.voxels = self.explode(voxels)
-        # colors = self.rgba_to_hex(rgba)
-        # colors = self.explode(colors)
-        # x, y, z = self.expand_coordinates(np.indices(np.array(self.voxels)+1))
-        # self.x = x
-        # self.x = y
-        # self.x = z
+        self.create_hex()
         return self
             
     def load_from_file(self, _filename):
@@ -43,17 +38,11 @@ class Vox(object):
         rgba = np.transpose(rgba, (2, 0, 1, 3))
         rgba = np.flip(rgba, axis=2)
         rgba = rgba/255.0
-        self.rgba = np.clip(rgba, 0.0, 1.0)
+        rgba = np.clip(rgba, 0.0, 1.0)
+        self.rgba = rgba[:, :, :, :4]
         self.rgb = self.rgba[:, :, :, :3]
         self.voxels = self.rgba[:, :, :, 3] > 0.1
-
-        # self.voxels = self.explode(voxels)
-        # colors = self.rgba_to_hex(rgba)
-        # colors = self.explode(colors)
-        # x, y, z = self.expand_coordinates(np.indices(np.array(self.voxels)+1))
-        # self.x = x
-        # self.x = y
-        # self.x = z
+        self.create_hex()
         return self
     
     def shape(self):
@@ -69,9 +58,6 @@ class Vox(object):
         z[:, :, 1::2] += 1
         return x, y, z
     
-    def rgba_to_hex(self, _data):
-        return '#{:02x}{:02x}{:02x}'.format(_data)
-    
     def explode(self, _data):
         shape_arr = np.array(_data.shape)
         size = shape_arr[:3]*2 - 1
@@ -79,11 +65,23 @@ class Vox(object):
         exploded[::2, ::2, ::2] = _data
         return exploded
     
+    def create_hex(self):
+        self.hex = np.zeros(self.rgba[:, :, :, 0].shape, dtype='U9')
+        size = self.hex.shape
+        for x in range(size[0]):
+            for y in range(size[1]):
+                for z in range(size[2]):
+                    self.hex[x, y, z] = to_hex(self.rgba[x, y, z], keep_alpha=True)
+                    
+        self.hex = self.explode(self.hex)
+        self.voxels = self.explode(self.voxels)
+        self.x, self.y, self.z = self.expand_coordinates(np.indices(np.array(self.voxels.shape)+1))
+    
     def render(self, _pitch=10, _yaw=285, _show_grid=False, _print=True):
         # * render using plt
         fig = plt.figure()
-        ax = fig.add_subplot(projection='3d')    
-        ax.voxels(self.voxels, facecolors=self.rgb, edgecolors=self.rgb)
+        ax = fig.add_subplot(projection='3d')
+        ax.voxels(self.x, self.y, self.z, self.voxels, facecolors=self.hex)
         ax.view_init(elev=_pitch, azim=_yaw)
         ax.set(xlabel='x', ylabel='y', zlabel='z')
         if not _show_grid: plt.axis('off')
