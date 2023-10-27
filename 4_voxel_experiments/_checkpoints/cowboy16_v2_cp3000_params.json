@@ -1,0 +1,12 @@
+{
+    "_EPOCHS_": 8000,
+    "_NAME_": "cowboy16_v2",
+    "_DEVICE_": "cuda",
+    "_CHANNELS_": 16,
+    "_MODEL_TYPE_": "ANISOTROPIC",
+    "_POOL_SIZE_": 32,
+    "_BATCH_SIZE_": 4,
+    "_PAD_": 4,
+    "_LOWER_LR_": 1e-05,
+    "_UPPER_LR_": 0.001
+}
