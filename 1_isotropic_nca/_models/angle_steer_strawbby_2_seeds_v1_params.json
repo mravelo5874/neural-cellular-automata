@@ -11,6 +11,7 @@
     "_HIDDEN_": 128,
     "_MODEL_TYPE_": "ANGLE_STEER",
     "_IS_STEERABLE_": true,
+    "_ANGLE_CHANNEL_": "RANDOMIZED",
     "_STOCHASTIC_UPDATE_RATE_": 0.5,
     "_LOSS_FUNC_": "PIXEL_WISE",
     "_LOWER_LR_": 1e-05,

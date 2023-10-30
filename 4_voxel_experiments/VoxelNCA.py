@@ -34,8 +34,11 @@ class VoxelNCA(torch.nn.Module):
         # * print model parameter count
         param_n = sum(p.numel() for p in self.parameters())
         print('VoxelNCA param count:', param_n)
+
+    def is_steerable(self):
+        return self.model_type == 'YAW_ISO'
         
-    def generate_video(self, _filename, _seed, _delta=1, _zoom=1, _show_grid=False, _print=True):
+    def generate_video(self, _filename, _seed, _delta=2, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
         assert _seed != None
         with VideoWriter(filename=_filename) as vid:
@@ -66,22 +69,60 @@ class VoxelNCA(torch.nn.Module):
                 vid.add(zoom(img, _zoom))
             for m in range(len(_mask_types)):
                 # * still frames
+                img = v.render(_yaw=285, _show_grid=_show_grid, _print=False)
                 for i in range(20):
-                    img = v.render(_yaw=285, _show_grid=_show_grid, _print=False)
                     vid.add(zoom(img, _zoom))
                 # * apply mask
                 mask = half_volume_mask(_size, _mask_types[m])
                 x *= torch.tensor(mask)
                 v = Vox().load_from_tensor(x)
                 # * still frames
+                img = v.render(_yaw=285, _show_grid=_show_grid, _print=False)
                 for i in range(20):
-                    img = v.render(_yaw=285, _show_grid=_show_grid, _print=False)
                     vid.add(zoom(img, _zoom))
                 # * 360 orbit of regen
                 for i in range(0, 360, 2):
                     x = self.forward(x)
                     v = Vox().load_from_tensor(x)
                     img = v.render(_yaw=i+285, _show_grid=_show_grid, _print=False)
+                    vid.add(zoom(img, _zoom))
+            if _print: vid.show()
+            
+    def rotate_video(self, _filename, _seed, _size, _rot_types=[(4, 3), (2, 3), (2, 3)], _zoom=1, _show_grid=False, _print=True):
+        assert _filename != None
+        assert _seed != None
+        assert _size != None
+        with VideoWriter(filename=_filename) as vid:
+            # * still frames of seed
+            x = _seed
+            v = Vox().load_from_tensor(x)
+            img = v.render(_show_grid=_show_grid, _print=False)
+            for i in range(32):
+                vid.add(zoom(img, _zoom))
+            # * render growth
+            for i in range(0, 360, 2):
+                x = self.forward(x)
+                v = Vox().load_from_tensor(x)
+                img = v.render(_yaw=i+285, _show_grid=_show_grid, _print=False)
+                vid.add(zoom(img, _zoom))
+            img = v.render(_show_grid=_show_grid, _print=False)
+            for i in range(32):
+                vid.add(zoom(img, _zoom))
+            for r in range(len(_rot_types)):
+                # * still frames of seed
+                x = torch.rot90(_seed, 1, _rot_types[r])
+                v = Vox().load_from_tensor(x)
+                img = v.render(_show_grid=_show_grid, _print=False)
+                for i in range(32):
+                    vid.add(zoom(img, _zoom))
+                # * render growth
+                for i in range(0, 360, 2):
+                    x = self.forward(x)
+                    v = Vox().load_from_tensor(x)
+                    img = v.render(_yaw=i+285, _show_grid=_show_grid, _print=False)
+                    vid.add(zoom(img, _zoom))
+                img = v.render(_show_grid=_show_grid, _print=False)
+                for i in range(32):
                     vid.add(zoom(img, _zoom))
             if _print: vid.show()
             
@@ -109,7 +150,7 @@ class VoxelNCA(torch.nn.Module):
         
         # * perform update
         _x = _x + p * stochastic_mask
-        if self.model_type == 'STEERABLE':
+        if self.is_steerable():
             states = _x[:, :-1]*alive_mask
             angle = _x[:, -1:] % (PI*2.0)
             _x = torch.cat([states, angle], 1)

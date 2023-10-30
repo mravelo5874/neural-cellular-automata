@@ -3,6 +3,8 @@ import numpy as np
 from Vox import Vox
 from matplotlib import pyplot as plt
 import matplotlib.gridspec as gridspec
+from torchvision.transforms.functional import rotate
+from torchvision.transforms import InterpolationMode
 
 def voxel_wise_loss_function(_x, _target, _scale=1e3, _dims=[]):
     return _scale * torch.mean(torch.square(_x[:, :4] - _target), _dims)
@@ -31,34 +33,44 @@ def show_batch(_batch_size, _before, _after, _dpi=256):
         axarr[1, i].imshow(img, aspect='equal')
     plt.show()
 
-def create_seed(_size=16, _channels=16, _dist=5, _points=4):
+def create_seed(_size=16, _channels=16, _dist=5, _points=4, _last_channel=None, _angle=0.0):
     x = torch.zeros([_channels, _size, _size, _size])
     half = _size//2
-    # * red
-    if _points > 0:
+    # * black
+    if _points == 1:
         x[3:_channels, half, half, half] = 1.0
-        x[0, half, half, half] = 1.0
-    # * green
-    if _points > 1:
-        x[3:_channels, half, half+_dist, half] = 1.0
-        x[1, half, half+_dist, half] = 1.0
-    # * blue
-    if _points > 2:
-        x[3:_channels, half+_dist, half, half] = 1.0
-        x[2, half+_dist, half, half] = 1.0
-    # * yellow
-    if _points > 3:
-        x[3:_channels, half, half, half+_dist] = 1.0
-        x[0:2, half, half, half+_dist] = 1.0
-    # * magenta
-    if _points > 4:
-        x[3:_channels, half, half-_dist, half] = 1.0
-        x[0, half, half-_dist, half] = 1.0
-        x[2, half, half-_dist, half] = 1.0
-    # * cyan
-    if _points > 5:
-        x[3:_channels, half-_dist, half, half] = 1.0
+    else:
+        # * red
+        if _points > 0:
+            x[3:_channels, half, half, half] = 1.0
+            x[0, half, half, half] = 1.0
+        # * green
+        if _points > 1:
+            x[3:_channels, half, half+_dist, half] = 1.0
+            x[1, half, half+_dist, half] = 1.0
+        # * blue
+        if _points > 2:
+            x[3:_channels, half+_dist, half, half] = 1.0
+            x[2, half+_dist, half, half] = 1.0
+        # * yellow
+        if _points > 3:
+            x[3:_channels, half, half, half+_dist] = 1.0
+            x[0:2, half, half, half+_dist] = 1.0
+        # * magenta
+        if _points > 4:
+            x[3:_channels, half, half-_dist, half] = 1.0
+            x[0, half, half-_dist, half] = 1.0
+            x[2, half, half-_dist, half] = 1.0
+        # * cyan
+        if _points > 5:
+            x[3:_channels, half-_dist, half, half] = 1.0
         x[1:3, half-_dist, half, half] = 1.0
+    # * change last channel
+    if _last_channel != None:
+        if _last_channel == 'rand_2pi':
+            x[-1:, ...] = torch.rand(_size, _size, _size)*np.pi*2.0
+        elif _last_channel == 'angle_deg':
+            x[-1:, ...] = torch.tensor(np.full((_size, _size, _size), np.deg2rad(_angle)))
     return x
 
 def half_volume_mask(_size, _type):

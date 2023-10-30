@@ -1,9 +1,9 @@
 {
-    "_EPOCHS_": 8000,
+    "_EPOCHS_": 10000,
     "_NAME_": "cowboy16_v2",
     "_DEVICE_": "cuda",
     "_CHANNELS_": 16,
-    "_MODEL_TYPE_": "ANISOTROPIC",
+    "_MODEL_TYPE_": "YAW_ISO",
     "_POOL_SIZE_": 32,
     "_BATCH_SIZE_": 4,
     "_PAD_": 4,
