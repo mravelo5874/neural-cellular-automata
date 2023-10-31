@@ -1,6 +1,6 @@
 import torch
 import torch.nn.functional as func
-from vox.Vox import Vox
+from scripts.vox.Vox import Vox
 from VoxelPerception import VoxelPerception as vp
 from VoxelUtil import half_volume_mask
 from numpy import pi as PI

@@ -1,6 +1,6 @@
 import torch
 import numpy as np
-from Vox import Vox
+from scripts.vox.Vox import Vox
 from matplotlib import pyplot as plt
 import matplotlib.gridspec as gridspec
 
