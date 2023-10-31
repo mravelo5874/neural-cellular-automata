@@ -192,8 +192,8 @@ def main():
     print ('generating videos...')
     with torch.no_grad():
         model.generate_video(f'_videos/{_NAME_}_grow.mp4', seed_ten)
-        model.regen_video(f'_videos/{_NAME_}_multi_regen.mp4', seed_ten, _size=_SIZE_+(2*_PAD_), _mask_types=['x+', 'y+', 'z+'])
-        model.rotate_video(f'_videos/{_NAME_}_multi_rotate.mp4', seed_ten, _size=_SIZE_+(2*_PAD_))
+        #model.regen_video(f'_videos/{_NAME_}_multi_regen.mp4', seed_ten, _size=_SIZE_+(2*_PAD_), _mask_types=['x+', 'y+', 'z+'])
+        #model.rotate_video(f'_videos/{_NAME_}_multi_rotate.mp4', seed_ten, _size=_SIZE_+(2*_PAD_))
     
     # * calculate elapsed time
     elapsed_time = datetime.datetime.now() - start

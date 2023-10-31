@@ -51,7 +51,7 @@ class VoxelNCA(torch.nn.Module):
                 v = Vox().load_from_tensor(x)
                 img = v.render(_yaw=i, _show_grid=_show_grid, _print=False)
                 vid.add(zoom(img, _zoom))
-            if _print: vid.show()
+            #if _print: vid.show()
     
     def regen_video(self, _filename, _seed, _size, _mask_types=['x+'], _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
@@ -86,7 +86,7 @@ class VoxelNCA(torch.nn.Module):
                     v = Vox().load_from_tensor(x)
                     img = v.render(_yaw=i+285, _show_grid=_show_grid, _print=False)
                     vid.add(zoom(img, _zoom))
-            if _print: vid.show()
+            #if _print: vid.show()
             
     def rotate_video(self, _filename, _seed, _size, _rot_types=[(4, 3), (2, 3), (2, 3)], _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
@@ -124,7 +124,7 @@ class VoxelNCA(torch.nn.Module):
                 img = v.render(_show_grid=_show_grid, _print=False)
                 for i in range(32):
                     vid.add(zoom(img, _zoom))
-            if _print: vid.show()
+            #if _print: vid.show()
             
     def get_alive_mask(self, _x):
         return func.max_pool3d(_x[:, 3:4, :, :, :], kernel_size=3, stride=1, padding=1) > 0.1
