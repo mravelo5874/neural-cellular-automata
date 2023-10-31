@@ -12,7 +12,7 @@ from scripts.vox import Vox
 
 def main():
     print ('****************')
-    print ('starting training...')
+    print ('init training...')
     start = datetime.datetime.now()
     
     # * target/seed parameters
@@ -40,8 +40,10 @@ def main():
     
     # * sets the device  
     _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
-    print ('is cuda available? ', torch.cuda.is_available())
     print ('device: ', _DEVICE_)
+    torch.backends.cudnn.benchmark = True
+    torch.cuda.empty_cache()
+    torch.set_default_tensor_type('torch.cuda.FloatTensor')
     
     # * save model method
     def save_model(_dir, _model, _name):
@@ -101,6 +103,7 @@ def main():
     print ('pool.shape:',pool.shape)
     
     # * model training
+    print (f'starting training w/ {_EPOCHS_+1} epochs...')
     loss_log = []
     for i in range(_EPOCHS_+1):
         with torch.no_grad():
