@@ -194,6 +194,5 @@ def main():
     print (f'elapsed time: {elapsed_time}')
     print ('****************')
     
-        
 if __name__ == '__main__':
     main()
