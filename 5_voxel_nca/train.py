@@ -16,7 +16,9 @@ def main():
     print ('initializing training...')
     start = datetime.datetime.now()
     
-    print ('cwd:',os.getcwd())
+    # * get current working directoty
+    cwd = os.getcwd()
+    print ('cwd:',cwd)
     
     # * target/seed parameters
     _NAME_ = 'cowboy16_condor_test'
@@ -181,7 +183,7 @@ def main():
     pl.plot(loss_log, '.', alpha=0.1)
     pl.yscale('log')
     pl.ylim(np.min(loss_log), loss_log[0])
-    pl.savefig(f'_models/{_NAME_}_loss_plot.png')
+    pl.savefig(f'/_models/{_NAME_}_loss_plot.png')
                 
     # * save final model
     save_model('_models', model, _NAME_)
