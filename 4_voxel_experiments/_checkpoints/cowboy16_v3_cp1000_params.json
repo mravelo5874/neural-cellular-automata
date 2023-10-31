@@ -1,6 +1,6 @@
 {
     "_EPOCHS_": 10000,
-    "_NAME_": "cowboy16_v2",
+    "_NAME_": "cowboy16_v3",
     "_DEVICE_": "cuda",
     "_CHANNELS_": 16,
     "_MODEL_TYPE_": "YAW_ISO",
