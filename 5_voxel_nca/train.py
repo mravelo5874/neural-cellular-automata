@@ -84,7 +84,7 @@ def main():
         json_object = json.dumps(dict, indent=4)
         with open(_dir + '/' + _name + '_params.json', 'w') as outfile:
             outfile.write(json_object)
-        print (f'model {_name} saved to {_dir}...')
+        print (f'\'{_name}\' saved to {_dir}...')
     
     # * create model
     model = NCA(_channels=_CHANNELS_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
