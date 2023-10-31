@@ -8,11 +8,11 @@ import matplotlib.pylab as pl
 
 from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as util
-from scripts.vox import Vox
+from scripts.vox.Vox import Vox
 
 def main():
     print ('****************')
-    print ('init training...')
+    print ('initializing training...')
     start = datetime.datetime.now()
     
     # * target/seed parameters
@@ -40,7 +40,7 @@ def main():
     
     # * sets the device  
     _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
-    print ('device: ', _DEVICE_)
+    print ('device:', _DEVICE_)
     torch.backends.cudnn.benchmark = True
     torch.cuda.empty_cache()
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
