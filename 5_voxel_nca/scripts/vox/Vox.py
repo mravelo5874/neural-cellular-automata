@@ -2,7 +2,7 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import to_hex
-from Video import VideoWriter, zoom
+from scripts.Video import VideoWriter, zoom
 import scripts.vox.VoxParser as parser
 
 class Vox(object):
