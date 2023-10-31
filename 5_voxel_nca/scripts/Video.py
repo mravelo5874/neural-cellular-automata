@@ -6,7 +6,7 @@ import numpy as np
 import os
 import PIL.Image, PIL.ImageDraw, PIL.ImageFont
 import requests
-from IPython.display import Image
+# from IPython.display import Image
 
 os.environ['FFMPEG_BINARY'] = 'ffmpeg'
 import moviepy.editor as mvp
@@ -59,8 +59,8 @@ def zoom(img, scale=4):
   img = np.repeat(img, scale, 1)
   return img
 
-def imshow(a, fmt='jpeg', scale=4):
-  display(Image(data=imencode(zoom(a, scale), fmt)))
+# def imshow(a, fmt='jpeg', scale=4):
+#   display(Image(data=imencode(zoom(a, scale), fmt)))
 
 def tile2d(a, w=None):
   a = np.asarray(a)
@@ -102,7 +102,7 @@ class VideoWriter:
     if self.writer is not None:
       self.writer.close()
 
-  def show(self, **kwargs):
-    self.close()
-    fn = self.params['filename']
-    display(mvp.ipython_display(fn, **kwargs))
+  # def show(self, **kwargs):
+  #   self.close()
+  #   fn = self.params['filename']
+  #   display(mvp.ipython_display(fn, **kwargs))
