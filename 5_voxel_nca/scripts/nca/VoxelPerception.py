@@ -1,7 +1,5 @@
 import torch
 import torch.nn.functional as func
-import torchvision.transforms.functional as trans
-import numpy as np
 
 # 3D filters
 X_SOBEL_KERN = torch.tensor([

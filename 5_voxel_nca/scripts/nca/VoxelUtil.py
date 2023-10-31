@@ -3,8 +3,6 @@ import numpy as np
 from Vox import Vox
 from matplotlib import pyplot as plt
 import matplotlib.gridspec as gridspec
-from torchvision.transforms.functional import rotate
-from torchvision.transforms import InterpolationMode
 
 def voxel_wise_loss_function(_x, _target, _scale=1e3, _dims=[]):
     return _scale * torch.mean(torch.square(_x[:, :4] - _target), _dims)
