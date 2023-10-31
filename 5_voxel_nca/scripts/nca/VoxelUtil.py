@@ -1,8 +1,8 @@
 import torch
 import numpy as np
-from scripts.vox.Vox import Vox
-from matplotlib import pyplot as plt
 import matplotlib.gridspec as gridspec
+from matplotlib import pyplot as plt
+from scripts.vox.Vox import Vox
 
 def voxel_wise_loss_function(_x, _target, _scale=1e3, _dims=[]):
     return _scale * torch.mean(torch.square(_x[:, :4] - _target), _dims)

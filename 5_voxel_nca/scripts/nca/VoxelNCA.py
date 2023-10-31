@@ -1,10 +1,10 @@
 import torch
 import torch.nn.functional as func
-from scripts.vox.Vox import Vox
-from VoxelPerception import VoxelPerception as vp
-from VoxelUtil import half_volume_mask
 from numpy import pi as PI
 from Video import VideoWriter, zoom
+from scripts.vox.Vox import Vox
+from scripts.nca.VoxelPerception import VoxelPerception as vp
+from scripts.nca.VoxelUtil import half_volume_mask
     
 class VoxelNCA(torch.nn.Module):
     def __init__(self, _channels=16, _hidden=128, _device='cuda', _model_type='ANISOTROPIC', _update_rate=0.5):

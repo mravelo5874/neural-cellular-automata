@@ -1,5 +1,5 @@
 from struct import unpack_from as unpack, calcsize
-from VoxModels import VoxObj, Size, Voxel, Color, Model, Material
+from scripts.vox.VoxModels import VoxObj, Size, Voxel, Color, Model, Material
 
 def bit(val, offset):
     mask = 1 << offset

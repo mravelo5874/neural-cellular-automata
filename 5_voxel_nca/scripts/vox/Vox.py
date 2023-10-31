@@ -2,8 +2,8 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import to_hex
-import VoxParser
 from Video import VideoWriter, zoom
+import scripts.vox.VoxParser as parser
 
 class Vox(object):
     def __init__(self):
@@ -31,7 +31,7 @@ class Vox(object):
     def load_from_file(self, _filename):
         prts = _filename.split('/')
         self.name = prts[len(prts)-1].replace('.vox', '')
-        self.vox_obj = VoxParser.voxparser(_filename).parse()
+        self.vox_obj = parser.voxparser(_filename).parse()
         
         # * extract RGB data
         rgba = self.vox_obj.to_dense_rgba()
