@@ -1,3 +1,4 @@
+import os
 import json
 import pathlib
 import datetime
@@ -14,6 +15,8 @@ def main():
     print ('****************')
     print ('initializing training...')
     start = datetime.datetime.now()
+    
+    print ('cwd:',os.getcwd())
     
     # * target/seed parameters
     _NAME_ = 'cowboy16_condor_test'
