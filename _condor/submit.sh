@@ -2,4 +2,5 @@
 source ~/.bashrc
 cd /u/marco/github/neural-cellular-automata
 source venv/bin/activate
-python3 /5_voxel_nca/train.py
+cd /u/marco/github/neural-cellular-automata/5_voxel_nca
+python3 train.py
