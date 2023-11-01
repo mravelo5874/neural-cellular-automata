@@ -166,13 +166,12 @@ def main():
             if l != np.NaN and l != -np.inf and l != np.inf:
                 loss_log.append(l)
 
-            # * print out info
-            secs = (datetime.datetime.now()-start).seconds
-            time = str(datetime.timedelta(seconds=secs))
-            iter_per_sec = float(i)/float(secs)
-            est_time = (_EPOCHS_-i)*(1/iter_per_sec)
-            if i % _INFO_RATE_ == 0:
-                # * print info
+            # * print info
+            if i % _INFO_RATE_ == 0 and i!= 0:
+                secs = (datetime.datetime.now()-start).seconds
+                time = str(datetime.timedelta(seconds=secs))
+                iter_per_sec = float(i)/float(secs)
+                est_time = (_EPOCHS_-i)*(1/iter_per_sec)
                 print(f'[info] iter: {i}\t iter/sec: {np.round(iter_per_sec, 5)}\t time: {time}\t est-rem: {np.round(est_time, 5)}\t loss: {np.round(l, 5)}\t min-loss: {np.round(np.min(loss_log), 5)}\t lr: {np.round(lr_sched.get_last_lr()[0], 5)}')
                     
             # * save checkpoint
