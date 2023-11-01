@@ -17,20 +17,20 @@ def main():
     start = datetime.datetime.now()
     
     # * target/seed parameters
-    _NAME_ = 'cowboy16_yaw_iso2'
+    _NAME_ = 'cowboy16_aniso'
     _SIZE_ = 16
     _PAD_ = 4
-    _SEED_POINTS_ = 3
+    _SEED_POINTS_ = 4
     _SEED_DIST_ = 4
     _TARGET_VOX_ = '../_vox/cowboy16.vox'
     # * model parameters
-    _MODEL_TYPE_ = 'YAW_ISO'
+    _MODEL_TYPE_ = 'ANISOTROPIC'
     _CHANNELS_ = 16
     # * training parameters
     _EPOCHS_ = 10_000
     _BATCH_SIZE_ = 4
     _POOL_SIZE_ = 32
-    _UPPER_LR_ = 8e-4
+    _UPPER_LR_ = 1e-3
     _LOWER_LR_ = 1e-5
     _NUM_DAMG_ = 2
     _DAMG_RATE_ = 5
@@ -40,9 +40,11 @@ def main():
     _VIDEO_RATE_ = 100_000
     
     # * print out parameters
-    print (f'model: {_NAME_} type: {_MODEL_TYPE_}')
-    print (f'batch size: {_BATCH_SIZE_} pool size: {_POOL_SIZE_}')
-    print (f'upper lr: {_UPPER_LR_} lower lr: {_LOWER_LR_}')
+    print (f'model: {_NAME_}')
+    print (f'type: {_MODEL_TYPE_}')
+    print (f'batch size: {_BATCH_SIZE_}')
+    print (f'pool size: {_POOL_SIZE_}')
+    print (f'lr: {_UPPER_LR_} > {_LOWER_LR_}')
     
     # * sets the device  
     _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
