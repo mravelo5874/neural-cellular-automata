@@ -42,8 +42,8 @@ def main():
     # * print out parameters
     print (f'model: {_NAME_}')
     print (f'type: {_MODEL_TYPE_}')
-    print (f'batch size: {_BATCH_SIZE_}')
-    print (f'pool size: {_POOL_SIZE_}')
+    print (f'batch-size: {_BATCH_SIZE_}')
+    print (f'pool-size: {_POOL_SIZE_}')
     print (f'lr: {_UPPER_LR_} > {_LOWER_LR_}')
     
     # * sets the device  
