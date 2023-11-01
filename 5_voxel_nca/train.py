@@ -40,7 +40,7 @@ def main():
     _DAMG_RATE_ = 5
     # * logging parameters
     _INFO_RATE_ = 50
-    _SAVE_RATE_ = 500
+    _SAVE_RATE_ = 1000
     _VIDEO_RATE_ = 100_000
     
     # * sets the device  
@@ -170,9 +170,10 @@ def main():
             secs = (datetime.datetime.now()-start).seconds
             time = str(datetime.timedelta(seconds=secs))
             iter_per_sec = float(i)/float(secs)
+            est_time = (_EPOCHS_-i)*(1/iter_per_sec)
             if i % _INFO_RATE_ == 0:
                 # * print info
-                print(f'[info] iter: {i}\t iter/sec: {np.round(iter_per_sec, 5)}\t time: {time}\t loss: {np.round(l, 5)}\t min-loss: {np.round(np.min(loss_log), 5)}\t lr: {np.round(lr_sched.get_last_lr()[0], 5)}')
+                print(f'[info] iter: {i}\t iter/sec: {np.round(iter_per_sec, 5)}\t time: {time}\t est-rem: {np.round(est_time, 5)}\t loss: {np.round(l, 5)}\t min-loss: {np.round(np.min(loss_log), 5)}\t lr: {np.round(lr_sched.get_last_lr()[0], 5)}')
                     
             # * save checkpoint
             if i % _SAVE_RATE_ == 0 and i != 0:
