@@ -1,4 +1,3 @@
-import os
 import json
 import pathlib
 import datetime
@@ -17,12 +16,12 @@ def main():
     start = datetime.datetime.now()
     
     # * target/seed parameters
-    _NAME_ = 'cowboy16_aniso'
-    _SIZE_ = 16
+    _NAME_ = 'cowboy28_aniso'
+    _SIZE_ = 28
     _PAD_ = 4
     _SEED_POINTS_ = 4
     _SEED_DIST_ = 4
-    _TARGET_VOX_ = '../_vox/cowboy16.vox'
+    _TARGET_VOX_ = '../_vox/cowboy28.vox'
     # * model parameters
     _MODEL_TYPE_ = 'ANISOTROPIC'
     _CHANNELS_ = 16
@@ -87,7 +86,7 @@ def main():
         json_object = json.dumps(dict, indent=4)
         with open(_dir + '/' + _name + '_params.json', 'w') as outfile:
             outfile.write(json_object)
-        print (f'\'{_name}\' saved to {_dir}...')
+        print (f'model [{_name}] saved to {_dir}...')
     
     # * create model
     model = NCA(_channels=_CHANNELS_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)

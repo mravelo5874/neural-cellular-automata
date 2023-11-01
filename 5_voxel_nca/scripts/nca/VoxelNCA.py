@@ -1,5 +1,6 @@
 import torch
 import torch.nn.functional as func
+import datetime
 from numpy import pi as PI
 from scripts.Video import VideoWriter, zoom
 from scripts.vox.Vox import Vox
@@ -41,6 +42,7 @@ class VoxelNCA(torch.nn.Module):
     def generate_video(self, _filename, _seed, _delta=4, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
         assert _seed != None
+        start = datetime.datetime.now()
         with VideoWriter(filename=_filename) as vid:
             x = _seed
             v = Vox().load_from_tensor(x)
@@ -52,12 +54,16 @@ class VoxelNCA(torch.nn.Module):
                 v = Vox().load_from_tensor(x)
                 img = v.render(_yaw=i, _show_grid=_show_grid, _print=False)
                 vid.add(zoom(img, _zoom))
-            #if _print: vid.show()
+        # * calculate elapsed time
+        secs = (datetime.datetime.now()-start).seconds
+        elapsed_time = str(datetime.timedelta(seconds=secs))
+        print (f'created video: {_filename}, gen-time: {elapsed_time}')
     
     def regen_video(self, _filename, _seed, _size, _mask_types=['x+'], _delta=4, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
         assert _seed != None
         assert _size != None
+        start = datetime.datetime.now()
         with VideoWriter(filename=_filename) as vid:
             x = _seed
             v = Vox().load_from_tensor(x)
@@ -89,12 +95,16 @@ class VoxelNCA(torch.nn.Module):
                     v = Vox().load_from_tensor(x)
                     img = v.render(_yaw=i+285, _show_grid=_show_grid, _print=False)
                     vid.add(zoom(img, _zoom))
-            #if _print: vid.show()
+        # * calculate elapsed time
+        secs = (datetime.datetime.now()-start).seconds
+        elapsed_time = str(datetime.timedelta(seconds=secs))
+        print (f'created video: {_filename}, gen-time: {elapsed_time}')
             
     def rotate_video(self, _filename, _seed, _size, _rot_types=[(4, 3), (2, 3), (2, 4)], _delta=4, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
         assert _seed != None
         assert _size != None
+        start = datetime.datetime.now()
         with VideoWriter(filename=_filename) as vid:
             # * still frames of seed
             x = _seed
@@ -129,7 +139,10 @@ class VoxelNCA(torch.nn.Module):
                 img = v.render(_show_grid=_show_grid, _print=False)
                 for i in range(32):
                     vid.add(zoom(img, _zoom))
-            #if _print: vid.show()
+            # * calculate elapsed time
+            secs = (datetime.datetime.now()-start).seconds
+            elapsed_time = str(datetime.timedelta(seconds=secs))
+            print (f'created video: {_filename}, gen-time: {elapsed_time}')
             
     def get_alive_mask(self, _x):
         return func.max_pool3d(_x[:, 3:4, :, :, :], kernel_size=3, stride=1, padding=1) > 0.1
