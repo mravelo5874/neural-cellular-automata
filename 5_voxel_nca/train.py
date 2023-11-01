@@ -171,9 +171,14 @@ def main():
                 secs = (datetime.datetime.now()-start).seconds
                 time = str(datetime.timedelta(seconds=secs))
                 iter_per_sec = float(i)/float(secs)
-                est_time_sec = (_EPOCHS_-i)*(1/iter_per_sec)
+                est_time_sec = int((_EPOCHS_-i)*(1/iter_per_sec))
                 est = str(datetime.timedelta(seconds=est_time_sec))
-                print(f'[info] iter: {i}\t iter/sec: {np.round(iter_per_sec, 5)}\t time: {time}\t est: {est}\t loss: {np.round(l, 5)}\t min-loss: {np.round(np.min(loss_log), 5)}\t lr: {np.round(lr_sched.get_last_lr()[0], 8)}')
+                print(f'[info] iter: {i}\t 
+                      iter/sec: {np.round(iter_per_sec, 5)}\t 
+                      time: {time}\t est: {est}\t 
+                      loss: {np.round(l, 5)}\t 
+                      min-loss: {np.round(np.min(loss_log), 5)}\t 
+                      lr: {np.round(lr_sched.get_last_lr()[0], 8)}')
                     
             # * save checkpoint
             if i % _SAVE_RATE_ == 0 and i != 0:
