@@ -30,8 +30,8 @@ def main():
     _EPOCHS_ = 10_000
     _BATCH_SIZE_ = 8
     _POOL_SIZE_ = 32
-    _UPPER_LR_ = 1e-3
-    _LOWER_LR_ = 1e-5
+    _UPPER_LR_ = 1e-4
+    _LOWER_LR_ = 1e-6
     _NUM_DAMG_ = 2
     _DAMG_RATE_ = 5
     # * logging parameters
