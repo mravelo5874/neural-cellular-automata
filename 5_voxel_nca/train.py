@@ -18,7 +18,7 @@ def main():
     # * target/seed parameters
     _NAME_ = 'cowboy28_aniso'
     _SIZE_ = 28
-    _PAD_ = 4
+    _PAD_ = 2
     _SEED_POINTS_ = 4
     _SEED_DIST_ = 4
     _TARGET_VOX_ = '../_vox/cowboy28.vox'
