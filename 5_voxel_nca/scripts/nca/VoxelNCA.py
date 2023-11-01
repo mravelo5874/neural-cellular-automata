@@ -16,7 +16,7 @@ class VoxelNCA(torch.nn.Module):
 
         # * determine number of perceived channels
         perception_channels = self.p.perception[self.model_type](self.p, torch.zeros([1, _channels, 8, 8, 8])).shape[1]
-        print ('perception_channels:',perception_channels)
+        print ('nca perception channels:',perception_channels)
         
         # * determine hidden channels (equalize the parameter count btwn model types)
         hidden_channels = 8*1024 // (perception_channels+_channels)
@@ -33,7 +33,7 @@ class VoxelNCA(torch.nn.Module):
         
         # * print model parameter count
         param_n = sum(p.numel() for p in self.parameters())
-        print('VoxelNCA param count:', param_n)
+        print('nca parameter count:', param_n)
 
     def is_steerable(self):
         return self.model_type == 'YAW_ISO'
@@ -47,7 +47,8 @@ class VoxelNCA(torch.nn.Module):
             img = v.render(_yaw=_delta, _show_grid=_show_grid, _print=False)
             vid.add(zoom(img, _zoom))
             for i in range(0, 360, _delta):
-                x = self.forward(x)
+                for _ in range(_delta):
+                    x = self.forward(x)
                 v = Vox().load_from_tensor(x)
                 img = v.render(_yaw=i, _show_grid=_show_grid, _print=False)
                 vid.add(zoom(img, _zoom))
@@ -63,7 +64,8 @@ class VoxelNCA(torch.nn.Module):
             img = v.render(_yaw=0, _show_grid=_show_grid, _print=False)
             vid.add(zoom(img, _zoom))
             for i in range(0, 285, _delta):
-                x = self.forward(x)
+                for _ in range(_delta):
+                    x = self.forward(x)
                 v = Vox().load_from_tensor(x)
                 img = v.render(_yaw=i, _show_grid=_show_grid, _print=False)
                 vid.add(zoom(img, _zoom))
@@ -82,7 +84,8 @@ class VoxelNCA(torch.nn.Module):
                     vid.add(zoom(img, _zoom))
                 # * 360 orbit of regen
                 for i in range(0, 360, _delta):
-                    x = self.forward(x)
+                    for _ in range(_delta):
+                        x = self.forward(x)
                     v = Vox().load_from_tensor(x)
                     img = v.render(_yaw=i+285, _show_grid=_show_grid, _print=False)
                     vid.add(zoom(img, _zoom))
@@ -101,7 +104,8 @@ class VoxelNCA(torch.nn.Module):
                 vid.add(zoom(img, _zoom))
             # * render growth
             for i in range(0, 360, _delta):
-                x = self.forward(x)
+                for _ in range(_delta):
+                    x = self.forward(x)
                 v = Vox().load_from_tensor(x)
                 img = v.render(_yaw=i+285, _show_grid=_show_grid, _print=False)
                 vid.add(zoom(img, _zoom))
@@ -117,7 +121,8 @@ class VoxelNCA(torch.nn.Module):
                     vid.add(zoom(img, _zoom))
                 # * render growth
                 for i in range(0, 360, _delta):
-                    x = self.forward(x)
+                    for _ in range(_delta):
+                        x = self.forward(x)
                     v = Vox().load_from_tensor(x)
                     img = v.render(_yaw=i+285, _show_grid=_show_grid, _print=False)
                     vid.add(zoom(img, _zoom))

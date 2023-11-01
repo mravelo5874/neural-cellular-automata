@@ -17,7 +17,7 @@ def main():
     start = datetime.datetime.now()
     
     # * target/seed parameters
-    _NAME_ = 'cowboy16_yaw_iso'
+    _NAME_ = 'cowboy16_yaw_iso2'
     _SIZE_ = 16
     _PAD_ = 4
     _SEED_POINTS_ = 3
