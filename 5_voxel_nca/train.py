@@ -99,6 +99,7 @@ def main():
     
     # * load target vox
     target = Vox().load_from_file(_TARGET_VOX_)
+    print (f'vox_target.shape: {target.shape()}')
     target_ten = target.tensor()
     target_ten = func.pad(target_ten, (_PAD_, _PAD_, _PAD_, _PAD_, _PAD_, _PAD_), 'constant')
     target_ten = target_ten.clone().repeat(_BATCH_SIZE_, 1, 1, 1, 1).to(_DEVICE_)
