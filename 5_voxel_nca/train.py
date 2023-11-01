@@ -41,7 +41,7 @@ def main():
     # * logging parameters
     _INFO_RATE_ = 50
     _SAVE_RATE_ = 500
-    _VIDEO_RATE_ = 1000
+    _VIDEO_RATE_ = 100_000
     
     # * sets the device  
     _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
