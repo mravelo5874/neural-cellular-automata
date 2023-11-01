@@ -16,10 +16,6 @@ def main():
     print ('initializing training...')
     start = datetime.datetime.now()
     
-    # * get current working directoty
-    cwd = os.getcwd()
-    print ('cwd:',cwd)
-    
     # * target/seed parameters
     _NAME_ = 'cowboy16_yaw_iso'
     _SIZE_ = 16
@@ -93,19 +89,19 @@ def main():
 
     # * create seed
     seed_ten = util.create_seed(_size=_SIZE_+(2*_PAD_), _dist=_SEED_DIST_, _points=_SEED_POINTS_).unsqueeze(0).to(_DEVICE_)
-    print ('seed.shape:',seed_ten.shape)
+    print (f'seed.shape: {seed_ten.shape}')
     
     # * load target vox
     target = Vox().load_from_file(_TARGET_VOX_)
     target_ten = target.tensor()
     target_ten = func.pad(target_ten, (_PAD_, _PAD_, _PAD_, _PAD_, _PAD_, _PAD_), 'constant')
     target_ten = target_ten.clone().repeat(_BATCH_SIZE_, 1, 1, 1, 1).to(_DEVICE_)
-    print ('target.shape:',target_ten.shape)
+    print (f'target.shape: {target_ten.shape}')
     
     # * create pool
     with torch.no_grad():
         pool = seed_ten.clone().repeat(_POOL_SIZE_, 1, 1, 1, 1)
-    print ('pool.shape:',pool.shape)
+    print (f'pool.shape: {pool.shape}')
     
     # * model training
     print (f'starting training w/ {_EPOCHS_+1} epochs...')
@@ -158,7 +154,7 @@ def main():
             # * normalize gradients 
             for p in model.parameters():
                 p.grad /= (p.grad.norm()+1e-8)
-            # maybe? : torch.nn.utils.clip_grad_norm_(model.parameters(), clip_value=5)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), clip_value=5) # maybe? : 
             opt.step()
             opt.zero_grad()
             lr_sched.step()
