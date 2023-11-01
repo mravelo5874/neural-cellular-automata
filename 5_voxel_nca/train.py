@@ -39,7 +39,7 @@ def main():
     _NUM_DAMG_ = 2
     _DAMG_RATE_ = 5
     # * logging parameters
-    _INFO_RATE_ = 50
+    _INFO_RATE_ = 250
     _SAVE_RATE_ = 1000
     _VIDEO_RATE_ = 100_000
     
@@ -111,6 +111,7 @@ def main():
     print (f'starting training w/ {_EPOCHS_+1} epochs...')
     train_start = datetime.datetime.now()
     loss_log = []
+    prev_lr = -np.inf
     for i in range(_EPOCHS_+1):
         with torch.no_grad():
             # * sample batch from pool
@@ -168,6 +169,7 @@ def main():
             if not torch.isnan(loss) and not torch.isinf(loss) and not torch.isneginf(loss): 
                 loss_log.append(_loss)
 
+            
             # * print info
             if i % _INFO_RATE_ == 0 and i!= 0:
                 secs = (datetime.datetime.now()-train_start).seconds
@@ -175,8 +177,13 @@ def main():
                 iter_per_sec = float(i)/float(secs)
                 est_time_sec = int((_EPOCHS_-i)*(1/iter_per_sec))
                 est = str(datetime.timedelta(seconds=est_time_sec))
-                print(f'[info] iter: {i}\t iter/sec: {np.round(iter_per_sec, 5)}\t time: {time}\t est: {est}\t loss: {np.round(_loss, 5)}\t min-loss: {np.round(np.min(loss_log), 5)}\t lr: {np.round(lr_sched.get_last_lr()[0], 8)}')
-                    
+                lr = np.round(lr_sched.get_last_lr()[0], 8)
+                step = '▲'
+                if prev_lr > lr:
+                    step = '▼'
+                prev_lr = lr
+                print(f'[info] iter: {i}\t iter/sec: {np.round(iter_per_sec, 5)}\t time: {time}\t est: {est}\t loss: {np.round(_loss, 5)}\t min-loss: {np.round(np.min(loss_log), 5)}\t lr: {lr} {step}')
+                                
             # * save checkpoint
             if i % _SAVE_RATE_ == 0 and i != 0:
                 save_model('_checkpoints', model, _NAME_+'_cp'+str(i))
