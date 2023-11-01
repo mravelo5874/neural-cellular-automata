@@ -1,0 +1,20 @@
+{
+    "_NAME_": "cowboy16_condor_test",
+    "_SIZE_": 16,
+    "_PAD_": 4,
+    "_SEED_POINTS_": 3,
+    "_SEED_DIST_": 4,
+    "_TARGET_VOX_": "../_vox/cowboy16.vox",
+    "_MODEL_TYPE_": "YAW_ISO",
+    "_CHANNELS_": 16,
+    "_EPOCHS_": 100,
+    "_BATCH_SIZE_": 4,
+    "_POOL_SIZE_": 32,
+    "_UPPER_LR_": 0.001,
+    "_LOWER_LR_": 1e-05,
+    "_NUM_DAMG_": 2,
+    "_DAMG_RATE_": 5,
+    "_INFO_RATE_": 50,
+    "_SAVE_RATE_": 500,
+    "_VIDEO_RATE_": 1000
+}
