@@ -7,4 +7,4 @@ pip install numpy
 pip install torch
 pip install matplotlib
 pip install requests
-pop install moviepy
+pip install moviepy
