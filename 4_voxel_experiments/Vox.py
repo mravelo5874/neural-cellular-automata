@@ -87,7 +87,6 @@ class Vox(object):
         if not _show_grid: plt.axis('off')
         
         if _print: plt.show()
-        else: plt.close()
 
         # * convert figure to numpy array RGB
         fig.canvas.draw()

@@ -109,6 +109,7 @@ def main():
     
     # * model training
     print (f'starting training w/ {_EPOCHS_+1} epochs...')
+    train_start = datetime.datetime.now()
     loss_log = []
     for i in range(_EPOCHS_+1):
         with torch.no_grad():
@@ -155,25 +156,26 @@ def main():
             loss.backward()
             # * normalize gradients 
             for p in model.parameters():
-                p.grad /= (p.grad.norm()+1e-8) 
+                p.grad /= (p.grad.norm()+1e-8)
+            # maybe? : torch.nn.utils.clip_grad_norm_(model.parameters(), clip_value=5)
             opt.step()
             opt.zero_grad()
             lr_sched.step()
             # * re-add batch to pool
             pool[batch_idxs] = x
             # * correctly add to loss log
-            l = loss.item()
-            if l != np.NaN and l != -np.inf and l != np.inf:
-                loss_log.append(l)
+            _loss = loss.item()
+            if not torch.isnan(loss) and not torch.isinf(loss) and not torch.isneginf(loss): 
+                loss_log.append(_loss)
 
             # * print info
             if i % _INFO_RATE_ == 0 and i!= 0:
-                secs = (datetime.datetime.now()-start).seconds
+                secs = (datetime.datetime.now()-train_start).seconds
                 time = str(datetime.timedelta(seconds=secs))
                 iter_per_sec = float(i)/float(secs)
                 est_time_sec = int((_EPOCHS_-i)*(1/iter_per_sec))
                 est = str(datetime.timedelta(seconds=est_time_sec))
-                print(f'[info] iter: {i}\t iter/sec: {np.round(iter_per_sec, 5)}\t time: {time}\t est: {est}\t loss: {np.round(l, 5)}\t min-loss: {np.round(np.min(loss_log), 5)}\t lr: {np.round(lr_sched.get_last_lr()[0], 8)}')
+                print(f'[info] iter: {i}\t iter/sec: {np.round(iter_per_sec, 5)}\t time: {time}\t est: {est}\t loss: {np.round(_loss, 5)}\t min-loss: {np.round(np.min(loss_log), 5)}\t lr: {np.round(lr_sched.get_last_lr()[0], 8)}')
                     
             # * save checkpoint
             if i % _SAVE_RATE_ == 0 and i != 0:
@@ -183,6 +185,11 @@ def main():
             if i % _VIDEO_RATE_ == 0 and i != 0:
                 model.generate_video(f'_videos/{_NAME_}_cp{i}.mp4', seed_ten)
 
+    # * print train time
+    secs = (datetime.datetime.now()-train_start).seconds
+    train_time = str(datetime.timedelta(seconds=secs))
+    print (f'train time: {train_time}')
+    
     # * save loss plot
     pl.plot(loss_log, '.', alpha=0.1)
     pl.yscale('log')
@@ -200,7 +207,8 @@ def main():
         model.rotate_video(f'_videos/{_NAME_}_multi_rotate.mp4', seed_ten, _size=_SIZE_+(2*_PAD_))
     
     # * calculate elapsed time
-    elapsed_time = datetime.datetime.now() - start
+    secs = (datetime.datetime.now()-start).seconds
+    elapsed_time = str(datetime.timedelta(seconds=secs))
     print (f'elapsed time: {elapsed_time}')
     print ('****************')
     

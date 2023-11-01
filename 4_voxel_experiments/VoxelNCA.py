@@ -2,7 +2,7 @@ import torch
 import torch.nn.functional as func
 from Vox import Vox
 from VoxelPerception import VoxelPerception as vp
-from VoxelUtil import half_volume_mask
+from VoxelUtil import VoxelUtil as util
 from numpy import pi as PI
 from Video import VideoWriter, zoom
     
@@ -73,7 +73,7 @@ class VoxelNCA(torch.nn.Module):
                 for i in range(20):
                     vid.add(zoom(img, _zoom))
                 # * apply mask
-                mask = half_volume_mask(_size, _mask_types[m])
+                mask = util.half_volume_mask(_size, _mask_types[m])
                 x *= torch.tensor(mask)
                 v = Vox().load_from_tensor(x)
                 # * still frames
