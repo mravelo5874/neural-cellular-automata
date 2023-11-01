@@ -152,9 +152,8 @@ def main():
         with torch.no_grad():
             loss.backward()
             # * normalize gradients 
-            for p in model.parameters():
-                p.grad /= (p.grad.norm()+1e-8)
-                
+            # for p in model.parameters():
+            #     p.grad /= (p.grad.norm()+1e-8)
             torch.nn.utils.clip_grad_norm(model.parameters(), 5) # maybe? : 
             opt.step()
             opt.zero_grad()
