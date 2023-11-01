@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "train.py", line 6, in <module>
-    import torch
-  File "/u/marco/github/neural-cellular-automata/venv/lib/python3.8/site-packages/torch/__init__.py", line 1332, in <module>
-    _C._initExtension(manager_path())
-ModuleNotFoundError: No module named 'torch.cuda'
