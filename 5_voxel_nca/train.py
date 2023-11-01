@@ -167,9 +167,12 @@ def main():
                 loss_log.append(l)
 
             # * print out info
+            secs = (datetime.datetime.now()-start).seconds
+            time = str(datetime.timedelta(secs))
+            iter_per_sec = i/secs
             if i % _INFO_RATE_ == 0:
                 # * print info
-                print(f'[info] step: {i} time: {datetime.datetime.now()-start} loss: {l} min-loss: {np.min(loss_log)} lr: {lr_sched.get_last_lr()[0]}')
+                print(f'[info] iter: {i} iter/sec: {iter_per_sec} time: {time} loss: {np.round(l,3)} min-loss: {np.round(np.min(loss_log), 3)} lr: {np.round(lr_sched.get_last_lr()[0], 3)}')
                     
             # * save checkpoint
             if i % _SAVE_RATE_ == 0 and i != 0:
