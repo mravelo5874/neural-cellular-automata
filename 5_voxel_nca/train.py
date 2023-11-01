@@ -21,7 +21,7 @@ def main():
     print ('cwd:',cwd)
     
     # * target/seed parameters
-    _NAME_ = 'cowboy16_condor_test'
+    _NAME_ = 'cowboy16_yaw_iso'
     _SIZE_ = 16
     _PAD_ = 4
     _SEED_POINTS_ = 3
@@ -31,7 +31,7 @@ def main():
     _MODEL_TYPE_ = 'YAW_ISO'
     _CHANNELS_ = 16
     # * training parameters
-    _EPOCHS_ = 100
+    _EPOCHS_ = 10_000
     _BATCH_SIZE_ = 4
     _POOL_SIZE_ = 32
     _UPPER_LR_ = 1e-3
@@ -192,8 +192,8 @@ def main():
     print ('generating videos...')
     with torch.no_grad():
         model.generate_video(f'_videos/{_NAME_}_grow.mp4', seed_ten)
-        #model.regen_video(f'_videos/{_NAME_}_multi_regen.mp4', seed_ten, _size=_SIZE_+(2*_PAD_), _mask_types=['x+', 'y+', 'z+'])
-        #model.rotate_video(f'_videos/{_NAME_}_multi_rotate.mp4', seed_ten, _size=_SIZE_+(2*_PAD_))
+        model.regen_video(f'_videos/{_NAME_}_multi_regen.mp4', seed_ten, _size=_SIZE_+(2*_PAD_), _mask_types=['x+', 'y+', 'z+'])
+        model.rotate_video(f'_videos/{_NAME_}_multi_rotate.mp4', seed_ten, _size=_SIZE_+(2*_PAD_))
     
     # * calculate elapsed time
     elapsed_time = datetime.datetime.now() - start
