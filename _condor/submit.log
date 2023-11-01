@@ -24,3 +24,33 @@
 
 	Job terminated of its own accord at 2023-10-31T16:58:00Z.
 ...
+000 (774070.000.000) 2023-11-01 12:28:45 Job submitted from host: <128.83.120.183:9618?addrs=128.83.120.183-9618&alias=darmok.cs.utexas.edu&noUDP&sock=schedd_1340_b4ff>
+...
+001 (774070.000.000) 2023-11-01 12:28:47 Job executing on host: <128.83.120.196:9618?addrs=128.83.120.196-9618&alias=nandor-5.cs.utexas.edu&noUDP&sock=startd_2561_3622>
+...
+006 (774070.000.000) 2023-11-01 12:28:55 Image size of job updated: 280416
+	135  -  MemoryUsage of job (MB)
+	137968  -  ResidentSetSize of job (KB)
+...
+006 (774070.000.000) 2023-11-01 12:28:57 Image size of job updated: 302492
+	135  -  MemoryUsage of job (MB)
+	137968  -  ResidentSetSize of job (KB)
+...
+005 (774070.000.000) 2023-11-01 12:28:57 Job terminated.
+	(1) Normal termination (return value 1)
+		Usr 0 00:00:02, Sys 0 00:00:06  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:02, Sys 0 00:00:06  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated Assigned
+	   Cpus                 :                80        80 
+	   Disk (KB)            :        1        1     75272 
+	   Gpus (Average)       :                 8         8 "GPU-686e454b,GPU-cb8ab85b,GPU-83975600,GPU-6f99e44b,GPU-55ef9753,GPU-1a6765ed,GPU-ba79a9e9,GPU-7e0616d1"
+	   Memory (MB)          :      135        1       128 
+
+	Job terminated of its own accord at 2023-11-01T17:28:57Z.
+...

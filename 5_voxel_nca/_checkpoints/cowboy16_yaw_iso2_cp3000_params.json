@@ -10,7 +10,7 @@
     "_EPOCHS_": 10000,
     "_BATCH_SIZE_": 4,
     "_POOL_SIZE_": 32,
-    "_UPPER_LR_": 0.0005,
+    "_UPPER_LR_": 0.0008,
     "_LOWER_LR_": 1e-05,
     "_NUM_DAMG_": 2,
     "_DAMG_RATE_": 5,
