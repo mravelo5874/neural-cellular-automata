@@ -16,12 +16,12 @@ def main():
     start = datetime.datetime.now()
     
     # * target/seed parameters
-    _NAME_ = 'cowboy28_aniso'
+    _NAME_ = 'deer_aniso'
     _SIZE_ = 28
     _PAD_ = 2
     _SEED_POINTS_ = 4
-    _SEED_DIST_ = 4
-    _TARGET_VOX_ = '../_vox/cowboy28.vox'
+    _SEED_DIST_ = 2
+    _TARGET_VOX_ = '../_vox/deer.vox'
     # * model parameters
     _MODEL_TYPE_ = 'ANISOTROPIC'
     _CHANNELS_ = 16
