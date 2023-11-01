@@ -30,7 +30,7 @@ def main():
     _EPOCHS_ = 10_000
     _BATCH_SIZE_ = 4
     _POOL_SIZE_ = 32
-    _UPPER_LR_ = 1e-3
+    _UPPER_LR_ = 8e-4
     _LOWER_LR_ = 1e-5
     _NUM_DAMG_ = 2
     _DAMG_RATE_ = 5
@@ -187,7 +187,7 @@ def main():
                     step = '▼'
                 prev_lr = lr
                 print(f'[iter {i}] iter/sec: {np.round(iter_per_sec, 3)}\t time: {time}\t est: {est}')
-                print(f'           loss>min: {np.round(_loss, 3)} > {np.round(np.min(loss_log), 3)}\t lr: {lr}{step}')
+                print(f'           loss>min: {np.round(_loss, 3)} > {np.round(np.min(loss_log), 3)}\t lr: {lr} {step}')
                                 
             # * save checkpoint
             if i % _SAVE_RATE_ == 0 and i != 0:
