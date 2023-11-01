@@ -38,7 +38,7 @@ class VoxelNCA(torch.nn.Module):
     def is_steerable(self):
         return self.model_type == 'YAW_ISO'
         
-    def generate_video(self, _filename, _seed, _delta=2, _zoom=1, _show_grid=False, _print=True):
+    def generate_video(self, _filename, _seed, _delta=6, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
         assert _seed != None
         with VideoWriter(filename=_filename) as vid:
@@ -53,7 +53,7 @@ class VoxelNCA(torch.nn.Module):
                 vid.add(zoom(img, _zoom))
             #if _print: vid.show()
     
-    def regen_video(self, _filename, _seed, _size, _mask_types=['x+'], _zoom=1, _show_grid=False, _print=True):
+    def regen_video(self, _filename, _seed, _size, _mask_types=['x+'], _delta=6, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
         assert _seed != None
         assert _size != None
@@ -62,7 +62,7 @@ class VoxelNCA(torch.nn.Module):
             v = Vox().load_from_tensor(x)
             img = v.render(_yaw=0, _show_grid=_show_grid, _print=False)
             vid.add(zoom(img, _zoom))
-            for i in range(0, 285, 2):
+            for i in range(0, 285, _delta):
                 x = self.forward(x)
                 v = Vox().load_from_tensor(x)
                 img = v.render(_yaw=i, _show_grid=_show_grid, _print=False)
@@ -81,14 +81,14 @@ class VoxelNCA(torch.nn.Module):
                 for i in range(20):
                     vid.add(zoom(img, _zoom))
                 # * 360 orbit of regen
-                for i in range(0, 360, 2):
+                for i in range(0, 360, _delta):
                     x = self.forward(x)
                     v = Vox().load_from_tensor(x)
                     img = v.render(_yaw=i+285, _show_grid=_show_grid, _print=False)
                     vid.add(zoom(img, _zoom))
             #if _print: vid.show()
             
-    def rotate_video(self, _filename, _seed, _size, _rot_types=[(4, 3), (2, 3), (2, 3)], _zoom=1, _show_grid=False, _print=True):
+    def rotate_video(self, _filename, _seed, _size, _rot_types=[(4, 3), (2, 3), (2, 3)], _delta=6, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
         assert _seed != None
         assert _size != None
@@ -100,7 +100,7 @@ class VoxelNCA(torch.nn.Module):
             for i in range(32):
                 vid.add(zoom(img, _zoom))
             # * render growth
-            for i in range(0, 360, 2):
+            for i in range(0, 360, _delta):
                 x = self.forward(x)
                 v = Vox().load_from_tensor(x)
                 img = v.render(_yaw=i+285, _show_grid=_show_grid, _print=False)
@@ -116,7 +116,7 @@ class VoxelNCA(torch.nn.Module):
                 for i in range(32):
                     vid.add(zoom(img, _zoom))
                 # * render growth
-                for i in range(0, 360, 2):
+                for i in range(0, 360, _delta):
                     x = self.forward(x)
                     v = Vox().load_from_tensor(x)
                     img = v.render(_yaw=i+285, _show_grid=_show_grid, _print=False)
