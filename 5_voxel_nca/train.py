@@ -28,10 +28,10 @@ def main():
     _CHANNELS_ = 16
     # * training parameters
     _EPOCHS_ = 10_000
-    _BATCH_SIZE_ = 8
+    _BATCH_SIZE_ = 4
     _POOL_SIZE_ = 32
-    _UPPER_LR_ = 1e-4
-    _LOWER_LR_ = 1e-6
+    _UPPER_LR_ = 5e-4
+    _LOWER_LR_ = 1e-5
     _NUM_DAMG_ = 2
     _DAMG_RATE_ = 5
     # * logging parameters
@@ -152,9 +152,9 @@ def main():
         with torch.no_grad():
             loss.backward()
             # * normalize gradients 
-            # for p in model.parameters():
-            #     p.grad /= (p.grad.norm()+1e-8)
-            torch.nn.utils.clip_grad_norm(model.parameters(), 5) # maybe? : 
+            for p in model.parameters():
+                p.grad /= (p.grad.norm()+1e-8)
+            #torch.nn.utils.clip_grad_norm(model.parameters(), 5) # maybe? : 
             opt.step()
             opt.zero_grad()
             lr_sched.step()
