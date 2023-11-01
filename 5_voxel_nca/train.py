@@ -169,7 +169,7 @@ def main():
             # * print out info
             if i % _INFO_RATE_ == 0:
                 # * print info
-                print(f'[info] step: {i} loss: {l} min-loss: {np.min(loss_log)} lr: {lr_sched.get_last_lr()[0]}')
+                print(f'[info] step: {i} time: {datetime.datetime.now()-start} loss: {l} min-loss: {np.min(loss_log)} lr: {lr_sched.get_last_lr()[0]}')
                     
             # * save checkpoint
             if i % _SAVE_RATE_ == 0 and i != 0:
