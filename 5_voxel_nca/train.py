@@ -39,6 +39,11 @@ def main():
     _SAVE_RATE_ = 1000
     _VIDEO_RATE_ = 100_000
     
+    # * print out parameters
+    print (f'model: {_NAME_} type: {_MODEL_TYPE_}')
+    print (f'batch size: {_BATCH_SIZE_} pool size: {_POOL_SIZE_}')
+    print (f'upper lr: {_UPPER_LR_} lower lr: {_LOWER_LR_}')
+    
     # * sets the device  
     _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
     print ('device:', _DEVICE_)
@@ -89,19 +94,16 @@ def main():
 
     # * create seed
     seed_ten = util.create_seed(_size=_SIZE_+(2*_PAD_), _dist=_SEED_DIST_, _points=_SEED_POINTS_).unsqueeze(0).to(_DEVICE_)
-    print (f'seed.shape: {seed_ten.shape}')
     
     # * load target vox
     target = Vox().load_from_file(_TARGET_VOX_)
     target_ten = target.tensor()
     target_ten = func.pad(target_ten, (_PAD_, _PAD_, _PAD_, _PAD_, _PAD_, _PAD_), 'constant')
     target_ten = target_ten.clone().repeat(_BATCH_SIZE_, 1, 1, 1, 1).to(_DEVICE_)
-    print (f'target.shape: {target_ten.shape}')
     
     # * create pool
     with torch.no_grad():
         pool = seed_ten.clone().repeat(_POOL_SIZE_, 1, 1, 1, 1)
-    print (f'pool.shape: {pool.shape}')
     
     # * model training
     print (f'starting training w/ {_EPOCHS_+1} epochs...')
@@ -179,12 +181,13 @@ def main():
                 iter_per_sec = float(i)/float(secs)
                 est_time_sec = int((_EPOCHS_-i)*(1/iter_per_sec))
                 est = str(datetime.timedelta(seconds=est_time_sec))
-                lr = np.round(lr_sched.get_last_lr()[0], 8)
+                lr = np.round(lr_sched.get_last_lr()[0], 10)
                 step = '▲'
                 if prev_lr > lr:
                     step = '▼'
                 prev_lr = lr
-                print(f'[info] iter: {i}\t iter/sec: {np.round(iter_per_sec, 5)}\t time: {time}\t est: {est}\t loss: {np.round(_loss, 5)}\t min-loss: {np.round(np.min(loss_log), 5)}\t lr: {lr} {step}')
+                print(f'[iter {i}] iter/sec: {np.round(iter_per_sec, 3)}\t time: {time}\t est: {est}')
+                print(f'           loss>min: {np.round(_loss, 3)} > {np.round(np.min(loss_log), 3)}\t lr: {lr}{step}')
                                 
             # * save checkpoint
             if i % _SAVE_RATE_ == 0 and i != 0:
