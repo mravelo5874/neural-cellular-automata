@@ -154,6 +154,7 @@ def main():
             # * normalize gradients 
             for p in model.parameters():
                 p.grad /= (p.grad.norm()+1e-8)
+                
             torch.nn.utils.clip_grad_norm_(model.parameters(), clip_value=5) # maybe? : 
             opt.step()
             opt.zero_grad()
@@ -165,6 +166,10 @@ def main():
             if not torch.isnan(loss) and not torch.isinf(loss) and not torch.isneginf(loss): 
                 loss_log.append(_loss)
 
+            # nan loss :9
+            if torch.isnan(loss) or torch.isinf(loss) or torch.isneginf(loss):
+                print (f'detected invalid loss value: {loss}')
+                raise ValueError
             
             # * print info
             if i % _INFO_RATE_ == 0 and i!= 0:
