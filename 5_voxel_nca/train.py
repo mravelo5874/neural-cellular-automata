@@ -162,7 +162,9 @@ def main():
             pool[batch_idxs] = x
             # * correctly add to loss log
             _loss = loss.item()
-            if not torch.isnan(loss) and not torch.isinf(loss) and not torch.isneginf(loss): 
+            if torch.isnan(loss) or torch.isinf(loss) or torch.isneginf(loss):
+                pass
+            else:
                 loss_log.append(_loss)
 
             # nan loss :9
