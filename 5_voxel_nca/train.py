@@ -16,22 +16,22 @@ def main():
     start = datetime.datetime.now()
     
     # * target/seed parameters
-    _NAME_ = 'deer_aniso'
-    _SIZE_ = 28
-    _PAD_ = 2
+    _NAME_ = 'earth_aniso'
+    _SIZE_ = 24
+    _PAD_ = 4
     _SEED_POINTS_ = 4
-    _SEED_DIST_ = 2
-    _TARGET_VOX_ = '../_vox/deer.vox'
+    _SEED_DIST_ = 4
+    _TARGET_VOX_ = '../_vox/earth.vox'
     # * model parameters
     _MODEL_TYPE_ = 'ANISOTROPIC'
     _CHANNELS_ = 16
     # * training parameters
     _EPOCHS_ = 10_000
-    _BATCH_SIZE_ = 4
+    _BATCH_SIZE_ = 8
     _POOL_SIZE_ = 32
     _UPPER_LR_ = 1e-3
     _LOWER_LR_ = 1e-5
-    _NUM_DAMG_ = 2
+    _NUM_DAMG_ = 3
     _DAMG_RATE_ = 5
     # * logging parameters
     _INFO_RATE_ = 250
