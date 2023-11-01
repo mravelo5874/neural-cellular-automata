@@ -168,11 +168,11 @@ def main():
 
             # * print out info
             secs = (datetime.datetime.now()-start).seconds
-            time = str(datetime.timedelta(secs))
+            time = str(datetime.timedelta(seconds=secs))
             iter_per_sec = i/secs
             if i % _INFO_RATE_ == 0:
                 # * print info
-                print(f'[info] iter: {i} iter/sec: {iter_per_sec} time: {time} loss: {np.round(l,3)} min-loss: {np.round(np.min(loss_log), 3)} lr: {np.round(lr_sched.get_last_lr()[0], 3)}')
+                print(f'[info] iter: {i}\t iter/sec: {np.round(iter_per_sec)}\t time: {time}\t loss: {np.round(l,3)}\t min-loss: {np.round(np.min(loss_log), 3)}\t lr: {np.round(lr_sched.get_last_lr()[0], 3)}')
                     
             # * save checkpoint
             if i % _SAVE_RATE_ == 0 and i != 0:
