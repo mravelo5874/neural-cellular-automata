@@ -38,7 +38,7 @@ class VoxelNCA(torch.nn.Module):
     def is_steerable(self):
         return self.model_type == 'YAW_ISO'
         
-    def generate_video(self, _filename, _seed, _delta=6, _zoom=1, _show_grid=False, _print=True):
+    def generate_video(self, _filename, _seed, _delta=4, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
         assert _seed != None
         with VideoWriter(filename=_filename) as vid:
@@ -54,7 +54,7 @@ class VoxelNCA(torch.nn.Module):
                 vid.add(zoom(img, _zoom))
             #if _print: vid.show()
     
-    def regen_video(self, _filename, _seed, _size, _mask_types=['x+'], _delta=6, _zoom=1, _show_grid=False, _print=True):
+    def regen_video(self, _filename, _seed, _size, _mask_types=['x+'], _delta=4, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
         assert _seed != None
         assert _size != None
@@ -91,7 +91,7 @@ class VoxelNCA(torch.nn.Module):
                     vid.add(zoom(img, _zoom))
             #if _print: vid.show()
             
-    def rotate_video(self, _filename, _seed, _size, _rot_types=[(4, 3), (2, 3), (2, 3)], _delta=6, _zoom=1, _show_grid=False, _print=True):
+    def rotate_video(self, _filename, _seed, _size, _rot_types=[(4, 3), (2, 3), (2, 4)], _delta=4, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
         assert _seed != None
         assert _size != None
