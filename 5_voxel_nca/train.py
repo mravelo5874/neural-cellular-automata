@@ -172,7 +172,7 @@ def main():
             iter_per_sec = float(i)/float(secs)
             if i % _INFO_RATE_ == 0:
                 # * print info
-                print(f'[info] iter: {i}\t iter/sec: {np.round(iter_per_sec)}\t time: {time}\t loss: {np.round(l,3)}\t min-loss: {np.round(np.min(loss_log), 3)}\t lr: {np.round(lr_sched.get_last_lr()[0], 3)}')
+                print(f'[info] iter: {i}\t iter/sec: {np.round(iter_per_sec, 5)}\t time: {time}\t loss: {np.round(l, 5)}\t min-loss: {np.round(np.min(loss_log), 5)}\t lr: {np.round(lr_sched.get_last_lr()[0], 5)}')
                     
             # * save checkpoint
             if i % _SAVE_RATE_ == 0 and i != 0:
