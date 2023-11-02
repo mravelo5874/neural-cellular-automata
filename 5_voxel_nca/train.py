@@ -26,7 +26,7 @@ def main():
     _MODEL_TYPE_ = 'ANISOTROPIC'
     _CHANNELS_ = 16
     # * training parameters
-    _EPOCHS_ = 20_000
+    _EPOCHS_ = 10_000
     _BATCH_SIZE_ = 4
     _POOL_SIZE_ = 32
     _UPPER_LR_ = 1e-3
@@ -35,7 +35,7 @@ def main():
     _NUM_DAMG_ = 2
     _DAMG_RATE_ = 5
     # * logging parameters
-    _INFO_RATE_ = 250
+    _INFO_RATE_ = 200
     _SAVE_RATE_ = 1000
     _VIDEO_RATE_ = 100_000
     
@@ -187,13 +187,13 @@ def main():
                 iter_per_sec = float(i)/float(secs)
                 est_time_sec = int((_EPOCHS_-i)*(1/iter_per_sec))
                 est = str(datetime.timedelta(seconds=est_time_sec))
-                avg = loss_log[-_INFO_RATE_]/_INFO_RATE_
-                lr = np.round(lr_sched.get_last_lr()[0], 3)
+                avg = loss_log[-_INFO_RATE_:]/_INFO_RATE_
+                lr = np.round(lr_sched.get_last_lr()[0], 8)
                 step = '▲'
                 if prev_lr > lr:
                     step = '▼'
                 prev_lr = lr
-                print(f'[{i}/{_EPOCHS_+1}] {np.round(iter_per_sec, 3)}it/s\t time: {time}~{est}\t loss: {np.round(avg, 3)}>{np.round(np.min(loss_log), 3)}\t lr: {lr} {step}')
+                print(f'[{i}/{_EPOCHS_+1}]\t {np.round(iter_per_sec, 3)}it/s\t time: {time}~{est}\t loss: {np.round(avg, 3)}>{np.round(np.min(loss_log), 3)}\t lr: {lr} {step}')
 
                                 
             # * save checkpoint
