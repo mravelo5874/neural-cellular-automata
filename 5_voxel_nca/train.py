@@ -26,7 +26,7 @@ def main():
     _MODEL_TYPE_ = 'ANISOTROPIC'
     _CHANNELS_ = 16
     # * training parameters
-    _EPOCHS_ = 10_000
+    _EPOCHS_ = 5_000
     _BATCH_SIZE_ = 4
     _POOL_SIZE_ = 32
     _UPPER_LR_ = 1e-3
@@ -39,19 +39,10 @@ def main():
     _SAVE_RATE_ = 1000
     _VIDEO_RATE_ = 100_000
     
-    # * print out parameters
-    print (f'model: {_NAME_}')
-    print (f'type: {_MODEL_TYPE_}')
-    print (f'batch-size: {_BATCH_SIZE_}')
-    print (f'pool-size: {_POOL_SIZE_}')
-    print (f'lr: {_UPPER_LR_}>{_LOWER_LR_}, step: {_LR_STEP_}')
-    
-    # * sets the device  
-    _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
-    print ('device:', _DEVICE_)
-    torch.backends.cudnn.benchmark = True
-    torch.cuda.empty_cache()
-    torch.set_default_tensor_type('torch.cuda.FloatTensor')
+    # * load from checkpoint
+    load_checkpoint = True
+    checkpoint_dir = '_checkpoints'
+    checkpoint_model = 'earth_aniso_cp10000'
     
     # * save model method
     def save_model(_dir, _model, _name):
@@ -90,10 +81,80 @@ def main():
             outfile.write(json_object)
         print (f'model [{_name}] saved to {_dir}...')
     
-    # * create model
-    model = NCA(_channels=_CHANNELS_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
-    opt = torch.optim.Adam(model.parameters(), _UPPER_LR_)
-    lr_sched = torch.optim.lr_scheduler.CyclicLR(opt, _LOWER_LR_, _UPPER_LR_, step_size_up=_LR_STEP_, mode='triangular2', cycle_momentum=False)
+    # * load model method
+    def load_model(_dir, _name):
+        # * read params from json file
+        with open(_dir+'/'+_name+'_params.json', 'r') as openfile:
+            global _NAME_
+            global _SIZE_
+            global _PAD_
+            global _SEED_POINTS_
+            global _SEED_DIST_
+            global _TARGET_VOX_
+            global _MODEL_TYPE_
+            global _CHANNELS_
+            global _EPOCHS_
+            global _BATCH_SIZE_
+            global _POOL_SIZE_
+            global _UPPER_LR_
+            global _LOWER_LR_
+            global _LR_STEP_
+            global _NUM_DAMG_
+            global _DAMG_RATE_
+            global _INFO_RATE_
+            global _SAVE_RATE_
+            global _VIDEO_RATE_
+            params = json.load(openfile)
+            # * target/seed parameters
+            _NAME_ = params['_NAME_']+'_from_checkpoint'
+            _SIZE_ = params['_SIZE_']
+            _PAD_ = params['_PAD_']
+            _SEED_POINTS_ = params['_SEED_POINTS_']
+            _SEED_DIST_ = params['_SEED_DIST_']
+            _TARGET_VOX_ = params['_TARGET_VOX_']
+            # * model parameters
+            _MODEL_TYPE_ = params['_MODEL_TYPE_']
+            _CHANNELS_ = params['_CHANNELS_']
+            # * training parameters
+            _EPOCHS_ = params['_EPOCHS_']
+            _BATCH_SIZE_ = params['_BATCH_SIZE_']
+            _POOL_SIZE_ = params['_POOL_SIZE_']
+            _UPPER_LR_ = params['_UPPER_LR_']
+            _LOWER_LR_ = params['_LOWER_LR_']
+            _LR_STEP_ = params['_LR_STEP_']
+            _NUM_DAMG_ = params['_NUM_DAMG_']
+            _DAMG_RATE_ = params['_DAMG_RATE_']
+            # * logging parameters
+            _INFO_RATE_ = params['_INFO_RATE_']
+            _SAVE_RATE_ = params['_SAVE_RATE_']
+            _VIDEO_RATE_ = params['_VIDEO_RATE_']
+    
+    # * sets the device  
+    _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
+    print ('device:', _DEVICE_)
+    torch.backends.cudnn.benchmark = True
+    torch.cuda.empty_cache()
+    torch.set_default_tensor_type('torch.cuda.FloatTensor')
+    
+    # * create / load model
+    if not load_checkpoint:
+        model = NCA(_channels=_CHANNELS_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
+        opt = torch.optim.Adam(model.parameters(), _UPPER_LR_)
+        lr_sched = torch.optim.lr_scheduler.CyclicLR(opt, _LOWER_LR_, _UPPER_LR_, step_size_up=_LR_STEP_, mode='triangular2', cycle_momentum=False)
+        print ('training new model from scratch...')
+    else: 
+        load_model(checkpoint_dir, checkpoint_model)
+        model = NCA(_channels=_CHANNELS_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
+        model.load_state_dict(torch.load(checkpoint_dir+'/'+checkpoint_model+'.pt', map_location=_DEVICE_))
+        model.train()
+        print (f'loading checkpoint: {checkpoint_dir}/{checkpoint_model}...')
+        
+    # * print out parameters
+    print (f'model: {_NAME_}')
+    print (f'type: {_MODEL_TYPE_}')
+    print (f'batch-size: {_BATCH_SIZE_}')
+    print (f'pool-size: {_POOL_SIZE_}')
+    print (f'lr: {_UPPER_LR_}>{_LOWER_LR_} w/ {_LR_STEP_} step')
 
     # * create seed
     seed_ten = util.create_seed(_size=_SIZE_+(2*_PAD_), _dist=_SEED_DIST_, _points=_SEED_POINTS_).unsqueeze(0).to(_DEVICE_)
@@ -223,7 +284,7 @@ def main():
     with torch.no_grad():
         model.generate_video(f'_videos/{_NAME_}_grow.mp4', seed_ten)
         model.regen_video(f'_videos/{_NAME_}_multi_regen.mp4', seed_ten, _size=_SIZE_+(2*_PAD_), _mask_types=['x+', 'y+', 'z+'])
-        model.rotate_video(f'_videos/{_NAME_}_multi_rotate.mp4', seed_ten, _size=_SIZE_+(2*_PAD_))
+        # model.rotate_video(f'_videos/{_NAME_}_multi_rotate.mp4', seed_ten, _size=_SIZE_+(2*_PAD_))
     
     # * calculate elapsed time
     secs = (datetime.datetime.now()-start).seconds
