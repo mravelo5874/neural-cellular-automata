@@ -14,7 +14,7 @@ from scripts.vox.Vox import Vox
 _NAME_ = 'earth_aniso2'
 _SIZE_ = 24
 _PAD_ = 4
-_SEED_POINTS_ = 4
+_SEED_POINTS_ = 2
 _SEED_DIST_ = 4
 _TARGET_VOX_ = '../_vox/earth.vox'
 # * model parameters
