@@ -16,6 +16,12 @@ def main():
     _VIDEO_ = '_videos/cowboy16_test'
     _DEVICE_ = 'cuda'
     
+    # * set cuda as device
+    print ('device:', _DEVICE_)
+    torch.backends.cudnn.benchmark = True
+    torch.cuda.empty_cache()
+    torch.set_default_tensor_type('torch.cuda.FloatTensor')
+    
     # * load model
     model = NCA()
     model.load_state_dict(torch.load(_MODEL_+'.pt', map_location=_DEVICE_))   
