@@ -31,7 +31,7 @@ def main():
     _POOL_SIZE_ = 32
     _UPPER_LR_ = 1e-3
     _LOWER_LR_ = 1e-5
-    _LR_STEP_ = 4000
+    _LR_STEP_ = 2000
     _NUM_DAMG_ = 2
     _DAMG_RATE_ = 5
     # * logging parameters
@@ -101,7 +101,6 @@ def main():
     
     # * load target vox
     target = Vox().load_from_file(_TARGET_VOX_)
-    print (f'vox_target.shape: {list(target.shape())}')
     target_ten = target.tensor()
     target_ten = func.pad(target_ten, (_PAD_, _PAD_, _PAD_, _PAD_, _PAD_, _PAD_), 'constant')
     target_ten = target_ten.clone().repeat(_BATCH_SIZE_, 1, 1, 1, 1).to(_DEVICE_)
@@ -188,13 +187,14 @@ def main():
                 iter_per_sec = float(i)/float(secs)
                 est_time_sec = int((_EPOCHS_-i)*(1/iter_per_sec))
                 est = str(datetime.timedelta(seconds=est_time_sec))
-                lr = np.round(lr_sched.get_last_lr()[0], 10)
+                avg = loss_log[-_INFO_RATE_]/_INFO_RATE_
+                lr = np.round(lr_sched.get_last_lr()[0], 3)
                 step = '▲'
                 if prev_lr > lr:
                     step = '▼'
                 prev_lr = lr
-                print(f'[iter {i}]\t iter/sec: {np.round(iter_per_sec, 3)}\t time: {time}\t est: {est}')
-                print(f'\t\t loss>min: {np.round(_loss, 3)} > {np.round(np.min(loss_log), 3)}\t lr: {lr} {step}')
+                print(f'[{i}/{_EPOCHS_+1}] {np.round(iter_per_sec, 3)}it/s\t time: {time}~{est}\t loss: {np.round(avg, 3)}>{np.round(np.min(loss_log), 3)}\t lr: {lr} {step}')
+
                                 
             # * save checkpoint
             if i % _SAVE_RATE_ == 0 and i != 0:
