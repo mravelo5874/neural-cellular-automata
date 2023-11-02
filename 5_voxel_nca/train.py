@@ -10,39 +10,40 @@ from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
+# * target/seed parameters
+_NAME_ = 'earth_aniso'
+_SIZE_ = 24
+_PAD_ = 4
+_SEED_POINTS_ = 4
+_SEED_DIST_ = 4
+_TARGET_VOX_ = '../_vox/earth.vox'
+# * model parameters
+_MODEL_TYPE_ = 'ANISOTROPIC'
+_CHANNELS_ = 16
+# * training parameters
+_EPOCHS_ = 5_000
+_BATCH_SIZE_ = 4
+_POOL_SIZE_ = 32
+_UPPER_LR_ = 1e-3
+_LOWER_LR_ = 1e-5
+_LR_STEP_ = 2000
+_NUM_DAMG_ = 2
+_DAMG_RATE_ = 5
+# * logging parameters
+_INFO_RATE_ = 200
+_SAVE_RATE_ = 1000
+_VIDEO_RATE_ = 100_000
+
+# * load from checkpoint
+load_checkpoint = True
+checkpoint_dir = '_checkpoints'
+checkpoint_model = 'earth_aniso_cp10000'
+
+
 def main():
     print ('****************')
     print ('initializing training...')
     start = datetime.datetime.now()
-    
-    # * target/seed parameters
-    _NAME_ = 'earth_aniso'
-    _SIZE_ = 24
-    _PAD_ = 4
-    _SEED_POINTS_ = 4
-    _SEED_DIST_ = 4
-    _TARGET_VOX_ = '../_vox/earth.vox'
-    # * model parameters
-    _MODEL_TYPE_ = 'ANISOTROPIC'
-    _CHANNELS_ = 16
-    # * training parameters
-    _EPOCHS_ = 5_000
-    _BATCH_SIZE_ = 4
-    _POOL_SIZE_ = 32
-    _UPPER_LR_ = 1e-3
-    _LOWER_LR_ = 1e-5
-    _LR_STEP_ = 2000
-    _NUM_DAMG_ = 2
-    _DAMG_RATE_ = 5
-    # * logging parameters
-    _INFO_RATE_ = 200
-    _SAVE_RATE_ = 1000
-    _VIDEO_RATE_ = 100_000
-    
-    # * load from checkpoint
-    load_checkpoint = True
-    checkpoint_dir = '_checkpoints'
-    checkpoint_model = 'earth_aniso_cp10000'
     
     # * save model method
     def save_model(_dir, _model, _name):
@@ -139,8 +140,6 @@ def main():
     # * create / load model
     if not load_checkpoint:
         model = NCA(_channels=_CHANNELS_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
-        opt = torch.optim.Adam(model.parameters(), _UPPER_LR_)
-        lr_sched = torch.optim.lr_scheduler.CyclicLR(opt, _LOWER_LR_, _UPPER_LR_, step_size_up=_LR_STEP_, mode='triangular2', cycle_momentum=False)
         print ('training new model from scratch...')
     else: 
         load_model(checkpoint_dir, checkpoint_model)
@@ -148,6 +147,10 @@ def main():
         model.load_state_dict(torch.load(checkpoint_dir+'/'+checkpoint_model+'.pt', map_location=_DEVICE_))
         model.train()
         print (f'loading checkpoint: {checkpoint_dir}/{checkpoint_model}...')
+    
+    # * create optimizer and learning-rate scheduler
+    opt = torch.optim.Adam(model.parameters(), _UPPER_LR_)
+    lr_sched = torch.optim.lr_scheduler.CyclicLR(opt, _LOWER_LR_, _UPPER_LR_, step_size_up=_LR_STEP_, mode='triangular2', cycle_momentum=False)
         
     # * print out parameters
     print (f'model: {_NAME_}')
