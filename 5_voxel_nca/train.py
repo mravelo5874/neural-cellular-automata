@@ -187,7 +187,7 @@ def main():
                 iter_per_sec = float(i)/float(secs)
                 est_time_sec = int((_EPOCHS_-i)*(1/iter_per_sec))
                 est = str(datetime.timedelta(seconds=est_time_sec))
-                avg = loss_log[-_INFO_RATE_:]/_INFO_RATE_
+                avg = sum(loss_log[-_INFO_RATE_:])/float(_INFO_RATE_)
                 lr = np.round(lr_sched.get_last_lr()[0], 8)
                 step = '▲'
                 if prev_lr > lr:
