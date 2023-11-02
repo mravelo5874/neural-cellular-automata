@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/u/marco/github/neural-cellular-automata/venv/lib/python3.8/site-packages/moviepy/video/io/ffmpeg_writer.py", line 136, in write_frame
+    self.proc.stdin.write(img_array.tobytes())
+BrokenPipeError: [Errno 32] Broken pipe
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "train.py", line 233, in <module>
+    main()
+  File "train.py", line 222, in main
+    model.generate_video(f'_videos/{_NAME_}_grow.mp4', seed_ten)
+  File "/u/marco/github/neural-cellular-automata/5_voxel_nca/scripts/nca/VoxelNCA.py", line 50, in generate_video
+    vid.add(zoom(img, _zoom))
+  File "/u/marco/github/neural-cellular-automata/5_voxel_nca/scripts/Video.py", line 99, in add
+    self.writer.write_frame(img)
+  File "/u/marco/github/neural-cellular-automata/venv/lib/python3.8/site-packages/moviepy/video/io/ffmpeg_writer.py", line 180, in write_frame
+    raise IOError(error)
+OSError: [Errno 32] Broken pipe
+
+MoviePy error: FFMPEG encountered the following error while writing file _videos/deer_aniso_grow.mp4:
+
+ b"Unrecognized option 'preset'.\nError splitting the argument list: Option not found\n"

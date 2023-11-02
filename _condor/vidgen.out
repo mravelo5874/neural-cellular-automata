@@ -1,0 +1,10 @@
+****************
+initializing video generation...
+nca perception channels: 80
+nca parameter count: 12416
+loaded model from: _models/cowboy16_aniso
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+generating video...
+created video: _videos/cowboy16_test.mp4, gen-time: 0:05:57
+elapsed time: 0:05:59
+****************
