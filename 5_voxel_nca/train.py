@@ -11,17 +11,17 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'earth_aniso'
+_NAME_ = 'earth_aniso2'
 _SIZE_ = 24
 _PAD_ = 4
-_SEED_POINTS_ = 4
-_SEED_DIST_ = 4
+_SEED_POINTS_ = 1
+_SEED_DIST_ = 1
 _TARGET_VOX_ = '../_vox/earth.vox'
 # * model parameters
 _MODEL_TYPE_ = 'ANISOTROPIC'
 _CHANNELS_ = 16
 # * training parameters
-_EPOCHS_ = 5_000
+_EPOCHS_ = 20_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 1e-3
@@ -32,10 +32,9 @@ _DAMG_RATE_ = 5
 # * logging parameters
 _INFO_RATE_ = 200
 _SAVE_RATE_ = 1000
-_VIDEO_RATE_ = 100_000
 
 # * load from checkpoint
-load_checkpoint = True
+load_checkpoint = False
 checkpoint_dir = '_checkpoints'
 checkpoint_model = 'earth_aniso_cp10000'
 
@@ -258,15 +257,11 @@ def main():
                     step = '▼'
                 prev_lr = lr
                 print(f'[{i}/{_EPOCHS_+1}]\t {np.round(iter_per_sec, 3)}it/s\t time: {time}~{est}\t loss: {np.round(avg, 3)}>{np.round(np.min(loss_log), 3)}\t lr: {lr} {step}')
-
-                                
+            
             # * save checkpoint
             if i % _SAVE_RATE_ == 0 and i != 0:
                 save_model('_checkpoints', model, _NAME_+'_cp'+str(i))
                 
-            # * create video
-            if i % _VIDEO_RATE_ == 0 and i != 0:
-                model.generate_video(f'_videos/{_NAME_}_cp{i}.mp4', seed_ten)
 
     # * print train time
     secs = (datetime.datetime.now()-train_start).seconds
