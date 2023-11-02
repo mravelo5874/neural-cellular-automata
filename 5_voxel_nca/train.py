@@ -26,11 +26,12 @@ def main():
     _MODEL_TYPE_ = 'ANISOTROPIC'
     _CHANNELS_ = 16
     # * training parameters
-    _EPOCHS_ = 10_000
+    _EPOCHS_ = 20_000
     _BATCH_SIZE_ = 4
     _POOL_SIZE_ = 32
     _UPPER_LR_ = 1e-3
     _LOWER_LR_ = 1e-5
+    _LR_STEP_ = 4000
     _NUM_DAMG_ = 2
     _DAMG_RATE_ = 5
     # * logging parameters
@@ -43,7 +44,7 @@ def main():
     print (f'type: {_MODEL_TYPE_}')
     print (f'batch-size: {_BATCH_SIZE_}')
     print (f'pool-size: {_POOL_SIZE_}')
-    print (f'lr: {_UPPER_LR_} > {_LOWER_LR_}')
+    print (f'lr: {_UPPER_LR_}>{_LOWER_LR_}, step: {_LR_STEP_}')
     
     # * sets the device  
     _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -76,6 +77,7 @@ def main():
             '_POOL_SIZE_': _POOL_SIZE_,
             '_UPPER_LR_': _UPPER_LR_,
             '_LOWER_LR_': _LOWER_LR_,
+            '_LR_STEP_': _LR_STEP_,
             '_NUM_DAMG_': _NUM_DAMG_,
             '_DAMG_RATE_': _DAMG_RATE_,
             # * logging parameters
@@ -91,8 +93,7 @@ def main():
     # * create model
     model = NCA(_channels=_CHANNELS_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
     opt = torch.optim.Adam(model.parameters(), _UPPER_LR_)
-    #lr_sched = torch.optim.lr_scheduler.CyclicLR(opt, _LOWER_LR_, _UPPER_LR_, step_size_up=2000, mode='triangular2', cycle_momentum=False)
-    lr_sched = torch.optim.lr_scheduler.ReduceLROnPlateau(opt, 'min')
+    lr_sched = torch.optim.lr_scheduler.CyclicLR(opt, _LOWER_LR_, _UPPER_LR_, step_size_up=_LR_STEP_, mode='triangular2', cycle_momentum=False)
 
     # * create seed
     seed_ten = util.create_seed(_size=_SIZE_+(2*_PAD_), _dist=_SEED_DIST_, _points=_SEED_POINTS_).unsqueeze(0).to(_DEVICE_)
