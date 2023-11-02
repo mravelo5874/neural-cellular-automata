@@ -74,7 +74,6 @@ def main():
             # * logging parameters
             '_INFO_RATE_': _INFO_RATE_,
             '_SAVE_RATE_': _SAVE_RATE_,
-            '_VIDEO_RATE_': _VIDEO_RATE_,
         }
         json_object = json.dumps(dict, indent=4)
         with open(_dir + '/' + _name + '_params.json', 'w') as outfile:
@@ -103,7 +102,6 @@ def main():
             global _DAMG_RATE_
             global _INFO_RATE_
             global _SAVE_RATE_
-            global _VIDEO_RATE_
             params = json.load(openfile)
             # * target/seed parameters
             _NAME_ = params['_NAME_']+'_from_checkpoint'
@@ -127,7 +125,6 @@ def main():
             # * logging parameters
             _INFO_RATE_ = params['_INFO_RATE_']
             _SAVE_RATE_ = params['_SAVE_RATE_']
-            _VIDEO_RATE_ = params['_VIDEO_RATE_']
     
     # * sets the device  
     _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
