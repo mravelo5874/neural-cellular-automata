@@ -211,7 +211,7 @@ def main():
                 overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :16].square().sum()
         
         # * calculate losses
-        target_loss += util.voxel_wise_loss_function(x, target_ten, _dims=[-1, -2, -3, -4])
+        target_loss += util.voxel_wise_loss_function(x, target_ten)
         target_loss /= 2.0
         diff_loss *= 10.0
         loss = target_loss + overflow_loss + diff_loss
