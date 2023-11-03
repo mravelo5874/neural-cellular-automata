@@ -100,8 +100,12 @@ class VoxelPerception():
             print ('*gx[:, :, :, i].shape:',gx[:, :, :, i].shape)
             print ('px[:, :, :, i].shape:',px[:, :, :, i].shape)
             print ('py[:, :, :, i].shape:',py[:, :, :, i].shape)
-            px[:, :, :, i] = (i_x*_cos)+(i_y*_sin)
-            py[:, :, :, i] = (i_y*_cos)-(i_x*_sin)
+            rx = (i_x*_cos)+(i_y*_sin)
+            ry = (i_y*_cos)-(i_x*_sin)
+            print ('rx.shape:',rx.shape)
+            print ('ry.shape:',ry.shape)
+            px[:, :, :, i] = rx
+            py[:, :, :, i] = ry
         return torch.cat([_x, px, py, gz, lap], 1)
         
     perception = {
