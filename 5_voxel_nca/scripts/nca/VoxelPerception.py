@@ -100,6 +100,8 @@ class VoxelPerception():
             print ('*gx[:, :, :, i].shape:',gx[:, :, :, i].shape)
             print ('px[:, :, :, i].shape:',px[:, :, :, i].shape)
             print ('py[:, :, :, i].shape:',py[:, :, :, i].shape)
+            print ('_cos.shape:',_cos.shape)
+            print ('_sin.shape:',_sin.shape)
             rx = (i_x*_cos)+(i_y*_sin)
             ry = (i_y*_cos)-(i_x*_sin)
             print ('rx.shape:',rx.shape)
