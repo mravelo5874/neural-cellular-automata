@@ -11,21 +11,21 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_yawiso3'
-_SIZE_ = 16
+_NAME_ = 'oak_aniso'
+_SIZE_ = 24
 _PAD_ = 4
 _SEED_POINTS_ = 4
 _SEED_DIST_ = 4
-_TARGET_VOX_ = '../_vox/cowboy16.vox'
+_TARGET_VOX_ = '../_vox/oak.vox'
 # * model parameters
-_MODEL_TYPE_ = 'YAW_ISO'
+_MODEL_TYPE_ = 'ANISOTROPIC'
 _CHANNELS_ = 16
 # * training parameters
-_EPOCHS_ = 10_000
+_EPOCHS_ = 20_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
-_UPPER_LR_ = 1e-4
-_LOWER_LR_ = 1e-6
+_UPPER_LR_ = 1e-3
+_LOWER_LR_ = 1e-5
 _LR_STEP_ = 2000
 _NUM_DAMG_ = 2
 _DAMG_RATE_ = 5

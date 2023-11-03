@@ -45,7 +45,7 @@ def main():
     with torch.no_grad():
         model.generate_video(f'_videos/{_NAME_}_grow.mp4', seed_ten, _delta=2)
         model.regen_video(f'_videos/{_NAME_}_multi_regen.mp4', seed_ten, _size=_SIZE_+(2*_PAD_), _mask_types=['x+', 'y+', 'z+'], _delta=2)
-        #model.rotate_video(f'_videos/{_NAME_}_multi_rotate.mp4', seed_ten, _size=_SIZE_+(2*_PAD_))
+        model.rotate_video(f'_videos/{_NAME_}_multi_rotate.mp4', seed_ten, _size=_SIZE_+(2*_PAD_), _delta=2)
         
      # * calculate elapsed time
     secs = (datetime.datetime.now()-start).seconds

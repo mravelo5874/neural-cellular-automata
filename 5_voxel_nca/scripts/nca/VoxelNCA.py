@@ -100,7 +100,7 @@ class VoxelNCA(torch.nn.Module):
         elapsed_time = str(datetime.timedelta(seconds=secs))
         print (f'created video: {_filename}, gen-time: {elapsed_time}')
             
-    def rotate_video(self, _filename, _seed, _size, _rot_types=[(4, 3), (2, 3), (2, 4)], _delta=4, _zoom=1, _show_grid=False, _print=True):
+    def rotate_video(self, _filename, _seed, _size, _rot_types=[(2, 3), (3, 2)], _delta=4, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
         assert _seed != None
         assert _size != None
