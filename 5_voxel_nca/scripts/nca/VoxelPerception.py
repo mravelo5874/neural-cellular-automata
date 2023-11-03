@@ -87,10 +87,14 @@ class VoxelPerception():
         lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
         # * compute px and py 
         _cos, _sin = angle.cos(), angle.sin()
-        px = (gx*_cos)+(gy*_sin)
-        py = (gy*_cos)-(gx*_sin)
+        px = torch.empty(_x.shape, dtype=torch.float32)
+        py = torch.empty(_x.shape, dtype=torch.float32)
+        for i in range(3):
+            i_x = gx[:, :, :, i]
+            i_y = gy[:, :, :, i]
+            px[:, :, :, i] = (i_x*_cos)+(i_y*_sin)
+            py[:, :, :, i] = (i_y*_cos)-(i_x*_sin)
         return torch.cat([_x, px, py, gz, lap], 1)
-        
         
     perception = {
         'ANISOTROPIC': anisotropic_perception,
