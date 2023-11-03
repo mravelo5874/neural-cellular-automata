@@ -94,6 +94,10 @@ class VoxelPerception():
         for i in range(3):
             i_x = gx[:, :, :, i]
             i_y = gy[:, :, :, i]
+            print ('i_x.shape:',i_x.shape)
+            print ('i_x.shape:',i_y.shape)
+            print ('px[:, :, :, i].shape:',px[:, :, :, i].shape)
+            print ('py[:, :, :, i].shape:',py[:, :, :, i].shape)
             px[:, :, :, i] = (i_x*_cos)+(i_y*_sin)
             py[:, :, :, i] = (i_y*_cos)-(i_x*_sin)
         return torch.cat([_x, px, py, gz, lap], 1)
