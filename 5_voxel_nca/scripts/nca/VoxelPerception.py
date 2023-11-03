@@ -85,6 +85,8 @@ class VoxelPerception():
         gy = self.per_channel_conv3d(states, Y_SOBEL_KERN[None, :])
         gz = self.per_channel_conv3d(states, Z_SOBEL_KERN[None, :])
         lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
+        print ('gx.shape:',gx.shape)
+        print ('gy.shape:',gy.shape)
         # * compute px and py 
         _cos, _sin = angle.cos(), angle.sin()
         px = torch.empty(_x.shape, dtype=torch.float32)
