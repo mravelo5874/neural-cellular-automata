@@ -16,7 +16,7 @@ _SIZE_ = 24
 _PAD_ = 4
 _SEED_POINTS_ = 4
 _SEED_DIST_ = 4
-_TARGET_VOX_ = '../_vox/oak.vox'
+_TARGET_VOX_ = '../_vox/earth.vox'
 # * model parameters
 _MODEL_TYPE_ = 'ANISOTROPIC'
 _CHANNELS_ = 16
