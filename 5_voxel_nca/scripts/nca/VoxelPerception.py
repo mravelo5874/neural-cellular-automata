@@ -85,25 +85,17 @@ class VoxelPerception():
         gy = self.per_channel_conv3d(states, Y_SOBEL_KERN[None, :])
         gz = self.per_channel_conv3d(states, Z_SOBEL_KERN[None, :])
         lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
-        print ('gx.shape:',gx.shape)
-        print ('gy.shape:',gy.shape)
         # * compute px and py 
         _cos, _sin = angle.cos(), angle.sin()
         px = torch.empty(gx.shape, dtype=torch.float32)
         py = torch.empty(gx.shape, dtype=torch.float32)
-        print ('px.shape:',px.shape)
-        print ('py.shape:',py.shape)
         for i in range(3):
             i_x = gx[:, :, :, i]
             i_y = gy[:, :, :, i]
-            print ('*i_x.shape:',i_x.shape)
-            print ('*gx[:, :, :, i].shape:',gx[:, :, :, i].shape)
-            print ('px[:, :, :, i].shape:',px[:, :, :, i].shape)
-            print ('py[:, :, :, i].shape:',py[:, :, :, i].shape)
-            print ('_cos.shape:',_cos.shape)
-            print ('_sin.shape:',_sin.shape)
-            rx = (i_x*_cos)+(i_y*_sin)
-            ry = (i_y*_cos)-(i_x*_sin)
+            i_c = _cos[:, :, :, i]
+            i_s = _sin[:, :, :, i]
+            rx = (i_x*i_c)+(i_y*i_s)
+            ry = (i_y*i_c)-(i_x*i_s)
             print ('rx.shape:',rx.shape)
             print ('ry.shape:',ry.shape)
             px[:, :, :, i] = rx
