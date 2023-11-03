@@ -96,8 +96,6 @@ class VoxelPerception():
             i_s = _sin[:, :, :, i]
             rx = (i_x*i_c)+(i_y*i_s)
             ry = (i_y*i_c)-(i_x*i_s)
-            print ('rx.shape:',rx.shape)
-            print ('ry.shape:',ry.shape)
             px[:, :, :, i] = rx
             py[:, :, :, i] = ry
         return torch.cat([_x, px, py, gz, lap], 1)
