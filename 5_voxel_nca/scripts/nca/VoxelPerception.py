@@ -89,6 +89,8 @@ class VoxelPerception():
         _cos, _sin = angle.cos(), angle.sin()
         px = torch.empty(_x.shape, dtype=torch.float32)
         py = torch.empty(_x.shape, dtype=torch.float32)
+        print ('px.shape:',px.shape)
+        print ('py.shape:',py.shape)
         for i in range(3):
             i_x = gx[:, :, :, i]
             i_y = gy[:, :, :, i]
