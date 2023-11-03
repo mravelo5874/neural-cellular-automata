@@ -228,7 +228,7 @@ def main():
             for p in model.parameters():
                 p.grad /= (p.grad.norm()+1e-5)
 
-            torch.nn.utils.clip_grad_norm(model.parameters(), 5) # maybe? : 
+            torch.nn.utils.clip_grad_norm_(model.parameters(), 5) # maybe? : 
             opt.step()
             opt.zero_grad()
             lr_sched.step()
