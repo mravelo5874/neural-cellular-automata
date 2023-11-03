@@ -169,6 +169,9 @@ def main():
     # * create pool
     with torch.no_grad():
         pool = seed_ten.clone().repeat(_POOL_SIZE_, 1, 1, 1, 1)
+        if model.is_steerable():
+            for j in range(_POOL_SIZE_):
+                pool[j, -1:] = 0
     print (f'pool.shape: {list(pool.shape)}')
     
     # * model training
@@ -188,7 +191,9 @@ def main():
             
             # * re-add seed into batch
             x[:1] = seed_ten
-            
+            if model.is_steerable():
+                x[:1, -1:] = 0
+        
             # * damage lowest loss in batch
             if i % _DAMG_RATE_ == 0:
                 mask = util.half_volume_mask(_SIZE_+(2*_PAD_), 'rand')
