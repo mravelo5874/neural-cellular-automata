@@ -82,7 +82,7 @@ class Vox(object):
         fig = plt.figure()
         ax = fig.add_subplot(projection='3d')
         ax.voxels(self.x, self.y, self.z, self.voxels, facecolors=self.hex)
-        ax.view_init(elev=_pitch, azim=_yaw)
+        #ax.view_init(elev=_pitch, azim=_yaw)
         ax.set(xlabel='x', ylabel='y', zlabel='z')
         if not _show_grid: plt.axis('off')
         

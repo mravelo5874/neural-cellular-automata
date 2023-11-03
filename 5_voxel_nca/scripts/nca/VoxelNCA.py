@@ -170,7 +170,7 @@ class VoxelNCA(torch.nn.Module):
         _x = _x + p * stochastic_mask
         if self.is_steerable():
             states = _x[:, :-1]*alive_mask
-            angle = _x[:, -1:] % (PI*2.0)
+            angle = _x[:, -1:]%(PI*2.0)
             _x = torch.cat([states, angle], 1)
         else:
             _x = _x * alive_mask

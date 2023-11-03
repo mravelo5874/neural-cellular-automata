@@ -3,18 +3,6 @@ import torch.nn.functional as func
 
 # 3D filters
 X_SOBEL_KERN = torch.tensor([
-   [[-1., 0., 1.], 
-    [-2., 0., 2.], 
-    [-1., 0., 1.]],
-   
-   [[-2., 0., 2.], 
-    [-4., 0., 4.], 
-    [-2., 0., 2.]],
-   
-   [[-1., 0., 1.], 
-    [-2., 0., 2.], 
-    [-1., 0., 1.]]])
-Y_SOBEL_KERN = torch.tensor([
    [[1., 2., 1.], 
     [0., 0., 0.], 
     [-1., -2., -1.]],
@@ -23,10 +11,10 @@ Y_SOBEL_KERN = torch.tensor([
     [0., 0., 0.], 
     [-2., -4., -2.]],
    
-   [[1., 0., 1.], 
+   [[1., 2., 1.], 
     [0., 0., 0.], 
     [-1., -2., -1.]]])
-Z_SOBEL_KERN = torch.tensor([
+Y_SOBEL_KERN = torch.tensor([
    [[1., 2., 1.], 
     [2., 4., 2.], 
     [1., 2., 1.]],
@@ -38,6 +26,18 @@ Z_SOBEL_KERN = torch.tensor([
    [[-1., -2., -1.], 
     [-2., -4., -2.], 
     [-1., -2., -1.]]])
+Z_SOBEL_KERN = torch.tensor([
+   [[-1., 0., 1.], 
+    [-2., 0., 2.], 
+    [-1., 0., 1.]],
+   
+   [[-2., 0., 2.], 
+    [-4., 0., 4.], 
+    [-2., 0., 2.]],
+   
+   [[-1., 0., 1.], 
+    [-2., 0., 2.], 
+    [-1., 0., 1.]]])
 LAP_KERN = torch.tensor([
    [[2., 3., 2.], 
     [3., 6., 3.], 
@@ -87,9 +87,9 @@ class VoxelPerception():
         lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
         # * compute px and py 
         _cos, _sin = angle.cos(), angle.sin()
-        pz = (gz*_cos)+(gy*_sin)
-        py = (gy*_cos)-(gz*_sin)
-        return torch.cat([_x, pz, py, gx, lap], 1)
+        px = (gx*_cos)+(gy*_sin)
+        py = (gy*_cos)-(gx*_sin)
+        return torch.cat([_x, px, py, gz, lap], 1)
         
         
     perception = {

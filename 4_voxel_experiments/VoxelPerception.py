@@ -4,7 +4,7 @@ import torchvision.transforms.functional as trans
 import numpy as np
 
 # 3D filters
-X_SOBEL_KERN = torch.tensor([
+Z_SOBEL_KERN = torch.tensor([
    [[-1., 0., 1.], 
     [-2., 0., 2.], 
     [-1., 0., 1.]],
@@ -16,7 +16,7 @@ X_SOBEL_KERN = torch.tensor([
    [[-1., 0., 1.], 
     [-2., 0., 2.], 
     [-1., 0., 1.]]])
-Y_SOBEL_KERN = torch.tensor([
+X_SOBEL_KERN = torch.tensor([
    [[1., 2., 1.], 
     [0., 0., 0.], 
     [-1., -2., -1.]],
@@ -25,10 +25,10 @@ Y_SOBEL_KERN = torch.tensor([
     [0., 0., 0.], 
     [-2., -4., -2.]],
    
-   [[1., 0., 1.], 
+   [[1., 2., 1.], 
     [0., 0., 0.], 
     [-1., -2., -1.]]])
-Z_SOBEL_KERN = torch.tensor([
+Y_SOBEL_KERN = torch.tensor([
    [[1., 2., 1.], 
     [2., 4., 2.], 
     [1., 2., 1.]],

@@ -11,9 +11,8 @@ def main():
     start = datetime.datetime.now()
     
     # * vidgen params
-    _NAME_ = 'earth_aniso'
-    _MODEL_ = '_models/earth_aniso'
-    _VIDEO_ = '_videos/cowboy16_test'
+    _NAME_ = 'earth_aniso2'
+    _MODEL_ = '_models/earth_aniso2'
     _DEVICE_ = 'cuda'
     
     # * set cuda as device
@@ -44,8 +43,8 @@ def main():
     # * generate video
     print ('generating video...')
     with torch.no_grad():
-        model.generate_video(f'{_VIDEO_}.mp4', seed_ten)
-        model.regen_video(f'_videos/{_NAME_}_multi_regen.mp4', seed_ten, _size=_SIZE_+(2*_PAD_), _mask_types=['x+', 'y+', 'z+'])
+        model.generate_video(f'_videos/{_NAME_}.mp4', seed_ten, _delta=2)
+        model.regen_video(f'_videos/{_NAME_}_multi_regen.mp4', seed_ten, _size=_SIZE_+(2*_PAD_), _mask_types=['x+', 'y+', 'z+'], _delta=2)
         #model.rotate_video(f'_videos/{_NAME_}_multi_rotate.mp4', seed_ten, _size=_SIZE_+(2*_PAD_))
         
      # * calculate elapsed time
