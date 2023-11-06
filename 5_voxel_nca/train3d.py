@@ -11,14 +11,14 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy26_yawiso3'
+_NAME_ = 'burger_aniso'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_POINTS_ = 4
 _SEED_DIST_ = 4
-_TARGET_VOX_ = '../_vox/cowboy16.vox'
+_TARGET_VOX_ = '../_vox/burger.vox'
 # * model parameters
-_MODEL_TYPE_ = 'YAW_ISO'
+_MODEL_TYPE_ = 'ANISOTROPIC'
 _CHANNELS_ = 16
 # * training parameters
 _EPOCHS_ = 10_000
@@ -35,7 +35,7 @@ _SAVE_RATE_ = 1000
 
 # * load from checkpoint
 load_checkpoint = False
-checkpoint_dir = '_checkpoints'
+checkpoint_dir = '_checkpoints/earth_aniso/'
 checkpoint_model = 'earth_aniso_cp10000'
 
 
@@ -137,7 +137,7 @@ def main():
     if not load_checkpoint:
         model = NCA(_channels=_CHANNELS_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
         print ('training new model from scratch...')
-    else: 
+    else:
         load_model(checkpoint_dir, checkpoint_model)
         model = NCA(_channels=_CHANNELS_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
         model.load_state_dict(torch.load(checkpoint_dir+'/'+checkpoint_model+'.pt', map_location=_DEVICE_))

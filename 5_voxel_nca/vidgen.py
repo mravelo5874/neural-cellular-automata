@@ -42,6 +42,8 @@ def main():
     print (f'seed.shape: {seed_ten.shape}')
 
     # * generate video
+    curr = datetime.datetime.now().strftime("%H:%M:%S")
+    print (f'starting time: {curr}')
     print ('generating videos...')
     with torch.no_grad():
         model.generate_video(f'_models/{_NAME_}/vid_{_NAME_}_grow.mp4', seed_ten)
