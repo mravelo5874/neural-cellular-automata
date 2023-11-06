@@ -12,7 +12,7 @@ def main():
     
     # * vidgen params
     _NAME_ = 'earth_aniso2'
-    _MODEL_ = '_models/earth_aniso2'
+    _DIR_ = '_models'
     _DEVICE_ = 'cuda'
     
     # * set cuda as device
@@ -22,14 +22,15 @@ def main():
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
     
     # * load model
+    path = f'{_DIR_}/{_NAME_}/{_NAME_}.pt'
     model = NCA()
-    model.load_state_dict(torch.load(_MODEL_+'.pt', map_location=_DEVICE_))   
+    model.load_state_dict(torch.load(path, map_location=_DEVICE_))   
     model.eval()
-    print (f'loaded model from: {_MODEL_}')
+    print (f'loaded model from: {path}')
     
     # * load in params for seed
     params = {}
-    with open(_MODEL_+'_params.json', 'r') as openfile:
+    with open(f'{_DIR_}/{_NAME_}/{_NAME_}_params.json', 'r') as openfile:
         params = json.load(openfile)
         _SIZE_ = params['_SIZE_']
         _PAD_ = params['_PAD_']
@@ -41,11 +42,11 @@ def main():
     print (f'seed.shape: {seed_ten.shape}')
 
     # * generate video
-    print ('generating video...')
+    print ('generating videos...')
     with torch.no_grad():
-        model.generate_video(f'_videos/{_NAME_}_grow.mp4', seed_ten, _delta=2)
-        model.regen_video(f'_videos/{_NAME_}_multi_regen.mp4', seed_ten, _size=_SIZE_+(2*_PAD_), _mask_types=['x+', 'y+', 'z+'], _delta=2)
-        model.rotate_video(f'_videos/{_NAME_}_multi_rotate.mp4', seed_ten, _size=_SIZE_+(2*_PAD_), _delta=2)
+        model.generate_video(f'_models/{_NAME_}/vid_{_NAME_}_grow.mp4', seed_ten)
+        model.regen_video(f'_models/{_NAME_}/vid_{_NAME_}_multi_regen.mp4', seed_ten, _size=_SIZE_+(2*_PAD_), _mask_types=['x+', 'y+', 'z+'])
+        model.rotate_video(f'_models/{_NAME_}/vid_{_NAME_}_multi_rotate.mp4', seed_ten, _size=_SIZE_+(2*_PAD_))
         
      # * calculate elapsed time
     secs = (datetime.datetime.now()-start).seconds
