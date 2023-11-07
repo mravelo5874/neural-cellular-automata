@@ -38,7 +38,6 @@ load_checkpoint = False
 checkpoint_dir = '_checkpoints/earth_aniso/'
 checkpoint_model = 'earth_aniso_cp10000'
 
-
 def main():
     print ('****************')
     print ('initializing training...')
@@ -266,7 +265,6 @@ def main():
             if i % _SAVE_RATE_ == 0 and i != 0:
                 save_model('_checkpoints', model, _NAME_+'_cp'+str(i))
                 
-
     # * print train time
     secs = (datetime.datetime.now()-train_start).seconds
     train_time = str(datetime.timedelta(seconds=secs))
@@ -276,7 +274,7 @@ def main():
     pl.plot(loss_log, '.', alpha=0.1)
     pl.yscale('log')
     pl.ylim(np.min(loss_log), loss_log[0])
-    pl.savefig(f'_models/{_NAME_}_loss_plot.png')
+    pl.savefig(f'_models/{_NAME_}/{_NAME_}_loss_plot.png')
                 
     # * save final model
     save_model('_models', model, _NAME_)
