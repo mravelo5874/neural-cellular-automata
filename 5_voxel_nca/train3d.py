@@ -134,7 +134,7 @@ def main():
     
     # * sets the device  
     _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'device:', _DEVICE_)
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'device: {_DEVICE_}')
     torch.backends.cudnn.benchmark = True
     torch.cuda.empty_cache()
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
