@@ -5,6 +5,7 @@ import sys
 from settings import *
 from shader_program import ShaderProgram
 from scene import Scene
+from player import Player
 
 class VoxelEngine:
     def __init__(self):
@@ -29,15 +30,21 @@ class VoxelEngine:
         self.clock = pg.time.Clock()
         self.delta_time = 0
         self.time = 0
+        
+        # * lock mouse cursor
+        pg.event.set_grab(True)
+        pg.mouse.set_visible(False)
 
         self.is_running = True
         self.on_init()
         
     def on_init(self):
+        self.player = Player(self)
         self.shader_program = ShaderProgram(self)
         self.scene = Scene(self)
     
     def update(self):
+        self.player.update()
         self.shader_program.update()
         self.scene.update()
         
