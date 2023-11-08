@@ -12,7 +12,7 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_yawiso4'
+_NAME_ = 'cowboy16_yawiso5'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_POINTS_ = 4
@@ -175,9 +175,12 @@ def main():
     # * create pool
     with torch.no_grad():
         pool = seed_ten.clone().repeat(_POOL_SIZE_, 1, 1, 1, 1)
+        # * randomize last channel
         if model.is_steerable():
             for j in range(_POOL_SIZE_):
-                pool[j, -1:] = 0
+                s = _SIZE_+(2*_PAD_)
+                rand = torch.rand(s, s, s)*np.pi*2.0
+                pool[j, -1:] = rand
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool.shape: {list(pool.shape)}')
     
     # * model training
@@ -197,8 +200,11 @@ def main():
             
             # * re-add seed into batch
             x[:1] = seed_ten
+            # * randomize last channel
             if model.is_steerable():
-                x[:1, -1:] = 0
+                s = _SIZE_+(2*_PAD_)
+                rand = torch.rand(s, s, s)*np.pi*2.0
+                x[:1, -1:] = rand
         
             # * damage lowest loss in batch
             if i % _DAMG_RATE_ == 0:
