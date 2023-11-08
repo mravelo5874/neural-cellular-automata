@@ -19,7 +19,7 @@ class VoxelNCA(torch.nn.Module):
 
         # * determine number of perceived channels
         perception_channels = self.p.perception[self.model_type](self.p, torch.zeros([1, _channels, 8, 8, 8])).shape[1]
-        util.logprint(f'_models/{_name}/{_log_file}', 'nca perception channels:',perception_channels)
+        util.logprint(f'_models/{_name}/{_log_file}', f'nca perception channels: {perception_channels}')
         
         # * determine hidden channels (equalize the parameter count btwn model types)
         hidden_channels = 8*1024 // (perception_channels+_channels)
@@ -36,7 +36,7 @@ class VoxelNCA(torch.nn.Module):
         
         # * print model parameter count
         param_n = sum(p.numel() for p in self.parameters())
-        util.logprint(f'_models/{_name}/{_log_file}', 'nca parameter count:', param_n)
+        util.logprint(f'_models/{_name}/{_log_file}', f'nca parameter count: {param_n}')
 
     def is_steerable(self):
         return self.model_type == 'YAW_ISO'
