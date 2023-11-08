@@ -4,6 +4,11 @@ import matplotlib.gridspec as gridspec
 from matplotlib import pyplot as plt
 from scripts.vox.Vox import Vox
 
+def logprint(_path, _str):
+    print (_str)
+    with open(_path, 'a') as f:
+        f.write(_str)
+        
 def voxel_wise_loss_function(_x, _target, _scale=1e3, _dims=[]):
     return _scale * torch.mean(torch.square(_x[:, :4] - _target), _dims)
 

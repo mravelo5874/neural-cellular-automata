@@ -11,14 +11,14 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'burger_aniso'
+_NAME_ = 'cowboy16_yawiso4'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_POINTS_ = 4
 _SEED_DIST_ = 4
-_TARGET_VOX_ = '../_vox/burger.vox'
+_TARGET_VOX_ = '../_vox/cowboy16.vox'
 # * model parameters
-_MODEL_TYPE_ = 'ANISOTROPIC'
+_MODEL_TYPE_ = 'YAW_ISO'
 _CHANNELS_ = 16
 # * training parameters
 _EPOCHS_ = 10_000
@@ -30,6 +30,7 @@ _LR_STEP_ = 2000
 _NUM_DAMG_ = 2
 _DAMG_RATE_ = 5
 # * logging parameters
+_LOG_FILE_ = 'trainlog.txt'
 _INFO_RATE_ = 200
 _SAVE_RATE_ = 1000
 
@@ -37,10 +38,10 @@ _SAVE_RATE_ = 1000
 load_checkpoint = False
 checkpoint_dir = '_checkpoints/earth_aniso/'
 checkpoint_model = 'earth_aniso_cp10000'
-
+        
 def main():
-    print ('****************')
-    print ('initializing training...')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '****************')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'initializing training...')
     start = datetime.datetime.now()
     
     # * save model method
@@ -77,7 +78,7 @@ def main():
         json_object = json.dumps(dict, indent=4)
         with open(f'{model_path.absolute()}/{_name}_params.json', 'w') as outfile:
             outfile.write(json_object)
-        print (f'model [{_name}] saved to {_dir}...')
+        util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'model [{_name}] saved to {_dir}...')
     
     # * load model method
     def load_model(_dir, _name):
@@ -127,43 +128,43 @@ def main():
     
     # * sets the device  
     _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
-    print ('device:', _DEVICE_)
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', 'device:', _DEVICE_)
     torch.backends.cudnn.benchmark = True
     torch.cuda.empty_cache()
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
     
     # * create / load model
     if not load_checkpoint:
-        model = NCA(_channels=_CHANNELS_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
-        print ('training new model from scratch...')
+        model = NCA(_name=_NAME_, _log_file=_LOG_FILE_, _channels=_CHANNELS_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
+        util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', 'training new model from scratch...')
     else:
         load_model(checkpoint_dir, checkpoint_model)
-        model = NCA(_channels=_CHANNELS_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
+        model = NCA(_name=_NAME_, _log_file=_LOG_FILE_, _channels=_CHANNELS_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
         model.load_state_dict(torch.load(checkpoint_dir+'/'+checkpoint_model+'.pt', map_location=_DEVICE_))
         model.train()
-        print (f'loading checkpoint: {checkpoint_dir}/{checkpoint_model}...')
+        util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', f'loading checkpoint: {checkpoint_dir}/{checkpoint_model}...')
     
     # * create optimizer and learning-rate scheduler
     opt = torch.optim.Adam(model.parameters(), _UPPER_LR_)
     lr_sched = torch.optim.lr_scheduler.CyclicLR(opt, _LOWER_LR_, _UPPER_LR_, step_size_up=_LR_STEP_, mode='triangular2', cycle_momentum=False)
         
     # * print out parameters
-    print (f'model: {_NAME_}')
-    print (f'type: {_MODEL_TYPE_}')
-    print (f'batch-size: {_BATCH_SIZE_}')
-    print (f'pool-size: {_POOL_SIZE_}')
-    print (f'lr: {_UPPER_LR_}>{_LOWER_LR_} w/ {_LR_STEP_} step')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', f'model: {_NAME_}')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', f'type: {_MODEL_TYPE_}')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', f'batch-size: {_BATCH_SIZE_}')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', f'pool-size: {_POOL_SIZE_}')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', f'lr: {_UPPER_LR_}>{_LOWER_LR_} w/ {_LR_STEP_} step')
 
     # * create seed
     seed_ten = util.create_seed(_size=_SIZE_+(2*_PAD_), _dist=_SEED_DIST_, _points=_SEED_POINTS_).unsqueeze(0).to(_DEVICE_)
-    print (f'seed.shape: {list(seed_ten.shape)}')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', f'seed.shape: {list(seed_ten.shape)}')
     
     # * load target vox
     target = Vox().load_from_file(_TARGET_VOX_)
     target_ten = target.tensor()
     target_ten = func.pad(target_ten, (_PAD_, _PAD_, _PAD_, _PAD_, _PAD_, _PAD_), 'constant')
     target_ten = target_ten.clone().repeat(_BATCH_SIZE_, 1, 1, 1, 1).to(_DEVICE_)
-    print (f'target.shape: {list(target_ten.shape)}')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', f'target.shape: {list(target_ten.shape)}')
     
     # * create pool
     with torch.no_grad():
@@ -171,10 +172,10 @@ def main():
         if model.is_steerable():
             for j in range(_POOL_SIZE_):
                 pool[j, -1:] = 0
-    print (f'pool.shape: {list(pool.shape)}')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', f'pool.shape: {list(pool.shape)}')
     
     # * model training
-    print (f'starting training w/ {_EPOCHS_+1} epochs...')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', f'starting training w/ {_EPOCHS_+1} epochs...')
     train_start = datetime.datetime.now()
     loss_log = []
     prev_lr = -np.inf
@@ -242,8 +243,8 @@ def main():
 
             # nan loss :9
             if torch.isnan(loss) or torch.isinf(loss) or torch.isneginf(loss):
-                print (f'detected invalid loss value: {loss}')
-                print (f'overflow loss: {overflow_loss}, diff loss: {diff_loss}, target loss: {target_loss}')
+                util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', f'detected invalid loss value: {loss}')
+                util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', f'overflow loss: {overflow_loss}, diff loss: {diff_loss}, target loss: {target_loss}')
                 raise ValueError
             
             # * print info
@@ -259,7 +260,7 @@ def main():
                 if prev_lr > lr:
                     step = '▼'
                 prev_lr = lr
-                print(f'[{i}/{_EPOCHS_+1}]\t {np.round(iter_per_sec, 3)}it/s\t time: {time}~{est}\t loss: {np.round(avg, 3)}>{np.round(np.min(loss_log), 3)}\t lr: {lr} {step}')
+                util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', f'[{i}/{_EPOCHS_+1}]\t {np.round(iter_per_sec, 3)}it/s\t time: {time}~{est}\t loss: {np.round(avg, 3)}>{np.round(np.min(loss_log), 3)}\t lr: {lr} {step}')
             
             # * save checkpoint
             if i % _SAVE_RATE_ == 0 and i != 0:
@@ -268,7 +269,7 @@ def main():
     # * print train time
     secs = (datetime.datetime.now()-train_start).seconds
     train_time = str(datetime.timedelta(seconds=secs))
-    print (f'train time: {train_time}')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', f'train time: {train_time}')
     
     # * save loss plot
     pl.plot(loss_log, '.', alpha=0.1)
@@ -281,8 +282,8 @@ def main():
     
     # * create videos
     curr = datetime.datetime.now().strftime("%H:%M:%S")
-    print (f'starting time: {curr}')
-    print ('generating videos...')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', f'starting time: {curr}')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', 'generating videos...')
     with torch.no_grad():
         model.generate_video(f'_models/{_NAME_}/vid_{_NAME_}_grow.mp4', seed_ten)
         model.regen_video(f'_models/{_NAME_}/vid_{_NAME_}_multi_regen.mp4', seed_ten, _size=_SIZE_+(2*_PAD_), _mask_types=['x+', 'y+', 'z+'])
@@ -291,8 +292,8 @@ def main():
     # * calculate elapsed time
     secs = (datetime.datetime.now()-start).seconds
     elapsed_time = str(datetime.timedelta(seconds=secs))
-    print (f'elapsed time: {elapsed_time}')
-    print ('****************')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', f'elapsed time: {elapsed_time}')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'_models/{_NAME_}', '****************')
     
 if __name__ == '__main__':
     main()

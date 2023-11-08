@@ -5,19 +5,21 @@ from numpy import pi as PI
 from scripts.Video import VideoWriter, zoom
 from scripts.vox.Vox import Vox
 from scripts.nca.VoxelPerception import VoxelPerception as vp
-from scripts.nca.VoxelUtil import half_volume_mask
+from scripts.nca import VoxelUtil as util
     
 class VoxelNCA(torch.nn.Module):
-    def __init__(self, _channels=16, _hidden=128, _device='cuda', _model_type='ANISOTROPIC', _update_rate=0.5):
+    def __init__(self, _name, _log_file, _channels=16, _hidden=128, _device='cuda', _model_type='ANISOTROPIC', _update_rate=0.5):
         super().__init__()
         self.device = _device
         self.model_type = _model_type
         self.update_rate = _update_rate
         self.p = vp(_device)
+        self.name = _name
+        self.log_file = _log_file
 
         # * determine number of perceived channels
         perception_channels = self.p.perception[self.model_type](self.p, torch.zeros([1, _channels, 8, 8, 8])).shape[1]
-        print ('nca perception channels:',perception_channels)
+        util.logprint(f'_models/{_name}/{_log_file}', 'nca perception channels:',perception_channels)
         
         # * determine hidden channels (equalize the parameter count btwn model types)
         hidden_channels = 8*1024 // (perception_channels+_channels)
@@ -34,7 +36,7 @@ class VoxelNCA(torch.nn.Module):
         
         # * print model parameter count
         param_n = sum(p.numel() for p in self.parameters())
-        print('nca parameter count:', param_n)
+        util.logprint(f'_models/{_name}/{_log_file}', 'nca parameter count:', param_n)
 
     def is_steerable(self):
         return self.model_type == 'YAW_ISO'
@@ -57,7 +59,7 @@ class VoxelNCA(torch.nn.Module):
         # * calculate elapsed time
         secs = (datetime.datetime.now()-start).seconds
         elapsed_time = str(datetime.timedelta(seconds=secs))
-        print (f'created video: {_filename}, gen-time: {elapsed_time}')
+        util.logprint(f'_models/{self.name}/{self.log_file}', f'created video: {_filename}, gen-time: {elapsed_time}')
     
     def regen_video(self, _filename, _seed, _size, _mask_types=['x+'], _delta=4, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
@@ -81,7 +83,7 @@ class VoxelNCA(torch.nn.Module):
                 for i in range(20):
                     vid.add(zoom(img, _zoom))
                 # * apply mask
-                mask = half_volume_mask(_size, _mask_types[m])
+                mask = util.half_volume_mask(_size, _mask_types[m])
                 x *= torch.tensor(mask)
                 v = Vox().load_from_tensor(x)
                 # * still frames
@@ -98,7 +100,7 @@ class VoxelNCA(torch.nn.Module):
         # * calculate elapsed time
         secs = (datetime.datetime.now()-start).seconds
         elapsed_time = str(datetime.timedelta(seconds=secs))
-        print (f'created video: {_filename}, gen-time: {elapsed_time}')
+        util.logprint(f'_models/{self.name}/{self.log_file}',f'created video: {_filename}, gen-time: {elapsed_time}')
             
     def rotate_video(self, _filename, _seed, _size, _rot_types=[(2, 3), (3, 2)], _delta=4, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
@@ -142,7 +144,7 @@ class VoxelNCA(torch.nn.Module):
             # * calculate elapsed time
             secs = (datetime.datetime.now()-start).seconds
             elapsed_time = str(datetime.timedelta(seconds=secs))
-            print (f'created video: {_filename}, gen-time: {elapsed_time}')
+            util.logprint(f'_models/{self.name}/{self.log_file}',f'created video: {_filename}, gen-time: {elapsed_time}')
             
     def get_alive_mask(self, _x):
         return func.max_pool3d(_x[:, 3:4, :, :, :], kernel_size=3, stride=1, padding=1) > 0.1
