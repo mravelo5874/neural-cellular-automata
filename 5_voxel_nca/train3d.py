@@ -1,3 +1,4 @@
+import os
 import json
 import pathlib
 import datetime
@@ -40,6 +41,8 @@ checkpoint_dir = '_checkpoints/earth_aniso/'
 checkpoint_model = 'earth_aniso_cp10000'
         
 def main():
+    # * make directory for model files
+    os.mkdir(f'_models/{_NAME_}')
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '****************')
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'initializing training...')
     start = datetime.datetime.now()
