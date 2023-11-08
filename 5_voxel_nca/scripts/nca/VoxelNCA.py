@@ -100,7 +100,7 @@ class VoxelNCA(torch.nn.Module):
         # * calculate elapsed time
         secs = (datetime.datetime.now()-start).seconds
         elapsed_time = str(datetime.timedelta(seconds=secs))
-        util.logprint(f'_models/{self.name}/{self.log_file}',f'created video: {_filename}, gen-time: {elapsed_time}')
+        util.logprint(f'_models/{self.name}/{self.log_file}', f'created video: {_filename}, gen-time: {elapsed_time}')
             
     def rotate_video(self, _filename, _seed, _size, _rot_types=[(2, 3), (3, 2)], _delta=4, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
@@ -144,7 +144,7 @@ class VoxelNCA(torch.nn.Module):
             # * calculate elapsed time
             secs = (datetime.datetime.now()-start).seconds
             elapsed_time = str(datetime.timedelta(seconds=secs))
-            util.logprint(f'_models/{self.name}/{self.log_file}',f'created video: {_filename}, gen-time: {elapsed_time}')
+            util.logprint(f'_models/{self.name}/{self.log_file}', f'created video: {_filename}, gen-time: {elapsed_time}')
             
     def get_alive_mask(self, _x):
         return func.max_pool3d(_x[:, 3:4, :, :, :], kernel_size=3, stride=1, padding=1) > 0.1
