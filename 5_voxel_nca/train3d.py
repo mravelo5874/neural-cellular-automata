@@ -42,7 +42,10 @@ checkpoint_model = 'earth_aniso_cp10000'
         
 def main():
     # * make directory for model files
-    os.mkdir(f'_models/{_NAME_}')
+    if not os.path.exists(f'_models/{_NAME_}'):
+        os.mkdir(f'_models/{_NAME_}')
+        
+    # * begin logging and start program timer
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '****************')
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'initializing training...')
     start = datetime.datetime.now()
