@@ -33,3 +33,17 @@ created video: _models/cowboy16_yawiso5/vidgen_cowboy16_yawiso5_multi_regen.mp4,
 created video: _models/cowboy16_yawiso5/vidgen_cowboy16_yawiso5_multi_rotate.mp4, gen-time: 0:20:25
 elapsed time: 0:53:27
 ****************
+****************
+initializing video generation...
+device: cuda
+nca perception channels: 76
+nca parameter count: 11904
+loaded model from: _models/cowboy16_yawiso5/cowboy16_yawiso5.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+starting time: 09:31:00
+generating videos...
+created video: _models/cowboy16_yawiso5/vidgen_cowboy16_yawiso5_grow.mp4, gen-time: 0:06:25
+created video: _models/cowboy16_yawiso5/vidgen_cowboy16_yawiso5_multi_regen.mp4, gen-time: 0:25:19
+created video: _models/cowboy16_yawiso5/vidgen_cowboy16_yawiso5_multi_rotate.mp4, gen-time: 0:20:24
+elapsed time: 0:52:28
+****************
