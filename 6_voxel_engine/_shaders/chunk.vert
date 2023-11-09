@@ -15,6 +15,6 @@ float rand(vec2 co){
 }
 
 void main() {
-    voxel_color = vec3(rand(vec2(voxel_id, voxel_id+1)), rand(vec2(voxel_id+1, voxel_id+2)), rand(vec2(voxel_id+2, voxel_id+3)));
+    voxel_color = vec3(rand(vec2(voxel_id, voxel_id+1)), rand(vec2(voxel_id+2, voxel_id+3)), rand(vec2(voxel_id+4, voxel_id+5)));
     gl_Position = m_proj*m_view*m_model*vec4(in_pos, 1.0);
 }

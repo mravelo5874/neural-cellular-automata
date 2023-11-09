@@ -12,7 +12,7 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_yawiso5'
+_NAME_ = 'cowboy16_yawiso6'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_POINTS_ = 4
@@ -296,8 +296,20 @@ def main():
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting time: {curr}')
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'generating videos...')
     with torch.no_grad():
+        # * randomize last channel
+        if model.is_steerable():
+            s = _SIZE_+(2*_PAD_)
+            seed_ten[:1, -1:] = torch.rand(s, s, s)*np.pi*2.0
         model.generate_video(f'_models/{_NAME_}/vid_{_NAME_}_grow.mp4', seed_ten)
+        # * randomize last channel
+        if model.is_steerable():
+            s = _SIZE_+(2*_PAD_)
+            seed_ten[:1, -1:] = torch.rand(s, s, s)*np.pi*2.0
         model.regen_video(f'_models/{_NAME_}/vid_{_NAME_}_multi_regen.mp4', seed_ten, _size=_SIZE_+(2*_PAD_), _mask_types=['x+', 'y+', 'z+'])
+        # * randomize last channel
+        if model.is_steerable():
+            s = _SIZE_+(2*_PAD_)
+            seed_ten[:1, -1:] = torch.rand(s, s, s)*np.pi*2.0
         model.rotate_video(f'_models/{_NAME_}/vid_{_NAME_}_multi_rotate.mp4', seed_ten, _size=_SIZE_+(2*_PAD_))
     
     # * calculate elapsed time

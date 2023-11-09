@@ -1,7 +1,7 @@
 import torch
 import torch.nn.functional as func
 import datetime
-from numpy import pi as PI
+from numpy import pi
 from scripts.Video import VideoWriter, zoom
 from scripts.vox.Vox import Vox
 from scripts.nca.VoxelPerception import VoxelPerception as vp
@@ -127,6 +127,8 @@ class VoxelNCA(torch.nn.Module):
             for r in range(len(_rot_types)):
                 # * still frames of seed
                 x = torch.rot90(_seed, 1, _rot_types[r])
+                if self.is_steerable():
+                    x[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
                 v = Vox().load_from_tensor(x)
                 img = v.render(_show_grid=_show_grid, _print=False)
                 for i in range(32):
@@ -172,7 +174,7 @@ class VoxelNCA(torch.nn.Module):
         _x = _x + p * stochastic_mask
         if self.is_steerable():
             states = _x[:, :-1]*alive_mask
-            angle = _x[:, -1:]%(PI*2.0)
+            angle = _x[:, -1:]%(pi*2.0)
             _x = torch.cat([states, angle], 1)
         else:
             _x = _x * alive_mask

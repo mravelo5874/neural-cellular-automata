@@ -1,6 +1,7 @@
 import json
 import torch
 import datetime
+from numpy import pi
 
 from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as util
@@ -11,7 +12,7 @@ def main():
     start = datetime.datetime.now()
     
     # * vidgen params
-    _NAME_ = 'earth_aniso2'
+    _NAME_ = 'cowboy16_yawiso5'
     _DIR_ = '_models'
     _DEVICE_ = 'cuda'
     
@@ -42,13 +43,23 @@ def main():
     print (f'seed.shape: {seed_ten.shape}')
 
     # * generate video
+    s = _SIZE_+(2*_PAD_)
     curr = datetime.datetime.now().strftime("%H:%M:%S")
     print (f'starting time: {curr}')
     print ('generating videos...')
     with torch.no_grad():
+        # * randomize last channel
+        if model.is_steerable():
+            seed_ten[:1, -1:] = torch.rand(s, s, s)*pi*2.0
         model.generate_video(f'_models/{_NAME_}/vid_{_NAME_}_grow.mp4', seed_ten)
-        model.regen_video(f'_models/{_NAME_}/vid_{_NAME_}_multi_regen.mp4', seed_ten, _size=_SIZE_+(2*_PAD_), _mask_types=['x+', 'y+', 'z+'])
-        model.rotate_video(f'_models/{_NAME_}/vid_{_NAME_}_multi_rotate.mp4', seed_ten, _size=_SIZE_+(2*_PAD_))
+        # * randomize last channel
+        if model.is_steerable():
+            seed_ten[:1, -1:] = torch.rand(s, s, s)*pi*2.0
+        model.regen_video(f'_models/{_NAME_}/vid_{_NAME_}_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
+        # * randomize last channel
+        if model.is_steerable():
+            seed_ten[:1, -1:] = torch.rand(s, s, s)*pi*2.0
+        model.rotate_video(f'_models/{_NAME_}/vid_{_NAME_}_multi_rotate.mp4', seed_ten, _size=s)
         
      # * calculate elapsed time
     secs = (datetime.datetime.now()-start).seconds
