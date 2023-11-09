@@ -21,7 +21,8 @@ class VoxelEngine:
         self.ctx = mgl.create_context()
         
         # * fragment depth testing, culling faces and color blending
-        self.ctx.enable(flags=mgl.DEPTH_TEST|mgl.CULL_FACE|mgl.BLEND)
+        self.ctx.enable(flags=mgl.DEPTH_TEST|mgl.CULL_FACE)
+        self.ctx.disable(flags=mgl.BLEND)
         
         # * automatic garbage collection
         self.ctx.gc_mode = 'auto'

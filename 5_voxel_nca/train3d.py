@@ -180,8 +180,7 @@ def main():
         if model.is_steerable():
             for j in range(_POOL_SIZE_):
                 s = _SIZE_+(2*_PAD_)
-                rand = torch.rand(s, s, s)*np.pi*2.0
-                pool[j, -1:] = rand
+                pool[j, -1:] = torch.rand(s, s, s)*np.pi*2.0
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool.shape: {list(pool.shape)}')
     
     # * model training
@@ -204,8 +203,7 @@ def main():
             # * randomize last channel
             if model.is_steerable():
                 s = _SIZE_+(2*_PAD_)
-                rand = torch.rand(s, s, s)*np.pi*2.0
-                x[:1, -1:] = rand
+                x[:1, -1:] = torch.rand(s, s, s)*np.pi*2.0
         
             # * damage lowest loss in batch
             if i % _DAMG_RATE_ == 0:
