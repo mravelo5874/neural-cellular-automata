@@ -208,14 +208,14 @@ def main():
         
             # * damage lowest loss in batch
             if i % _DAMG_RATE_ == 0:
-                mask = util.half_volume_mask(_SIZE_+(2*_PAD_), 'rand')
+                mask = torch.tensor(util.half_volume_mask(_SIZE_+(2*_PAD_), 'rand')).to(_DEVICE_)
                 # * apply mask
-                x[-_NUM_DAMG_:] *= torch.tensor(mask).to(_DEVICE_)
+                x[-_NUM_DAMG_:] *= mask
                 # * randomize angles for steerable models
                 if model.is_steerable():
                     inv_mask = ~mask
                     rand = torch.rand(_SIZE_, _SIZE_)*np.pi*2.0
-                    rand *= inv_mask.to(_DEVICE_)
+                    rand *= inv_mask
                     x[-_NUM_DAMG_:, -1:] += rand
 
         # * different loss values
