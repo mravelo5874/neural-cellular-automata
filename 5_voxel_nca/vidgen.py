@@ -29,13 +29,6 @@ def main():
     torch.cuda.empty_cache()
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
     
-    # * load model
-    path = f'{_DIR_}/{_NAME_}/{_NAME_}.pt'
-    model = NCA(_name=_NAME_, _log_file=_LOG_FILE_)
-    model.load_state_dict(torch.load(path, map_location=_DEVICE_))   
-    model.eval()
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'loaded model from: {path}')
-    
     # * load in params for seed
     params = {}
     with open(f'{_DIR_}/{_NAME_}/{_NAME_}_params.json', 'r') as openfile:
@@ -44,6 +37,13 @@ def main():
         _PAD_ = params['_PAD_']
         _SEED_POINTS_ = params['_SEED_POINTS_']
         _SEED_DIST_ = params['_SEED_DIST_']
+        
+    # * load model
+    path = f'{_DIR_}/{_NAME_}/{_NAME_}.pt'
+    model = NCA(_name=_NAME_, _log_file=_LOG_FILE_, _channels=params['_CHANNELS_'], _model_type=params['_MODEL_TYPE_'])
+    model.load_state_dict(torch.load(path, map_location=_DEVICE_))   
+    model.eval()
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'loaded model from: {path}')
         
     # * create seed
     seed_ten = util.create_seed(_size=_SIZE_+(2*_PAD_), _dist=_SEED_DIST_, _points=_SEED_POINTS_).unsqueeze(0).to(_DEVICE_)
