@@ -1,3 +1,4 @@
+import os
 import json
 import torch
 import datetime
@@ -7,27 +8,32 @@ from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as util
 
 def main():
-    print ('****************')
-    print ('initializing video generation...')
+    # * make directory for model files
+    if not os.path.exists(f'_models/{_NAME_}'):
+        os.mkdir(f'_models/{_NAME_}')
+        
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '****************')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'initializing video generation...')
     start = datetime.datetime.now()
     
     # * vidgen params
     _NAME_ = 'cowboy16_yawiso5'
     _DIR_ = '_models'
     _DEVICE_ = 'cuda'
+    _LOG_FILE_ = 'vidlog.txt'
     
     # * set cuda as device
-    print ('device:', _DEVICE_)
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'device:', _DEVICE_)
     torch.backends.cudnn.benchmark = True
     torch.cuda.empty_cache()
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
     
     # * load model
     path = f'{_DIR_}/{_NAME_}/{_NAME_}.pt'
-    model = NCA()
+    model = NCA(_name=_NAME_, _log_file=_LOG_FILE_)
     model.load_state_dict(torch.load(path, map_location=_DEVICE_))   
     model.eval()
-    print (f'loaded model from: {path}')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'loaded model from: {path}')
     
     # * load in params for seed
     params = {}
@@ -40,13 +46,13 @@ def main():
         
     # * create seed
     seed_ten = util.create_seed(_size=_SIZE_+(2*_PAD_), _dist=_SEED_DIST_, _points=_SEED_POINTS_).unsqueeze(0).to(_DEVICE_)
-    print (f'seed.shape: {seed_ten.shape}')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'seed.shape: {seed_ten.shape}')
 
     # * generate video
     s = _SIZE_+(2*_PAD_)
     curr = datetime.datetime.now().strftime("%H:%M:%S")
-    print (f'starting time: {curr}')
-    print ('generating videos...')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting time: {curr}')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'generating videos...')
     with torch.no_grad():
         # * randomize last channel
         if model.is_steerable():
@@ -64,8 +70,8 @@ def main():
      # * calculate elapsed time
     secs = (datetime.datetime.now()-start).seconds
     elapsed_time = str(datetime.timedelta(seconds=secs))
-    print (f'elapsed time: {elapsed_time}')
-    print ('****************')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'elapsed time: {elapsed_time}')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '****************')
 
 if __name__ == '__main__':
     main()
