@@ -7,20 +7,21 @@ from numpy import pi
 from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as util
 
+# * vidgen params
+_NAME_ = 'cowboy16_yawiso5'
+_DIR_ = '_models'
+_DEVICE_ = 'cuda'
+_LOG_FILE_ = 'vidlog.txt'
+
 def main():
     # * make directory for model files
     if not os.path.exists(f'_models/{_NAME_}'):
         os.mkdir(f'_models/{_NAME_}')
-        
+    
+    # * begin logging and start program timer
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '****************')
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'initializing video generation...')
     start = datetime.datetime.now()
-    
-    # * vidgen params
-    _NAME_ = 'cowboy16_yawiso5'
-    _DIR_ = '_models'
-    _DEVICE_ = 'cuda'
-    _LOG_FILE_ = 'vidlog.txt'
     
     # * set cuda as device
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'device:', _DEVICE_)
