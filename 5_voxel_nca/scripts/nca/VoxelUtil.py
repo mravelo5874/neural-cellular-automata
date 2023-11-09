@@ -94,7 +94,7 @@ def half_volume_mask(_size, _type):
         mat[:, :, :half] = 1.0
     elif _type == 'z-':
         mat[:, :, -half:] = 1.0
-    return mat
+    return mat > 0.0
 
 def rotate_mat2d(_mat, _angle):
     _cos, _sin = _angle.cos().item(), _angle.sin().item()
