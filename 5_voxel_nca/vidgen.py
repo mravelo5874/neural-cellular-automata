@@ -24,7 +24,7 @@ def main():
     start = datetime.datetime.now()
     
     # * set cuda as device
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'device:', _DEVICE_)
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'device: {_DEVICE_}')
     torch.backends.cudnn.benchmark = True
     torch.cuda.empty_cache()
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
