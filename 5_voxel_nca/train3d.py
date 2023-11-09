@@ -45,8 +45,6 @@ def main():
     if not os.path.exists(f'_models/{_NAME_}'):
         os.mkdir(f'_models/{_NAME_}')
 
-    
-        
     # * begin logging and start program timer
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '****************')
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'timestamp: {datetime.datetime.now()}')
@@ -211,7 +209,14 @@ def main():
             # * damage lowest loss in batch
             if i % _DAMG_RATE_ == 0:
                 mask = util.half_volume_mask(_SIZE_+(2*_PAD_), 'rand')
+                # * apply mask
                 x[-_NUM_DAMG_:] *= torch.tensor(mask).to(_DEVICE_)
+                # * randomize angles for steerable models
+                if model.is_steerable():
+                    inv_mask = ~mask
+                    rand = torch.rand(_SIZE_, _SIZE_)*np.pi*2.0
+                    rand *= inv_mask
+                    x[-_NUM_DAMG_:, -1:] += rand
 
         # * different loss values
         overflow_loss = 0.0
