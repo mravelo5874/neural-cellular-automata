@@ -213,7 +213,7 @@ def main():
                 # * randomize angles for steerable models
                 if model.is_steerable():
                     inv_mask = ~mask
-                    rand = torch.rand(PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                    rand = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
                     rand *= inv_mask
                     x[-_NUM_DAMG_:, -1:] += rand
 
