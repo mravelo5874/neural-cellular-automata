@@ -20,6 +20,7 @@ def main():
     
     # * begin logging and start program timer
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '****************')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'timestamp: {datetime.datetime.now()}')
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'initializing video generation...')
     start = datetime.datetime.now()
     
@@ -57,7 +58,7 @@ def main():
     with torch.no_grad():
         model.generate_video(f'_models/{_NAME_}/vidgen_grow.mp4', seed_ten, _size=s)
         model.regen_video(f'_models/{_NAME_}/vidgen_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
-        model.rotate_video(f'_models/{_NAME_}/vidgen_multi_rotate.mp4', seed_ten, _size=s)
+        model.rotate_video(f'_models/{_NAME_}/vidgen_multi_rotate.mp4', seed_ten, _size=s, _show_grid=True)
         
      # * calculate elapsed time
     secs = (datetime.datetime.now()-start).seconds
