@@ -55,9 +55,9 @@ def main():
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting time: {curr}')
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'generating videos...')
     with torch.no_grad():
-        model.generate_video(f'_models/{_NAME_}/vidgen_{_NAME_}_grow.mp4', seed_ten, _size=s)
-        model.regen_video(f'_models/{_NAME_}/vidgen_{_NAME_}_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
-        model.rotate_video(f'_models/{_NAME_}/vidgen_{_NAME_}_multi_rotate.mp4', seed_ten, _size=s)
+        model.generate_video(f'_models/{_NAME_}/vidgen_grow.mp4', seed_ten, _size=s)
+        model.regen_video(f'_models/{_NAME_}/vidgen_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
+        model.rotate_video(f'_models/{_NAME_}/vidgen_multi_rotate.mp4', seed_ten, _size=s)
         
      # * calculate elapsed time
     secs = (datetime.datetime.now()-start).seconds
