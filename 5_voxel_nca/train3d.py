@@ -215,7 +215,7 @@ def main():
                 if model.is_steerable():
                     inv_mask = ~mask
                     rand = torch.rand(_SIZE_, _SIZE_)*np.pi*2.0
-                    rand *= inv_mask
+                    rand *= inv_mask.to(_DEVICE_)
                     x[-_NUM_DAMG_:, -1:] += rand
 
         # * different loss values
