@@ -55,18 +55,9 @@ def main():
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting time: {curr}')
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'generating videos...')
     with torch.no_grad():
-        # * randomize last channel
-        if model.is_steerable():
-            seed_ten[:1, -1:] = torch.rand(s, s, s)*pi*2.0
-        model.generate_video(f'_models/{_NAME_}/vid_{_NAME_}_grow.mp4', seed_ten)
-        # * randomize last channel
-        if model.is_steerable():
-            seed_ten[:1, -1:] = torch.rand(s, s, s)*pi*2.0
-        model.regen_video(f'_models/{_NAME_}/vid_{_NAME_}_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
-        # * randomize last channel
-        if model.is_steerable():
-            seed_ten[:1, -1:] = torch.rand(s, s, s)*pi*2.0
-        model.rotate_video(f'_models/{_NAME_}/vid_{_NAME_}_multi_rotate.mp4', seed_ten, _size=s)
+        model.generate_video(f'_models/{_NAME_}/vidgen_{_NAME_}_grow.mp4', seed_ten, _size=s)
+        model.regen_video(f'_models/{_NAME_}/vidgen_{_NAME_}_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
+        model.rotate_video(f'_models/{_NAME_}/vidgen_{_NAME_}_multi_rotate.mp4', seed_ten, _size=s)
         
      # * calculate elapsed time
     secs = (datetime.datetime.now()-start).seconds

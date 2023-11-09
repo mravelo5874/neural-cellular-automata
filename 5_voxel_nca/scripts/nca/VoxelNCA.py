@@ -41,11 +41,14 @@ class VoxelNCA(torch.nn.Module):
     def is_steerable(self):
         return self.model_type == 'YAW_ISO'
         
-    def generate_video(self, _filename, _seed, _delta=4, _zoom=1, _show_grid=False, _print=True):
+    def generate_video(self, _filename, _seed, _size, _delta=4, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
         assert _seed != None
         start = datetime.datetime.now()
         with VideoWriter(filename=_filename) as vid:
+            # * randomize last channel
+            if self.is_steerable():
+                _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
             x = _seed
             v = Vox().load_from_tensor(x)
             img = v.render(_yaw=_delta, _show_grid=_show_grid, _print=False)
@@ -67,6 +70,9 @@ class VoxelNCA(torch.nn.Module):
         assert _size != None
         start = datetime.datetime.now()
         with VideoWriter(filename=_filename) as vid:
+            # * randomize last channel
+            if self.is_steerable():
+                _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
             x = _seed
             v = Vox().load_from_tensor(x)
             img = v.render(_yaw=0, _show_grid=_show_grid, _print=False)
@@ -108,8 +114,11 @@ class VoxelNCA(torch.nn.Module):
         assert _size != None
         start = datetime.datetime.now()
         with VideoWriter(filename=_filename) as vid:
-            # * still frames of seed
+            # * randomize last channel
+            if self.is_steerable():
+                _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
             x = _seed
+            # * still frames of seed
             v = Vox().load_from_tensor(x)
             img = v.render(_show_grid=_show_grid, _print=False)
             for i in range(32):
@@ -125,10 +134,11 @@ class VoxelNCA(torch.nn.Module):
             for i in range(32):
                 vid.add(zoom(img, _zoom))
             for r in range(len(_rot_types)):
+                # * randomize last channel
+                if self.is_steerable():
+                    _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
                 # * still frames of seed
                 x = torch.rot90(_seed, 1, _rot_types[r])
-                if self.is_steerable():
-                    x[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
                 v = Vox().load_from_tensor(x)
                 img = v.render(_show_grid=_show_grid, _print=False)
                 for i in range(32):

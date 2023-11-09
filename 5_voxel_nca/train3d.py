@@ -291,26 +291,15 @@ def main():
     # * save final model
     save_model('_models', model, _NAME_)
     
-    # * create videos
+    # * generate videos
+    s = _SIZE_+(2*_PAD_)
     curr = datetime.datetime.now().strftime("%H:%M:%S")
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting time: {curr}')
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'generating videos...')
     with torch.no_grad():
-        # * randomize last channel
-        if model.is_steerable():
-            s = _SIZE_+(2*_PAD_)
-            seed_ten[:1, -1:] = torch.rand(s, s, s)*np.pi*2.0
-        model.generate_video(f'_models/{_NAME_}/vid_{_NAME_}_grow.mp4', seed_ten)
-        # * randomize last channel
-        if model.is_steerable():
-            s = _SIZE_+(2*_PAD_)
-            seed_ten[:1, -1:] = torch.rand(s, s, s)*np.pi*2.0
-        model.regen_video(f'_models/{_NAME_}/vid_{_NAME_}_multi_regen.mp4', seed_ten, _size=_SIZE_+(2*_PAD_), _mask_types=['x+', 'y+', 'z+'])
-        # * randomize last channel
-        if model.is_steerable():
-            s = _SIZE_+(2*_PAD_)
-            seed_ten[:1, -1:] = torch.rand(s, s, s)*np.pi*2.0
-        model.rotate_video(f'_models/{_NAME_}/vid_{_NAME_}_multi_rotate.mp4', seed_ten, _size=_SIZE_+(2*_PAD_))
+        model.generate_video(f'_models/{_NAME_}/vidtrain_{_NAME_}_grow.mp4', seed_ten, _size=s)
+        model.regen_video(f'_models/{_NAME_}/vidtrain_{_NAME_}_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
+        model.rotate_video(f'_models/{_NAME_}/vidtrain_{_NAME_}_multi_rotate.mp4', seed_ten, _size=s)
     
     # * calculate elapsed time
     secs = (datetime.datetime.now()-start).seconds
