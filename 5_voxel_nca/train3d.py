@@ -52,7 +52,8 @@ def main():
     
     # * save model method
     def save_model(_dir, _model, _name):
-        model_path = pathlib.Path(f'{_dir}/{_name}')
+        # * create directory
+        model_path = pathlib.Path(f'{_dir}/{_NAME_}')
         model_path.mkdir(parents=True, exist_ok=True)
         torch.save(_model.state_dict(), f'{model_path.absolute()}/{_name}.pt')
         
