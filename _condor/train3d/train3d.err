@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "train3d.py", line 311, in <module>
+    main()
+  File "train3d.py", line 260, in main
+    raise ValueError
+ValueError
