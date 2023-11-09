@@ -1,0 +1,21 @@
+****************
+initializing video generation...
+****************
+initializing video generation...
+device: cuda
+nca perception channels: 80
+nca parameter count: 12416
+****************
+initializing video generation...
+device: cuda
+nca perception channels: 76
+nca parameter count: 11904
+loaded model from: _models/cowboy16_yawiso5/cowboy16_yawiso5.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+starting time: 21:27:21
+generating videos...
+created video: _models/cowboy16_yawiso5/vid_cowboy16_yawiso5_grow.mp4, gen-time: 0:06:29
+created video: _models/cowboy16_yawiso5/vid_cowboy16_yawiso5_multi_regen.mp4, gen-time: 0:26:07
+created video: _models/cowboy16_yawiso5/vid_cowboy16_yawiso5_multi_rotate.mp4, gen-time: 0:20:26
+elapsed time: 0:53:22
+****************

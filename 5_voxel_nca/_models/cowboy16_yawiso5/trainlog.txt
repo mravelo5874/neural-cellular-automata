@@ -82,3 +82,12 @@ created video: _models/cowboy16_yawiso5/vid_cowboy16_yawiso5_multi_regen.mp4, ge
 created video: _models/cowboy16_yawiso5/vid_cowboy16_yawiso5_multi_rotate.mp4, gen-time: 0:20:04
 elapsed time: 1:45:52
 ****************
+****************
+initializing training...
+device: cuda
+****************
+initializing training...
+device: cuda
+****************
+initializing training...
+device: cuda
