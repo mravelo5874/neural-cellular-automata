@@ -96,7 +96,7 @@ def half_volume_mask(_size, _type):
         mat[:, :, -half:] = 1.0
     return mat
 
-def rotate_3x3(_mat, _angle):
+def rotate_mat2d(_mat, _angle):
     _cos, _sin = _angle.cos(), _angle.sin()
     rot = torch.tensor([
         [_cos, -_sin, 0],

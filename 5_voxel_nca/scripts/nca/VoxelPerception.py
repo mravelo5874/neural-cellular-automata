@@ -90,13 +90,14 @@ class VoxelPerception():
         _cos, _sin = angle.cos(), angle.sin()
         px = (gx*_cos)+(gy*_sin)
         py = (gy*_cos)-(gx*_sin)
-        
-        print (f'gz.shape: {gz.shape}')
-        # rotate gz
+        # * compute pz as rotated gz
+        b, c, x, y, z = gz.shape
+        pz = gz.reshape(b*c, x, y, z)
         for i in range(3):
             for j in range(3):
-                gz[:, :, i, j, :] = util.rotate_3x3(gz[:, :, i, j, :], angle)
-        return torch.cat([_x, px, py, gz, lap], 1)
+                pz[:, i, j, :] = util.rotate_mat2d(pz[:, i, j, :], angle) 
+        pz = gz.reshape(b, c, x, y, z)
+        return torch.cat([_x, px, py, pz, lap], 1)
         
     perception = {
         'ANISOTROPIC': anisotropic_perception,
