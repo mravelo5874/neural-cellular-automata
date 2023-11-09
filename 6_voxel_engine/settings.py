@@ -4,7 +4,7 @@ import numpy as np
 from numba import njit
 
 # * resolution
-WIN_RES = glm.vec2(1600, 900)
+WIN_RES = glm.vec2(800, 600)
 
 # * chunk
 CHUNK_SIZE = 32

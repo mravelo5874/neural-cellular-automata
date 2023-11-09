@@ -44,9 +44,12 @@ def main():
     # * make directory for model files
     if not os.path.exists(f'_models/{_NAME_}'):
         os.mkdir(f'_models/{_NAME_}')
+
+    
         
     # * begin logging and start program timer
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '****************')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'timestamp: {datetime.datetime.now()}')
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'initializing training...')
     start = datetime.datetime.now()
     
