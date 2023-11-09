@@ -164,7 +164,8 @@ def main():
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'lr: {_UPPER_LR_}>{_LOWER_LR_} w/ {_LR_STEP_} step')
 
     # * create seed
-    seed_ten = util.create_seed(_size=_SIZE_+(2*_PAD_), _dist=_SEED_DIST_, _points=_SEED_POINTS_).unsqueeze(0).to(_DEVICE_)
+    PAD_SIZE = _SIZE_+(2*_PAD_)
+    seed_ten = util.create_seed(_size=PAD_SIZE, _dist=_SEED_DIST_, _points=_SEED_POINTS_).unsqueeze(0).to(_DEVICE_)
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'seed.shape: {list(seed_ten.shape)}')
     
     # * load target vox
@@ -180,8 +181,7 @@ def main():
         # * randomize last channel
         if model.is_steerable():
             for j in range(_POOL_SIZE_):
-                s = _SIZE_+(2*_PAD_)
-                pool[j, -1:] = torch.rand(s, s, s)*np.pi*2.0
+                pool[j, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool.shape: {list(pool.shape)}')
     
     # * model training
@@ -203,18 +203,17 @@ def main():
             x[:1] = seed_ten
             # * randomize last channel
             if model.is_steerable():
-                s = _SIZE_+(2*_PAD_)
-                x[:1, -1:] = torch.rand(s, s, s)*np.pi*2.0
+                x[:1, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
         
             # * damage lowest loss in batch
             if i % _DAMG_RATE_ == 0:
-                mask = torch.tensor(util.half_volume_mask(_SIZE_+(2*_PAD_), 'rand')).to(_DEVICE_)
+                mask = torch.tensor(util.half_volume_mask(PAD_SIZE, 'rand')).to(_DEVICE_)
                 # * apply mask
                 x[-_NUM_DAMG_:] *= mask
                 # * randomize angles for steerable models
                 if model.is_steerable():
                     inv_mask = ~mask
-                    rand = torch.rand(_SIZE_, _SIZE_)*np.pi*2.0
+                    rand = torch.rand(PAD_SIZE, PAD_SIZE)*np.pi*2.0
                     rand *= inv_mask
                     x[-_NUM_DAMG_:, -1:] += rand
 
