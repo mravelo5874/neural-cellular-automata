@@ -89,8 +89,14 @@ class VoxelNCA(torch.nn.Module):
                 for i in range(20):
                     vid.add(zoom(img, _zoom))
                 # * apply mask
-                mask = util.half_volume_mask(_size, _mask_types[m])
-                x *= torch.tensor(mask)
+                mask = torch.tensor(util.half_volume_mask(_size, _mask_types[m]))
+                x *= mask
+                # * randomize angles for steerable models
+                if self.is_steerable():
+                    inv_mask = ~mask
+                    rand = torch.rand(_size, _size, _size)*pi*2.0
+                    rand *= inv_mask
+                    x[:1, -1:] += rand
                 v = Vox().load_from_tensor(x)
                 # * still frames
                 img = v.render(_yaw=285, _show_grid=_show_grid, _print=False)
