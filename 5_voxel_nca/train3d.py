@@ -12,7 +12,7 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_yawiso6'
+_NAME_ = 'cowboy16_yawiso7_testing'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_POINTS_ = 4
@@ -22,7 +22,7 @@ _TARGET_VOX_ = '../_vox/cowboy16.vox'
 _MODEL_TYPE_ = 'YAW_ISO'
 _CHANNELS_ = 16
 # * training parameters
-_EPOCHS_ = 10_000
+_EPOCHS_ = 20_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
@@ -182,7 +182,10 @@ def main():
         if model.is_steerable():
             for j in range(_POOL_SIZE_):
                 pool[j, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                
+    torch.set_printoptions(profile='full', threshold=10_000)
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool.shape: {list(pool.shape)}')
+    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool: {pool}')
     
     # * model training
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting training w/ {_EPOCHS_+1} epochs...')
@@ -216,6 +219,8 @@ def main():
                     rand = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
                     rand *= inv_mask
                     x[-_NUM_DAMG_:, -1:] += rand
+                    
+        util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'x: {x}')
 
         # * different loss values
         overflow_loss = 0.0

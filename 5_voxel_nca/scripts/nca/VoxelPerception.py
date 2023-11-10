@@ -90,8 +90,12 @@ class VoxelPerception():
         px = (gx*_cos)+(gy*_sin)
         py = (gy*_cos)-(gx*_sin)
         return torch.cat([_x, px, py, gz, lap], 1)
+    
+    def quaternion_perception(self, _x):
+        pass
         
     perception = {
         'ANISOTROPIC': anisotropic_perception,
         'YAW_ISO': yaw_isotropic_perception,
+        'QUATERNION': quaternion_perception,
     }
