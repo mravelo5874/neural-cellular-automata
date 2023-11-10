@@ -128,49 +128,31 @@ class VoxelNCA(torch.nn.Module):
         elapsed_time = str(datetime.timedelta(seconds=secs))
         util.logprint(f'_models/{self.name}/{self.log_file}', f'created video: {_filename}, gen-time: {elapsed_time}')
             
-    def rotate_video(self, _filename, _seed, _size, _rot_types=[(2, 3), (3, 2)], _delta=4, _zoom=1, _show_grid=False, _print=True):
+    def rotate_yawiso_video(self, _filename, _seed, _size, _delta=4, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
         assert _seed != None
         assert _size != None
         start = datetime.datetime.now()
+        
+        s0 = util.custom_seed(_center='red', _plus_x='green', _plus_y='blue').unsqueeze(0)
+        s1 = util.custom_seed(_center='red', _minus_x='blue', _plus_y='green').unsqueeze(0)
+        s2 = util.custom_seed(_center='red', _minus_x='green', _minus_y='blue').unsqueeze(0)
+        s3 = util.custom_seed(_center='red', _plus_x='blue', _minus_y='green').unsqueeze(0)
+        seeds = [s0, s1, s2, s3]
+        
         with VideoWriter(filename=_filename) as vid:
-            # * randomize last channel(s)
-            if self.model_type == 'YAW_ISO':
-                _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
-            elif self.model_type == 'QUATERNION':
-                pass
-                # _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
-                # _seed[:1, -2] = torch.rand(_size, _size, _size)*pi*2.0
-                # _seed[:1, -3] = torch.rand(_size, _size, _size)*pi*2.0
-                
-            x = _seed
-            # * still frames of seed
-            v = Vox().load_from_tensor(x)
-            img = v.render(_show_grid=_show_grid, _print=False)
-            for i in range(32):
-                vid.add(zoom(img, _zoom))
-            # * render growth
-            for i in range(0, 360, _delta):
-                for _ in range(_delta):
-                    x = self.forward(x)
-                v = Vox().load_from_tensor(x)
-                img = v.render(_yaw=i+285, _show_grid=_show_grid, _print=False)
-                vid.add(zoom(img, _zoom))
-            img = v.render(_show_grid=_show_grid, _print=False)
-            for i in range(32):
-                vid.add(zoom(img, _zoom))
-            for r in range(len(_rot_types)):
+            for i in range(len(seeds)):
+                x = seeds[i]
                 # * randomize last channel(s)
                 if self.model_type == 'YAW_ISO':
-                    _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
+                    x[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
                 elif self.model_type == 'QUATERNION':
                     pass
                     # _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
                     # _seed[:1, -2] = torch.rand(_size, _size, _size)*pi*2.0
                     # _seed[:1, -3] = torch.rand(_size, _size, _size)*pi*2.0
-                
+
                 # * still frames of seed
-                x = torch.rot90(_seed, 1, _rot_types[r])
                 v = Vox().load_from_tensor(x)
                 img = v.render(_show_grid=_show_grid, _print=False)
                 for i in range(32):
@@ -185,6 +167,7 @@ class VoxelNCA(torch.nn.Module):
                 img = v.render(_show_grid=_show_grid, _print=False)
                 for i in range(32):
                     vid.add(zoom(img, _zoom))
+            
             # * calculate elapsed time
             secs = (datetime.datetime.now()-start).seconds
             elapsed_time = str(datetime.timedelta(seconds=secs))

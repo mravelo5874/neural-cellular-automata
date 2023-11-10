@@ -12,11 +12,19 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_yawiso7'
+_NAME_ = 'cowboy16_yawiso8'
 _SIZE_ = 16
 _PAD_ = 4
-_SEED_POINTS_ = 3
 _SEED_DIST_ = 5
+_SEED_DIC_ = {
+    'center': 'red',
+    'plus_x': 'green',
+    'minus_x': None,
+    'plus_y': 'blue',
+    'minus_y': None,
+    'plus_z': None,
+    'minus_z': None,
+}
 _TARGET_VOX_ = '../_vox/cowboy16.vox'
 # * model parameters
 _MODEL_TYPE_ = 'YAW_ISO'
@@ -64,8 +72,8 @@ def main():
             '_NAME_': _NAME_,
             '_SIZE_': _SIZE_,
             '_PAD_': _PAD_,
-            '_SEED_POINTS_': _SEED_POINTS_,
             '_SEED_DIST_': _SEED_DIST_,
+            '_SEED_DIC_' : _SEED_DIC_,
             '_TARGET_VOX_': _TARGET_VOX_,
             # * model parameters
             '_MODEL_TYPE_': _MODEL_TYPE_,
@@ -95,8 +103,8 @@ def main():
             global _NAME_
             global _SIZE_
             global _PAD_
-            global _SEED_POINTS_
             global _SEED_DIST_
+            global _SEED_DIC_
             global _TARGET_VOX_
             global _MODEL_TYPE_
             global _CHANNELS_
@@ -115,7 +123,7 @@ def main():
             _NAME_ = params['_NAME_']+'_from_checkpoint'
             _SIZE_ = params['_SIZE_']
             _PAD_ = params['_PAD_']
-            _SEED_POINTS_ = params['_SEED_POINTS_']
+            _SEED_DIC_ = params['_SEED_DIC_']
             _SEED_DIST_ = params['_SEED_DIST_']
             _TARGET_VOX_ = params['_TARGET_VOX_']
             # * model parameters
@@ -165,7 +173,10 @@ def main():
 
     # * create seed
     PAD_SIZE = _SIZE_+(2*_PAD_)
-    seed_ten = util.create_seed(_size=PAD_SIZE, _dist=_SEED_DIST_, _points=_SEED_POINTS_).unsqueeze(0).to(_DEVICE_)
+    seed_ten = util.custom_seed(_size=PAD_SIZE, _channels=_CHANNELS_, _dist=_SEED_DIST_, _center=_SEED_DIC_['center'], 
+                                _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
+                                _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
+                                _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(_DEVICE_)
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'seed.shape: {list(seed_ten.shape)}')
     
     # * load target vox
@@ -320,7 +331,8 @@ def main():
     with torch.no_grad():
         model.generate_video(f'_models/{_NAME_}/vidtrain_grow.mp4', seed_ten, _size=s)
         model.regen_video(f'_models/{_NAME_}/vidtrain_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
-        model.rotate_video(f'_models/{_NAME_}/vidtrain_multi_rotate.mp4', seed_ten, _size=s, _show_grid=True)
+        if model.model_type == 'YAW_ISO':
+            model.rotate_yawiso_video(f'_models/{_NAME_}/vidtrain_multi_rotate.mp4', seed_ten, _size=s, _show_grid=True)
     
     # * calculate elapsed time
     secs = (datetime.datetime.now()-start).seconds

@@ -90,5 +90,74 @@ class VoxelUtil():
             mat[:, :, :half] = 1.0
         elif _type == 'z-':
             mat[:, :, -half:] = 1.0
-            
         return mat
+    
+    def color_to_channels(self, _color='BLACK'):
+        color = _color.lower()
+        if color == 'black':
+            return []
+        elif color == 'red':
+            return [0]
+        elif color == 'green':
+            return [1]
+        elif color == 'blue':
+            return [2]
+        elif color == 'yellow':
+            return [0, 1]
+        elif color == 'pink':
+            return [0, 2]
+        elif color == 'cyan':
+            return [1, 2]
+        elif color == 'white':
+            return [0, 1, 2]
+
+    def custom_seed(self, _size=16, _channels=16, _dist=5, _center=None, 
+                    _plus_x=None, _minus_x=None, 
+                    _plus_y=None, _minus_y=None, 
+                    _plus_z=None, _minus_z=None):
+        x = torch.zeros([_channels, _size, _size, _size])
+        half = _size//2
+        
+        if _center != None:
+            chns = self.color_to_channels(_center)
+            x[3:_channels, half, half, half] = 1.0
+            for i in range(len(chns)):
+                x[chns[i], half, half, half] = 1.0
+                
+        if _plus_x != None:
+            chns = self.color_to_channels(_plus_x)
+            x[3:_channels, half+_dist, half, half] = 1.0
+            for i in range(len(chns)):
+                x[chns[i], half+_dist, half, half] = 1.0
+                
+        if _minus_x != None:
+            chns = self.color_to_channels(_minus_x)
+            x[3:_channels, half-_dist, half, half] = 1.0
+            for i in range(len(chns)):
+                x[chns[i], half-_dist, half, half] = 1.0
+        
+        if _plus_y != None:
+            chns = self.color_to_channels(_plus_y)
+            x[3:_channels, half, half+_dist, half] = 1.0
+            for i in range(len(chns)):
+                x[chns[i], half, half+_dist, half] = 1.0
+                
+        if _minus_y != None:
+            chns = self.color_to_channels(_minus_y)
+            x[3:_channels, half, half-_dist, half] = 1.0
+            for i in range(len(chns)):
+                x[chns[i], half, half-_dist, half] = 1.0
+                
+        if _plus_z != None:
+            chns = self.color_to_channels(_minus_y)
+            x[3:_channels, half, half, half+_dist] = 1.0
+            for i in range(len(chns)):
+                x[chns[i], half, half, half+_dist] = 1.0
+                
+        if _minus_z != None:
+            chns = self.color_to_channels(_minus_x)
+            x[3:_channels, half, half, half-_dist] = 1.0
+            for i in range(len(chns)):
+                x[chns[i], half, half, half-_dist] = 1.0
+
+        return x
