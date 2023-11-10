@@ -182,9 +182,7 @@ def main():
         if model.is_steerable():
             for j in range(_POOL_SIZE_):
                 pool[j, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-                
-    torch.set_printoptions(threshold=100_000)
-    torch.set_printoptions(profile="full")
+            
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool.shape: {list(pool.shape)}')
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool: {pool}')
     

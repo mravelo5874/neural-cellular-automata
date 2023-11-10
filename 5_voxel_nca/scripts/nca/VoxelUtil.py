@@ -5,6 +5,8 @@ from matplotlib import pyplot as plt
 from scripts.vox.Vox import Vox
 
 def logprint(_path, _str):
+    torch.set_printoptions(threshold=100_000)
+    torch.set_printoptions(profile="full")
     print (_str)
     with open(_path, 'a') as f:
         f.write(f'{_str}\n')
