@@ -37,18 +37,20 @@ class VoxelNCA(torch.nn.Module):
         # * print model parameter count
         param_n = sum(p.numel() for p in self.parameters())
         util.logprint(f'_models/{_name}/{_log_file}', f'nca parameter count: {param_n}')
-
-    def is_steerable(self):
-        return self.model_type == 'YAW_ISO'
         
     def generate_video(self, _filename, _seed, _size, _delta=4, _zoom=1, _show_grid=False, _print=True):
         assert _filename != None
         assert _seed != None
         start = datetime.datetime.now()
         with VideoWriter(filename=_filename) as vid:
-            # * randomize last channel
-            if self.is_steerable():
-                _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
+            # * randomize last channel(s)
+            if self.model_type == 'YAW_ISO':
+                _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+            elif self.model_type == 'QUATERNION':
+                _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                _seed[:1, -2] = torch.rand(_size, _size, _size)*pi*2.0
+                _seed[:1, -3] = torch.rand(_size, _size, _size)*pi*2.0
+                
             x = _seed
             v = Vox().load_from_tensor(x)
             img = v.render(_yaw=_delta, _show_grid=_show_grid, _print=False)
@@ -70,9 +72,14 @@ class VoxelNCA(torch.nn.Module):
         assert _size != None
         start = datetime.datetime.now()
         with VideoWriter(filename=_filename) as vid:
-            # * randomize last channel
-            if self.is_steerable():
-                _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
+            # * randomize last channel(s)
+            if self.model_type == 'YAW_ISO':
+                _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+            elif self.model_type == 'QUATERNION':
+                _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                _seed[:1, -2] = torch.rand(_size, _size, _size)*pi*2.0
+                _seed[:1, -3] = torch.rand(_size, _size, _size)*pi*2.0
+            
             x = _seed
             v = Vox().load_from_tensor(x)
             img = v.render(_yaw=0, _show_grid=_show_grid, _print=False)
@@ -90,13 +97,17 @@ class VoxelNCA(torch.nn.Module):
                     vid.add(zoom(img, _zoom))
                 # * apply mask
                 mask = torch.tensor(util.half_volume_mask(_size, _mask_types[m]))
-                x *= mask
-                # * randomize angles for steerable models
-                if self.is_steerable():
+                x *= mask 
+                # * randomize last channel(s)
+                if self.model_type == 'YAW_ISO':
                     inv_mask = ~mask
-                    rand = torch.rand(_size, _size, _size)*pi*2.0
-                    rand *= inv_mask
-                    x[:1, -1:] += rand
+                    x[:1, -1] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
+                elif self.model_type == 'QUATERNION':
+                    inv_mask = ~mask
+                    x[:1, -1] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
+                    x[:1, -2] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
+                    x[:1, -3] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
+                
                 v = Vox().load_from_tensor(x)
                 # * still frames
                 img = v.render(_yaw=285, _show_grid=_show_grid, _print=False)
@@ -120,9 +131,14 @@ class VoxelNCA(torch.nn.Module):
         assert _size != None
         start = datetime.datetime.now()
         with VideoWriter(filename=_filename) as vid:
-            # * randomize last channel
-            if self.is_steerable():
-                _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
+            # * randomize last channel(s)
+            if self.model_type == 'YAW_ISO':
+                _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+            elif self.model_type == 'QUATERNION':
+                _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                _seed[:1, -2] = torch.rand(_size, _size, _size)*pi*2.0
+                _seed[:1, -3] = torch.rand(_size, _size, _size)*pi*2.0
+                
             x = _seed
             # * still frames of seed
             v = Vox().load_from_tensor(x)
@@ -140,9 +156,14 @@ class VoxelNCA(torch.nn.Module):
             for i in range(32):
                 vid.add(zoom(img, _zoom))
             for r in range(len(_rot_types)):
-                # * randomize last channel
-                if self.is_steerable():
-                    _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
+                # * randomize last channel(s)
+                if self.model_type == 'YAW_ISO':
+                    _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                elif self.model_type == 'QUATERNION':
+                    _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                    _seed[:1, -2] = torch.rand(_size, _size, _size)*pi*2.0
+                    _seed[:1, -3] = torch.rand(_size, _size, _size)*pi*2.0
+                
                 # * still frames of seed
                 x = torch.rot90(_seed, 1, _rot_types[r])
                 v = Vox().load_from_tensor(x)
@@ -188,10 +209,16 @@ class VoxelNCA(torch.nn.Module):
         
         # * perform update
         _x = _x + p * stochastic_mask
-        if self.is_steerable():
+        if self.model_type == 'YAW_ISO':
             states = _x[:, :-1]*alive_mask
-            angle = _x[:, -1:]%(pi*2.0)
+            angle = _x[:, -1]%(pi*2.0)
             _x = torch.cat([states, angle], 1)
+        elif self.model_type == 'QUATERNION':
+            states = _x[:, :-3]*alive_mask
+            ax = _x[:, -1]%(pi*2.0)
+            ay = _x[:, -2]%(pi*2.0)
+            az = _x[:, -3]%(pi*2.0)
+            _x = torch.cat([states, az, ay, ax], 1)
         else:
             _x = _x * alive_mask
         if _print: print ('final _x.shape:',_x.shape)

@@ -12,17 +12,17 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_yawiso7_testing'
+_NAME_ = 'cowboy16_yawiso7'
 _SIZE_ = 16
 _PAD_ = 4
-_SEED_POINTS_ = 4
-_SEED_DIST_ = 4
+_SEED_POINTS_ = 3
+_SEED_DIST_ = 5
 _TARGET_VOX_ = '../_vox/cowboy16.vox'
 # * model parameters
 _MODEL_TYPE_ = 'YAW_ISO'
 _CHANNELS_ = 16
 # * training parameters
-_EPOCHS_ = 1
+_EPOCHS_ = 20_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
@@ -178,13 +178,15 @@ def main():
     # * create pool
     with torch.no_grad():
         pool = seed_ten.clone().repeat(_POOL_SIZE_, 1, 1, 1, 1)
-        # * randomize last channel
-        if model.is_steerable():
+        # * randomize channel(s)
+        if model.model_type == 'YAW_ISO':
             for j in range(_POOL_SIZE_):
-                pool[j, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-            
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool.shape: {list(pool.shape)}')
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool[0]: {pool[0]}')
+                pool[j, -1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+        elif model.model_type == 'QUATERNION':
+            for j in range(_POOL_SIZE_):
+                pool[j, -1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                pool[j, -2] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                pool[j, -3] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
     
     # * model training
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting training w/ {_EPOCHS_+1} epochs...')
@@ -204,8 +206,12 @@ def main():
             # * re-add seed into batch
             x[:1] = seed_ten
             # * randomize last channel
-            if model.is_steerable():
-                x[:1, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+            if model.model_type == 'YAW_ISO':
+                x[:1, -1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+            elif model.model_type == 'QUATERNION':
+                x[:1, -1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                x[:1, -2] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                x[:1, -3] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
         
             # * damage lowest loss in batch
             if i % _DAMG_RATE_ == 0:
@@ -213,7 +219,7 @@ def main():
                 # * apply mask
                 x[-_NUM_DAMG_:] *= mask
                 # * randomize angles for steerable models
-                if model.is_steerable():
+                if model.model_type == 'YAW_ISO':
                     inv_mask = ~mask
                     rand = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
                     rand *= inv_mask
@@ -232,10 +238,12 @@ def main():
             prev_x = x
             x = model(x)
             diff_loss += (x - prev_x).abs().mean()
-            if model.is_steerable():
-                overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :15].square().sum()
+            if model.model_type == 'YAW_ISO':
+                overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_-1].square().sum()
+            elif model.model_type == 'QUATERNION':
+                overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_-3].square().sum()
             else:
-                overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :16].square().sum()
+                overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_].square().sum()
         
         # * calculate losses
         target_loss += util.voxel_wise_loss_function(x, target_ten)
@@ -262,8 +270,8 @@ def main():
                 pass
             else:
                 loss_log.append(_loss)
-
-            # nan loss :9
+                
+            # * detect invalid loss values :(
             if torch.isnan(loss) or torch.isinf(loss) or torch.isneginf(loss):
                 util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'detected invalid loss value: {loss}')
                 util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'overflow loss: {overflow_loss}, diff loss: {diff_loss}, target loss: {target_loss}')

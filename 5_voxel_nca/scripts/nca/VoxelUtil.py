@@ -5,8 +5,8 @@ from matplotlib import pyplot as plt
 from scripts.vox.Vox import Vox
 
 def logprint(_path, _str):
-    torch.set_printoptions(threshold=100_000)
-    torch.set_printoptions(profile="full")
+    # torch.set_printoptions(threshold=100_000)
+    # torch.set_printoptions(profile="full")
     print (_str)
     with open(_path, 'a') as f:
         f.write(f'{_str}\n')
@@ -38,7 +38,7 @@ def show_batch(_batch_size, _before, _after, _dpi=256):
         axarr[1, i].imshow(img, aspect='equal')
     plt.show()
 
-def create_seed(_size=16, _channels=16, _dist=5, _points=4, _last_channel=None, _angle=0.0):
+def create_seed(_size=16, _channels=16, _dist=5, _points=4):
     x = torch.zeros([_channels, _size, _size, _size])
     half = _size//2
     # * black
@@ -70,12 +70,6 @@ def create_seed(_size=16, _channels=16, _dist=5, _points=4, _last_channel=None, 
         if _points > 5:
             x[3:_channels, half-_dist, half, half] = 1.0
         x[1:3, half-_dist, half, half] = 1.0
-    # * change last channel
-    if _last_channel != None:
-        if _last_channel == 'rand_2pi':
-            x[-1:, ...] = torch.rand(_size, _size, _size)*np.pi*2.0
-        elif _last_channel == 'angle_deg':
-            x[-1:, ...] = torch.tensor(np.full((_size, _size, _size), np.deg2rad(_angle)))
     return x
 
 def half_volume_mask(_size, _type):
@@ -98,11 +92,22 @@ def half_volume_mask(_size, _type):
         mat[:, :, -half:] = 1.0
     return mat > 0.0
 
-def rotate_mat2d(_mat, _angle):
-    _cos, _sin = _angle.cos().item(), _angle.sin().item()
-    rot = torch.tensor([
-        [_cos, -_sin, 0],
-        [_sin,  _cos, 0],
-        [   0,     0, 1],
-    ])
-    return torch.dot(rot, _mat)
+def euler_to_quaternion(_ax, _ay, _az):
+    # * convert to rads
+    rx = torch.deg2rad(_ax)
+    ry = torch.deg2rad(_ay)
+    rz = torch.deg2rad(_az)
+    # * get sin and cos values
+    cx = torch.cos(rx/2) 
+    sx = torch.sin(rx/2)
+    cy = torch.cos(ry/2)
+    sy = torch.sin(ry/2)
+    cz = torch.cos(rz/2)
+    sz = torch.sin(rz/2)
+    # * compute w, x, y, z
+    w = cx*cy*cz+sx*sy*sz
+    x = sx*cy*cz-cx*sy*sz
+    y = cx*sy*cz+sx*cy*sz
+    z = cx*cy*sz-sx*sy*cz
+    # * return quat values
+    return torch.cat([w, x, y, z], 0)

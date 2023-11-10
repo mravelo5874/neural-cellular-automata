@@ -1,5 +1,6 @@
 import torch
 import torch.nn.functional as func
+from scripts.nca import VoxelUtil as util
 
 # 3D filters
 X_SOBEL_KERN = torch.tensor([
@@ -79,20 +80,32 @@ class VoxelPerception():
     
     def yaw_isotropic_perception(self, _x):
         # * separate states and angle channels
-        states, angle = _x[:, :-1], _x[:, -1:]
+        states, angle = _x[:, :-1], _x[:, -1]
+        # * calculate gx and gy
+        gx = self.per_channel_conv3d(states, X_SOBEL_KERN[None, :])
+        gy = self.per_channel_conv3d(states, Y_SOBEL_KERN[None, :])
+        # * compute px and py 
+        _cos, _sin = angle.cos(), angle.sin()
+        px = (gx*_cos)+(gy*_sin)
+        py = (gy*_cos)-(gx*_sin)
+        # * calculate gz and lap
+        gz = self.per_channel_conv3d(states, Z_SOBEL_KERN[None, :])
+        lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
+        return torch.cat([_x, px, py, gz, lap], 1)
+    
+    def quaternion_perception(self, _x):
+        # * separate states and angle channels
+        states, ax, ay, az = _x[:, :-3], _x[:, -1], _x[:, -2], _x[:, -3]
         # * per channel convolutions
         gx = self.per_channel_conv3d(states, X_SOBEL_KERN[None, :])
         gy = self.per_channel_conv3d(states, Y_SOBEL_KERN[None, :])
         gz = self.per_channel_conv3d(states, Z_SOBEL_KERN[None, :])
         lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
-        # * compute px and py 
-        _cos, _sin = angle.cos(), angle.sin()
-        px = (gx*_cos)+(gy*_sin)
-        py = (gy*_cos)-(gx*_sin)
-        return torch.cat([_x, px, py, gz, lap], 1)
-    
-    def quaternion_perception(self, _x):
-        pass
+        # * get quat values
+        quat = util.euler_to_quaternion(ax.item(), ay.item(), az.item())
+        gxyz = torch.cat([gx, gy, gz], 1)
+        rot = quat*gxyz*torch.conj(quat)
+        
         
     perception = {
         'ANISOTROPIC': anisotropic_perception,
