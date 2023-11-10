@@ -185,8 +185,6 @@ def main():
             
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool.shape: {list(pool.shape)}')
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool[0]: {pool[0]}')
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool[12]: {pool[12]}')
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool[26]: {pool[26]}')
     
     # * model training
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting training w/ {_EPOCHS_+1} epochs...')
@@ -222,7 +220,6 @@ def main():
                     x[-_NUM_DAMG_:, -1:] += rand
                     
         util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'x[0]: {x[0]}')
-        util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'x[3]: {x[3]}')
 
         # * different loss values
         overflow_loss = 0.0
