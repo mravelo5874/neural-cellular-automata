@@ -45,11 +45,12 @@ class VoxelNCA(torch.nn.Module):
         with VideoWriter(filename=_filename) as vid:
             # * randomize last channel(s)
             if self.model_type == 'YAW_ISO':
-                _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
             elif self.model_type == 'QUATERNION':
-                _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
-                _seed[:1, -2] = torch.rand(_size, _size, _size)*pi*2.0
-                _seed[:1, -3] = torch.rand(_size, _size, _size)*pi*2.0
+                pass
+                # _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                # _seed[:1, -2] = torch.rand(_size, _size, _size)*pi*2.0
+                # _seed[:1, -3] = torch.rand(_size, _size, _size)*pi*2.0
                 
             x = _seed
             v = Vox().load_from_tensor(x)
@@ -74,11 +75,12 @@ class VoxelNCA(torch.nn.Module):
         with VideoWriter(filename=_filename) as vid:
             # * randomize last channel(s)
             if self.model_type == 'YAW_ISO':
-                _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
             elif self.model_type == 'QUATERNION':
-                _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
-                _seed[:1, -2] = torch.rand(_size, _size, _size)*pi*2.0
-                _seed[:1, -3] = torch.rand(_size, _size, _size)*pi*2.0
+                pass
+                # _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                # _seed[:1, -2] = torch.rand(_size, _size, _size)*pi*2.0
+                # _seed[:1, -3] = torch.rand(_size, _size, _size)*pi*2.0
             
             x = _seed
             v = Vox().load_from_tensor(x)
@@ -101,12 +103,13 @@ class VoxelNCA(torch.nn.Module):
                 # * randomize last channel(s)
                 if self.model_type == 'YAW_ISO':
                     inv_mask = ~mask
-                    x[:1, -1] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
+                    x[:1, -1:] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
                 elif self.model_type == 'QUATERNION':
-                    inv_mask = ~mask
-                    x[:1, -1] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
-                    x[:1, -2] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
-                    x[:1, -3] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
+                    pass
+                    # inv_mask = ~mask
+                    # x[:1, -1] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
+                    # x[:1, -2] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
+                    # x[:1, -3] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
                 
                 v = Vox().load_from_tensor(x)
                 # * still frames
@@ -133,11 +136,12 @@ class VoxelNCA(torch.nn.Module):
         with VideoWriter(filename=_filename) as vid:
             # * randomize last channel(s)
             if self.model_type == 'YAW_ISO':
-                _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
             elif self.model_type == 'QUATERNION':
-                _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
-                _seed[:1, -2] = torch.rand(_size, _size, _size)*pi*2.0
-                _seed[:1, -3] = torch.rand(_size, _size, _size)*pi*2.0
+                pass
+                # _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                # _seed[:1, -2] = torch.rand(_size, _size, _size)*pi*2.0
+                # _seed[:1, -3] = torch.rand(_size, _size, _size)*pi*2.0
                 
             x = _seed
             # * still frames of seed
@@ -158,11 +162,12 @@ class VoxelNCA(torch.nn.Module):
             for r in range(len(_rot_types)):
                 # * randomize last channel(s)
                 if self.model_type == 'YAW_ISO':
-                    _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                    _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
                 elif self.model_type == 'QUATERNION':
-                    _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
-                    _seed[:1, -2] = torch.rand(_size, _size, _size)*pi*2.0
-                    _seed[:1, -3] = torch.rand(_size, _size, _size)*pi*2.0
+                    pass
+                    # _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                    # _seed[:1, -2] = torch.rand(_size, _size, _size)*pi*2.0
+                    # _seed[:1, -3] = torch.rand(_size, _size, _size)*pi*2.0
                 
                 # * still frames of seed
                 x = torch.rot90(_seed, 1, _rot_types[r])
@@ -211,7 +216,7 @@ class VoxelNCA(torch.nn.Module):
         _x = _x + p * stochastic_mask
         if self.model_type == 'YAW_ISO':
             states = _x[:, :-1]*alive_mask
-            angle = _x[:, -1]%(pi*2.0)
+            angle = _x[:, -1:]%(pi*2.0)
             _x = torch.cat([states, angle], 1)
         elif self.model_type == 'QUATERNION':
             states = _x[:, :-3]*alive_mask

@@ -80,7 +80,7 @@ class VoxelPerception():
     
     def yaw_isotropic_perception(self, _x):
         # * separate states and angle channels
-        states, angle = _x[:, :-1], _x[:, -1]
+        states, angle = _x[:, :-1], _x[:, -1:]
         # * calculate gx and gy
         gx = self.per_channel_conv3d(states, X_SOBEL_KERN[None, :])
         gy = self.per_channel_conv3d(states, Y_SOBEL_KERN[None, :])
@@ -103,7 +103,12 @@ class VoxelPerception():
         lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
         # * get quat values
         quat = util.euler_to_quaternion(ax.item(), ay.item(), az.item())
-        gxyz = torch.cat([gx, gy, gz], 1)
+        b, c, x, y, z = gx.shape
+        # * reshape gx, gy, and gz
+        rsx = gx.reshape(b*c, x, y, z)
+        rsy = gy.reshape(b*c, x, y, z)
+        rsz = gz.reshape(b*c, x, y, z)
+        gxyz = torch.cat([rsx, rsy, rsz], 1)
         rot = quat*gxyz*torch.conj(quat)
         
         

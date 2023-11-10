@@ -181,12 +181,13 @@ def main():
         # * randomize channel(s)
         if model.model_type == 'YAW_ISO':
             for j in range(_POOL_SIZE_):
-                pool[j, -1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                pool[j, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
         elif model.model_type == 'QUATERNION':
             for j in range(_POOL_SIZE_):
-                pool[j, -1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-                pool[j, -2] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-                pool[j, -3] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                pass
+                # pool[j, -1, ...] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                # pool[j, -2, ...] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                # pool[j, -3, ...] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
     
     # * model training
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting training w/ {_EPOCHS_+1} epochs...')
@@ -207,11 +208,12 @@ def main():
             x[:1] = seed_ten
             # * randomize last channel
             if model.model_type == 'YAW_ISO':
-                x[:1, -1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                x[:1, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
             elif model.model_type == 'QUATERNION':
-                x[:1, -1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-                x[:1, -2] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-                x[:1, -3] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                pass
+                # x[:1, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                # x[:1, -2:-1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                # x[:1, -3:-2] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
         
             # * damage lowest loss in batch
             if i % _DAMG_RATE_ == 0:
@@ -224,8 +226,8 @@ def main():
                     rand = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
                     rand *= inv_mask
                     x[-_NUM_DAMG_:, -1:] += rand
-                    
-        util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'x[0]: {x[0]}')
+                elif model.model_type == 'QUATERNION':
+                    pass
 
         # * different loss values
         overflow_loss = 0.0
