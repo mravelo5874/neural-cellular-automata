@@ -36,8 +36,8 @@ def main():
         params = json.load(openfile)
         _SIZE_ = params['_SIZE_']
         _PAD_ = params['_PAD_']
-        _SEED_POINTS_ = params['_SEED_POINTS_']
         _SEED_DIST_ = params['_SEED_DIST_']
+        _SEED_DIC_ = params['_SEED_DIC_']
         
     # * load model
     path = f'{_DIR_}/{_NAME_}/{_NAME_}.pt'
@@ -47,11 +47,14 @@ def main():
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'loaded model from: {path}')
         
     # * create seed
-    seed_ten = util.create_seed(_size=_SIZE_+(2*_PAD_), _dist=_SEED_DIST_, _points=_SEED_POINTS_).unsqueeze(0).to(_DEVICE_)
+    PAD_SIZE = _SIZE_+(2*_PAD_)
+    seed_ten = util.custom_seed(_size=PAD_SIZE, _channels=params['_CHANNELS_'], _dist=_SEED_DIST_, _center=_SEED_DIC_['center'], 
+                                _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
+                                _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
+                                _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(_DEVICE_)
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'seed.shape: {seed_ten.shape}')
 
     # * generate video
-    s = _SIZE_+(2*_PAD_)
     curr = datetime.datetime.now().strftime("%H:%M:%S")
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting time: {curr}')
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'generating videos...')
@@ -59,7 +62,7 @@ def main():
         # model.generate_video(f'_models/{_NAME_}/vidgen_grow.mp4', seed_ten, _size=s)
         # model.regen_video(f'_models/{_NAME_}/vidgen_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
         if model.model_type == 'YAW_ISO':
-            model.rotate_yawiso_video(f'_models/{_NAME_}/vidgen_multi_rotate.mp4', seed_ten, _size=s, _show_grid=True)
+            model.rotate_yawiso_video(f'_models/{_NAME_}/vidgen_multi_rotate.mp4', seed_ten, _size=PAD_SIZE, _show_grid=True)
         
      # * calculate elapsed time
     secs = (datetime.datetime.now()-start).seconds
