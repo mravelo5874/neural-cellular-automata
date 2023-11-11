@@ -8,7 +8,7 @@ from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as util
 
 # * vidgen params
-_NAME_ = 'cowboy16_yawiso5'
+_NAME_ = 'cowboy16_yawiso8'
 _DIR_ = '_models'
 _DEVICE_ = 'cuda'
 _LOG_FILE_ = 'vidlog.txt'
@@ -56,8 +56,8 @@ def main():
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting time: {curr}')
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'generating videos...')
     with torch.no_grad():
-        model.generate_video(f'_models/{_NAME_}/vidgen_grow.mp4', seed_ten, _size=s)
-        model.regen_video(f'_models/{_NAME_}/vidgen_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
+        # model.generate_video(f'_models/{_NAME_}/vidgen_grow.mp4', seed_ten, _size=s)
+        # model.regen_video(f'_models/{_NAME_}/vidgen_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
         if model.model_type == 'YAW_ISO':
             model.rotate_yawiso_video(f'_models/{_NAME_}/vidgen_multi_rotate.mp4', seed_ten, _size=s, _show_grid=True)
         

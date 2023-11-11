@@ -134,10 +134,10 @@ class VoxelNCA(torch.nn.Module):
         assert _size != None
         start = datetime.datetime.now()
         
-        s0 = util.custom_seed(_center='red', _plus_x='green', _plus_y='blue').unsqueeze(0)
-        s1 = util.custom_seed(_center='red', _minus_x='blue', _plus_y='green').unsqueeze(0)
-        s2 = util.custom_seed(_center='red', _minus_x='green', _minus_y='blue').unsqueeze(0)
-        s3 = util.custom_seed(_center='red', _plus_x='blue', _minus_y='green').unsqueeze(0)
+        s0 = util.custom_seed(_size=_size, _center='red', _plus_x='green', _plus_y='blue').unsqueeze(0)
+        s1 = util.custom_seed(_size=_size, _center='red', _minus_x='blue', _plus_y='green').unsqueeze(0)
+        s2 = util.custom_seed(_size=_size, _center='red', _minus_x='green', _minus_y='blue').unsqueeze(0)
+        s3 = util.custom_seed(_size=_size, _center='red', _plus_x='blue', _minus_y='green').unsqueeze(0)
         seeds = [s0, s1, s2, s3]
         
         with VideoWriter(filename=_filename) as vid:
