@@ -1,0 +1,17 @@
+****************
+timestamp: 2023-11-10 19:47:40.687580
+initializing video generation...
+device: cuda
+****************
+timestamp: 2023-11-10 19:49:48.127297
+initializing video generation...
+device: cuda
+nca perception channels: 76
+nca parameter count: 11904
+loaded model from: _models/cowboy16_yawiso8/cowboy16_yawiso8.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+starting time: 19:50:07
+generating videos...
+created video: _models/cowboy16_yawiso8/vidgen_multi_rotate.mp4, gen-time: 0:26:28
+elapsed time: 0:26:48
+****************
