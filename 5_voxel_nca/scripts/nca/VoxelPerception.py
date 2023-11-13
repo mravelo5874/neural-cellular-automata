@@ -91,7 +91,7 @@ class VoxelPerception():
         # * calculate gz and lap
         gz = self.per_channel_conv3d(states, Z_SOBEL_KERN[None, :])
         lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
-        return torch.cat([_x, px, py, gz, lap], 1)
+        return torch.cat([_x, px, py, lap], 1)
     
     def quaternion_perception(self, _x):
         # * separate states and angle channels

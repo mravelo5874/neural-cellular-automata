@@ -12,7 +12,7 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_yawiso8'
+_NAME_ = 'cowboy16_yawiso9'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_DIST_ = 5
@@ -22,7 +22,7 @@ _SEED_DIC_ = {
     'minus_x': None,
     'plus_y': 'blue',
     'minus_y': None,
-    'plus_z': None,
+    'plus_z': 'cyan',
     'minus_z': None,
 }
 _TARGET_VOX_ = '../_vox/cowboy16.vox'
@@ -329,8 +329,8 @@ def main():
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting time: {curr}')
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'generating videos...')
     with torch.no_grad():
-        model.generate_video(f'_models/{_NAME_}/vidtrain_grow.mp4', seed_ten, _size=s)
-        model.regen_video(f'_models/{_NAME_}/vidtrain_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
+        # model.generate_video(f'_models/{_NAME_}/vidtrain_grow.mp4', seed_ten, _size=s)
+        # model.regen_video(f'_models/{_NAME_}/vidtrain_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
         if model.model_type == 'YAW_ISO':
             model.rotate_yawiso_video(f'_models/{_NAME_}/vidtrain_multi_rotate.mp4', seed_ten, _size=s, _show_grid=True)
     
