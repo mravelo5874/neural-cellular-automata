@@ -12,7 +12,7 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_yawiso_10'
+_NAME_ = 'cowboy16_yawiso_11'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_DIST_ = 5
@@ -30,14 +30,14 @@ _TARGET_VOX_ = '../_vox/cowboy16.vox'
 _MODEL_TYPE_ = 'YAW_ISO'
 _CHANNELS_ = 16
 # * training parameters
-_EPOCHS_ = 20_000
+_EPOCHS_ = 10_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
 _LOWER_LR_ = 1e-5
 _LR_STEP_ = 2000
-_NUM_DAMG_ = 2
-_DAMG_RATE_ = 5
+_NUM_DAMG_ = 0
+_DAMG_RATE_ = 100_000
 # * logging parameters
 _LOG_FILE_ = 'trainlog.txt'
 _INFO_RATE_ = 200

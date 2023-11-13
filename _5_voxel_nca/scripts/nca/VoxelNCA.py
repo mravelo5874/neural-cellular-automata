@@ -38,7 +38,7 @@ class VoxelNCA(torch.nn.Module):
         param_n = sum(p.numel() for p in self.parameters())
         util.logprint(f'_models/{_name}/{_log_file}', f'nca parameter count: {param_n}')
         
-    def generate_video(self, _filename, _seed, _size, _delta=4, _zoom=1, _show_grid=False, _print=True):
+    def generate_video(self, _filename, _seed, _size, _delta=4, _zoom=1, _show_grid=False):
         assert _filename != None
         assert _seed != None
         start = datetime.datetime.now()
@@ -67,7 +67,7 @@ class VoxelNCA(torch.nn.Module):
         elapsed_time = str(datetime.timedelta(seconds=secs))
         util.logprint(f'_models/{self.name}/{self.log_file}', f'created video: {_filename}, gen-time: {elapsed_time}')
     
-    def regen_video(self, _filename, _seed, _size, _mask_types=['x+'], _delta=4, _zoom=1, _show_grid=False, _print=True):
+    def regen_video(self, _filename, _seed, _size, _mask_types=['x+'], _delta=4, _zoom=1, _show_grid=False):
         assert _filename != None
         assert _seed != None
         assert _size != None
@@ -128,7 +128,7 @@ class VoxelNCA(torch.nn.Module):
         elapsed_time = str(datetime.timedelta(seconds=secs))
         util.logprint(f'_models/{self.name}/{self.log_file}', f'created video: {_filename}, gen-time: {elapsed_time}')
             
-    def rotate_yawiso_video(self, _filename, _seed, _size, _delta=4, _zoom=1, _show_grid=False, _print=True):
+    def rotate_yawiso_video(self, _filename, _seed, _size, _delta=4, _zoom=1, _show_grid=False):
         assert _filename != None
         assert _seed != None
         assert _size != None
@@ -145,7 +145,7 @@ class VoxelNCA(torch.nn.Module):
                 x = seeds[i]
                 # * randomize last channel(s)
                 if self.model_type == 'YAW_ISO':
-                    x[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
+                    x[:, -1:] = torch.rand(_size, _size, _size)*pi*2.0
                 elif self.model_type == 'QUATERNION':
                     pass
                     # _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
