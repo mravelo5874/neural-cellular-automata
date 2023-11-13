@@ -7,8 +7,13 @@ from shader_program import ShaderProgram
 from scene import Scene
 from player import Player
 
+
 class VoxelEngine:
     def __init__(self):
+        # * vox info
+        self._VOX_FILE_ = '../vox/cowboy16.vox'
+        self._VOX_SIZE_ = 16
+        
         # * setup pygame + gl attributes
         pg.init()
         pg.display.gl_set_attribute(pg.GL_CONTEXT_MAJOR_VERSION, 3)

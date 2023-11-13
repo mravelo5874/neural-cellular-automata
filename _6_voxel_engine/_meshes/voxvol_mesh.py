@@ -1,5 +1,5 @@
 from _meshes.base_mesh import BaseMesh
-from _meshes.chunk_mesh_builder import build_chunk_mesh
+from _6_voxel_engine._meshes.voxvol_mesh_builder import build_chunk_mesh
 
 class ChunkMesh(BaseMesh):
     def __init__(self, _chunk):
