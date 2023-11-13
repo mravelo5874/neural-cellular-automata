@@ -1,7 +1,7 @@
 from settings import *
 from _6_voxel_engine._meshes.voxvol_mesh import VoxVolMesh
 
-class Chunk:
+class VoxVol:
     def __init__(self, _app):
         self.app = _app
         self.voxels: np.array = self.build_voxels()
