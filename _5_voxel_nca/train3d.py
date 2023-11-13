@@ -12,17 +12,17 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_yawiso9'
+_NAME_ = 'cowboy16_yawiso_10'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_DIST_ = 5
 _SEED_DIC_ = {
-    'center': 'red',
-    'plus_x': 'green',
+    'center': None,
+    'plus_x': 'red',
     'minus_x': None,
-    'plus_y': 'blue',
+    'plus_y': 'green',
     'minus_y': None,
-    'plus_z': 'cyan',
+    'plus_z': 'blue',
     'minus_z': None,
 }
 _TARGET_VOX_ = '../_vox/cowboy16.vox'
@@ -33,7 +33,7 @@ _CHANNELS_ = 16
 _EPOCHS_ = 20_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
-_UPPER_LR_ = 1e-4
+_UPPER_LR_ = 5e-4
 _LOWER_LR_ = 1e-5
 _LR_STEP_ = 2000
 _NUM_DAMG_ = 2

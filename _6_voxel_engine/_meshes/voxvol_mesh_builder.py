@@ -14,7 +14,7 @@ def add_data(_vertex_data, _index, *vertices):
             _index += 1
     return _index
 
-def build_chunk_mesh(_chunk_voxels, _format_size):
+def build_voxvol_mesh(_chunk_voxels, _format_size):
     # * CHUNK_VOL = number of voxels in chunk
     # * 18 = max 3 faces per voxel = 6 triangles = 18 vertices
     # * 5 = 5 attributes per vertex: x, y, z, voxel_id, face_id
