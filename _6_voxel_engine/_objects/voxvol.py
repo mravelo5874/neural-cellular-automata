@@ -1,8 +1,8 @@
 from settings import *
-from _meshes.chunk_mesh import ChunkMesh
+from _6_voxel_engine._meshes.voxvol_mesh import ChunkMesh
 
-class VoxObj:
-    def __init__(self, _app, _vox):
+class Chunk:
+    def __init__(self, _app):
         self.app = _app
         self.voxels: np.array = self.build_voxels()
         self.mesh: ChunkMesh = None
