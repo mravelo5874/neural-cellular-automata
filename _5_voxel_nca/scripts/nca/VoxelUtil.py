@@ -180,4 +180,8 @@ def euler_to_quaternion(_ax, _ay, _az):
     y = cx*sy*cz+sx*cy*sz
     z = cx*cy*sz-sx*sy*cz
     # * return quat values
-    return torch.cat([w, x, y, z], 0)
+    # print (f'w.shape: {w.shape}')
+    # print (f'x.shape: {x.shape}')
+    # print (f'y.shape: {y.shape}')
+    # print (f'z.shape: {z.shape}')
+    return torch.cat([w, x, y, z], 1)

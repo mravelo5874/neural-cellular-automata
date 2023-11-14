@@ -12,7 +12,7 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_yawiso_11'
+_NAME_ = 'cowboy16_quat_0'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_DIST_ = 5
@@ -27,7 +27,7 @@ _SEED_DIC_ = {
 }
 _TARGET_VOX_ = '../_vox/cowboy16.vox'
 # * model parameters
-_MODEL_TYPE_ = 'YAW_ISO'
+_MODEL_TYPE_ = 'QUATERNION'
 _CHANNELS_ = 16
 # * training parameters
 _EPOCHS_ = 10_000
@@ -195,10 +195,9 @@ def main():
                 pool[j, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
         elif model.model_type == 'QUATERNION':
             for j in range(_POOL_SIZE_):
-                pass
-                # pool[j, -1, ...] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-                # pool[j, -2, ...] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-                # pool[j, -3, ...] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                pool[j, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                pool[j, -2:-1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                pool[j, -3:-2] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
     
     # * model training
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting training w/ {_EPOCHS_+1} epochs...')
@@ -221,10 +220,9 @@ def main():
             if model.model_type == 'YAW_ISO':
                 x[:1, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
             elif model.model_type == 'QUATERNION':
-                pass
-                # x[:1, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-                # x[:1, -2:-1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-                # x[:1, -3:-2] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                x[:1, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                x[:1, -2:-1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                x[:1, -3:-2] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
         
             # * damage lowest loss in batch
             if i % _DAMG_RATE_ == 0:
@@ -329,8 +327,8 @@ def main():
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting time: {curr}')
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'generating videos...')
     with torch.no_grad():
-        # model.generate_video(f'_models/{_NAME_}/vidtrain_grow.mp4', seed_ten, _size=s)
-        # model.regen_video(f'_models/{_NAME_}/vidtrain_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
+        model.generate_video(f'_models/{_NAME_}/vidtrain_grow.mp4', seed_ten, _size=s)
+        model.regen_video(f'_models/{_NAME_}/vidtrain_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
         if model.model_type == 'YAW_ISO':
             model.rotate_yawiso_video(f'_models/{_NAME_}/vidtrain_multi_rotate.mp4', seed_ten, _size=s, _show_grid=True)
     

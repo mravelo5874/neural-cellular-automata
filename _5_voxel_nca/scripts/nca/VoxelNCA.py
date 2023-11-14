@@ -48,9 +48,9 @@ class VoxelNCA(torch.nn.Module):
                 _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
             elif self.model_type == 'QUATERNION':
                 pass
-                # _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
-                # _seed[:1, -2] = torch.rand(_size, _size, _size)*pi*2.0
-                # _seed[:1, -3] = torch.rand(_size, _size, _size)*pi*2.0
+                _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                _seed[:1, -2:-1] = torch.rand(_size, _size, _size)*pi*2.0
+                _seed[:1, -3:-2] = torch.rand(_size, _size, _size)*pi*2.0
                 
             x = _seed
             v = Vox().load_from_tensor(x)
@@ -78,9 +78,9 @@ class VoxelNCA(torch.nn.Module):
                 _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
             elif self.model_type == 'QUATERNION':
                 pass
-                # _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
-                # _seed[:1, -2] = torch.rand(_size, _size, _size)*pi*2.0
-                # _seed[:1, -3] = torch.rand(_size, _size, _size)*pi*2.0
+                _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                _seed[:1, -2:-1] = torch.rand(_size, _size, _size)*pi*2.0
+                _seed[:1, -3:-2] = torch.rand(_size, _size, _size)*pi*2.0
             
             x = _seed
             v = Vox().load_from_tensor(x)
@@ -105,11 +105,10 @@ class VoxelNCA(torch.nn.Module):
                     inv_mask = ~mask
                     x[:1, -1:] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
                 elif self.model_type == 'QUATERNION':
-                    pass
-                    # inv_mask = ~mask
-                    # x[:1, -1] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
-                    # x[:1, -2] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
-                    # x[:1, -3] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
+                    inv_mask = ~mask
+                    x[:1, -1] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
+                    x[:1, -2:-1] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
+                    x[:1, -3:-2] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
                 
                 v = Vox().load_from_tensor(x)
                 # * still frames
@@ -148,9 +147,9 @@ class VoxelNCA(torch.nn.Module):
                     x[:, -1:] = torch.rand(_size, _size, _size)*pi*2.0
                 elif self.model_type == 'QUATERNION':
                     pass
-                    # _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
-                    # _seed[:1, -2] = torch.rand(_size, _size, _size)*pi*2.0
-                    # _seed[:1, -3] = torch.rand(_size, _size, _size)*pi*2.0
+                    _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                    _seed[:1, -2:-1] = torch.rand(_size, _size, _size)*pi*2.0
+                    _seed[:1, -3:-2] = torch.rand(_size, _size, _size)*pi*2.0
 
                 # * still frames of seed
                 v = Vox().load_from_tensor(x)
@@ -204,8 +203,8 @@ class VoxelNCA(torch.nn.Module):
         elif self.model_type == 'QUATERNION':
             states = _x[:, :-3]*alive_mask
             ax = _x[:, -1:]%(pi*2.0)
-            ay = _x[:, -2:]%(pi*2.0)
-            az = _x[:, -3:]%(pi*2.0)
+            ay = _x[:, -2:-1]%(pi*2.0)
+            az = _x[:, -3:-2]%(pi*2.0)
             _x = torch.cat([states, az, ay, ax], 1)
         else:
             _x = _x * alive_mask

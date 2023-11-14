@@ -1,6 +1,7 @@
 import torch
 import torch.nn.functional as func
 from scripts.nca import VoxelUtil as util
+from scipy.spatial.transform import Rotation
 
 # 3D filters
 X_SOBEL_KERN = torch.tensor([
@@ -95,21 +96,56 @@ class VoxelPerception():
     
     def quaternion_perception(self, _x):
         # * separate states and angle channels
-        states, ax, ay, az = _x[:, :-3], _x[:, -1], _x[:, -2], _x[:, -3]
+        states, ax, ay, az = _x[:, :-3], _x[:, -1:], _x[:, -2:-1], _x[:, -3:-2]
+        # print (f'states.shape: {states.shape}')
+        # print (f'ax.shape: {ax.shape}')
+        # print (f'ay.shape: {ay.shape}')
+        # print (f'az.shape: {az.shape}')
         # * per channel convolutions
-        gx = self.per_channel_conv3d(states, X_SOBEL_KERN[None, :])
-        gy = self.per_channel_conv3d(states, Y_SOBEL_KERN[None, :])
-        gz = self.per_channel_conv3d(states, Z_SOBEL_KERN[None, :])
+        px = self.per_channel_conv3d(states, X_SOBEL_KERN[None, :])
+        py = self.per_channel_conv3d(states, Y_SOBEL_KERN[None, :])
+        pz = self.per_channel_conv3d(states, Z_SOBEL_KERN[None, :])
         lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
         # * get quat values
-        quat = util.euler_to_quaternion(ax.item(), ay.item(), az.item())
-        b, c, x, y, z = gx.shape
-        # * reshape gx, gy, and gz
-        rsx = gx.reshape(b*c, x, y, z)
-        rsy = gy.reshape(b*c, x, y, z)
-        rsz = gz.reshape(b*c, x, y, z)
-        gxyz = torch.cat([rsx, rsy, rsz], 1)
-        rot = quat*gxyz*torch.conj(quat)
+        quat = util.euler_to_quaternion(ax, ay, az)
+        # print (f'quat.shape: {quat.shape}')
+    
+        perception_tensors = [px, py, pz]
+        
+        # Initialize empty output tensors for each direction (px, py, pz)
+        batch_size, hidden_channels, x, y, z = px.shape
+        rotated_tensors = [
+            torch.zeros((batch_size, hidden_channels, x, y, z)),
+            torch.zeros((batch_size, hidden_channels, x, y, z)),
+            torch.zeros((batch_size, hidden_channels, x, y, z))
+        ]
+
+        # Iterate through each cell in the volume and apply the rotation
+        for i in range(x):
+            for j in range(y):
+                for k in range(z):
+                    cell_quaternion = quat[:, :, i, j, k]
+                    cell_perception = torch.zeros((batch_size, 4, hidden_channels))
+                    cell_rotated = torch.zeros((batch_size, 4, hidden_channels))
+
+                    # Iterate through each direction (px, py, pz)
+                    for t in range(3):
+                        # Extract the perception tensors for this direction
+                        cell_perception[:, t+1] = perception_tensors[t][:, :, i, j, k]
+                        
+                    # print (f'cell_quaternion.shape: {cell_quaternion.shape}')
+                    # print (f'cell_perception.shape: {cell_perception.shape}')
+                    
+                    for t in range(hidden_channels):
+                        cell_rotated[:, :, t] = cell_quaternion * cell_perception[:, :, t] * torch.conj(cell_quaternion)
+
+                    # print (f'cell_rotated[:, 0].shape: {cell_rotated[:, 0].shape}')
+                    # print (f'rotated_tensors[0][:, :, i, j, k].shape: {rotated_tensors[0][:, :, i, j, k].shape}')
+                    
+                    for t in range(3):
+                        rotated_tensors[t][:, :, i, j, k] = cell_rotated[:, t+1]
+                        
+        return torch.cat([_x, rotated_tensors[0], rotated_tensors[1], rotated_tensors[2], lap], 1)
         
         
     perception = {
