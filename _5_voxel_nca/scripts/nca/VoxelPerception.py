@@ -1,10 +1,11 @@
 import torch
 import torch.nn.functional as func
-from scripts.nca import VoxelUtil as util
-import scipy.spatial.transform.rotation as R
 import numpy as np
+import scipy.spatial.transform.rotation as R
 import pytorch3d.transforms as T
+
 from enum import Enum
+from scripts.nca import VoxelUtil as util
 
 Perception = Enum('Perception', ['ANISOTROPIC', 'YAW_ISO', 'QUATERNION', 'FAST_QUAT', 'EULER'])
 
