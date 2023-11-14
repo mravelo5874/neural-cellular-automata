@@ -13,10 +13,10 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_quat_tests'
-_SIZE_ = 16
+_NAME_ = 'bally4_fquat_0'
+_SIZE_ = 4
 _PAD_ = 4
-_SEED_DIST_ = 5
+_SEED_DIST_ = 2
 _SEED_DIC_ = {
     'center': None,
     'plus_x': 'red',
@@ -26,7 +26,7 @@ _SEED_DIC_ = {
     'plus_z': 'blue',
     'minus_z': None,
 }
-_TARGET_VOX_ = '../_vox/cowboy16.vox'
+_TARGET_VOX_ = '../_vox/bally4.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.FAST_QUAT
 _CHANNELS_ = 16
@@ -332,7 +332,8 @@ def main():
     util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'generating videos...')
     with torch.no_grad():
         model.generate_video(f'_models/{_NAME_}/vidtrain_grow.mp4', seed_ten, _size=s)
-        model.regen_video(f'_models/{_NAME_}/vidtrain_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
+        if _NUM_DAMG_ > 0:
+            model.regen_video(f'_models/{_NAME_}/vidtrain_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
         if model.isotropic_type() > 0:
             model.rotate_yawiso_video(f'_models/{_NAME_}/vidtrain_multi_rotate.mp4', seed_ten, _size=s, _show_grid=True)
     

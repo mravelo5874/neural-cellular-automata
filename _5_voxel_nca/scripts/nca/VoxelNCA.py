@@ -43,7 +43,7 @@ class VoxelNCA(torch.nn.Module):
     def isotropic_type(self):
         if self.model_type == Perception.YAW_ISO:
             return 1
-        elif self.model_type == Perception.QUATERNION or self.model_type == Perception.EULER or self.model_type == Perception.FAST_QUAT:
+        elif self.model_type == Perception.QUATERNION or self.model_type == Perception.FAST_QUAT or self.model_type == Perception.EULER:
             return 3
         else:
             return 0
