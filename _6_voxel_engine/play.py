@@ -2,6 +2,8 @@ import moderngl as mgl
 import pygame as pg
 import sys
 
+from models import *
+
 class VoxelEngine:
     def __init__(self, _win_size=(1600, 900)):
         # * init pygame modules
@@ -27,6 +29,9 @@ class VoxelEngine:
         self.delta_time = 0
         self.time = 0
         
+        # * init scene
+        self.scene = Triangle(self)
+        
         # * game is running
         self.is_running = True
         
@@ -39,6 +44,9 @@ class VoxelEngine:
     def render(self):
         # * clear framebuffer
         self.ctx.clear(color=self.BG_COLOR)
+        
+        # * render scene
+        self.scene.render()
         
         # * swap buffers
         pg.display.flip()
@@ -53,6 +61,8 @@ class VoxelEngine:
             self.handle_events()
             self.update()
             self.render()
+            
+        # * 
         pg.quit()
         sys.exit()
 

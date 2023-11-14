@@ -41,7 +41,7 @@ _NUM_DAMG_ = 2
 _DAMG_RATE_ = 5
 # * logging parameters
 _LOG_FILE_ = 'trainlog.txt'
-_INFO_RATE_ = 20
+_INFO_RATE_ = 100
 _SAVE_RATE_ = 1000
 
 # * load from checkpoint
@@ -308,7 +308,7 @@ def main():
                 util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'[{i}/{_EPOCHS_+1}]\t {np.round(iter_per_sec, 3)}it/s\t time: {time}~{est}\t loss: {np.round(avg, 3)}>{np.round(np.min(loss_log), 3)}\t lr: {lr} {step}')
             
             # * save checkpoint
-            if i % _SAVE_RATE_ == 0 and i != 0:
+            if i % _SAVE_RATE_ == 0: # TODO read this -> and i != 0
                 save_model('_checkpoints', model, _NAME_+'_cp'+str(i))
                 
     # * print train time

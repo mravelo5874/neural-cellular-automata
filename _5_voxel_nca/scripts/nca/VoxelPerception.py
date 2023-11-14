@@ -7,7 +7,12 @@ import pytorch3d.transforms as T
 from enum import Enum
 from scripts.nca import VoxelUtil as util
 
-Perception = Enum('Perception', ['ANISOTROPIC', 'YAW_ISO', 'QUATERNION', 'FAST_QUAT', 'EULER'])
+class Perception(int, Enum):
+    ANISOTROPIC: int = 0                                      
+    YAW_ISO: int = 1                                       
+    QUATERNION: int = 2
+    FAST_QUAT: int = 3
+    EULER: int = 4
 
 # 3D filters
 X_SOBEL_KERN = torch.tensor([
