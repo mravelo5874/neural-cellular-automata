@@ -13,7 +13,7 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'bally4_euler_0'
+_NAME_ = 'bally4_yawiso_0'
 _SIZE_ = 4
 _PAD_ = 4
 _SEED_DIST_ = 2
@@ -28,7 +28,7 @@ _SEED_DIC_ = {
 }
 _TARGET_VOX_ = '../_vox/bally4.vox'
 # * model parameters
-_MODEL_TYPE_ = Perception.EULER
+_MODEL_TYPE_ = Perception.YAW_ISO
 _CHANNELS_ = 16
 # * training parameters
 _EPOCHS_ = 5_000
@@ -37,8 +37,8 @@ _POOL_SIZE_ = 32
 _UPPER_LR_ = 1e-3
 _LOWER_LR_ = 1e-5
 _LR_STEP_ = 2000
-_NUM_DAMG_ = 0
-_DAMG_RATE_ = 100_000
+_NUM_DAMG_ = 2
+_DAMG_RATE_ = 5
 # * logging parameters
 _LOG_FILE_ = 'trainlog.txt'
 _INFO_RATE_ = 20
