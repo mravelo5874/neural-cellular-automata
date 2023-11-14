@@ -1,6 +1,12 @@
 import torch
 import torch.nn.functional as func
 from scripts.nca import VoxelUtil as util
+import scipy.spatial.transform.rotation as R
+import numpy as np
+import pytorch3d.transforms as T
+from enum import Enum
+
+Perception = Enum('Perception', ['ANISOTROPIC', 'YAW_ISO', 'QUATERNION', 'EULER', 'PYTORCH3D'])
 
 # 3D filters
 X_SOBEL_KERN = torch.tensor([
@@ -131,9 +137,60 @@ class VoxelPerception():
         ry = rxyz[:, 2]
         rz = rxyz[:, 3]
         return torch.cat([_x, rx, ry, rz, lap], 1)
+    
+    def euler_perception(self, _x):
+        # * separate states and angle channels
+        states, ax, ay, az = _x[:, :-3], _x[:, -1:], _x[:, -2:-1], _x[:, -3:-2]
+
+        # * per channel convolutions
+        px = self.per_channel_conv3d(states, X_SOBEL_KERN[None, :])
+        py = self.per_channel_conv3d(states, Y_SOBEL_KERN[None, :])
+        pz = self.per_channel_conv3d(states, Z_SOBEL_KERN[None, :])
+        lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
+        
+        # * combine perception tensors
+        px = px[None, ...]
+        py = py[None, ...]
+        pz = pz[None, ...]
+        pxyz = torch.cat([px, py, pz], 0)
+        p3, bs, hc, sx, sy, sz = pxyz.shape
+        pxyz = torch.permute(pxyz, (0, 2, 1, 3, 4, 5))
+        pxyz = pxyz.reshape([p3, hc, bs*sx*sy*sz])
+        pxyz = torch.permute(pxyz, (1, 2, 0))
+ 
+        # * get euler values
+        bs, a, sx, sy, sz = ax.shape
+        ax = torch.permute(ax, (1, 0, 2, 3, 4))
+        ay = torch.permute(ay, (1, 0, 2, 3, 4))
+        az = torch.permute(az, (1, 0, 2, 3, 4))
+        ax = ax.reshape([a, sx*sy*sz*bs])
+        ay = ay.reshape([a, sx*sy*sz*bs])
+        az = az.reshape([a, sx*sy*sz*bs])
+        axyz = torch.cat([ax, ay, az], 0)
+        axyz = torch.permute(axyz, (1, 0))
+
+        # * perform rotations
+        rots = R.from_euler('xyz', axyz.cpu().detach().numpy(), degrees=False)
+        rxyz = np.zeros_like(pxyz.cpu().detach().numpy())
+        for t in range(hc):
+            rxyz[t] = rots.apply(pxyz[t].cpu().detach().numpy())
+        rxyz = torch.tensor(rxyz)
+        rxyz = torch.permute(rxyz, (2, 0, 1))
+        rxyz = rxyz.reshape([bs, p3, hc, sx, sy, sz])
+
+        # * extract rotated perception tensors
+        rx = rxyz[:, 0]
+        ry = rxyz[:, 1]
+        rz = rxyz[:, 2]
+        return torch.cat([_x, rx, ry, rz, lap], 1)
+    
+    def pytorch3d_perception(self, _x):
+        pass
         
     perception = {
-        'ANISOTROPIC': anisotropic_perception,
-        'YAW_ISO': yaw_isotropic_perception,
-        'QUATERNION': quaternion_perception,
+        Perception.ANISOTROPIC: anisotropic_perception,
+        Perception.YAW_ISO: yaw_isotropic_perception,
+        Perception.QUATERNION: quaternion_perception,
+        Perception.EULER: euler_perception,
+        Perception.PYTORCH3D: pytorch3d_perception,
     }

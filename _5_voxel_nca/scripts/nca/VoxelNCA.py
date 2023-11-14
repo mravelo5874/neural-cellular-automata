@@ -5,6 +5,7 @@ from numpy import pi
 from scripts.Video import VideoWriter, zoom
 from scripts.vox.Vox import Vox
 from scripts.nca.VoxelPerception import VoxelPerception as vp
+from scripts.nca.VoxelPerception import Perception
 from scripts.nca import VoxelUtil as util
     
 class VoxelNCA(torch.nn.Module):
@@ -37,6 +38,15 @@ class VoxelNCA(torch.nn.Module):
         # * print model parameter count
         param_n = sum(p.numel() for p in self.parameters())
         util.logprint(f'_models/{_name}/{_log_file}', f'nca parameter count: {param_n}')
+        util.logprint(f'_models/{_name}/{_log_file}', f'nca isotropic type: {self.isotropic_type()}')
+        
+    def isotropic_type(self):
+        if self.model_type == Perception.YAW_ISO:
+            return 1
+        elif self.model_type == Perception.QUATERNION or self.model_type == Perception.EULER or self.model_type == Perception.PYTORCH3D:
+            return 3
+        else:
+            return 0
         
     def generate_video(self, _filename, _seed, _size, _delta=4, _zoom=1, _show_grid=False):
         assert _filename != None
@@ -44,9 +54,9 @@ class VoxelNCA(torch.nn.Module):
         start = datetime.datetime.now()
         with VideoWriter(filename=_filename) as vid:
             # * randomize last channel(s)
-            if self.model_type == 'YAW_ISO':
+            if self.isotropic_type() == 0:
                 _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
-            elif self.model_type == 'QUATERNION':
+            elif self.isotropic_type() == 3:
                 pass
                 _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
                 _seed[:1, -2:-1] = torch.rand(_size, _size, _size)*pi*2.0
@@ -74,9 +84,9 @@ class VoxelNCA(torch.nn.Module):
         start = datetime.datetime.now()
         with VideoWriter(filename=_filename) as vid:
             # * randomize last channel(s)
-            if self.model_type == 'YAW_ISO':
+            if self.isotropic_type() == 0:
                 _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
-            elif self.model_type == 'QUATERNION':
+            elif self.isotropic_type() == 3:
                 pass
                 _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
                 _seed[:1, -2:-1] = torch.rand(_size, _size, _size)*pi*2.0
@@ -101,10 +111,10 @@ class VoxelNCA(torch.nn.Module):
                 mask = torch.tensor(util.half_volume_mask(_size, _mask_types[m]))
                 x *= mask 
                 # * randomize last channel(s)
-                if self.model_type == 'YAW_ISO':
+                if self.isotropic_type() == 0:
                     inv_mask = ~mask
                     x[:1, -1:] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
-                elif self.model_type == 'QUATERNION':
+                elif self.isotropic_type() == 3:
                     inv_mask = ~mask
                     x[:1, -1:] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
                     x[:1, -2:-1] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
@@ -143,9 +153,9 @@ class VoxelNCA(torch.nn.Module):
             for i in range(len(seeds)):
                 x = seeds[i]
                 # * randomize last channel(s)
-                if self.model_type == 'YAW_ISO':
+                if self.isotropic_type() == 0:
                     x[:, -1:] = torch.rand(_size, _size, _size)*pi*2.0
-                elif self.model_type == 'QUATERNION':
+                elif self.isotropic_type() == 3:
                     pass
                     _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
                     _seed[:1, -2:-1] = torch.rand(_size, _size, _size)*pi*2.0
@@ -196,11 +206,11 @@ class VoxelNCA(torch.nn.Module):
         
         # * perform update
         _x = _x + p * stochastic_mask
-        if self.model_type == 'YAW_ISO':
+        if self.isotropic_type() == 1:
             states = _x[:, :-1]*alive_mask
             angle = _x[:, -1:]%(pi*2.0)
             _x = torch.cat([states, angle], 1)
-        elif self.model_type == 'QUATERNION':
+        if self.isotropic_type() == 3:
             states = _x[:, :-3]*alive_mask
             ax = _x[:, -1:]%(pi*2.0)
             ay = _x[:, -2:-1]%(pi*2.0)

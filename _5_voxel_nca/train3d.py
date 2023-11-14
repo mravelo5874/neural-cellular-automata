@@ -8,11 +8,12 @@ import torch.nn.functional as func
 import matplotlib.pylab as pl
 
 from scripts.nca.VoxelNCA import VoxelNCA as NCA
+from scripts.nca.VoxelPerception import Perception
 from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_quat_2'
+_NAME_ = 'cowboy16_quat_tests'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_DIST_ = 5
@@ -27,7 +28,7 @@ _SEED_DIC_ = {
 }
 _TARGET_VOX_ = '../_vox/cowboy16.vox'
 # * model parameters
-_MODEL_TYPE_ = 'QUATERNION'
+_MODEL_TYPE_ = Perception.QUATERNION
 _CHANNELS_ = 16
 # * training parameters
 _EPOCHS_ = 5_000
@@ -192,10 +193,10 @@ def main():
     with torch.no_grad():
         pool = seed_ten.clone().repeat(_POOL_SIZE_, 1, 1, 1, 1)
         # * randomize channel(s)
-        if model.model_type == 'YAW_ISO':
+        if model.isotropic_type() == 1:
             for j in range(_POOL_SIZE_):
                 pool[j, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-        elif model.model_type == 'QUATERNION':
+        elif model.isotropic_type() == 3:
             for j in range(_POOL_SIZE_):
                 pool[j, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
                 pool[j, -2:-1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
@@ -219,9 +220,9 @@ def main():
             # * re-add seed into batch
             x[:1] = seed_ten
             # * randomize last channel
-            if model.model_type == 'YAW_ISO':
+            if model.isotropic_type() == 1:
                 x[:1, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-            elif model.model_type == 'QUATERNION':
+            elif model.isotropic_type() == 3:
                 x[:1, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
                 x[:1, -2:-1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
                 x[:1, -3:-2] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
@@ -232,10 +233,10 @@ def main():
                 # * apply mask
                 x[-_NUM_DAMG_:] *= mask
                 # * randomize angles for steerable models
-                if model.model_type == 'YAW_ISO':
+                if model.isotropic_type() == 1:
                     inv_mask = ~mask
                     x[-_NUM_DAMG_:, -1:] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
-                elif model.model_type == 'QUATERNION':
+                elif model.isotropic_type() == 3:
                     inv_mask = ~mask
                     x[-_NUM_DAMG_:, -1:] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
                     x[-_NUM_DAMG_:, -2:-1] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
@@ -252,9 +253,9 @@ def main():
             prev_x = x
             x = model(x)
             diff_loss += (x - prev_x).abs().mean()
-            if model.model_type == 'YAW_ISO':
+            if model.isotropic_type() == 1:
                 overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_-1].square().sum()
-            elif model.model_type == 'QUATERNION':
+            elif model.isotropic_type() == 3:
                 overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_-3].square().sum()
             else:
                 overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_].square().sum()
@@ -332,7 +333,7 @@ def main():
     with torch.no_grad():
         model.generate_video(f'_models/{_NAME_}/vidtrain_grow.mp4', seed_ten, _size=s)
         model.regen_video(f'_models/{_NAME_}/vidtrain_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
-        if model.model_type == 'YAW_ISO' or model.model_type == 'QUATERNION':
+        if model.isotropic_type() > 0:
             model.rotate_yawiso_video(f'_models/{_NAME_}/vidtrain_multi_rotate.mp4', seed_ten, _size=s, _show_grid=True)
     
     # * calculate elapsed time
