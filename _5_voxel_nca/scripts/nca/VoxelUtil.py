@@ -161,25 +161,16 @@ def half_volume_mask(_size, _type):
     return mat > 0.0
 
 def euler_to_quaternion(_ax, _ay, _az):
-    # * convert to rads
-    rx = torch.deg2rad(_ax)
-    ry = torch.deg2rad(_ay)
-    rz = torch.deg2rad(_az)
     # * get sin and cos values
-    cx = torch.cos(rx/2) 
-    sx = torch.sin(rx/2)
-    cy = torch.cos(ry/2)
-    sy = torch.sin(ry/2)
-    cz = torch.cos(rz/2)
-    sz = torch.sin(rz/2)
+    cx, sx = torch.cos(_ax/2), torch.sin(_ax/2)
+    cy, sy = torch.cos(_ay/2), torch.sin(_ay/2)
+    cz, sz = torch.cos(_az/2), torch.sin(_az/2)
+
     # * compute w, x, y, z
     w = cx*cy*cz+sx*sy*sz
     x = sx*cy*cz-cx*sy*sz
     y = cx*sy*cz+sx*cy*sz
     z = cx*cy*sz-sx*sy*cz
+    
     # * return quat values
-    # print (f'w.shape: {w.shape}')
-    # print (f'x.shape: {x.shape}')
-    # print (f'y.shape: {y.shape}')
-    # print (f'z.shape: {z.shape}')
     return torch.cat([w, x, y, z], 1)

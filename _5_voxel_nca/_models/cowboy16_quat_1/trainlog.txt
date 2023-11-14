@@ -76,3 +76,33 @@ created video: _models/cowboy16_quat_1/vidtrain_grow.mp4, gen-time: 0:17:40
 created video: _models/cowboy16_quat_1/vidtrain_multi_regen.mp4, gen-time: 0:38:51
 elapsed time: 5:38:42
 ****************
+****************
+timestamp: 2023-11-14 09:04:30.097910
+initializing training...
+device: cuda
+nca perception channels: 68
+nca parameter count: 10880
+training new model from scratch...
+model: cowboy16_quat_1
+type: QUATERNION
+batch-size: 4
+pool-size: 32
+lr: 0.001>1e-05 w/ 2000 step
+seed.shape: [1, 16, 24, 24, 24]
+target.shape: [4, 4, 24, 24, 24]
+starting training w/ 5001 epochs...
+****************
+timestamp: 2023-11-14 09:15:14.897280
+initializing training...
+device: cuda
+nca perception channels: 68
+nca parameter count: 10880
+training new model from scratch...
+model: cowboy16_quat_1
+type: QUATERNION
+batch-size: 4
+pool-size: 32
+lr: 0.001>1e-05 w/ 2000 step
+seed.shape: [1, 16, 24, 24, 24]
+target.shape: [4, 4, 24, 24, 24]
+starting training w/ 5001 epochs...

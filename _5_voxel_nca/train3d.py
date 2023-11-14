@@ -12,7 +12,7 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_quat_1'
+_NAME_ = 'cowboy16_quat_2'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_DIST_ = 5
@@ -40,7 +40,7 @@ _NUM_DAMG_ = 0
 _DAMG_RATE_ = 100_000
 # * logging parameters
 _LOG_FILE_ = 'trainlog.txt'
-_INFO_RATE_ = 100
+_INFO_RATE_ = 20
 _SAVE_RATE_ = 1000
 
 # * load from checkpoint
@@ -234,11 +234,12 @@ def main():
                 # * randomize angles for steerable models
                 if model.model_type == 'YAW_ISO':
                     inv_mask = ~mask
-                    rand = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-                    rand *= inv_mask
-                    x[-_NUM_DAMG_:, -1:] += rand
+                    x[-_NUM_DAMG_:, -1:] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
                 elif model.model_type == 'QUATERNION':
-                    pass
+                    inv_mask = ~mask
+                    x[-_NUM_DAMG_:, -1:] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
+                    x[-_NUM_DAMG_:, -2:-1] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
+                    x[-_NUM_DAMG_:, -3:-2] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
 
         # * different loss values
         overflow_loss = 0.0
@@ -331,7 +332,7 @@ def main():
     with torch.no_grad():
         model.generate_video(f'_models/{_NAME_}/vidtrain_grow.mp4', seed_ten, _size=s)
         model.regen_video(f'_models/{_NAME_}/vidtrain_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
-        if model.model_type == 'YAW_ISO':
+        if model.model_type == 'YAW_ISO' or model.model_type == 'QUATERNION':
             model.rotate_yawiso_video(f'_models/{_NAME_}/vidtrain_multi_rotate.mp4', seed_ten, _size=s, _show_grid=True)
     
     # * calculate elapsed time

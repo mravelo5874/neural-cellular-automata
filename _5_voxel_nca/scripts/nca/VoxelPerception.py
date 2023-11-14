@@ -103,30 +103,33 @@ class VoxelPerception():
         pz = self.per_channel_conv3d(states, Z_SOBEL_KERN[None, :])
         lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
         
-        # * get quat values
-        quats = util.euler_to_quaternion(ax, ay, az)
-        
         # * combine perception tensors
         px = px[:, None, ...]
         py = py[:, None, ...]
         pz = pz[:, None, ...]
         p0 = torch.zeros_like(px)
         
+        # * get quat values
+        bs, a, sx, sy, sz = ax.shape
+        ax = ax.reshape([bs, a, sx*sy*sz])
+        ay = ay.reshape([bs, a, sx*sy*sz])
+        az = az.reshape([bs, a, sx*sy*sz])
+        quats = util.euler_to_quaternion(ax, ay, az)
+        
         # * rotate perception tensors
         pxyz = torch.cat([p0, px, py, pz], 1)
         bs, p4, hc, sx, sy, sz = pxyz.shape
         pxyz = pxyz.reshape([bs, p4, hc, sx*sy*sz])
-        q = quats.reshape([bs, p4, sx*sy*sz])
-        j = torch.conj(q)
+        conj = torch.conj(quats)
         rxyz = torch.zeros_like(pxyz)
         for t in range(hc):
-            rxyz[:, :, t] = q * pxyz[:, :, t] * j
+            rxyz[:, :, t] = quats * pxyz[:, :, t] * conj
         rxyz = rxyz.reshape([bs, p4, hc, sx, sy, sz])
         
         # * extract rotated perception tensors
-        rx = rxyz[:, 0]
-        ry = rxyz[:, 1]
-        rz = rxyz[:, 2]
+        rx = rxyz[:, 1]
+        ry = rxyz[:, 2]
+        rz = rxyz[:, 3]
         return torch.cat([_x, rx, ry, rz, lap], 1)
         
     perception = {

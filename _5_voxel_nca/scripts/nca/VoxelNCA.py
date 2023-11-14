@@ -48,7 +48,7 @@ class VoxelNCA(torch.nn.Module):
                 _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
             elif self.model_type == 'QUATERNION':
                 pass
-                _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
                 _seed[:1, -2:-1] = torch.rand(_size, _size, _size)*pi*2.0
                 _seed[:1, -3:-2] = torch.rand(_size, _size, _size)*pi*2.0
                 
@@ -78,7 +78,7 @@ class VoxelNCA(torch.nn.Module):
                 _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
             elif self.model_type == 'QUATERNION':
                 pass
-                _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
                 _seed[:1, -2:-1] = torch.rand(_size, _size, _size)*pi*2.0
                 _seed[:1, -3:-2] = torch.rand(_size, _size, _size)*pi*2.0
             
@@ -106,7 +106,7 @@ class VoxelNCA(torch.nn.Module):
                     x[:1, -1:] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
                 elif self.model_type == 'QUATERNION':
                     inv_mask = ~mask
-                    x[:1, -1] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
+                    x[:1, -1:] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
                     x[:1, -2:-1] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
                     x[:1, -3:-2] += torch.rand(_size, _size, _size)*pi*2.0*inv_mask
                 
@@ -147,7 +147,7 @@ class VoxelNCA(torch.nn.Module):
                     x[:, -1:] = torch.rand(_size, _size, _size)*pi*2.0
                 elif self.model_type == 'QUATERNION':
                     pass
-                    _seed[:1, -1] = torch.rand(_size, _size, _size)*pi*2.0
+                    _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
                     _seed[:1, -2:-1] = torch.rand(_size, _size, _size)*pi*2.0
                     _seed[:1, -3:-2] = torch.rand(_size, _size, _size)*pi*2.0
 
