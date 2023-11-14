@@ -8,4 +8,5 @@ pip install torch
 pip install matplotlib
 pip install requests
 pip install moviepy
+pip install scipy
 pip install pytorch3d
