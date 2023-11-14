@@ -12,7 +12,7 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_quat_0'
+_NAME_ = 'cowboy16_quat_1'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_DIST_ = 5
