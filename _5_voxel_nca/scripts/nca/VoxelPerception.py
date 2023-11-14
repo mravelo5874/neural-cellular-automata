@@ -194,23 +194,16 @@ class VoxelPerception():
         pz = pz[None, ...]
         pxyz = torch.cat([px, py, pz], 0)
         p3, bs, hc, sx, sy, sz = pxyz.shape
-        pxyz = torch.permute(pxyz, (0, 2, 1, 3, 4, 5))
-        pxyz = pxyz.reshape([p3, hc, bs*sx*sy*sz])
-        pxyz = torch.permute(pxyz, (1, 2, 0))
+        pxyz = torch.permute(pxyz, (2, 1, 3, 4, 5, 0))
+        pxyz = pxyz.reshape([hc, bs*sx*sy*sz, p3])
  
-        # * get euler values
-        bs, a, sx, sy, sz = ax.shape
-        ax = torch.permute(ax, (1, 0, 2, 3, 4))
-        ay = torch.permute(ay, (1, 0, 2, 3, 4))
-        az = torch.permute(az, (1, 0, 2, 3, 4))
-        ax = ax.reshape([a, sx*sy*sz*bs])
-        ay = ay.reshape([a, sx*sy*sz*bs])
-        az = az.reshape([a, sx*sy*sz*bs])
-        axyz = torch.cat([ax, ay, az], 0)
-        axyz = torch.permute(axyz, (1, 0))
+        # * get quat values
+        axyz = torch.cat([ax, ay, az], 1)
+        bs, a, sx, sy, sz = axyz.shape
+        axyz = torch.permute(axyz, (0, 2, 3, 4, 1))
+        axyz = axyz.reshape([sx*sy*sz*bs, a])
 
         # * perform rotations
-        
         rots = sci.Rotation.from_euler('xyz', axyz.cpu().detach().numpy(), degrees=False)
         rxyz = np.zeros_like(pxyz.cpu().detach().numpy())
         for t in range(hc):
