@@ -1,7 +1,7 @@
 import torch
 import torch.nn.functional as func
 import numpy as np
-import scipy.spatial.transform._rotation as R
+import scipy.spatial.transform.Rotation as R
 import pytorch3d.transforms as T
 
 from enum import Enum
@@ -210,6 +210,7 @@ class VoxelPerception():
         axyz = torch.permute(axyz, (1, 0))
 
         # * perform rotations
+        
         rots = R.from_euler('xyz', axyz.cpu().detach().numpy(), degrees=False)
         rxyz = np.zeros_like(pxyz.cpu().detach().numpy())
         for t in range(hc):
