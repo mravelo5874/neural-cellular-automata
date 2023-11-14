@@ -5,10 +5,8 @@ from matplotlib import pyplot as plt
 from scripts.vox.Vox import Vox
 
 def logprint(_path, _str):
-    # torch.set_printoptions(threshold=100_000)
-    # torch.set_printoptions(profile="full")
     print (_str)
-    with open(_path, 'a') as f:
+    with open(_path, 'a', encoding='utf-8') as f:
         f.write(f'{_str}\n')
         
 def voxel_wise_loss_function(_x, _target, _scale=1e3, _dims=[]):

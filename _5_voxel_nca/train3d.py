@@ -30,17 +30,17 @@ _TARGET_VOX_ = '../_vox/cowboy16.vox'
 _MODEL_TYPE_ = 'QUATERNION'
 _CHANNELS_ = 16
 # * training parameters
-_EPOCHS_ = 10_000
+_EPOCHS_ = 5_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
-_UPPER_LR_ = 5e-4
+_UPPER_LR_ = 1e-3
 _LOWER_LR_ = 1e-5
 _LR_STEP_ = 2000
 _NUM_DAMG_ = 0
 _DAMG_RATE_ = 100_000
 # * logging parameters
 _LOG_FILE_ = 'trainlog.txt'
-_INFO_RATE_ = 200
+_INFO_RATE_ = 1
 _SAVE_RATE_ = 1000
 
 # * load from checkpoint
@@ -49,6 +49,8 @@ checkpoint_dir = '_checkpoints/earth_aniso/'
 checkpoint_model = 'earth_aniso_cp10000'
         
 def main():
+    torch.autograd.set_detect_anomaly(True)
+    
     # * make directory for model files
     if not os.path.exists(f'_models/{_NAME_}'):
         os.mkdir(f'_models/{_NAME_}')
