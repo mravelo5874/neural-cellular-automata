@@ -323,3 +323,86 @@
 009 (784082.000.000) 2023-11-09 15:50:03 Job was aborted.
 	via condor_rm (by user marco)
 ...
+000 (792662.000.000) 2023-11-14 00:24:36 Job submitted from host: <128.83.120.183:9618?addrs=128.83.120.183-9618&alias=darmok.cs.utexas.edu&noUDP&sock=schedd_1340_b4ff>
+...
+001 (792662.000.000) 2023-11-14 00:24:47 Job executing on host: <128.83.120.179:9618?addrs=128.83.120.179-9618&alias=nandor-3.cs.utexas.edu&noUDP&sock=startd_2548_4b67>
+...
+006 (792662.000.000) 2023-11-14 00:24:56 Image size of job updated: 315012
+	171  -  MemoryUsage of job (MB)
+	174412  -  ResidentSetSize of job (KB)
+...
+006 (792662.000.000) 2023-11-14 00:29:57 Image size of job updated: 55427508
+	3753  -  MemoryUsage of job (MB)
+	3842508  -  ResidentSetSize of job (KB)
+...
+006 (792662.000.000) 2023-11-14 00:49:58 Image size of job updated: 55428212
+	3754  -  MemoryUsage of job (MB)
+	3843244  -  ResidentSetSize of job (KB)
+...
+006 (792662.000.000) 2023-11-14 01:15:01 Image size of job updated: 55428692
+	3754  -  MemoryUsage of job (MB)
+	3843880  -  ResidentSetSize of job (KB)
+...
+006 (792662.000.000) 2023-11-14 02:45:10 Image size of job updated: 55428948
+	3754  -  MemoryUsage of job (MB)
+	3843964  -  ResidentSetSize of job (KB)
+...
+006 (792662.000.000) 2023-11-14 05:10:25 Image size of job updated: 55428948
+	4009  -  MemoryUsage of job (MB)
+	4105164  -  ResidentSetSize of job (KB)
+...
+006 (792662.000.000) 2023-11-14 05:15:25 Image size of job updated: 55428948
+	4122  -  MemoryUsage of job (MB)
+	4220256  -  ResidentSetSize of job (KB)
+...
+006 (792662.000.000) 2023-11-14 05:20:26 Image size of job updated: 55428948
+	4155  -  MemoryUsage of job (MB)
+	4253860  -  ResidentSetSize of job (KB)
+...
+006 (792662.000.000) 2023-11-14 05:30:26 Image size of job updated: 55428948
+	4181  -  MemoryUsage of job (MB)
+	4281028  -  ResidentSetSize of job (KB)
+...
+006 (792662.000.000) 2023-11-14 05:35:27 Image size of job updated: 55428948
+	4215  -  MemoryUsage of job (MB)
+	4315276  -  ResidentSetSize of job (KB)
+...
+006 (792662.000.000) 2023-11-14 05:40:28 Image size of job updated: 55428948
+	4238  -  MemoryUsage of job (MB)
+	4339244  -  ResidentSetSize of job (KB)
+...
+006 (792662.000.000) 2023-11-14 05:45:28 Image size of job updated: 55428948
+	4238  -  MemoryUsage of job (MB)
+	4339412  -  ResidentSetSize of job (KB)
+...
+006 (792662.000.000) 2023-11-14 05:50:29 Image size of job updated: 55428948
+	4238  -  MemoryUsage of job (MB)
+	4339616  -  ResidentSetSize of job (KB)
+...
+006 (792662.000.000) 2023-11-14 05:55:30 Image size of job updated: 55428948
+	4239  -  MemoryUsage of job (MB)
+	4340472  -  ResidentSetSize of job (KB)
+...
+006 (792662.000.000) 2023-11-14 06:00:30 Image size of job updated: 55428948
+	4250  -  MemoryUsage of job (MB)
+	4351452  -  ResidentSetSize of job (KB)
+...
+005 (792662.000.000) 2023-11-14 06:03:47 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 05:22:03, Sys 0 00:18:54  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 05:22:03, Sys 0 00:18:54  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated Assigned
+	   Cpus                 :     1.14       80        80 
+	   Disk (KB)            :     1           1     75272 
+	   Gpus (Average)       :     0.27        8         8 "GPU-2c5b90a7,GPU-f8e16bcc,GPU-ff4b36e5,GPU-eae33a14,GPU-bb67ad3a,GPU-1bdcb1ac,GPU-2e4fe718,GPU-71e3dafb"
+	   GpusMemory (MB)      :   353                       
+	   Memory (MB)          :  4250           1       128 
+
+	Job terminated of its own accord at 2023-11-14T12:03:47Z.
+...
