@@ -28,7 +28,7 @@ _SEED_DIC_ = {
 }
 _TARGET_VOX_ = '../_vox/cowboy16.vox'
 # * model parameters
-_MODEL_TYPE_ = Perception.QUATERNION
+_MODEL_TYPE_ = Perception.FAST_QUAT
 _CHANNELS_ = 16
 # * training parameters
 _EPOCHS_ = 5_000
