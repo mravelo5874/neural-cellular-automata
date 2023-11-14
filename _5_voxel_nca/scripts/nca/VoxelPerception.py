@@ -1,7 +1,7 @@
 import torch
 import torch.nn.functional as func
 import numpy as np
-import scipy.spatial.transform.rotation as R
+import scipy.spatial.transform._rotation as R
 import pytorch3d.transforms as T
 
 from enum import Enum
