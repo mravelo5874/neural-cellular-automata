@@ -1,7 +1,6 @@
 import torch
 import torch.nn.functional as func
 from scripts.nca import VoxelUtil as util
-from scipy.spatial.transform import Rotation
 
 # 3D filters
 X_SOBEL_KERN = torch.tensor([
