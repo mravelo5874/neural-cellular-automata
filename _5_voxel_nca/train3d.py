@@ -13,7 +13,7 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'bally4_fquat_0'
+_NAME_ = 'bally4_euler_0'
 _SIZE_ = 4
 _PAD_ = 4
 _SEED_DIST_ = 2
@@ -28,7 +28,7 @@ _SEED_DIC_ = {
 }
 _TARGET_VOX_ = '../_vox/bally4.vox'
 # * model parameters
-_MODEL_TYPE_ = Perception.FAST_QUAT
+_MODEL_TYPE_ = Perception.EULER
 _CHANNELS_ = 16
 # * training parameters
 _EPOCHS_ = 5_000
