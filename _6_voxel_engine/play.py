@@ -32,7 +32,7 @@ class VoxelEngine:
         self.PLAYER_POS = glm.vec3(1, 0, 4)
         self.MOUSE_SENS = 0.002
         # * model
-        self.model_name = 'cowboy16_yawiso8'
+        self.model_name = 'earth_aniso'
         # -------------------------- #
         
         # * set opengl attributes
@@ -51,7 +51,6 @@ class VoxelEngine:
         self.ctx = mgl.create_context()
         self.ctx.front_face = 'cw'
         self.ctx.enable(flags=mgl.DEPTH_TEST|mgl.CULL_FACE)
-        self.ctx.disable(flags=mgl.BLEND)
         
         # * create clock to track time
         self.clock = pg.time.Clock()

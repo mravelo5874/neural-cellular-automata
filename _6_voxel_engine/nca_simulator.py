@@ -83,7 +83,8 @@ class NCASimulator:
         
         # convert numbers to -> np.uint8 values between 0-255
         data = data[:, :4, ...]
-        data = np.transpose(data, (0, 2, 3, 4, 1))
+        data = np.clip(data, 0.0, 1.0)
+        data = np.transpose(data, (0, 2, 4, 3, 1))
         _, x, y, z, rgba = data.shape
         data = data.reshape((x*y*z, rgba))*255
         data = data.astype(np.uint8)

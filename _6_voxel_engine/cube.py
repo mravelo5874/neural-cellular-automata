@@ -1,6 +1,6 @@
-import sys
 import glm
 import numpy as np
+import moderngl as mgl
 
 class Cube:
     def __init__(self, _app):
@@ -39,8 +39,11 @@ class Cube:
         # * 8 bits per component, 4 components per voxel
         self.texture = self.ctx.texture3d([s, s, s], 4, dtype='f1')
         self.texture.swizzle = 'RGBA'
-        data = self.app.sim.get_data() # self.dummy_data(s)
-        print (f'len(data): {len(data)}')
+        self.texture.filter = mgl.NEAREST, mgl.NEAREST
+        self.texture.repeat_x = False
+        self.texture.repeat_y = False
+        self.texture.repeat_z = False
+        data = self.app.sim.get_data() # self.dummy_data(s) # 
         self.texture.write(data)
         self.texture.use()
         
