@@ -1,0 +1,33 @@
+****************
+timestamp: 2023-11-14 20:41:35.663158
+initializing video generation...
+device: cuda
+****************
+timestamp: 2023-11-14 20:43:40.095397
+initializing video generation...
+device: cuda
+****************
+timestamp: 2023-11-14 20:44:27.459112
+initializing video generation...
+device: cuda
+nca perception channels: 68
+nca parameter count: 10880
+nca isotropic type: 3
+loaded model from: _models/cowboy16_quat_2/cowboy16_quat_2.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+starting time: 20:44:47
+generating videos...
+****************
+timestamp: 2023-11-14 22:06:14.723221
+initializing video generation...
+device: cuda
+nca perception channels: 68
+nca parameter count: 10880
+nca isotropic type: 3
+loaded model from: _models/cowboy16_quat_2/cowboy16_quat_2.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+starting time: 22:06:16
+generating videos...
+created video: _models/cowboy16_quat_2/vidgen_multi_rotate.mp4, gen-time: 2:12:34
+elapsed time: 2:12:36
+****************
