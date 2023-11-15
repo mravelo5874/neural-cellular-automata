@@ -3,13 +3,14 @@ import pygame as pg
 import sys
 import glm
 import math
+import threading
 
-from models import *
+from cube import Cube
 from player import Player
 from nca_simulator import NCASimulator
 
 class VoxelEngine:
-    def __init__(self, _win_size=(1600, 900)):
+    def __init__(self, _win_size=(800, 450)):
         # * init pygame modules
         pg.init()
         
@@ -30,6 +31,8 @@ class VoxelEngine:
         self.PLAYER_ROT_SPEED = 0.005
         self.PLAYER_POS = glm.vec3(1, 0, 4)
         self.MOUSE_SENS = 0.002
+        # * model
+        self.model_name = 'cowboy16_yawiso8'
         # -------------------------- #
         
         # * set opengl attributes
@@ -52,13 +55,16 @@ class VoxelEngine:
         self.delta_time = 0
         self.time = 0
         
-        # * init scene
+        # * init player and cube
         self.player = Player(self)
-        self.scene = Cube(self)
+        self.cube = Cube(self)
         
         # * init simulator
-        self.sim = NCASimulator('model')
-        
+        self.sim = None
+        def init_sim(_app):
+            _app.sim = NCASimulator(_app.model_name)
+        threading.Thread(target=init_sim, args=[self]).start()
+
         # * game is running
         self.is_running = True
         
@@ -68,16 +74,16 @@ class VoxelEngine:
         self.time = pg.time.get_ticks() * 0.001
         pg.display.set_caption(f'fps: {self.clock.get_fps() :.0f}')
         
-        # * update player and scene
+        # * update player and cube
         self.player.update()
-        self.scene.update()
+        self.cube.update()
         
     def render(self):
         # * clear framebuffer
         self.ctx.clear(color=self.BG_COLOR)
         
-        # * render scene
-        self.scene.render()
+        # * render cube
+        self.cube.render()
         
         # * swap buffers
         pg.display.flip()
@@ -94,7 +100,7 @@ class VoxelEngine:
             self.render()
             
         # * destroy scene
-        self.scene.destroy()
+        self.cube.destroy()
         
         # * quit application
         pg.quit()
