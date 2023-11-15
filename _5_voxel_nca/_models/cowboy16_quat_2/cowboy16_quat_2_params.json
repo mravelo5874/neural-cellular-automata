@@ -13,7 +13,7 @@
         "minus_z": null
     },
     "_TARGET_VOX_": "../_vox/cowboy16.vox",
-    "_MODEL_TYPE_": "QUATERNION",
+    "_MODEL_TYPE_": "2",
     "_CHANNELS_": 16,
     "_EPOCHS_": 5000,
     "_BATCH_SIZE_": 4,
