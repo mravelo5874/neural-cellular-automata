@@ -6,6 +6,7 @@ import math
 
 from models import *
 from player import Player
+from nca_simulator import NCASimulator
 
 class VoxelEngine:
     def __init__(self, _win_size=(1600, 900)):
@@ -25,9 +26,9 @@ class VoxelEngine:
         self.FAR = 2000
         self.MAX_PITCH = glm.radians(89)
         # * player
-        self.PLAYER_SPEED = 0.001
-        self.PLAYER_ROT_SPEED = 0.
-        self.PLAYER_POS = glm.vec3(0, 0, 1)
+        self.PLAYER_SPEED = 0.002
+        self.PLAYER_ROT_SPEED = 0.005
+        self.PLAYER_POS = glm.vec3(1, 0, 4)
         self.MOUSE_SENS = 0.002
         # -------------------------- #
         
@@ -54,6 +55,9 @@ class VoxelEngine:
         # * init scene
         self.player = Player(self)
         self.scene = Cube(self)
+        
+        # * init simulator
+        self.sim = NCASimulator('model')
         
         # * game is running
         self.is_running = True
