@@ -1,17 +1,35 @@
 import moderngl as mgl
 import pygame as pg
 import sys
+import glm
+import math
 
 from models import *
+from player import Player
 
 class VoxelEngine:
     def __init__(self, _win_size=(1600, 900)):
         # * init pygame modules
         pg.init()
         
-        # * options
+        # -------- settings -------- #
+        # * window
         self.WIN_SIZE = _win_size
-        self.BG_COLOR = (1.0, 1.0, 1.0)
+        self.BG_COLOR = (0, 0, 0)
+        # * camera
+        self.ASPECT_RATIO = _win_size[0]/_win_size[1]
+        self.FOV_DEG = 50
+        self.V_FOV = glm.radians(self.FOV_DEG)
+        self.H_FOV = 2*math.atan(math.tan(self.V_FOV*0.5)*self.ASPECT_RATIO)
+        self.NEAR = 0.1
+        self.FAR = 2000
+        self.MAX_PITCH = glm.radians(89)
+        # * player
+        self.PLAYER_SPEED = 0.001
+        self.PLAYER_ROT_SPEED = 0.
+        self.PLAYER_POS = glm.vec3(0, 0, 1)
+        self.MOUSE_SENS = 0.002
+        # -------------------------- #
         
         # * set opengl attributes
         pg.display.gl_set_attribute(pg.GL_CONTEXT_MAJOR_VERSION, 3)
@@ -20,6 +38,10 @@ class VoxelEngine:
         
         # * create opengl context
         pg.display.set_mode(self.WIN_SIZE, flags=pg.OPENGL|pg.DOUBLEBUF)
+        
+        # * hide mouse cursor
+        pg.event.set_grab(True)
+        pg.mouse.set_visible(False)
         
         # * use opengl context
         self.ctx = mgl.create_context()
@@ -30,7 +52,8 @@ class VoxelEngine:
         self.time = 0
         
         # * init scene
-        self.scene = Triangle(self)
+        self.player = Player(self)
+        self.scene = Cube(self)
         
         # * game is running
         self.is_running = True
@@ -40,6 +63,10 @@ class VoxelEngine:
         self.delta_time = self.clock.tick()
         self.time = pg.time.get_ticks() * 0.001
         pg.display.set_caption(f'fps: {self.clock.get_fps() :.0f}')
+        
+        # * update player and scene
+        self.player.update()
+        self.scene.update()
         
     def render(self):
         # * clear framebuffer
@@ -62,7 +89,10 @@ class VoxelEngine:
             self.update()
             self.render()
             
-        # * 
+        # * destroy scene
+        self.scene.destroy()
+        
+        # * quit application
         pg.quit()
         sys.exit()
 
