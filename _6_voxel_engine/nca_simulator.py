@@ -3,6 +3,7 @@ import os
 import json
 import torch
 import threading
+import numpy as np
 
 # * add path to '_5_voxel_nca' to sys
 cwd = os.getcwd().split('\\')[:-1]
@@ -16,6 +17,8 @@ class NCASimulator:
     def __init__(self, _model, _device='cuda'):
         self.is_running = False
         self.device = _device
+        self.count = 0
+        self.mutex = threading.Lock()
         
         # * setup cuda if available
         torch.backends.cudnn.benchmark = True
@@ -48,7 +51,7 @@ class NCASimulator:
                                     _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
                                     _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
                                     _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(self.device)
-        self.x = self.seed
+        self.x = self.seed.detach().clone()
         print (f'finished loading model: {_model}')
         
     def run_thread(self):
@@ -57,16 +60,14 @@ class NCASimulator:
                 self.mutex.acquire()
                 self.x = self.model(self.x)
                 self.mutex.release()
-            #print (f'forward {self.count}!')
-            #self.count += 1
+            # print (f'forward {self.count}!')
+            # self.count += 1
                 
     def run(self):
         # * can only start running if not running
         if self.is_running:
             return
         self.is_running = True
-        self.count = 0
-        self.mutex = threading.Lock()
         threading.Thread(target=self.run_thread, daemon=True).start()
   
     def stop(self):
@@ -75,7 +76,15 @@ class NCASimulator:
             self.is_running = False
         
     def get_data(self):
+        # * get tensor
         self.mutex.acquire()
-        x = self.x.copy_()
+        data = self.x.cpu().detach().numpy()
         self.mutex.release()
         
+        # convert numbers to -> np.uint8 values between 0-255
+        data = data[:, :4, ...]
+        data = np.transpose(data, (0, 2, 3, 4, 1))
+        _, x, y, z, rgba = data.shape
+        data = data.reshape((x*y*z, rgba))*255
+        data = data.astype(np.uint8)
+        return data.tobytes()

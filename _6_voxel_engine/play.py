@@ -10,14 +10,14 @@ from player import Player
 from nca_simulator import NCASimulator
 
 class VoxelEngine:
-    def __init__(self, _win_size=(800, 450)):
+    def __init__(self, _win_size=(1200, 800)):
         # * init pygame modules
         pg.init()
         
         # -------- settings -------- #
         # * window
         self.WIN_SIZE = _win_size
-        self.BG_COLOR = (0, 0, 0)
+        self.BG_COLOR = (1.0, 1.0, 1.0)
         # * camera
         self.ASPECT_RATIO = _win_size[0]/_win_size[1]
         self.FOV_DEG = 50
@@ -49,6 +49,9 @@ class VoxelEngine:
         
         # * use opengl context
         self.ctx = mgl.create_context()
+        self.ctx.front_face = 'cw'
+        self.ctx.enable(flags=mgl.DEPTH_TEST|mgl.CULL_FACE)
+        self.ctx.disable(flags=mgl.BLEND)
         
         # * create clock to track time
         self.clock = pg.time.Clock()
