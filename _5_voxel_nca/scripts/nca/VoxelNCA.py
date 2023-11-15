@@ -9,7 +9,7 @@ from scripts.nca.VoxelPerception import Perception
 from scripts.nca import VoxelUtil as util
     
 class VoxelNCA(torch.nn.Module):
-    def __init__(self, _name, _log_file, _channels=16, _hidden=128, _device='cuda', _model_type='ANISOTROPIC', _update_rate=0.5):
+    def __init__(self, _name, _log_file=None, _channels=16, _hidden=128, _device='cuda', _model_type='ANISOTROPIC', _update_rate=0.5):
         super().__init__()
         self.device = _device
         self.model_type = _model_type
@@ -20,7 +20,8 @@ class VoxelNCA(torch.nn.Module):
 
         # * determine number of perceived channels
         perception_channels = self.p.perception[self.model_type](self.p, torch.zeros([1, _channels, 8, 8, 8])).shape[1]
-        util.logprint(f'_models/{_name}/{_log_file}', f'nca perception channels: {perception_channels}')
+        if self.log_file != None:
+            util.logprint(f'_models/{_name}/{_log_file}', f'nca perception channels: {perception_channels}')
         
         # * determine hidden channels (equalize the parameter count btwn model types)
         hidden_channels = 8*1024 // (perception_channels+_channels)
@@ -37,8 +38,9 @@ class VoxelNCA(torch.nn.Module):
         
         # * print model parameter count
         param_n = sum(p.numel() for p in self.parameters())
-        util.logprint(f'_models/{_name}/{_log_file}', f'nca parameter count: {param_n}')
-        util.logprint(f'_models/{_name}/{_log_file}', f'nca isotropic type: {self.isotropic_type()}')
+        if self.log_file != None:
+            util.logprint(f'_models/{_name}/{_log_file}', f'nca parameter count: {param_n}')
+            util.logprint(f'_models/{_name}/{_log_file}', f'nca isotropic type: {self.isotropic_type()}')
         
     def isotropic_type(self):
         if self.model_type == Perception.YAW_ISO:

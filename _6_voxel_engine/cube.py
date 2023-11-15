@@ -13,9 +13,23 @@ class Cube:
     def on_init(self):
         self.program['m_proj'].write(self.app.player.m_proj)
         self.program['m_model'].write(glm.mat4())
+        self.texture = None
 
     def update(self):
         self.program['m_view'].write(self.app.player.m_view)
+        
+        if self.app.sim != None:
+            # * setup texture3d
+            if self.texture == None:
+                self.app.sim.run()
+                self.init_texture()
+            
+    def init_texture(self):
+        s = self.app.sim.size
+        self.texture = self.ctx.texture3d([s, s, s], 1)
+        self.texture.swizzle = 'RGBA'
+        #TODO self.texture.write(self.app.sim.get_data())
+        self.texture.use(location=0)
         
     def render(self):
         self.vao.render()
@@ -58,4 +72,7 @@ class Cube:
             frag = file.read()   
          
         program = self.ctx.program(vertex_shader=vert, fragment_shader=frag)
+        for name in program:
+            member = program[name]
+            print(name, type(member), member)
         return program      
