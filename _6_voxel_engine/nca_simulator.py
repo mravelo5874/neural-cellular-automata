@@ -16,10 +16,10 @@ from scripts.nca import VoxelUtil as util
 
 class NCASimulator:
     def __init__(self, _model, _device='cuda'):
+        self.is_loaded = False
         self.is_running = False
         self.is_paused = False
         self.device = _device
-        self.count = 0
         self.mutex = threading.Lock()
         
         # * setup cuda if available
@@ -62,8 +62,10 @@ class NCASimulator:
             self.seed[:1, -1:] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
             self.seed[:1, -2:-1] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
             self.seed[:1, -3:-2] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+            
+        # * set tensor
         self.x = self.seed.detach().clone()
-        print (f'finished loading model...')
+        self.is_loaded = True
         
     def run_thread(self, _delay):
         # * wait 3 seconds to show off seed
@@ -75,8 +77,6 @@ class NCASimulator:
                 if not self.is_paused:
                     self.x = self.model(self.x)
                 self.mutex.release()
-            # print (f'forward {self.count}!')
-            # self.count += 1
                 
     def run(self, _delay=0.5):
         # * can only start running if not running
@@ -98,6 +98,13 @@ class NCASimulator:
         self.is_paused = False
         self.mutex.release()
         self.worker.join()
+        
+    def unload(self):
+        if self.is_loaded and self.is_running:
+            self.is_loaded = False
+            self.stop()
+            return True
+        return False
   
     def toggle_pause(self):
         # * can only pause if running
@@ -108,13 +115,14 @@ class NCASimulator:
 
     def reset(self):
         # * reset to seed
-        self.is_running = False
-        if self.worker:
-            self.worker.join()
-        self.mutex.acquire()
-        self.x = self.seed.detach().clone()
-        self.mutex.release()
-        self.run()
+        if self.is_running:
+            self.is_running = False
+            if self.worker:
+                self.worker.join()
+            self.mutex.acquire()
+            self.x = self.seed.detach().clone()
+            self.mutex.release()
+            self.run()
         
     def get_data(self):
         # * get tensor

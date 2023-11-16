@@ -25,15 +25,17 @@ class Cube:
         self.program['u_view'].write(self.app.player.m_view)
         self.program['u_eye'].write(self.app.player.pos)
         
+        # * update volume if sim exists and is loaded
         if self.app.sim != None:
-            # * setup texture3d
-            if self.texture == None:
-                self.init_texture()
-                self.app.sim.run()
-                
-            # * update volume data
-            data = self.app.sim.get_data()
-            self.texture.write(data)
+            if self.app.sim.is_loaded:            
+                # * setup texture3d
+                if self.texture == None:
+                    self.init_texture()
+                    self.app.sim.run()
+                    
+                # * update volume data
+                data = self.app.sim.get_data()
+                self.texture.write(data)
             
     def init_texture(self):
         s = self.app.sim.size
