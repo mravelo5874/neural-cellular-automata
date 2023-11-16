@@ -40,7 +40,7 @@ class VoxelEngine:
         
         # * get list of models
         self.models = next(os.walk(f'{cwd}/models/'))[1]
-        self.curr_model = 4
+        self.curr_model = 5
         print (f'models: {self.models}')
         
         # * set opengl attributes
@@ -65,15 +65,15 @@ class VoxelEngine:
         self.player = Player(self)
         self.cube = Cube(self)
         
-        # * hide mouse cursor
-        pg.event.set_grab(True)
-        pg.mouse.set_visible(False)
-        
         # * init simulator
         self.sim = None
         def init_sim(_app):
             _app.sim = NCASimulator(_app.models[_app.curr_model])
         threading.Thread(target=init_sim, args=[self]).start()
+        
+        # * hide mouse cursor
+        pg.event.set_grab(True)
+        pg.mouse.set_visible(False)
 
         # * game is running
         self.is_running = True
@@ -131,6 +131,11 @@ class VoxelEngine:
                 if event.key == pg.K_p:
                     if self.sim != None:
                         self.sim.toggle_pause()
+                        
+                # * step forward model (if paused)'
+                if event.key == pg.K_RETURN:
+                    if self.sim != None:
+                        self.sim.step_forward()
                         
                 # * load next model
                 # TODO fix this!

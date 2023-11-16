@@ -51,8 +51,8 @@ checkpoint_model = 'earth_aniso_cp10000'
         
 def main():
     _FIND_ANOMALY_ = False
-    torch.autograd.set_detect_anomaly(_FIND_ANOMALY_)
     if _FIND_ANOMALY_:
+        torch.autograd.set_detect_anomaly(_FIND_ANOMALY_)
         print ('[WARNING] detect anomaly is on. training will be slower than normal.')
     
     
@@ -312,7 +312,7 @@ def main():
                 util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'[{i}/{_EPOCHS_+1}]\t {np.round(iter_per_sec, 3)}it/s\t time: {time}~{est}\t loss: {np.round(avg, 3)}>{np.round(np.min(loss_log), 3)}\t lr: {lr} {step}')
             
             # * save checkpoint
-            if i % _SAVE_RATE_ == 0: # TODO read this -> and i != 0
+            if i % _SAVE_RATE_ == 0 and i != 0:
                 save_model('_checkpoints', model, _NAME_+'_cp'+str(i))
                 
     # * print train time
