@@ -40,7 +40,7 @@ class VoxelEngine:
         
         # * get list of models
         self.models = next(os.walk(f'{cwd}/models/'))[1]
-        self.curr_model = 1
+        self.curr_model = 4
         print (f'models: {self.models}')
         
         # * set opengl attributes

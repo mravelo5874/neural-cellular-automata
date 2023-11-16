@@ -34,7 +34,7 @@ _CHANNELS_ = 16
 _EPOCHS_ = 20_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
-_UPPER_LR_ = 1e-3
+_UPPER_LR_ = 5e-4
 _LOWER_LR_ = 1e-5
 _LR_STEP_ = 2000
 _NUM_DAMG_ = 2
@@ -50,7 +50,11 @@ checkpoint_dir = '_checkpoints/earth_aniso/'
 checkpoint_model = 'earth_aniso_cp10000'
         
 def main():
-    torch.autograd.set_detect_anomaly(True)
+    _FIND_ANOMALY_ = False
+    torch.autograd.set_detect_anomaly(_FIND_ANOMALY_)
+    if _FIND_ANOMALY_:
+        print ('[WARNING] detect anomaly is on. training will be slower than normal.')
+    
     
     # * make directory for model files
     if not os.path.exists(f'_models/{_NAME_}'):
