@@ -17,6 +17,7 @@ from scripts.nca import VoxelUtil as util
 class NCASimulator:
     def __init__(self, _model, _device='cuda'):
         self.is_running = False
+        self.is_paused = False
         self.device = _device
         self.count = 0
         self.mutex = threading.Lock()
@@ -71,33 +72,45 @@ class NCASimulator:
         while self.is_running:
             with torch.no_grad():
                 self.mutex.acquire()
-                self.x = self.model(self.x)
+                if not self.is_paused:
+                    self.x = self.model(self.x)
                 self.mutex.release()
             # print (f'forward {self.count}!')
             # self.count += 1
                 
-    def run(self, _delay=1):
+    def run(self, _delay=0.5):
         # * can only start running if not running
         if self.is_running:
             return
         self.worker = threading.Thread(target=self.run_thread, args=[_delay], daemon=True)
         self.worker.start()
         
+    def step_forward(self):
+        with torch.no_grad():
+            self.mutex.acquire()
+            if self.is_paused:
+                self.x = self.model(self.x)
+            self.mutex.release()
+        
     def stop(self):
         self.is_running = False
+        self.mutex.acquire()
+        self.is_paused = False
+        self.mutex.release()
         self.worker.join()
   
     def toggle_pause(self):
         # * can only pause if running
         if self.is_running:
-            self.stop()
-        else:
-            self.run(_delay=0)
-            
+            self.mutex.acquire()
+            self.is_paused = not self.is_paused
+            self.mutex.release()
+
     def reset(self):
         # * reset to seed
         self.is_running = False
-        self.worker.join()
+        if self.worker:
+            self.worker.join()
         self.mutex.acquire()
         self.x = self.seed.detach().clone()
         self.mutex.release()
