@@ -33,7 +33,7 @@ class VoxelEngine:
         self.MOUSE_SENS = 0.002
         self.CREATIVE_MODE = True
         # * model
-        self.model_name = 'burger_aniso'
+        self.model_name = 'oak_aniso'
         # -------------------------- #
         
         # * set opengl attributes
