@@ -1,13 +1,17 @@
-import moderngl as mgl
-import pygame as pg
+import os
 import sys
 import glm
 import math
 import threading
+import moderngl as mgl
+import pygame as pg
 
 from cube import Cube
 from player import Player
 from nca_simulator import NCASimulator
+
+cwd = os.getcwd().split('\\')[:-1]
+cwd = '/'.join(cwd)
 
 class VoxelEngine:
     def __init__(self, _win_size=(1200, 800)):
@@ -32,9 +36,12 @@ class VoxelEngine:
         self.PLAYER_POS = glm.vec3(-3, 0, 3)
         self.MOUSE_SENS = 0.002
         self.CREATIVE_MODE = True
-        # * model
-        self.model_name = 'oak_aniso'
         # -------------------------- #
+        
+        # * get list of models
+        self.models = next(os.walk(f'{cwd}/models/'))[1]
+        self.curr_model = 1
+        print (f'models: {self.models}')
         
         # * set opengl attributes
         pg.display.gl_set_attribute(pg.GL_CONTEXT_MAJOR_VERSION, 3)
@@ -65,7 +72,7 @@ class VoxelEngine:
         # * init simulator
         self.sim = None
         def init_sim(_app):
-            _app.sim = NCASimulator(_app.model_name)
+            _app.sim = NCASimulator(_app.models[_app.curr_model])
         threading.Thread(target=init_sim, args=[self]).start()
 
         # * game is running
@@ -124,6 +131,20 @@ class VoxelEngine:
                 if event.key == pg.K_p:
                     if self.sim != None:
                         self.sim.toggle_pause()
+                        
+                # * load next model
+                # TODO fix this!
+                # if event.key == pg.K_n:
+                #     if self.sim != None:
+                #         self.curr_model += 1
+                #         if self.curr_model > len(self.models)-1:
+                #             self.curr_model = 0
+                #         self.sim.stop()
+                #         self.cube.destroy()
+                #         self.cube = Cube(self)
+                #         def init_sim(_app):
+                #             _app.sim = NCASimulator(_app.models[_app.curr_model])
+                #         threading.Thread(target=init_sim, args=[self]).start()
             # ---------------------------------- #
                     
                     

@@ -54,6 +54,13 @@ class NCASimulator:
                                     _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
                                     _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
                                     _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(self.device)
+        # * randomize channels
+        if model.isotropic_type() == 1:
+                self.seed[:1, -1:] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+        elif model.isotropic_type() == 3:
+            self.seed[:1, -1:] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+            self.seed[:1, -2:-1] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+            self.seed[:1, -3:-2] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
         self.x = self.seed.detach().clone()
         print (f'finished loading model...')
         
@@ -75,12 +82,15 @@ class NCASimulator:
             return
         self.worker = threading.Thread(target=self.run_thread, args=[_delay], daemon=True)
         self.worker.start()
+        
+    def stop(self):
+        self.is_running = False
+        self.worker.join()
   
     def toggle_pause(self):
         # * can only pause if running
         if self.is_running:
-            self.is_running = False
-            self.worker.join()
+            self.stop()
         else:
             self.run(_delay=0)
             
