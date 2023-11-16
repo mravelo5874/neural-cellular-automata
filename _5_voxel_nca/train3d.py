@@ -14,9 +14,9 @@ from scripts.vox.Vox import Vox
 
 # * target/seed parameters
 _NAME_ = 'earth_yawiso_0'
-_SIZE_ = 4
+_SIZE_ = 24
 _PAD_ = 4
-_SEED_DIST_ = 2
+_SEED_DIST_ = 5
 _SEED_DIC_ = {
     'center': None,
     'plus_x': 'red',
