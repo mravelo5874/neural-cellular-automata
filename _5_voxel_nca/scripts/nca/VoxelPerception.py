@@ -2,7 +2,7 @@ import torch
 import torch.nn.functional as func
 import numpy as np
 import scipy.spatial.transform as sci
-import pytorch3d.transforms as T
+# import pytorch3d.transforms as T
 
 from enum import Enum
 from scripts.nca import VoxelUtil as util
@@ -168,12 +168,13 @@ class VoxelPerception():
         bs, a, sx, sy, sz = axyz.shape
         axyz = torch.permute(axyz, (0, 2, 3, 4, 1))
         axyz = axyz.reshape([sx*sy*sz*bs, a])
-        quat = T.axis_angle_to_quaternion(axyz)
+        #quat = T.axis_angle_to_quaternion(axyz)
         
         # * apply quat rotations
         rxyz = torch.zeros_like(pxyz)
         for t in range(hc):
-            rxyz[t] = T.quaternion_apply(quat, pxyz[t])
+            #rxyz[t] = T.quaternion_apply(quat, pxyz[t])
+            rxyz[t] = pxyz[t]
         rxyz = torch.permute(rxyz, (2, 0, 1))
         rxyz = rxyz.reshape([bs, p3, hc, sx, sy, sz])
 
