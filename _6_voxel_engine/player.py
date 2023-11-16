@@ -2,8 +2,9 @@ import pygame as pg
 from camera import Camera
 
 class Player(Camera):
-    def __init__(self, _app, _yaw=-90, _pitch=0):
+    def __init__(self, _app, _yaw=-45, _pitch=0):
         self.app = _app
+        self.prev_mouse = pg.mouse.get_pos()
         super().__init__(_app, _app.PLAYER_POS, _yaw, _pitch)
         
     def update(self):
@@ -17,7 +18,7 @@ class Player(Camera):
             self.rotate_yaw(mdx * self.app.MOUSE_SENS)
         if mdy:
             self.rotate_pitch(mdy * self.app.MOUSE_SENS)
-        
+
     def keyboard_control(self):
         state = pg.key.get_pressed()
         vel = self.app.PLAYER_SPEED * self.app.delta_time

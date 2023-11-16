@@ -56,5 +56,10 @@ void main() {
         p += ray * dt;
     }
 
+    // set color to white if no voxels hit
+    if (my_color == vec4(0.0, 0.0, 0.0, 0.0)) {
+        my_color = vec4(1.0);
+    }
+
     fragColor = my_color;
 }

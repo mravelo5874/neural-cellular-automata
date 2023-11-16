@@ -14,6 +14,7 @@ class Cube:
     def on_init(self):
         # * set texture3d
         self.texture = None
+        self.blend = False
         self.program['u_volume'] = 0
         # * set uniforms
         self.program['u_proj'].write(self.app.player.m_proj)
@@ -27,9 +28,9 @@ class Cube:
         if self.app.sim != None:
             # * setup texture3d
             if self.texture == None:
-                self.app.sim.run()
                 self.init_texture()
-            
+                self.app.sim.run()
+                
             # * update volume data
             data = self.app.sim.get_data()
             self.texture.write(data)
@@ -90,6 +91,14 @@ class Cube:
         vertex_data = self.get_vertex_data()
         vbo = self.ctx.buffer(vertex_data)
         return vbo
+    
+    def toggle_blend(self):
+        if self.texture != None:
+            self.blend = not self.blend
+            if self.blend:
+                self.texture.filter = mgl.LINEAR, mgl.LINEAR
+            else:
+                self.texture.filter = mgl.NEAREST, mgl.NEAREST
     
     def get_shader_program(self, _name):
         with open(f'shaders/{_name}.vert') as file:

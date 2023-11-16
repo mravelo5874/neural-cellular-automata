@@ -17,7 +17,7 @@ class VoxelEngine:
         # -------- settings -------- #
         # * window
         self.WIN_SIZE = _win_size
-        self.BG_COLOR = (1.0, 1.0, 1.0)
+        self.BG_COLOR = (178/255, 196/255, 209/255)
         # * camera
         self.ASPECT_RATIO = _win_size[0]/_win_size[1]
         self.FOV_DEG = 50
@@ -29,10 +29,11 @@ class VoxelEngine:
         # * player
         self.PLAYER_SPEED = 0.002
         self.PLAYER_ROT_SPEED = 0.005
-        self.PLAYER_POS = glm.vec3(1, 0, 4)
+        self.PLAYER_POS = glm.vec3(-3, 0, 3)
         self.MOUSE_SENS = 0.002
+        self.CREATIVE_MODE = True
         # * model
-        self.model_name = 'earth_aniso'
+        self.model_name = 'burger_aniso'
         # -------------------------- #
         
         # * set opengl attributes
@@ -42,10 +43,6 @@ class VoxelEngine:
         
         # * create opengl context
         pg.display.set_mode(self.WIN_SIZE, flags=pg.OPENGL|pg.DOUBLEBUF)
-        
-        # * hide mouse cursor
-        pg.event.set_grab(True)
-        pg.mouse.set_visible(False)
         
         # * use opengl context
         self.ctx = mgl.create_context()
@@ -60,6 +57,10 @@ class VoxelEngine:
         # * init player and cube
         self.player = Player(self)
         self.cube = Cube(self)
+        
+        # * hide mouse cursor
+        pg.event.set_grab(True)
+        pg.mouse.set_visible(False)
         
         # * init simulator
         self.sim = None
@@ -76,8 +77,11 @@ class VoxelEngine:
         self.time = pg.time.get_ticks() * 0.001
         pg.display.set_caption(f'fps: {self.clock.get_fps() :.0f}')
         
-        # * update player and cube
-        self.player.update()
+        # * update player
+        if self.CREATIVE_MODE:
+            self.player.update()
+            
+        # * update cube
         self.cube.update()
         
     def render(self):
@@ -92,9 +96,47 @@ class VoxelEngine:
         
     def handle_events(self):
         for event in pg.event.get():
-            if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+            # * quit application
+            if event.type == pg.QUIT:
                 self.is_running = False
-                
+            
+            # -------- key press events -------- #
+            if event.type == pg.KEYDOWN:
+            
+                # * exit creative mode if press ESC key
+                if event.key == pg.K_ESCAPE:
+                    if self.CREATIVE_MODE:
+                        self.CREATIVE_MODE = False
+                        # * show mouse cursor
+                        pg.event.set_grab(False)
+                        pg.mouse.set_visible(True)
+                        
+                # * toggle voxel blend
+                if event.key == pg.K_b:
+                    self.cube.toggle_blend()
+                    
+                # * reset model
+                if event.key == pg.K_r:
+                    if self.sim != None:
+                        self.sim.reset()
+                        
+                # * pause/unpause model
+                if event.key == pg.K_p:
+                    if self.sim != None:
+                        self.sim.toggle_pause()
+            # ---------------------------------- #
+                    
+                    
+            # ---------- mouse events ---------- #
+            if pg.mouse.get_pressed(3)[0]:
+                # * enter creative mode if click on screen
+                if not self.CREATIVE_MODE:
+                    self.CREATIVE_MODE = True
+                    # * hide mouse cursor
+                    pg.event.set_grab(True)
+                    pg.mouse.set_visible(False)
+            # ---------------------------------- #
+            
     def run(self):
         while self.is_running:
             self.handle_events()
@@ -105,6 +147,7 @@ class VoxelEngine:
         self.cube.destroy()
         
         # * quit application
+        print ('exiting application...')
         pg.quit()
         sys.exit()
 

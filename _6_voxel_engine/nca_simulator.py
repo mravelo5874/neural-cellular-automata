@@ -1,6 +1,7 @@
 import sys
 import os
 import json
+import time
 import torch
 import threading
 import numpy as np
@@ -32,6 +33,8 @@ class NCASimulator:
         self.load_model(_model)
         
     def load_model(self, _model):
+        print (f'loading model: {_model}')
+        
         # * load in params for seed
         params = {}
         with open(f'{cwd}/models/{_model}/{_model}_params.json', 'r') as openfile:
@@ -46,15 +49,18 @@ class NCASimulator:
         _PAD_ = params['_PAD_']
         _SEED_DIST_ = params['_SEED_DIST_']
         _SEED_DIC_ = params['_SEED_DIC_']
-        self.size = _SIZE_+(2*_PAD_)
+        self.size = _SIZE_+(2*_PAD_)*2
         self.seed = util.custom_seed(_size=self.size, _channels=params['_CHANNELS_'], _dist=_SEED_DIST_, _center=_SEED_DIC_['center'], 
                                     _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
                                     _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
                                     _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(self.device)
         self.x = self.seed.detach().clone()
-        print (f'finished loading model: {_model}')
+        print (f'finished loading model...')
         
-    def run_thread(self):
+    def run_thread(self, _delay):
+        # * wait 3 seconds to show off seed
+        time.sleep(_delay)
+        self.is_running = True
         while self.is_running:
             with torch.no_grad():
                 self.mutex.acquire()
@@ -63,17 +69,29 @@ class NCASimulator:
             # print (f'forward {self.count}!')
             # self.count += 1
                 
-    def run(self):
+    def run(self, _delay=1):
         # * can only start running if not running
         if self.is_running:
             return
-        self.is_running = True
-        threading.Thread(target=self.run_thread, daemon=True).start()
+        self.worker = threading.Thread(target=self.run_thread, args=[_delay], daemon=True)
+        self.worker.start()
   
-    def stop(self):
-        # * can only stop running if running
+    def toggle_pause(self):
+        # * can only pause if running
         if self.is_running:
             self.is_running = False
+            self.worker.join()
+        else:
+            self.run(_delay=0)
+            
+    def reset(self):
+        # * reset to seed
+        self.is_running = False
+        self.worker.join()
+        self.mutex.acquire()
+        self.x = self.seed.detach().clone()
+        self.mutex.release()
+        self.run()
         
     def get_data(self):
         # * get tensor
