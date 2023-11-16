@@ -21,7 +21,7 @@ vec2 intersect_box(vec3 orig, vec3 dir) {
 }
 
 void main() {   
-    vec4 my_color = vec4(0.0, 0.0, 0.0, 0.0);
+    vec4 my_color = vec4(0.0);
 
     // step 1: normalize ray
     vec3 ray = normalize(v_ray);
@@ -43,13 +43,18 @@ void main() {
     // step 4: march ray through volume and sample
     vec3 p = v_eye + t_hit.x * ray;
     for (float t = t_hit.x; t < t_hit.y; t += dt) {
-        // sample volume
+        // step 5: sample volume
         vec3 pos = (p/2.0)+0.5;
         vec4 rgba = texture(u_volume, pos);
 
+        // Step 6: Accumulate the color and opacity using 
+		//  the front-to-back compositing equation
+        rgba.a *= 0.2;
         if (rgba.a > 0.1) {
-            my_color += rgba;
+            my_color.rgb += (1.0 - my_color.a) * rgba.a * rgba.rgb;
+            my_color.a += (1.0 - my_color.a) * rgba.a;
         }
+        
         if (my_color.a >= 0.95) {
             break;
         }
