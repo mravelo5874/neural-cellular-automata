@@ -6,12 +6,13 @@ class Cube:
     def __init__(self, _app):
         self.app = _app
         self.ctx = _app.ctx
+        self.setup_cube()
+        
+    def setup_cube(self):
+        # * setup cube 
         self.vbo = self.get_vbo()
         self.program = self.get_shader_program('cube')
         self.vao = self.get_vao()
-        self.on_init()
-        
-    def on_init(self):
         # * set texture3d
         self.texture = None
         self.blend = False
@@ -82,6 +83,7 @@ class Cube:
                     (3, 7, 4), (3, 2, 7),
                     (0, 6, 1), (0, 5, 6)]
         vertex_data = self.get_data(vertices, indicies)
+        # print (f'vertex data: {vertex_data}')
         return vertex_data
     
     @staticmethod
@@ -109,7 +111,4 @@ class Cube:
             frag = file.read()
          
         program = self.ctx.program(vertex_shader=vert, fragment_shader=frag)
-        # for name in program:
-        #     member = program[name]
-        #     print(name, type(member), member)
         return program

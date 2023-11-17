@@ -19,6 +19,7 @@ class NCASimulator:
         self.is_loaded = False
         self.is_running = False
         self.is_paused = False
+        self.started = False
         self.device = _device
         self.mutex = threading.Lock()
         
@@ -64,7 +65,9 @@ class NCASimulator:
             self.seed[:1, -3:-2] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
             
         # * set tensor
+        self.mutex.acquire()
         self.x = self.seed.detach().clone()
+        self.mutex.release()
         self.is_loaded = True
         
     def run_thread(self, _delay):
@@ -76,6 +79,7 @@ class NCASimulator:
                 self.mutex.acquire()
                 if not self.is_paused:
                     self.x = self.model(self.x)
+                    self.started = True
                 self.mutex.release()
                 
     def run(self, _delay=0.5):
@@ -91,15 +95,30 @@ class NCASimulator:
             if self.is_paused:
                 self.x = self.model(self.x)
             self.mutex.release()
-        
+            
+    def rot_seed(self, _axis='z'):
+        # can only rotate seed if not started
+        if not self.started:
+            if _axis == 'x':
+                self.seed = torch.rot90(self.seed, 1, (2, 3))
+            elif _axis == 'y':
+                self.seed = torch.rot90(self.seed, 1, (2, 4))
+            elif _axis == 'z':
+                self.seed = torch.rot90(self.seed, 1, (3, 4))
+            self.mutex.acquire()
+            self.x = self.seed.detach().clone()
+            self.mutex.release()
+     
     def stop(self):
         self.is_running = False
         self.mutex.acquire()
         self.is_paused = False
+        self.started = False
         self.mutex.release()
         self.worker.join()
         
     def unload(self):
+        # * can only unload if loaded and running
         if self.is_loaded and self.is_running:
             self.is_loaded = False
             self.stop()
@@ -114,12 +133,13 @@ class NCASimulator:
             self.mutex.release()
 
     def reset(self):
-        # * reset to seed
+        # * can only reset if running
         if self.is_running:
             self.is_running = False
             if self.worker:
                 self.worker.join()
             self.mutex.acquire()
+            self.started = False
             self.x = self.seed.detach().clone()
             self.mutex.release()
             self.run()

@@ -8,6 +8,8 @@ import pygame as pg
 import pygame_gui as gui
 
 from cube import Cube
+from wireframe import WireFrame
+from axis import Axis
 from player import Player
 from nca_simulator import NCASimulator
 
@@ -22,7 +24,7 @@ class VoxelEngine:
         # -------- settings -------- #
         # * window
         self.WIN_SIZE = _win_size
-        self.BG_COLOR = (178/255, 196/255, 209/255)
+        self.BG_COLOR = (25/255, 25/255, 28/255)
         # * camera
         self.ASPECT_RATIO = _win_size[0]/_win_size[1]
         self.FOV_DEG = 50
@@ -32,12 +34,14 @@ class VoxelEngine:
         self.FAR = 2000
         self.MAX_PITCH = glm.radians(89)
         # * player
-        self.PLAYER_SPEED = 0.002
-        self.PLAYER_ROT_SPEED = 0.005
-        self.PLAYER_POS = glm.vec3(-3, 0, 3)
+        self.PLAYER_SPEED = 0.0015
+        self.PLAYER_ROT_SPEED = 0.004
+        self.PLAYER_POS = glm.vec3(-2, 0, 2)
         self.MOUSE_SENS = 0.002
         self.CREATIVE_MODE = True
-        # * gui
+        self.SHOW_WIRE = True
+        self.SHOW_AXIS = True
+        # * TODO gui
         self.GUI = gui.UIManager(_win_size)
         self.SURF = pg.Surface(_win_size)
         hello_button = gui.elements.UIButton(relative_rect=pg.Rect((350, 275), (100, 50)),
@@ -47,7 +51,7 @@ class VoxelEngine:
         
         # * get list of models
         self.models = next(os.walk(f'{cwd}/models/'))[1]
-        self.curr_model = 5
+        self.curr_model = 0
         print (f'models: {self.models}')
         
         # * set opengl attributes
@@ -71,6 +75,8 @@ class VoxelEngine:
         # * init player and cube
         self.player = Player(self)
         self.cube = Cube(self)
+        self.axis = Axis(self)
+        self.wireframe = WireFrame(self)
         
         # * init simulator
         self.sim = None
@@ -98,15 +104,25 @@ class VoxelEngine:
         if self.CREATIVE_MODE:
             self.player.update()
             
-        # * update cube
+        # * update objects
+        if self.SHOW_WIRE:
+            self.wireframe.update()
+        if self.SHOW_AXIS:
+            self.axis.update()
+        
         self.cube.update()
         
     def render(self):
         # * clear framebuffer
         self.ctx.clear(color=self.BG_COLOR)
         
-        # * render cube
+        # * objects
         self.cube.render()
+        if self.SHOW_WIRE:
+            self.wireframe.render()
+        if self.SHOW_AXIS:
+            self.axis.render()
+        
         
         # * TODO render gui using mgl
         # * links: https://stackoverflow.com/questions/76697818/gui-with-pygame-and-moderngl
@@ -146,6 +162,21 @@ class VoxelEngine:
                     if self.sim != None:
                         self.sim.reset()
                         
+                # * rotate seed xy
+                if event.key == pg.K_UP:
+                    if self.sim != None:
+                        self.sim.rot_seed('x')
+                        
+                # * rotate seed xz
+                if event.key == pg.K_LEFT:
+                    if self.sim != None:
+                        self.sim.rot_seed('y')
+                        
+                # * rotate seed xz
+                if event.key == pg.K_RIGHT:
+                    if self.sim != None:
+                        self.sim.rot_seed('z')
+                        
                 # * pause/unpause model
                 if event.key == pg.K_p:
                     if self.sim != None:
@@ -155,6 +186,14 @@ class VoxelEngine:
                 if event.key == pg.K_RETURN:
                     if self.sim != None:
                         self.sim.step_forward()
+                        
+                # * toggle axis
+                if event.key == pg.K_1:
+                    self.SHOW_AXIS = not self.SHOW_AXIS
+                    
+                # * toggle wireframe
+                if event.key == pg.K_2:
+                    self.SHOW_WIRE = not self.SHOW_WIRE
                         
                 # * load next model
                 if event.key == pg.K_n:
@@ -189,6 +228,7 @@ class VoxelEngine:
             
         # * destroy scene
         self.cube.destroy()
+        self.wireframe.destroy()
         
         # * quit application
         print ('exiting application...')
