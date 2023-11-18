@@ -1,4 +1,20 @@
 ****************
+timestamp: 2023-11-18 00:07:45.278296
+initializing training...
+device: cuda
+nca perception channels: 68
+nca parameter count: 10880
+nca isotropic type: 3
+training new model from scratch...
+model: earth_quat_0
+type: 2
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 32, 32, 32]
+target.shape: [4, 4, 32, 32, 32]
+starting training w/ 25001 epochs...
+****************
 timestamp: 2023-11-18 00:11:17.940175
 initializing training...
 device: cuda

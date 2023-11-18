@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "train3d.py", line 351, in <module>
+    main()
+  File "train3d.py", line 258, in main
+    x = model(x)
+  File "/u/marco/github/neural-cellular-automata/venv/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/u/marco/github/neural-cellular-automata/venv/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/u/marco/github/neural-cellular-automata/_5_voxel_nca/scripts/nca/VoxelNCA.py", line 202, in forward
+    p = self.conv2(torch.relu(self.conv1(p)))
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 64.00 MiB. GPU 0 has a total capacty of 22.16 GiB of which 19.88 MiB is free. Including non-PyTorch memory, this process has 22.14 GiB memory in use. Of the allocated memory 20.97 GiB is allocated by PyTorch, and 119.56 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
