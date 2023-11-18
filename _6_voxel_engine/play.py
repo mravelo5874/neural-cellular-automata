@@ -17,7 +17,7 @@ cwd = os.getcwd().split('\\')[:-1]
 cwd = '/'.join(cwd)
 
 class VoxelEngine:
-    def __init__(self, _win_size=(1200, 800)):
+    def __init__(self, _win_size=(1800, 1000)):
         # * init pygame modules
         pg.init()
         

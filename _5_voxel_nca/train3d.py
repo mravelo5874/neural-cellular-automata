@@ -13,7 +13,7 @@ from scripts.nca import VoxelUtil as util
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'earth_yawiso_0'
+_NAME_ = 'earth_quat_0'
 _SIZE_ = 24
 _PAD_ = 4
 _SEED_DIST_ = 5
@@ -28,10 +28,10 @@ _SEED_DIC_ = {
 }
 _TARGET_VOX_ = '../vox/earth.vox'
 # * model parameters
-_MODEL_TYPE_ = Perception.YAW_ISO
+_MODEL_TYPE_ = Perception.QUATERNION
 _CHANNELS_ = 16
 # * training parameters
-_EPOCHS_ = 20_000
+_EPOCHS_ = 25_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
