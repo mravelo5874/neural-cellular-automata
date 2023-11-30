@@ -12,6 +12,7 @@ from wireframe import WireFrame
 from axis import Axis
 from player import Player
 from nca_simulator import NCASimulator
+from utils import Utils as utils
 
 cwd = os.getcwd().split('\\')[:-1]
 cwd = '/'.join(cwd)
@@ -90,6 +91,27 @@ class VoxelEngine:
 
         # * game is running
         self.is_running = True
+        
+    def fire_raycast(self):
+        if self.sim != None:
+            # * get ray and cubes from simulation
+            pos = self.player.pos
+            vec = self.player.forward
+            cubes, size = self.sim.get_cubes()
+            
+            # * attempt to intersect each cube and find the nearest one
+            min_t = float("inf")
+            hit_idx = -1
+            for i, cube in enumerate(cubes):
+                t = utils.ray_cube_intersection(pos, vec, size, cube)
+                if t > -1 and t < min_t:
+                    min_t = t
+                    hit_idx = i
+
+            if hit_idx > -1:
+                print (f'min_t: {min_t}')
+                print (f'hit_idx: {hit_idx}')
+                    
         
     def update(self):
         # * calculate fps
@@ -222,6 +244,7 @@ class VoxelEngine:
             
     def run(self):
         while self.is_running:
+            self.fire_raycast()
             self.handle_events()
             self.update()
             self.render()

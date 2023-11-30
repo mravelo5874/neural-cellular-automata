@@ -35,8 +35,6 @@ class NCASimulator:
         self.load_model(_model)
         
     def load_model(self, _model):
-        print (f'loading model: {_model}')
-        
         # * load in params for seed
         params = {}
         with open(f'{cwd}/models/{_model}/{_model}_params.json', 'r') as openfile:
@@ -158,3 +156,14 @@ class NCASimulator:
         data = data.reshape((x*y*z, rgba))*255
         data = data.astype(np.uint8)
         return data.tobytes()
+    
+    def get_cubes(self):
+        # * copy x as numpy array
+        self.mutex.acquire()
+        vol = np.array(self.x.cpu())
+        self.mutex.release()
+        
+        # * get voxels that are alive
+        vol = vol.squeeze(0)[3, ...]
+        cubes = np.argwhere(vol > 0.1)
+        return cubes, vol.shape[0]
