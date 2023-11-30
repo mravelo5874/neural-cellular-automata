@@ -48,6 +48,8 @@ class VoxelEngine:
         hello_button = gui.elements.UIButton(relative_rect=pg.Rect((350, 275), (100, 50)),
                                              text='Say Hello',
                                              manager=self.GUI)
+        # * interaction
+        self.my_voxel = None
         # -------------------------- #
         
         # * get list of models
@@ -67,6 +69,7 @@ class VoxelEngine:
         self.ctx = mgl.create_context()
         self.ctx.front_face = 'cw'
         self.ctx.enable(flags=mgl.DEPTH_TEST|mgl.CULL_FACE)
+        self.ctx.line_width = 4
         
         # * create clock to track time
         self.clock = pg.time.Clock()
@@ -109,8 +112,7 @@ class VoxelEngine:
                     hit_idx = i
 
             if hit_idx > -1:
-                print (f'min_t: {min_t}')
-                print (f'hit_idx: {hit_idx}')
+                self.my_voxel = tuple(cubes[hit_idx])
                     
         
     def update(self):
@@ -240,6 +242,10 @@ class VoxelEngine:
                     # * hide mouse cursor
                     pg.event.set_grab(True)
                     pg.mouse.set_visible(False)
+                else:
+                    if self.my_voxel != None:
+                        if self.sim != None:
+                            self.sim.erase_sphere(self.my_voxel, 4)
             # ---------------------------------- #
             
     def run(self):

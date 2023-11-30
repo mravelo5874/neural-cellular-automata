@@ -166,4 +166,13 @@ class NCASimulator:
         # * get voxels that are alive
         vol = vol.squeeze(0)[3, ...]
         cubes = np.argwhere(vol > 0.1)
-        return cubes, vol.shape[0]
+        return cubes, self.size
+    
+    def erase_sphere(self, _pos, _radius):
+        X, Y, Z = np.ogrid[:self.size, :self.size, :self.size]
+        dist_from_center = np.sqrt((X-_pos[0])**2 + (Y-_pos[1])**2 + (Z-_pos[2])**2)
+        mask = torch.tensor(dist_from_center >= _radius)
+        
+        self.mutex.acquire()
+        self.x = self.x*mask
+        self.mutex.release()
