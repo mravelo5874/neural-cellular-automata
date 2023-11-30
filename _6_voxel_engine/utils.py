@@ -8,7 +8,7 @@ class Utils:
         inv = 1/vec
         
         # * get correct cube pos
-        cube = (_cube/32*2)-1
+        cube = (_cube/_size*2)-1
         unit = 2/_size
 
         min_bb = glm.vec3(cube-unit)

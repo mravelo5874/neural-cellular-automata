@@ -10,6 +10,7 @@ import pygame_gui as gui
 from cube import Cube
 from wireframe import WireFrame
 from axis import Axis
+from voxel import Voxel
 from player import Player
 from nca_simulator import NCASimulator
 from utils import Utils as utils
@@ -80,6 +81,7 @@ class VoxelEngine:
         self.player = Player(self)
         self.cube = Cube(self)
         self.axis = Axis(self)
+        self.voxel = Voxel(self)
         self.wireframe = WireFrame(self)
         
         # * init simulator
@@ -133,6 +135,10 @@ class VoxelEngine:
             self.wireframe.update()
         if self.SHOW_AXIS:
             self.axis.update()
+            
+        # * update voxel
+        if self.my_voxel != None and self.sim != None:
+            self.voxel.update()
         
         self.cube.update()
         
@@ -146,7 +152,7 @@ class VoxelEngine:
             self.wireframe.render()
         if self.SHOW_AXIS:
             self.axis.render()
-        
+        self.voxel.render()
         
         # * TODO render gui using mgl
         # * links: https://stackoverflow.com/questions/76697818/gui-with-pygame-and-moderngl
@@ -258,6 +264,8 @@ class VoxelEngine:
         # * destroy scene
         self.cube.destroy()
         self.wireframe.destroy()
+        self.axis.destroy()
+        self.voxel.destroy()
         
         # * quit application
         print ('exiting application...')
