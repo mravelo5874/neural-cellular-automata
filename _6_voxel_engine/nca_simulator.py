@@ -1,5 +1,6 @@
 import sys
 import os
+import glm
 import json
 import time
 import torch
@@ -12,7 +13,8 @@ cwd = '/'.join(cwd)
 sys.path.insert(1, cwd+'/_5_voxel_nca')
 
 from scripts.nca.VoxelNCA import VoxelNCA as NCA
-from scripts.nca import VoxelUtil as util
+from scripts.nca import VoxelUtil as voxutil
+from utils import Utils as utils
 
 class NCASimulator:
     def __init__(self, _model, _device='cuda'):
@@ -50,7 +52,7 @@ class NCASimulator:
         _SEED_DIST_ = params['_SEED_DIST_']
         _SEED_DIC_ = params['_SEED_DIC_']
         self.size = _SIZE_+(2*_PAD_)*2
-        self.seed = util.custom_seed(_size=self.size, _channels=params['_CHANNELS_'], _dist=_SEED_DIST_, _center=_SEED_DIC_['center'], 
+        self.seed = voxutil.custom_seed(_size=self.size, _channels=params['_CHANNELS_'], _dist=_SEED_DIST_, _center=_SEED_DIC_['center'], 
                                     _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
                                     _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
                                     _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(self.device)
@@ -151,27 +153,128 @@ class NCASimulator:
         # convert numbers to -> np.uint8 values between 0-255
         data = data[:, :4, ...]
         data = np.clip(data, 0.0, 1.0)
-        data = np.transpose(data, (0, 2, 4, 3, 1))
+        data = np.transpose(data, (0, 4, 3, 2, 1))
         _, x, y, z, rgba = data.shape
         data = data.reshape((x*y*z, rgba))*255
         data = data.astype(np.uint8)
         return data.tobytes()
     
-    def get_cubes(self):
+    def raycast_volume(self, _pos, _vec):
+        pos = glm.vec3(_pos[0], _pos[1], _pos[2])
+        vec = glm.normalize(_vec)
+        
+        # * find the init voxel
+        # * determine if ray starts in volume or outside volume
+        
+        # * find where ray intersects volume on the surface
+        t_min, t_max = utils.ray_box_intersection(pos, vec, glm.vec3(-1), glm.vec3(0.999))
+        # * exit if no intersection found
+        if t_min == None or t_max == None:
+            return None
+        
+        # * inside volume
+        if utils.is_point_in_box(pos, glm.vec3(-1), glm.vec3(0.999)):
+            # * normalize point to be within 0, 1
+            norm_pos = (pos+1)/2
+            # * multiply by size to get approximate voxel
+            vox = glm.floor(norm_pos*self.size)
+        # * outside volume
+        else:
+            # * normalize point to be within 0, 1
+            int_pos = pos+(vec*t_min)
+            norm_pos = (int_pos+1)/2
+            # * multiply by size to get approximate voxel
+            vox = glm.floor(norm_pos*self.size)
+
+        # * run fast voxel traversal algorithm
+        # * ref: https://github.com/cgyurgyik/fast-voxel-traversal-algorithm/blob/master/overview/FastVoxelTraversalOverview.md
+        
         # * copy x as numpy array
         self.mutex.acquire()
         vol = np.array(self.x.cpu())
         self.mutex.release()
         
-        # * get voxels that are alive
+        # * get voxel alpha value only
         vol = vol.squeeze(0)[3, ...]
-        cubes = np.argwhere(vol > 0.1)
-        return cubes, self.size
+             
+        # * init step values
+        # * init t-max values
+        # * init delta values
+        vox_size = 2/self.size
+        step_x, step_y, step_z = 0, 0, 0
+        if vec.x > 0:
+            step_x = 1
+            t_delta_x = vox_size/_vec.x
+            t_max_x = t_min + (-1 + vox.x * vox_size - _pos.x) / _vec.x
+        elif vec.x < 0:
+            step_x = -1
+            t_delta_x = -vox_size/_vec.x
+            t_max_x = t_min + (-1 + (vox.x-1) * vox_size - _pos.x) / _vec.x
+        else:
+            step_x = 0
+            t_delta_x = t_max
+            t_max_x = t_max
+            
+        if vec.y > 0:
+            step_y = 1
+            t_delta_y = vox_size/_vec.y
+            t_max_y = t_min + (-1 + vox.y * vox_size - _pos.y) / _vec.y
+        elif vec.y < 0:
+            step_y = -1
+            t_delta_y = -vox_size/_vec.y
+            t_max_y = t_min + (-1 + (vox.y-1) * vox_size - _pos.y) / _vec.y
+        else:
+            step_y = 0
+            t_delta_y = t_max
+            t_max_y = t_max
+            
+        if vec.z > 0:
+            step_z = 1
+            t_delta_z = vox_size/_vec.z
+            t_max_z = t_min + (-1 + vox.z * vox_size - _pos.z) / _vec.z
+        elif vec.z < 0:
+            step_z = -1
+            t_delta_z = -vox_size/_vec.z
+            t_max_z = t_min + (-1 + (vox.z-1) * vox_size - _pos.z) / _vec.z
+        else:
+            step_z = 0
+            t_delta_z = t_max
+            t_max_z = t_max
+
+        # * run algorithm main loop
+        while True:
+            if t_max_x < t_max_y:
+                if t_max_x < t_max_z:
+                    vox.x += step_x
+                    if vox.x < 0 or vox.x >= self.size:
+                        return None
+                    t_max_x += t_delta_x
+                else:
+                    vox.z += step_z
+                    if vox.z < 0 or vox.z >= self.size:
+                        return None
+                    t_max_z += t_delta_z
+            else:
+                if t_max_y < t_max_z:
+                    vox.y += step_y
+                    if vox.y < 0 or vox.y >= self.size:
+                        return None
+                    t_max_y += t_delta_y
+                else:
+                    vox.z += step_z
+                    if vox.z < 0 or vox.z >= self.size:
+                        return None
+                    t_max_z += t_delta_z
+            # * check if voxel is "alive"
+            if vol[int(vox.x), int(vox.y), int(vox.z)] > 0.1:
+                break
+        return vox
     
     def erase_sphere(self, _pos, _radius):
         X, Y, Z = np.ogrid[:self.size, :self.size, :self.size]
         dist_from_center = np.sqrt((X-_pos[0])**2 + (Y-_pos[1])**2 + (Z-_pos[2])**2)
         mask = torch.tensor(dist_from_center >= _radius)
+        mask = mask[None, None, ...]
         
         self.mutex.acquire()
         self.x = self.x*mask

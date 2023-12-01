@@ -18,11 +18,11 @@ class Voxel:
         
     def update(self):
         self.program['u_view'].write(self.app.player.m_view)
-        o = np.array(self.app.my_voxel) / float(self.app.sim.size)
-        offset = glm.vec3(o[0], o[1], o[2])
+        v = np.array(self.app.my_voxel)/self.app.sim.size
+        offset = glm.vec3(v[0], v[1], v[2])
         self.program['u_offset'].write(offset)
-        scale = glm.float32(1/self.app.sim.size)
-        self.program['u_scale'].write(scale)
+        unit = glm.float32(1/self.app.sim.size)
+        self.program['u_unit'].write(unit)
         
     def render(self):
         self.vao.render(mgl.LINES)
@@ -35,8 +35,8 @@ class Voxel:
         
     def get_vertex_data(self):
         v = 1
-        vertices = [(-v, -v, v), (v, -v, v), (v, v, v), (-v, v, v),
-                    (-v, v, -v), (-v, -v, -v), (v, -v, -v), (v, v, -v)]
+        vertices = [(0, 0, v), (v, 0, v), (v, v, v), (0, v, v),
+                    (0, v, 0), (0, 0, 0), (v, 0, 0), (v, v, 0)]
         lines = [(0, 1), (1, 2), (2, 3), (3, 0),
                  (4, 5), (5, 6), (6, 7), (7, 4),
                  (0, 5), (1, 6), (2, 7), (3, 4)]

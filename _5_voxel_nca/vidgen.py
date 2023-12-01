@@ -5,7 +5,7 @@ import datetime
 from numpy import pi
 
 from scripts.nca.VoxelNCA import VoxelNCA as NCA
-from scripts.nca import VoxelUtil as util
+from scripts.nca import VoxelUtil as voxutil
 
 # * vidgen params
 _NAME_ = 'cowboy16_quat_2'
@@ -19,13 +19,13 @@ def main():
         os.mkdir(f'_models/{_NAME_}')
     
     # * begin logging and start program timer
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '****************')
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'timestamp: {datetime.datetime.now()}')
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'initializing video generation...')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '****************')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'timestamp: {datetime.datetime.now()}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'initializing video generation...')
     start = datetime.datetime.now()
     
     # * set cuda as device
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'device: {_DEVICE_}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'device: {_DEVICE_}')
     torch.backends.cudnn.benchmark = True
     torch.cuda.empty_cache()
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
@@ -44,20 +44,20 @@ def main():
     model = NCA(_name=_NAME_, _log_file=_LOG_FILE_, _channels=params['_CHANNELS_'], _model_type=params['_MODEL_TYPE_'])
     model.load_state_dict(torch.load(path, map_location=_DEVICE_))   
     model.eval()
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'loaded model from: {path}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'loaded model from: {path}')
         
     # * create seed
     PAD_SIZE = _SIZE_+(2*_PAD_)
-    seed_ten = util.custom_seed(_size=PAD_SIZE, _channels=params['_CHANNELS_'], _dist=_SEED_DIST_, _center=_SEED_DIC_['center'], 
+    seed_ten = voxutil.custom_seed(_size=PAD_SIZE, _channels=params['_CHANNELS_'], _dist=_SEED_DIST_, _center=_SEED_DIC_['center'], 
                                 _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
                                 _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
                                 _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(_DEVICE_)
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'seed.shape: {seed_ten.shape}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'seed.shape: {seed_ten.shape}')
 
     # * generate video
     curr = datetime.datetime.now().strftime("%H:%M:%S")
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting time: {curr}')
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'generating videos...')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting time: {curr}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'generating videos...')
     with torch.no_grad():
         # model.generate_video(f'_models/{_NAME_}/vidgen_grow.mp4', seed_ten, _size=s)
         # model.regen_video(f'_models/{_NAME_}/vidgen_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
@@ -66,8 +66,8 @@ def main():
      # * calculate elapsed time
     secs = (datetime.datetime.now()-start).seconds
     elapsed_time = str(datetime.timedelta(seconds=secs))
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'elapsed time: {elapsed_time}')
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '****************')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'elapsed time: {elapsed_time}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '****************')
 
 if __name__ == '__main__':
     main()

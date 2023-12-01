@@ -11,9 +11,9 @@ from cube import Cube
 from wireframe import WireFrame
 from axis import Axis
 from voxel import Voxel
+from crosshair import Crosshair
 from player import Player
 from nca_simulator import NCASimulator
-from utils import Utils as utils
 
 cwd = os.getcwd().split('\\')[:-1]
 cwd = '/'.join(cwd)
@@ -41,8 +41,8 @@ class VoxelEngine:
         self.PLAYER_POS = glm.vec3(-2, 0, 2)
         self.MOUSE_SENS = 0.002
         self.CREATIVE_MODE = True
-        self.SHOW_WIRE = True
-        self.SHOW_AXIS = True
+        self.SHOW_WIRE = False
+        self.SHOW_AXIS = False
         # * TODO gui
         self.GUI = gui.UIManager(_win_size)
         self.SURF = pg.Surface(_win_size)
@@ -82,6 +82,7 @@ class VoxelEngine:
         self.cube = Cube(self)
         self.axis = Axis(self)
         self.voxel = Voxel(self)
+        self.crosshair = Crosshair(self)
         self.wireframe = WireFrame(self)
         
         # * init simulator
@@ -96,26 +97,17 @@ class VoxelEngine:
 
         # * game is running
         self.is_running = True
-        
+    
     def fire_raycast(self):
         if self.sim != None:
-            # * get ray and cubes from simulation
+            # * fire raycast from mouse pos through volume
             pos = self.player.pos
             vec = self.player.forward
-            cubes, size = self.sim.get_cubes()
-            
-            # * attempt to intersect each cube and find the nearest one
-            min_t = float("inf")
-            hit_idx = -1
-            for i, cube in enumerate(cubes):
-                t = utils.ray_cube_intersection(pos, vec, size, cube)
-                if t > -1 and t < min_t:
-                    min_t = t
-                    hit_idx = i
-
-            if hit_idx > -1:
-                self.my_voxel = tuple(cubes[hit_idx])
-                    
+            voxel = self.sim.raycast_volume(pos, vec)
+            if voxel != None:
+                self.my_voxel = voxel
+            else:
+                self.my_voxel = [1e12, 1e12, 1e12]
         
     def update(self):
         # * calculate fps
@@ -152,7 +144,9 @@ class VoxelEngine:
             self.wireframe.render()
         if self.SHOW_AXIS:
             self.axis.render()
+            
         self.voxel.render()
+        self.crosshair.render()
         
         # * TODO render gui using mgl
         # * links: https://stackoverflow.com/questions/76697818/gui-with-pygame-and-moderngl
@@ -251,7 +245,7 @@ class VoxelEngine:
                 else:
                     if self.my_voxel != None:
                         if self.sim != None:
-                            self.sim.erase_sphere(self.my_voxel, 4)
+                            self.sim.erase_sphere(self.my_voxel, 6)
             # ---------------------------------- #
             
     def run(self):

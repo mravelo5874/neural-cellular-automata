@@ -5,7 +5,7 @@ import scipy.spatial.transform as sci
 # import pytorch3d.transforms as T
 
 from enum import Enum
-from scripts.nca import VoxelUtil as util
+from scripts.nca import VoxelUtil as voxutil
 
 class Perception(int, Enum):
     ANISOTROPIC: int = 0                                      
@@ -126,7 +126,7 @@ class VoxelPerception():
         ax = ax.reshape([bs, a, sx*sy*sz])
         ay = ay.reshape([bs, a, sx*sy*sz])
         az = az.reshape([bs, a, sx*sy*sz])
-        quats = util.euler_to_quaternion(ax, ay, az)
+        quats = voxutil.euler_to_quaternion(ax, ay, az)
         
         # * rotate perception tensors
         pxyz = torch.cat([p0, px, py, pz], 1)

@@ -9,7 +9,7 @@ import matplotlib.pylab as pl
 
 from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca.VoxelPerception import Perception
-from scripts.nca import VoxelUtil as util
+from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
@@ -61,9 +61,9 @@ def main():
         os.mkdir(f'_models/{_NAME_}')
 
     # * begin logging and start program timer
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '****************')
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'timestamp: {datetime.datetime.now()}')
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'initializing training...')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '****************')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'timestamp: {datetime.datetime.now()}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'initializing training...')
     start = datetime.datetime.now()
     
     # * save model method
@@ -101,7 +101,7 @@ def main():
         json_object = json.dumps(dict, indent=4)
         with open(f'{model_path.absolute()}/{_name}_params.json', 'w') as outfile:
             outfile.write(json_object)
-        util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'model [{_name}] saved to {_dir}...')
+        voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'model [{_name}] saved to {_dir}...')
     
     # * load model method
     def load_model(_dir, _name):
@@ -151,7 +151,7 @@ def main():
     
     # * sets the device  
     _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'device: {_DEVICE_}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'device: {_DEVICE_}')
     torch.backends.cudnn.benchmark = True
     torch.cuda.empty_cache()
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
@@ -159,39 +159,39 @@ def main():
     # * create / load model
     if not load_checkpoint:
         model = NCA(_name=_NAME_, _log_file=_LOG_FILE_, _channels=_CHANNELS_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
-        util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'training new model from scratch...')
+        voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'training new model from scratch...')
     else:
         load_model(checkpoint_dir, checkpoint_model)
         model = NCA(_name=_NAME_, _log_file=_LOG_FILE_, _channels=_CHANNELS_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
         model.load_state_dict(torch.load(checkpoint_dir+'/'+checkpoint_model+'.pt', map_location=_DEVICE_))
         model.train()
-        util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'loading checkpoint: {checkpoint_dir}/{checkpoint_model}...')
+        voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'loading checkpoint: {checkpoint_dir}/{checkpoint_model}...')
     
     # * create optimizer and learning-rate scheduler
     opt = torch.optim.Adam(model.parameters(), _UPPER_LR_)
     lr_sched = torch.optim.lr_scheduler.CyclicLR(opt, _LOWER_LR_, _UPPER_LR_, step_size_up=_LR_STEP_, mode='triangular2', cycle_momentum=False)
         
     # * print out parameters
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'model: {_NAME_}')
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'type: {_MODEL_TYPE_}')
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'batch-size: {_BATCH_SIZE_}')
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool-size: {_POOL_SIZE_}')
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'lr: {_UPPER_LR_}>{_LOWER_LR_} w/ {_LR_STEP_} step')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'model: {_NAME_}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'type: {_MODEL_TYPE_}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'batch-size: {_BATCH_SIZE_}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool-size: {_POOL_SIZE_}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'lr: {_UPPER_LR_}>{_LOWER_LR_} w/ {_LR_STEP_} step')
 
     # * create seed
     PAD_SIZE = _SIZE_+(2*_PAD_)
-    seed_ten = util.custom_seed(_size=PAD_SIZE, _channels=_CHANNELS_, _dist=_SEED_DIST_, _center=_SEED_DIC_['center'], 
+    seed_ten = voxutil.custom_seed(_size=PAD_SIZE, _channels=_CHANNELS_, _dist=_SEED_DIST_, _center=_SEED_DIC_['center'], 
                                 _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
                                 _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
                                 _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(_DEVICE_)
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'seed.shape: {list(seed_ten.shape)}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'seed.shape: {list(seed_ten.shape)}')
     
     # * load target vox
     target = Vox().load_from_file(_TARGET_VOX_)
     target_ten = target.tensor()
     target_ten = func.pad(target_ten, (_PAD_, _PAD_, _PAD_, _PAD_, _PAD_, _PAD_), 'constant')
     target_ten = target_ten.clone().repeat(_BATCH_SIZE_, 1, 1, 1, 1).to(_DEVICE_)
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'target.shape: {list(target_ten.shape)}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'target.shape: {list(target_ten.shape)}')
     
     # * create pool
     with torch.no_grad():
@@ -207,7 +207,7 @@ def main():
                 pool[j, -3:-2] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
     
     # * model training
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting training w/ {_EPOCHS_+1} epochs...')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting training w/ {_EPOCHS_+1} epochs...')
     train_start = datetime.datetime.now()
     loss_log = []
     prev_lr = -np.inf
@@ -218,7 +218,7 @@ def main():
             x = pool[batch_idxs]
             
             # * re-order batch based on loss
-            loss_ranks = torch.argsort(util.voxel_wise_loss_function(x, target_ten, _dims=[-1, -2, -3, -4]), descending=True)
+            loss_ranks = torch.argsort(voxutil.voxel_wise_loss_function(x, target_ten, _dims=[-1, -2, -3, -4]), descending=True)
             x = x[loss_ranks]
             
             # * re-add seed into batch
@@ -233,7 +233,7 @@ def main():
         
             # * damage lowest loss in batch
             if i % _DAMG_RATE_ == 0:
-                mask = torch.tensor(util.half_volume_mask(PAD_SIZE, 'rand')).to(_DEVICE_)
+                mask = torch.tensor(voxutil.half_volume_mask(PAD_SIZE, 'rand')).to(_DEVICE_)
                 # * apply mask
                 x[-_NUM_DAMG_:] *= mask
                 # * randomize angles for steerable models
@@ -265,7 +265,7 @@ def main():
                 overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_].square().sum()
         
         # * calculate losses
-        target_loss += util.voxel_wise_loss_function(x, target_ten)
+        target_loss += voxutil.voxel_wise_loss_function(x, target_ten)
         target_loss /= 2.0
         diff_loss *= 10.0
         loss = target_loss + overflow_loss + diff_loss
@@ -292,8 +292,8 @@ def main():
                 
             # * detect invalid loss values :(
             if torch.isnan(loss) or torch.isinf(loss) or torch.isneginf(loss):
-                util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'detected invalid loss value: {loss}')
-                util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'overflow loss: {overflow_loss}, diff loss: {diff_loss}, target loss: {target_loss}')
+                voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'detected invalid loss value: {loss}')
+                voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'overflow loss: {overflow_loss}, diff loss: {diff_loss}, target loss: {target_loss}')
                 raise ValueError
             
             # * print info
@@ -309,7 +309,7 @@ def main():
                 if prev_lr > lr:
                     step = '▼'
                 prev_lr = lr
-                util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'[{i}/{_EPOCHS_+1}]\t {np.round(iter_per_sec, 3)}it/s\t time: {time}~{est}\t loss: {np.round(avg, 3)}>{np.round(np.min(loss_log), 3)}\t lr: {lr} {step}')
+                voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'[{i}/{_EPOCHS_+1}]\t {np.round(iter_per_sec, 3)}it/s\t time: {time}~{est}\t loss: {np.round(avg, 3)}>{np.round(np.min(loss_log), 3)}\t lr: {lr} {step}')
             
             # * save checkpoint
             if i % _SAVE_RATE_ == 0 and i != 0:
@@ -318,7 +318,7 @@ def main():
     # * print train time
     secs = (datetime.datetime.now()-train_start).seconds
     train_time = str(datetime.timedelta(seconds=secs))
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'train time: {train_time}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'train time: {train_time}')
     
     # * save loss plot
     pl.plot(loss_log, '.', alpha=0.1)
@@ -332,8 +332,8 @@ def main():
     # * generate videos
     s = _SIZE_+(2*_PAD_)
     curr = datetime.datetime.now().strftime("%H:%M:%S")
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting time: {curr}')
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'generating videos...')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting time: {curr}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'generating videos...')
     with torch.no_grad():
         model.generate_video(f'_models/{_NAME_}/vidtrain_grow.mp4', seed_ten, _size=s)
         if _NUM_DAMG_ > 0:
@@ -344,8 +344,8 @@ def main():
     # * calculate elapsed time
     secs = (datetime.datetime.now()-start).seconds
     elapsed_time = str(datetime.timedelta(seconds=secs))
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'elapsed time: {elapsed_time}')
-    util.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '****************')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'elapsed time: {elapsed_time}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '****************')
     
 if __name__ == '__main__':
     main()
