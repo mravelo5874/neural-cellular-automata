@@ -44,6 +44,7 @@ class VoxelEngine:
         self.CREATIVE_MODE = True
         self.SHOW_WIRE = False
         self.SHOW_AXIS = False
+        self.SHOW_VECT = True
         # * TODO gui
         self.GUI = gui.UIManager(_win_size)
         self.SURF = pg.Surface(_win_size)
@@ -133,6 +134,8 @@ class VoxelEngine:
             self.wireframe.update()
         if self.SHOW_AXIS:
             self.axis.update()
+        if self.SHOW_VECT:
+            self.vector.update()
             
         # * update voxel
         if self.my_voxel != None and self.sim != None:
@@ -151,9 +154,10 @@ class VoxelEngine:
             self.wireframe.render()
         if self.SHOW_AXIS:
             self.axis.render()
+        if self.SHOW_VECT:
+            self.vector.render()
             
         self.voxel.render()
-        self.vector.render()
         self.crosshair.render()
         
         # * TODO render gui using mgl
@@ -254,7 +258,7 @@ class VoxelEngine:
                     if self.my_voxel != None:
                         if self.sim != None:
                             self.sim.erase_sphere(self.my_voxel, 6)
-                            self.my_vector = (glm.vec3(self.player.pos), glm.normalize(glm.vec3(self.player.pos)))
+                            self.my_vector = (glm.vec3(self.player.pos), glm.normalize(glm.vec3(self.player.forward)))
             # ---------------------------------- #
             
     def run(self):

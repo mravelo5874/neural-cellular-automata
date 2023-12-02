@@ -33,7 +33,9 @@ class Vector:
         if pos == None or vec == None:
             pos, vec = glm.vec3(-1), glm.vec3(-1)
         t_min, t_max = utils.ray_box_intersection(pos, vec, glm.vec3(-1), glm.vec3(1))
-        end = pos+vec*t_min
+        if t_max == None:
+            t_max = 0
+        end = pos+vec*t_max
         vertices = [pos, end]
         data = np.array(vertices, dtype='f4')
         vbo = self.ctx.buffer(data)
