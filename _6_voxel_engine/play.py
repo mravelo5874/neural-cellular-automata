@@ -13,6 +13,7 @@ from axis import Axis
 from voxel import Voxel
 from crosshair import Crosshair
 from player import Player
+from vector import Vector
 from nca_simulator import NCASimulator
 
 cwd = os.getcwd().split('\\')[:-1]
@@ -81,9 +82,14 @@ class VoxelEngine:
         self.player = Player(self)
         self.cube = Cube(self)
         self.axis = Axis(self)
-        self.voxel = Voxel(self)
         self.crosshair = Crosshair(self)
         self.wireframe = WireFrame(self)
+        
+        self.my_vector = (None, None)
+        self.my_voxel = None
+        
+        self.vector = Vector(self)
+        self.voxel = Voxel(self)
         
         # * init simulator
         self.sim = None
@@ -131,7 +137,8 @@ class VoxelEngine:
         # * update voxel
         if self.my_voxel != None and self.sim != None:
             self.voxel.update()
-        
+            
+        self.vector.update()
         self.cube.update()
         
     def render(self):
@@ -146,6 +153,7 @@ class VoxelEngine:
             self.axis.render()
             
         self.voxel.render()
+        self.vector.render()
         self.crosshair.render()
         
         # * TODO render gui using mgl
@@ -246,6 +254,7 @@ class VoxelEngine:
                     if self.my_voxel != None:
                         if self.sim != None:
                             self.sim.erase_sphere(self.my_voxel, 6)
+                            self.my_vector = (glm.vec3(self.player.pos), glm.normalize(glm.vec3(self.player.pos)))
             # ---------------------------------- #
             
     def run(self):
@@ -260,6 +269,7 @@ class VoxelEngine:
         self.wireframe.destroy()
         self.axis.destroy()
         self.voxel.destroy()
+        self.vector.destroy()
         
         # * quit application
         print ('exiting application...')

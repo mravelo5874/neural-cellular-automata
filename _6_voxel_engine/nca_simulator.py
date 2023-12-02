@@ -177,14 +177,14 @@ class NCASimulator:
             # * normalize point to be within 0, 1
             norm_pos = (pos+1)/2
             # * multiply by size to get approximate voxel
-            vox = glm.floor(norm_pos*self.size)
+            vox = glm.ceil(norm_pos*self.size)
         # * outside volume
         else:
             # * normalize point to be within 0, 1
             int_pos = pos+(vec*t_min)
             norm_pos = (int_pos+1)/2
             # * multiply by size to get approximate voxel
-            vox = glm.floor(norm_pos*self.size)
+            vox = glm.ceil(norm_pos*self.size)
 
         # * run fast voxel traversal algorithm
         # * ref: https://github.com/cgyurgyik/fast-voxel-traversal-algorithm/blob/master/overview/FastVoxelTraversalOverview.md
@@ -265,6 +265,11 @@ class NCASimulator:
                     if vox.z < 0 or vox.z >= self.size:
                         return None
                     t_max_z += t_delta_z
+            # * check for out of bounds
+            if (vox.x < 0 or vox.x >= self.size or
+                vox.y < 0 or vox.y >= self.size or
+                vox.z < 0 or vox.z >= self.size):
+                return None
             # * check if voxel is "alive"
             if vol[int(vox.x), int(vox.y), int(vox.z)] > 0.1:
                 break
