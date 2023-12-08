@@ -63,7 +63,7 @@ def main():
         # model.regen_video(f'_models/{_NAME_}/vidgen_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
         model.rotate_yawiso_video(f'_models/{_NAME_}/vidgen_multi_rotate.mp4', seed_ten, _size=PAD_SIZE, _show_grid=True)
         
-     # * calculate elapsed time
+    # * calculate elapsed time
     secs = (datetime.datetime.now()-start).seconds
     elapsed_time = str(datetime.timedelta(seconds=secs))
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'elapsed time: {elapsed_time}')

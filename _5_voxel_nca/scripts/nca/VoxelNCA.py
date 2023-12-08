@@ -187,7 +187,7 @@ class VoxelNCA(torch.nn.Module):
     def get_alive_mask(self, _x):
         return func.max_pool3d(_x[:, 3:4, :, :, :], kernel_size=3, stride=1, padding=1) > 0.1
         
-    def forward(self, _x, _print=False):
+    def forward(self, _x, _print=False, _mask=None):
         if _print: print ('init _x.shape:',_x.shape)
         # * get alive mask
         alive_mask = self.get_alive_mask(_x).to(self.device)
@@ -203,7 +203,10 @@ class VoxelNCA(torch.nn.Module):
         if _print: print ('update p.shape:',p.shape)
         
         # * create stochastic update mask
-        stochastic_mask = (torch.rand(_x[:, :1, :, :, :].shape) <= self.update_rate).to(self.device, torch.float32)
+        if _mask != None:
+            stochastic_mask = _mask
+        else:
+            stochastic_mask = (torch.rand(_x[:, :1, :, :, :].shape) <= self.update_rate).to(self.device, torch.float32)
         if _print: print ('stochastic_mask.shape:',stochastic_mask.shape)
         
         # * perform update
