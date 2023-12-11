@@ -13,17 +13,17 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_iso2_v2'
+_NAME_ = 'cowboy16_iso2_v3'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_DIST_ = 4
 _SEED_DIC_ = {
     'center': None,
-    'plus_x': 'red',
+    'plus_x': None,
     'minus_x': None,
-    'plus_y': 'green',
-    'minus_y': None,
-    'plus_z': 'blue',
+    'plus_y': 'red',
+    'minus_y': 'cyan',
+    'plus_z': None,
     'minus_z': None,
 }
 _TARGET_VOX_ = '../vox/cowboy16.vox'
@@ -31,7 +31,7 @@ _TARGET_VOX_ = '../vox/cowboy16.vox'
 _MODEL_TYPE_ = Perception.YAW_ISO_V2
 _CHANNELS_ = 16
 # * training parameters
-_EPOCHS_ = 10_000
+_EPOCHS_ = 12_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
