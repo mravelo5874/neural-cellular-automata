@@ -41,7 +41,18 @@ Y_SOBEL_2D_KERN = torch.tensor([
    [[0., 0., 0.], 
     [-1., -2., -1.],
     [0., 0., 0.]]])
-
+Z_SOBEL_2D_KERN = torch.tensor([
+   [[0., 0., 0.], 
+    [0., 0., 0.], 
+    [0., 0., 0.]],
+   
+   [[-1., 0., 1.], 
+    [-2., 0., 2.], 
+    [-1., 0., 1.]],
+   
+   [[0., 0., 0.], 
+    [0., 0., 0.], 
+    [0., 0., 0.]]])
 X_SOBEL_KERN = torch.tensor([
    [[1., 2., 1.], 
     [0., 0., 0.], 
@@ -257,7 +268,7 @@ class VoxelPerception():
         py = (gy*_cos)-(gx*_sin)
         
         # * calculate gz and lap
-        gz = self.per_channel_conv3d(states, Z_SOBEL_KERN[None, :])
+        gz = self.per_channel_conv3d(states, Z_SOBEL_2D_KERN[None, :])
         lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
             
         return torch.cat([_x, px, py, gz, lap], 1)
