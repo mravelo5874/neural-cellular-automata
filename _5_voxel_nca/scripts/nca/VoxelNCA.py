@@ -204,8 +204,11 @@ class VoxelNCA(torch.nn.Module):
         
         # * perception step
         _x = _x.to(self.device)
-        _c = _comp.to(self.device)
-        p = self.p.perception[self.model_type](self.p, _x, _c)
+        if _comp != None:
+            _c = _comp.to(self.device)
+            p = self.p.perception[self.model_type](self.p, _x, _c)
+
+        p = self.p.perception[self.model_type](self.p, _x)
         if _print: print ('perception p.shape:',p.shape)
         
         if _comp != None:
@@ -242,16 +245,16 @@ class VoxelNCA(torch.nn.Module):
         
         # * perform update
         _x = _x + p * stochastic_mask
-        _c = _c + c_p * stochastic_mask
+        # _c = _c + c_p * stochastic_mask
         
         if self.isotropic_type() == 1:
             states = _x[:, :-1]*alive_mask
             angle = _x[:, -1:] % (pi*2.0)
             _x = torch.cat([states, angle], 1)
             
-            c_states = _c[:, :-1]*c_alive_mask
-            c_angle = _c[:, -1:] % (pi*2.0)
-            _c = torch.cat([c_states, c_angle], 1)
+            # c_states = _c[:, :-1]*c_alive_mask
+            # c_angle = _c[:, -1:] % (pi*2.0)
+            # _c = torch.cat([c_states, c_angle], 1)
             
         if self.isotropic_type() == 3:
             states = _x[:, :-3]*alive_mask
@@ -261,7 +264,7 @@ class VoxelNCA(torch.nn.Module):
             _x = torch.cat([states, az, ay, ax], 1)
         else:
             _x = _x * alive_mask
-            _c = _c * c_alive_mask
+            # _c = _c * c_alive_mask
             
         if _print: print ('final _x.shape:',_x.shape)
         if _print: print ('********')
