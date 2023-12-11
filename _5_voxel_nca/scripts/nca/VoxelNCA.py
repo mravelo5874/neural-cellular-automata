@@ -43,7 +43,7 @@ class VoxelNCA(torch.nn.Module):
             voxutil.logprint(f'_models/{_name}/{_log_file}', f'nca isotropic type: {self.isotropic_type()}')
         
     def isotropic_type(self):
-        if self.model_type == Perception.YAW_ISO:
+        if self.model_type == Perception.YAW_ISO or self.model_type == Perception.YAW_ISO_V2:
             return 1
         elif self.model_type == Perception.QUATERNION or self.model_type == Perception.FAST_QUAT or self.model_type == Perception.EULER:
             return 3
@@ -187,20 +187,51 @@ class VoxelNCA(torch.nn.Module):
     def get_alive_mask(self, _x):
         return func.max_pool3d(_x[:, 3:4, :, :, :], kernel_size=3, stride=1, padding=1) > 0.1
         
-    def forward(self, _x, _print=False, _mask=None):
+    def forward(self, _x, _print=False, _mask=None, _comp=None):
         if _print: print ('init _x.shape:',_x.shape)
         # * get alive mask
         alive_mask = self.get_alive_mask(_x).to(self.device)
         if _print: print ('init alive_mask.shape:',alive_mask.shape)
         
+        if _comp != None:
+            c_alive_mask = self.get_alive_mask(_comp).to(self.device)
+            
+            c_clone = c_alive_mask.detach().clone()
+            c_clone = torch.rot90(c_clone, 1, (3, 2))
+            
+            res = torch.all(torch.eq(alive_mask, c_clone))
+            print (f'alive mask comp: {res}')
+        
         # * perception step
         _x = _x.to(self.device)
-        p = self.p.perception[self.model_type](self.p, _x)
+        _c = _comp.to(self.device)
+        p = self.p.perception[self.model_type](self.p, _x, _c)
         if _print: print ('perception p.shape:',p.shape)
+        
+        if _comp != None:
+            _c = _comp.to(self.device)
+            c_p = self.p.perception[self.model_type](self.p, _c)
+            
+            c_clone = c_p.detach().clone()
+            c_clone = torch.rot90(c_clone, 1, (3, 2))
+            
+            dif = torch.abs(p - c_clone)
+            res = torch.all(dif < 0.0001)
+            print (f'perception comp: {res}')
         
         # * update step
         p = self.conv2(torch.relu(self.conv1(p)))
         if _print: print ('update p.shape:',p.shape)
+        
+        if _comp != None:
+            c_p = self.conv2(torch.relu(self.conv1(c_p)))
+            
+            c_clone = c_p.detach().clone()
+            c_clone = torch.rot90(c_clone, 1, (3, 2))
+            
+            dif = torch.abs(p - c_clone)
+            res = torch.all(dif < 0.0001)
+            print (f'update comp: {res}')
         
         # * create stochastic update mask
         if _mask != None:
@@ -211,18 +242,27 @@ class VoxelNCA(torch.nn.Module):
         
         # * perform update
         _x = _x + p * stochastic_mask
+        _c = _c + c_p * stochastic_mask
+        
         if self.isotropic_type() == 1:
             states = _x[:, :-1]*alive_mask
-            angle = _x[:, -1:]%(pi*2.0)
+            angle = _x[:, -1:] % (pi*2.0)
             _x = torch.cat([states, angle], 1)
+            
+            c_states = _c[:, :-1]*c_alive_mask
+            c_angle = _c[:, -1:] % (pi*2.0)
+            _c = torch.cat([c_states, c_angle], 1)
+            
         if self.isotropic_type() == 3:
             states = _x[:, :-3]*alive_mask
-            ax = _x[:, -1:]%(pi*2.0)
-            ay = _x[:, -2:-1]%(pi*2.0)
-            az = _x[:, -3:-2]%(pi*2.0)
+            ax = _x[:, -1:] % (pi*2.0)
+            ay = _x[:, -2:-1] % (pi*2.0)
+            az = _x[:, -3:-2] % (pi*2.0)
             _x = torch.cat([states, az, ay, ax], 1)
         else:
             _x = _x * alive_mask
+            _c = _c * c_alive_mask
+            
         if _print: print ('final _x.shape:',_x.shape)
         if _print: print ('********')
         return _x

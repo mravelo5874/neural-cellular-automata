@@ -15,7 +15,7 @@ _NAME_ = 'cowboy16_yawiso_10'
 _DIR_ = '_models'
 _DEVICE_ = 'cuda'
 _LOG_FILE_ = 'complog.txt'
-_ITER_ = 8
+_ITER_ = 1
 
 # * for reproducability
 _SEED_ = 100
@@ -56,14 +56,17 @@ def main():
     model.eval()
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'loaded model from: {path}')
         
-    # * create seed 0
+    # * create seed
     PAD_SIZE = _SIZE_+(2*_PAD_)
-    seed_0 = voxutil.custom_seed(_size=PAD_SIZE, _channels=params['_CHANNELS_'], _dist=_SEED_DIST_, _center=_SEED_DIC_['center'], 
+    seed = voxutil.custom_seed(_size=PAD_SIZE, _channels=params['_CHANNELS_'], _dist=_SEED_DIST_, _center=_SEED_DIC_['center'], 
                                 _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
                                 _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
                                 _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(_DEVICE_)
-    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'seed.shape: {seed_0.shape}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'seed.shape: {seed.shape}')
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'model.iso_type: {model.isotropic_type()}')
+    
+    # * create seed 0
+    seed_0 = seed.detach().clone()
     
     # * randomize channel(s)
     if model.isotropic_type() == 1:
@@ -81,24 +84,25 @@ def main():
     
     # * rotate istropic channel(s)
     if model.isotropic_type() == 1:
-        seed_1[:, -1:] = torch.add(seed_1[:, -1:], (np.pi/2)) % (np.pi*2)
+        seed_1[:, -1:] = torch.add(seed_1[:, -1:], (np.pi/2))
     elif model.isotropic_type() == 3:
-        seed_1[:, -1:] = torch.add(seed_1[:, -1:], (np.pi/2)) % (np.pi*2)
-        seed_1[:, -2:-1] = torch.add(seed_1[:, -2:-1],(np.pi/2)) % (np.pi*2)
-        seed_1[:, -3:-2] = torch.add(seed_1[:, -3:-2],(np.pi/2)) % (np.pi*2)
+        seed_1[:, -1:] = torch.add(seed_1[:, -1:], (np.pi/2))
+        seed_1[:, -2:-1] = torch.add(seed_1[:, -2:-1],(np.pi/2))
+        seed_1[:, -3:-2] = torch.add(seed_1[:, -3:-2],(np.pi/2))
 
     # * compare seeds
     seed_1_copy = seed_1.detach().clone()
-    
+
     # * rotate istropic channel(s)
     if model.isotropic_type() == 1:
-        seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2)) % (np.pi*2)
+        seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2))
     elif model.isotropic_type() == 3:
-        seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2)) % (np.pi*2)
-        seed_1_copy[:, -2:-1] = torch.sub(seed_1_copy[:, -2:-1], (np.pi/2)) % (np.pi*2)
-        seed_1_copy[:, -3:-2] = torch.sub(seed_1_copy[:, -3:-2], (np.pi/2)) % (np.pi*2)  
-    seed_1_copy = torch.rot90(seed_1_copy, 1, (3, 2))
+        seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2))
+        seed_1_copy[:, -2:-1] = torch.sub(seed_1_copy[:, -2:-1], (np.pi/2))
+        seed_1_copy[:, -3:-2] = torch.sub(seed_1_copy[:, -3:-2], (np.pi/2))
         
+    seed_1_copy = torch.rot90(seed_1_copy, 1, (3, 2))
+    
     # Vox().load_from_tensor(seed_0).render(_show_grid=True)
     # Vox().load_from_tensor(seed_1_copy).render(_show_grid=True)
     
@@ -110,35 +114,40 @@ def main():
     with torch.no_grad():
         for i in range(_ITER_):
             mask = (torch.rand(seed_0[:, :1, :, :, :].shape) <= model.update_rate).to(model.device, torch.float32)
-            seed_0 = model.forward(seed_0, _mask=mask)
-            seed_1 = model.forward(seed_1, _mask=mask)
+            seed_0 = model.forward(seed_0, _mask=mask, _comp=seed_1)
+            # seed_1 = model.forward(seed_1, _mask=mask)
             
             # * compare seeds
             seed_1_copy = seed_1.detach().clone()
+            seed_1_copy = torch.rot90(seed_1, 1, (3, 2))
     
             # * rotate istropic channel(s)
             if model.isotropic_type() == 1:
-                seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2)) % (np.pi*2)
+                seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2))
             elif model.isotropic_type() == 3:
-                seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2)) % (np.pi*2.0)
-                seed_1_copy[:, -2:-1] = torch.sub(seed_1_copy[:, -2:-1], (np.pi/2)) % (np.pi*2.0)
-                seed_1_copy[:, -3:-2] = torch.sub(seed_1_copy[:, -3:-2], (np.pi/2)) % (np.pi*2.0)   
-            seed_1_copy = torch.rot90(seed_1, 1, (3, 2))
-        
-            dif = torch.abs(seed_0 - seed_1_copy)
-            res = torch.all(dif < 0.0001)
-            print (f'{i} comp: {res}')
+                seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2))
+                seed_1_copy[:, -2:-1] = torch.sub(seed_1_copy[:, -2:-1], (np.pi/2))
+                seed_1_copy[:, -3:-2] = torch.sub(seed_1_copy[:, -3:-2], (np.pi/2))
+            
+            # dif = torch.abs(seed_0 - seed_1_copy)
+            # res = torch.all(dif < 0.0001)
+            # print (f'{i} comp: {res}')
+            
+            # dif += seed
+            # Vox().load_from_tensor(dif).render(_show_grid=True)
             
     # * compare seeds
     seed_1_copy = seed_1.detach().clone()
+    seed_1_copy = torch.rot90(seed_1, 1, (3, 2))
+    
     # * rotate istropic channel(s)
     if model.isotropic_type() == 1:
-        seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2)) % (np.pi*2)
+        seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2))
     elif model.isotropic_type() == 3:
-        seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2)) % (np.pi*2.0)
-        seed_1_copy[:, -2:-1] = torch.sub(seed_1_copy[:, -2:-1], (np.pi/2)) % (np.pi*2.0)
-        seed_1_copy[:, -3:-2] = torch.sub(seed_1_copy[:, -3:-2], (np.pi/2)) % (np.pi*2.0)
-    seed_1_copy = torch.rot90(seed_1, 1, (3, 2))
+        seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2))
+        seed_1_copy[:, -2:-1] = torch.sub(seed_1_copy[:, -2:-1], (np.pi/2))
+        seed_1_copy[:, -3:-2] = torch.sub(seed_1_copy[:, -3:-2], (np.pi/2))
+    
         
     dif = torch.abs(seed_0 - seed_1_copy)
     res = torch.all(dif < 0.0001)

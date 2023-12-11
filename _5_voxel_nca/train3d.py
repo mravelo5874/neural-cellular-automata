@@ -13,10 +13,10 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'earth_quat_0'
-_SIZE_ = 24
+_NAME_ = 'cowboy16_iso2_init'
+_SIZE_ = 16
 _PAD_ = 4
-_SEED_DIST_ = 5
+_SEED_DIST_ = 4
 _SEED_DIC_ = {
     'center': None,
     'plus_x': 'red',
@@ -26,12 +26,12 @@ _SEED_DIC_ = {
     'plus_z': 'blue',
     'minus_z': None,
 }
-_TARGET_VOX_ = '../vox/earth.vox'
+_TARGET_VOX_ = '../vox/cowboy16.vox'
 # * model parameters
-_MODEL_TYPE_ = Perception.QUATERNION
+_MODEL_TYPE_ = Perception.YAW_ISO_V2
 _CHANNELS_ = 16
 # * training parameters
-_EPOCHS_ = 25_000
+_EPOCHS_ = 10_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
@@ -332,14 +332,14 @@ def main():
     # * generate videos
     s = _SIZE_+(2*_PAD_)
     curr = datetime.datetime.now().strftime("%H:%M:%S")
-    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting time: {curr}')
-    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'generating videos...')
-    with torch.no_grad():
-        model.generate_video(f'_models/{_NAME_}/vidtrain_grow.mp4', seed_ten, _size=s)
-        if _NUM_DAMG_ > 0:
-            model.regen_video(f'_models/{_NAME_}/vidtrain_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
-        if model.isotropic_type() > 0:
-            model.rotate_yawiso_video(f'_models/{_NAME_}/vidtrain_multi_rotate.mp4', seed_ten, _size=s, _show_grid=True)
+    # voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting time: {curr}')
+    # voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'generating videos...')
+    # with torch.no_grad():
+    #     model.generate_video(f'_models/{_NAME_}/vidtrain_grow.mp4', seed_ten, _size=s)
+    #     if _NUM_DAMG_ > 0:
+    #         model.regen_video(f'_models/{_NAME_}/vidtrain_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
+    #     if model.isotropic_type() > 0:
+    #         model.rotate_yawiso_video(f'_models/{_NAME_}/vidtrain_multi_rotate.mp4', seed_ten, _size=s, _show_grid=True)
     
     # * calculate elapsed time
     secs = (datetime.datetime.now()-start).seconds
