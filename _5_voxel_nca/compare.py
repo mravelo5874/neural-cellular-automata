@@ -10,7 +10,7 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * compair params
-_NAME_ = 'cowboy16_iso2_v4' # yawiso_10
+_NAME_ = 'cowboy16_iso2_v5' # yawiso_10
 _DIR_ = '_models'
 _DEVICE_ = 'cuda'
 _LOG_FILE_ = 'complog.txt'
@@ -114,7 +114,10 @@ def main():
         for i in range(_ITER_):
             mask = (torch.rand(seed_0[:, :1, :, :, :].shape) <= model.update_rate).to(model.device, torch.float32)
             seed_0 = model.forward(seed_0, _mask=mask, _comp=seed_1)
-            # seed_1 = model.forward(seed_1, _mask=mask)
+            
+            # * rotate mask
+            rot_mask = torch.rot90(mask, 1, (2, 3))
+            seed_1 = model.forward(seed_1, _mask=rot_mask)
             
             # * compare seeds
             seed_1_copy = seed_1.detach().clone()
@@ -132,8 +135,8 @@ def main():
             res = torch.all(dif < 0.0001)
             print (f'{i} comp: {res}')
             
-            # dif += seed
-            # Vox().load_from_tensor(dif).render(_show_grid=True)
+            dif += seed
+            Vox().load_from_tensor(dif).render(_show_grid=True)
             
     # * compare seeds
     seed_1_copy = seed_1.detach().clone()
