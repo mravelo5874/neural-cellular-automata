@@ -253,7 +253,7 @@ class VoxelPerception():
             
         return torch.cat([_x, px, py, gz, lap], 1)
     
-    def yaw_isotropic_v2_perception(self, _x, _c=None):
+    def yaw_isotropic_v2_perception(self, _x, _c=None, _iso_type=5):
         # * separate states and angle channels
         states, angle = _x[:, :-1], _x[:, -1:]
         
@@ -261,14 +261,22 @@ class VoxelPerception():
             c_clone = _c.detach().clone()
             c_clone = torch.rot90(c_clone, 1, (3, 2))
             
+            # * rotate istropic channel(s)
+            if _iso_type == 1:
+                c_clone[:, -1:] = torch.sub(c_clone[:, -1:], (np.pi/2))
+            elif _iso_type == 3:
+                c_clone[:, -1:] = torch.sub(c_clone[:, -1:], (np.pi/2))
+                c_clone[:, -2:-1] = torch.sub(c_clone[:, -2:-1], (np.pi/2))
+                c_clone[:, -3:-2] = torch.sub(c_clone[:, -3:-2], (np.pi/2))
+            
             dif = torch.abs(_x - c_clone)
             res = torch.all(dif < 0.0001)
             print (f'x/c comp: {res}')
             
-            print ('* rendering x...')
-            Vox().load_from_tensor(_x).render(_show_grid=True)
-            print ('* rendering c_clone...')
-            Vox().load_from_tensor(c_clone).render(_show_grid=True)
+            # print ('* rendering x...')
+            # Vox().load_from_tensor(_x).render(_show_grid=True)
+            # print ('* rendering c_clone...')
+            # Vox().load_from_tensor(c_clone).render(_show_grid=True)
             
             c_states, c_angle = _c[:, :-1], _c[:, -1:]
             
@@ -387,8 +395,8 @@ class VoxelPerception():
             dif = torch.abs(lap - c_lap_clone)
             res = torch.all(dif < 0.0001)
             print (f'lap comp: {res}')
-            
-        return torch.cat([_x, px, py, gz, lap], 1)
+        
+        return torch.cat([states, px, py, gz, lap], 1)
     
     def quaternion_perception(self, _x):
         # * separate states and angle channels

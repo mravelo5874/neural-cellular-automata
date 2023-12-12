@@ -10,7 +10,7 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * compair params
-_NAME_ = 'cowboy16_iso2_v3' # yawiso_10
+_NAME_ = 'cowboy16_iso2_v4' # yawiso_10
 _DIR_ = '_models'
 _DEVICE_ = 'cuda'
 _LOG_FILE_ = 'complog.txt'
@@ -128,9 +128,9 @@ def main():
                 seed_1_copy[:, -2:-1] = torch.sub(seed_1_copy[:, -2:-1], (np.pi/2))
                 seed_1_copy[:, -3:-2] = torch.sub(seed_1_copy[:, -3:-2], (np.pi/2))
             
-            # dif = torch.abs(seed_0 - seed_1_copy)
-            # res = torch.all(dif < 0.0001)
-            # print (f'{i} comp: {res}')
+            dif = torch.abs(seed_0 - seed_1_copy)
+            res = torch.all(dif < 0.0001)
+            print (f'{i} comp: {res}')
             
             # dif += seed
             # Vox().load_from_tensor(dif).render(_show_grid=True)
@@ -147,7 +147,6 @@ def main():
         seed_1_copy[:, -2:-1] = torch.sub(seed_1_copy[:, -2:-1], (np.pi/2))
         seed_1_copy[:, -3:-2] = torch.sub(seed_1_copy[:, -3:-2], (np.pi/2))
     
-        
     dif = torch.abs(seed_0 - seed_1_copy)
     res = torch.all(dif < 0.0001)
     print (f'post-comp: {res}')
