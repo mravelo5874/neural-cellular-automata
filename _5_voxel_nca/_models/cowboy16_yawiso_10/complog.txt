@@ -572,3 +572,15 @@ seed.shape: torch.Size([1, 16, 24, 24, 24])
 model.iso_type: 1
 elapsed time: 0:00:00
 ****************
+****************
+timestamp: 2023-12-11 21:27:29.186562
+initializing comparison...
+device: cuda
+nca perception channels: 76
+nca parameter count: 11904
+nca isotropic type: 1
+loaded model from: _models/cowboy16_yawiso_10/cowboy16_yawiso_10.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************

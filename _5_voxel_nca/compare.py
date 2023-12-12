@@ -4,14 +4,13 @@ import torch
 import random
 import datetime
 import numpy as np
-from numpy import pi
 
 from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * compair params
-_NAME_ = 'cowboy16_yawiso_10'
+_NAME_ = 'cowboy16_iso2_v3' # yawiso_10
 _DIR_ = '_models'
 _DEVICE_ = 'cuda'
 _LOG_FILE_ = 'complog.txt'

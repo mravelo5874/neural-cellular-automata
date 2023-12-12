@@ -1,0 +1,94 @@
+****************
+timestamp: 2023-12-11 21:23:17.797941
+initializing comparison...
+device: cuda
+nca perception channels: 76
+nca parameter count: 11904
+nca isotropic type: 1
+loaded model from: _models/cowboy16_iso2_v3/cowboy16_iso2_v3.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+****************
+timestamp: 2023-12-11 21:25:32.006357
+initializing comparison...
+device: cuda
+nca perception channels: 76
+nca parameter count: 11904
+nca isotropic type: 1
+loaded model from: _models/cowboy16_iso2_v3/cowboy16_iso2_v3.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-11 21:28:42.633860
+initializing comparison...
+device: cuda
+nca perception channels: 76
+nca parameter count: 11904
+nca isotropic type: 1
+loaded model from: _models/cowboy16_iso2_v3/cowboy16_iso2_v3.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-11 21:29:31.210645
+initializing comparison...
+device: cuda
+nca perception channels: 76
+nca parameter count: 11904
+nca isotropic type: 1
+loaded model from: _models/cowboy16_iso2_v3/cowboy16_iso2_v3.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:25
+****************
+****************
+timestamp: 2023-12-11 21:30:16.382568
+initializing comparison...
+device: cuda
+nca perception channels: 76
+nca parameter count: 11904
+nca isotropic type: 1
+loaded model from: _models/cowboy16_iso2_v3/cowboy16_iso2_v3.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:07
+****************
+****************
+timestamp: 2023-12-11 21:30:42.189488
+initializing comparison...
+device: cuda
+nca perception channels: 76
+nca parameter count: 11904
+nca isotropic type: 1
+loaded model from: _models/cowboy16_iso2_v3/cowboy16_iso2_v3.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-11 21:33:57.940635
+initializing comparison...
+device: cuda
+nca perception channels: 76
+nca parameter count: 11904
+nca isotropic type: 1
+loaded model from: _models/cowboy16_iso2_v3/cowboy16_iso2_v3.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-11 21:34:46.315048
+initializing comparison...
+device: cuda
+nca perception channels: 76
+nca parameter count: 11904
+nca isotropic type: 1
+loaded model from: _models/cowboy16_iso2_v3/cowboy16_iso2_v3.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:17
+****************
