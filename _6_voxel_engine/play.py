@@ -39,12 +39,12 @@ class VoxelEngine:
         # * player
         self.PLAYER_SPEED = 0.0015
         self.PLAYER_ROT_SPEED = 0.004
-        self.PLAYER_POS = glm.vec3(-2, 0, 2)
+        self.PLAYER_POS = glm.vec3(0, -3, 0)
         self.MOUSE_SENS = 0.002
         self.CREATIVE_MODE = True
         self.SHOW_WIRE = False
         self.SHOW_AXIS = False
-        self.SHOW_VECT = True
+        self.SHOW_VECT = False
         # * TODO gui
         self.GUI = gui.UIManager(_win_size)
         self.SURF = pg.Surface(_win_size)
@@ -230,6 +230,10 @@ class VoxelEngine:
                 # * toggle wireframe
                 if event.key == pg.K_2:
                     self.SHOW_WIRE = not self.SHOW_WIRE
+                    
+                # * toggle vector
+                if event.key == pg.K_3:
+                    self.SHOW_VECT = not self.SHOW_VECT
                         
                 # * load next model
                 if event.key == pg.K_n:
