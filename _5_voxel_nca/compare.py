@@ -135,8 +135,8 @@ def main():
             res = torch.all(dif < 0.0001)
             print (f'{i} comp: {res}')
             
-            dif += seed
-            Vox().load_from_tensor(dif).render(_show_grid=True)
+            # dif += seed
+            # Vox().load_from_tensor(dif).render(_show_grid=True)
             
     # * compare seeds
     seed_1_copy = seed_1.detach().clone()

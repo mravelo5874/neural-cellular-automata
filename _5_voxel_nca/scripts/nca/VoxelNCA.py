@@ -248,7 +248,6 @@ class VoxelNCA(torch.nn.Module):
         
         # * create stochastic update mask (or use custom mask)
         if _mask != None:
-            print ('using custom mask!')
             stochastic_mask = _mask
         else:
             stochastic_mask = (torch.rand(_x[:, :1, :, :, :].shape) <= self.update_rate).to(self.device, torch.float32)

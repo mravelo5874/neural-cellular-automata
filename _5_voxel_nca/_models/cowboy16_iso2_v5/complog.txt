@@ -94,3 +94,39 @@ seed.shape: torch.Size([1, 16, 24, 24, 24])
 model.iso_type: 1
 elapsed time: 0:00:22
 ****************
+****************
+timestamp: 2023-12-12 16:46:17.348394
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/cowboy16_iso2_v5/cowboy16_iso2_v5.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:05
+****************
+****************
+timestamp: 2023-12-12 16:57:22.521779
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/cowboy16_iso2_v5/cowboy16_iso2_v5.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:06
+****************
+****************
+timestamp: 2023-12-12 16:58:02.304986
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/cowboy16_iso2_v5/cowboy16_iso2_v5.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
