@@ -365,12 +365,12 @@ class VoxelPerception():
         if _c != None:
             c_cos, c_sin = c_angle.cos(), c_angle.sin()
    
-        px = (gx*_cos)-(gy*_sin)
-        py = (gx*_sin)+(gy*_cos)
+        px = (gy*_cos)-(gx*_sin)
+        py = (gy*_sin)+(gx*_cos)
         
         if _c != None:
-            c_px = (c_gx*c_cos)-(c_gy*c_sin)
-            c_py = (c_gx*c_sin)+(c_gy*c_cos)
+            c_px = (c_gy*c_cos)-(c_gx*c_sin)
+            c_py = (c_gy*c_sin)+(c_gx*c_cos)
             
             c_px_clone = c_px.detach().clone()
             c_px_clone = torch.rot90(c_px_clone, 1, (3, 2))

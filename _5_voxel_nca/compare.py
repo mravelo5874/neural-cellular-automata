@@ -10,7 +10,7 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * compair params
-_NAME_ = 'cowboy16_iso2_v10' # yawiso_10
+_NAME_ = 'ghosty_iso2_v11' # yawiso_10
 _DIR_ = '_models'
 _DEVICE_ = 'cuda'
 _LOG_FILE_ = 'complog.txt'

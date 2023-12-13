@@ -1,0 +1,144 @@
+****************
+timestamp: 2023-12-13 09:43:28.700276
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v11/ghosty_iso2_v11.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-13 09:45:43.680749
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v11/ghosty_iso2_v11.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:26
+****************
+****************
+timestamp: 2023-12-13 09:46:37.166437
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v11/ghosty_iso2_v11.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:15
+****************
+****************
+timestamp: 2023-12-13 09:52:41.117259
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v11/ghosty_iso2_v11.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:46
+****************
+****************
+timestamp: 2023-12-13 09:55:48.343149
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v11/ghosty_iso2_v11.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:34
+****************
+****************
+timestamp: 2023-12-13 10:02:58.842151
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v11/ghosty_iso2_v11.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:14
+****************
+****************
+timestamp: 2023-12-13 10:03:28.503528
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v11/ghosty_iso2_v11.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-13 10:04:09.228909
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v11/ghosty_iso2_v11.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-13 10:04:43.066042
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v11/ghosty_iso2_v11.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:03:18
+****************
+****************
+timestamp: 2023-12-13 10:12:25.473288
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v11/ghosty_iso2_v11.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:18
+****************
+****************
+timestamp: 2023-12-13 10:13:31.954892
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v11/ghosty_iso2_v11.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:16
+****************
+****************
+timestamp: 2023-12-13 10:14:20.183690
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v11/ghosty_iso2_v11.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************

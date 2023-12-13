@@ -13,10 +13,10 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'ghosty_iso2_v11'
+_NAME_ = 'ghosty_iso2_v12'
 _SIZE_ = 16
 _PAD_ = 4
-_SEED_DIST_ = 4
+_SEED_DIST_ = 2
 _SEED_DIC_ = {
     'center': None,
     'plus_x': None,
