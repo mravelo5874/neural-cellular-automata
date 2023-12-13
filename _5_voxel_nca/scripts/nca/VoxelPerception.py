@@ -29,6 +29,33 @@ X_SOBEL_2D_KERN = torch.tensor([
    [[0., 0., 0.], 
     [0., 0., 0.], 
     [0., 0., 0.]]])
+
+X_SOBEL_2D_KERN_v2 = torch.tensor([
+   [[0., 1., 0.], 
+    [0., 0., 0.], 
+    [0., -1., 0.]],
+   
+   [[0., 2., 0.], 
+    [0., 0., 0.], 
+    [0., -2., 0.]],
+   
+   [[0., 1., 0.], 
+    [0., 0., 0.], 
+    [0., -1., 0.]]])
+
+Y_SOBEL_2D_KERN_v2 = torch.tensor([
+   [[0., 1., 0.], 
+    [0., 2., 0.], 
+    [0., 1., 0.]],
+   
+   [[0., 0., 0.], 
+    [0., 0., 0.], 
+    [0., 0., 0.]],
+   
+   [[0., -1., 0.], 
+    [0., -2., 0.], 
+    [0., -1., 0.]]])
+
 Y_SOBEL_2D_KERN = torch.tensor([
    [[0., 0., 0.], 
     [1., 2., 1.], 
@@ -41,6 +68,7 @@ Y_SOBEL_2D_KERN = torch.tensor([
    [[0., 0., 0.], 
     [-1., -2., -1.],
     [0., 0., 0.]]])
+
 Z_SOBEL_2D_KERN = torch.tensor([
    [[0., 0., 0.], 
     [0., 0., 0.], 
@@ -296,12 +324,12 @@ class VoxelPerception():
             print (f'angle comp: {res}')
         
         # * calculate gx and gy
-        gx = self.per_channel_conv3d(states, X_SOBEL_2D_KERN[None, :])
-        gy = self.per_channel_conv3d(states, Y_SOBEL_2D_KERN[None, :])
+        gx = self.per_channel_conv3d(states, X_SOBEL_2D_KERN_v2[None, :])
+        gy = self.per_channel_conv3d(states, Y_SOBEL_2D_KERN_v2[None, :])
         
         if _c != None:
-            c_gx = self.per_channel_conv3d(c_states, X_SOBEL_2D_KERN[None, :])
-            c_gy = self.per_channel_conv3d(c_states, Y_SOBEL_2D_KERN[None, :])
+            c_gx = self.per_channel_conv3d(c_states, X_SOBEL_2D_KERN_v2[None, :])
+            c_gy = self.per_channel_conv3d(c_states, Y_SOBEL_2D_KERN_v2[None, :])
             
             c_gx_clone = c_gx.detach().clone()
             c_gx_clone = torch.rot90(c_gx_clone, 1, (3, 2))
@@ -396,7 +424,7 @@ class VoxelPerception():
             res = torch.all(dif < 0.0001)
             print (f'lap comp: {res}')
         
-        return torch.cat([states, px, py, lap], 1) # * removed 'gz' from perception
+        return torch.cat([states, px, py, gz, lap], 1) # * removed 'gz' from perception
     
     def quaternion_perception(self, _x):
         # * separate states and angle channels
