@@ -13,18 +13,18 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_iso2_v6'
+_NAME_ = 'cowboy16_iso2_v7'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_DIST_ = 4
 _SEED_DIC_ = {
-    'center': None,
+    'center': 'black',
     'plus_x': None,
     'minus_x': None,
     'plus_y': None,
     'minus_y': None,
-    'plus_z': 'red',
-    'minus_z': 'cyan',
+    'plus_z': None,
+    'minus_z': None,
 }
 _TARGET_VOX_ = '../vox/cowboy16.vox'
 # * model parameters

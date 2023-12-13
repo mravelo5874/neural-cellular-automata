@@ -1,5 +1,5 @@
 {
-    "_NAME_": "cowboy16_iso2_v5",
+    "_NAME_": "cowboy16_iso2_v6",
     "_SIZE_": 16,
     "_PAD_": 4,
     "_SEED_DIST_": 4,
@@ -7,10 +7,10 @@
         "center": null,
         "plus_x": null,
         "minus_x": null,
-        "plus_y": "red",
-        "minus_y": "cyan",
-        "plus_z": null,
-        "minus_z": null
+        "plus_y": null,
+        "minus_y": null,
+        "plus_z": "red",
+        "minus_z": "cyan"
     },
     "_TARGET_VOX_": "../vox/cowboy16.vox",
     "_MODEL_TYPE_": 5,
