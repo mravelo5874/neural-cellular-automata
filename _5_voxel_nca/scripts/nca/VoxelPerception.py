@@ -396,7 +396,7 @@ class VoxelPerception():
             res = torch.all(dif < 0.0001)
             print (f'lap comp: {res}')
         
-        return torch.cat([px, py, gz, lap], 1) # * removed 'states' from perception
+        return torch.cat([states, px, py, lap], 1) # * removed 'gz' from perception
     
     def quaternion_perception(self, _x):
         # * separate states and angle channels

@@ -1,10 +1,10 @@
 {
-    "_NAME_": "cowboy16_iso2_v7",
+    "_NAME_": "cowboy16_iso2_v8",
     "_SIZE_": 16,
     "_PAD_": 4,
     "_SEED_DIST_": 4,
     "_SEED_DIC_": {
-        "center": "black",
+        "center": "white",
         "plus_x": null,
         "minus_x": null,
         "plus_y": null,
