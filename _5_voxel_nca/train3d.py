@@ -13,7 +13,7 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_iso2_v10'
+_NAME_ = 'ghosty_iso2_v11'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_DIST_ = 4
@@ -26,7 +26,7 @@ _SEED_DIC_ = {
     'plus_z': None,
     'minus_z': None,
 }
-_TARGET_VOX_ = '../vox/cowboy16.vox'
+_TARGET_VOX_ = '../vox/ghosty.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V2
 _CHANNELS_ = 16
@@ -42,7 +42,7 @@ _DAMG_RATE_ = 5
 # * logging parameters
 _LOG_FILE_ = 'trainlog.txt'
 _INFO_RATE_ = 100
-_SAVE_RATE_ = 1000
+_SAVE_RATE_ = 3000
 
 # * load from checkpoint
 load_checkpoint = False

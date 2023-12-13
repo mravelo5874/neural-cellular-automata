@@ -1,0 +1,12 @@
+****************
+timestamp: 2023-12-12 23:35:33.153001
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/cowboy16_iso2_v10/cowboy16_iso2_v10.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************

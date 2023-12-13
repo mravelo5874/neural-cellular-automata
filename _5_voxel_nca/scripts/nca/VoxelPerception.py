@@ -17,7 +17,7 @@ class Perception(int, Enum):
     YAW_ISO_V2: int = 5
 
 # 3D filters
-X_SOBEL_2D_KERN = torch.tensor([
+Y_SOBEL_2D_KERN = torch.tensor([
    [[0., 0., 0.], 
     [0., 0., 0.], 
     [0., 0., 0.]],
@@ -30,7 +30,20 @@ X_SOBEL_2D_KERN = torch.tensor([
     [0., 0., 0.], 
     [0., 0., 0.]]])
 
-X_SOBEL_2D_KERN_v2 = torch.tensor([
+X_SOBEL_2D_KERN = torch.tensor([
+   [[0., 0., 0.], 
+    [1., 2., 1.], 
+    [0., 0., 0.]],
+   
+   [[0., 0., 0.], 
+    [0., 0., 0.], 
+    [0., 0., 0.]],
+   
+   [[0., 0., 0.], 
+    [-1., -2., -1.],
+    [0., 0., 0.]]])
+
+Y_SOBEL_2D_KERN_v2 = torch.tensor([
    [[0., 1., 0.], 
     [0., 0., 0.], 
     [0., -1., 0.]],
@@ -43,7 +56,7 @@ X_SOBEL_2D_KERN_v2 = torch.tensor([
     [0., 0., 0.], 
     [0., -1., 0.]]])
 
-Y_SOBEL_2D_KERN_v2 = torch.tensor([
+X_SOBEL_2D_KERN_v2 = torch.tensor([
    [[0., 1., 0.], 
     [0., 2., 0.], 
     [0., 1., 0.]],
@@ -55,19 +68,6 @@ Y_SOBEL_2D_KERN_v2 = torch.tensor([
    [[0., -1., 0.], 
     [0., -2., 0.], 
     [0., -1., 0.]]])
-
-Y_SOBEL_2D_KERN = torch.tensor([
-   [[0., 0., 0.], 
-    [1., 2., 1.], 
-    [0., 0., 0.]],
-   
-   [[0., 0., 0.], 
-    [0., 0., 0.], 
-    [0., 0., 0.]],
-   
-   [[0., 0., 0.], 
-    [-1., -2., -1.],
-    [0., 0., 0.]]])
 
 Z_SOBEL_2D_KERN = torch.tensor([
    [[0., 0., 0.], 
@@ -81,7 +81,8 @@ Z_SOBEL_2D_KERN = torch.tensor([
    [[0., 0., 0.], 
     [0., 0., 0.], 
     [0., 0., 0.]]])
-X_SOBEL_KERN = torch.tensor([
+
+Y_SOBEL_KERN = torch.tensor([
    [[1., 2., 1.], 
     [0., 0., 0.], 
     [-1., -2., -1.]],
@@ -93,7 +94,8 @@ X_SOBEL_KERN = torch.tensor([
    [[1., 2., 1.], 
     [0., 0., 0.], 
     [-1., -2., -1.]]])
-Y_SOBEL_KERN = torch.tensor([
+
+X_SOBEL_KERN = torch.tensor([
    [[1., 2., 1.], 
     [2., 4., 2.], 
     [1., 2., 1.]],
@@ -105,6 +107,7 @@ Y_SOBEL_KERN = torch.tensor([
    [[-1., -2., -1.], 
     [-2., -4., -2.], 
     [-1., -2., -1.]]])
+
 Z_SOBEL_KERN = torch.tensor([
    [[-1., 0., 1.], 
     [-2., 0., 2.], 
@@ -117,6 +120,7 @@ Z_SOBEL_KERN = torch.tensor([
    [[-1., 0., 1.], 
     [-2., 0., 2.], 
     [-1., 0., 1.]]])
+
 LAP_KERN = torch.tensor([
    [[2., 3., 2.], 
     [3., 6., 3.], 
@@ -424,7 +428,7 @@ class VoxelPerception():
             res = torch.all(dif < 0.0001)
             print (f'lap comp: {res}')
         
-        return torch.cat([states, px, py, gz, lap], 1) # * removed 'gz' from perception
+        return torch.cat([states, px, py, gz, lap], 1)
     
     def quaternion_perception(self, _x):
         # * separate states and angle channels
