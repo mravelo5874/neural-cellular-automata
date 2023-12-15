@@ -13,7 +13,7 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_iso2_v13'
+_NAME_ = 'cowboy16_iso3_v0'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_DIST_ = 2
@@ -28,10 +28,10 @@ _SEED_DIC_ = {
 }
 _TARGET_VOX_ = '../vox/cowboy16.vox'
 # * model parameters
-_MODEL_TYPE_ = Perception.YAW_ISO_V2
+_MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
 # * training parameters
-_EPOCHS_ = 12_000
+_EPOCHS_ = 20_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
@@ -42,7 +42,7 @@ _DAMG_RATE_ = 5
 # * logging parameters
 _LOG_FILE_ = 'trainlog.txt'
 _INFO_RATE_ = 100
-_SAVE_RATE_ = 3000
+_SAVE_RATE_ = 4000
 
 # * load from checkpoint
 load_checkpoint = False
@@ -160,8 +160,6 @@ def main():
     torch.backends.cudnn.benchmark = True
     torch.cuda.empty_cache()
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
-    
-    # * force cuDNN
     force_cudnn_initialization()
     
     # * create / load model

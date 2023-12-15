@@ -1,5 +1,5 @@
 {
-    "_NAME_": "ghosty_iso2_v12",
+    "_NAME_": "cowboy16_iso2_v13",
     "_SIZE_": 16,
     "_PAD_": 4,
     "_SEED_DIST_": 2,
@@ -12,7 +12,7 @@
         "plus_z": null,
         "minus_z": null
     },
-    "_TARGET_VOX_": "../vox/ghosty.vox",
+    "_TARGET_VOX_": "../vox/cowboy16.vox",
     "_MODEL_TYPE_": 5,
     "_CHANNELS_": 16,
     "_EPOCHS_": 12000,
