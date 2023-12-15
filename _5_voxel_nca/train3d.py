@@ -48,13 +48,18 @@ _SAVE_RATE_ = 3000
 load_checkpoint = False
 checkpoint_dir = '_checkpoints/earth_aniso/'
 checkpoint_model = 'earth_aniso_cp10000'
+
+def force_cudnn_initialization():
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'forcing cuDNN initialization...')
+    s = 32
+    dev = torch.device('cuda')
+    torch.nn.functional.conv2d(torch.zeros(s, s, s, s, device=dev), torch.zeros(s, s, s, s, device=dev))
         
 def main():
     _FIND_ANOMALY_ = False
     if _FIND_ANOMALY_:
         torch.autograd.set_detect_anomaly(_FIND_ANOMALY_)
         print ('[WARNING] detect anomaly is on. training will be slower than normal.')
-    
     
     # * make directory for model files
     if not os.path.exists(f'_models/{_NAME_}'):
@@ -155,6 +160,9 @@ def main():
     torch.backends.cudnn.benchmark = True
     torch.cuda.empty_cache()
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
+    
+    # * force cuDNN
+    force_cudnn_initialization()
     
     # * create / load model
     if not load_checkpoint:
