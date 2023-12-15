@@ -295,11 +295,11 @@ class VoxelPerception():
             
             # * rotate istropic channel(s)
             if _iso_type == 1:
-                c_clone[:, -1:] = torch.sub(c_clone[:, -1:], (np.pi/2))
+                c_clone[:, -1:] = (torch.sub(c_clone[:, -1:], (np.pi/2))) % (np.pi*2)
             elif _iso_type == 3:
-                c_clone[:, -1:] = torch.sub(c_clone[:, -1:], (np.pi/2))
-                c_clone[:, -2:-1] = torch.sub(c_clone[:, -2:-1], (np.pi/2))
-                c_clone[:, -3:-2] = torch.sub(c_clone[:, -3:-2], (np.pi/2))
+                c_clone[:, -1:] = (torch.sub(c_clone[:, -1:], (np.pi/2))) % (np.pi*2)
+                c_clone[:, -2:-1] = (torch.sub(c_clone[:, -2:-1], (np.pi/2))) % (np.pi*2)
+                c_clone[:, -3:-2] = (torch.sub(c_clone[:, -3:-2], (np.pi/2))) % (np.pi*2)
             
             dif = torch.abs(_x - c_clone)
             res = torch.all(dif < 0.0001)

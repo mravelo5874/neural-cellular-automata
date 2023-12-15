@@ -14,13 +14,15 @@ _NAME_ = 'ghosty_iso2_v12' # yawiso_10
 _DIR_ = '_models'
 _DEVICE_ = 'cuda'
 _LOG_FILE_ = 'complog.txt'
-_ITER_ = 1
+_ITER_ = 12
 
 # * for reproducability
 _SEED_ = 100
 np.random.seed(_SEED_)
 random.seed(_SEED_)
 torch.manual_seed(_SEED_)
+
+torch.set_printoptions(threshold=None, profile='full', sci_mode=False, linewidth=200)
 
 def main():
     # * make directory for model files
@@ -83,22 +85,22 @@ def main():
     
     # * rotate istropic channel(s)
     if model.isotropic_type() == 1:
-        seed_1[:, -1:] = torch.add(seed_1[:, -1:], (np.pi/2))
+        seed_1[:, -1:] = torch.add(seed_1[:, -1:], (np.pi/2)) % (np.pi*2)
     elif model.isotropic_type() == 3:
-        seed_1[:, -1:] = torch.add(seed_1[:, -1:], (np.pi/2))
-        seed_1[:, -2:-1] = torch.add(seed_1[:, -2:-1],(np.pi/2))
-        seed_1[:, -3:-2] = torch.add(seed_1[:, -3:-2],(np.pi/2))
+        seed_1[:, -1:] = torch.add(seed_1[:, -1:], (np.pi/2)) % (np.pi*2)
+        seed_1[:, -2:-1] = torch.add(seed_1[:, -2:-1],(np.pi/2)) % (np.pi*2)
+        seed_1[:, -3:-2] = torch.add(seed_1[:, -3:-2],(np.pi/2)) % (np.pi*2)
 
     # * compare seeds
     seed_1_copy = seed_1.detach().clone()
 
     # * rotate istropic channel(s)
     if model.isotropic_type() == 1:
-        seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2))
+        seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2)) % (np.pi*2)
     elif model.isotropic_type() == 3:
-        seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2))
-        seed_1_copy[:, -2:-1] = torch.sub(seed_1_copy[:, -2:-1], (np.pi/2))
-        seed_1_copy[:, -3:-2] = torch.sub(seed_1_copy[:, -3:-2], (np.pi/2))
+        seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2)) % (np.pi*2)
+        seed_1_copy[:, -2:-1] = torch.sub(seed_1_copy[:, -2:-1], (np.pi/2)) % (np.pi*2)
+        seed_1_copy[:, -3:-2] = torch.sub(seed_1_copy[:, -3:-2], (np.pi/2)) % (np.pi*2)
         
     seed_1_copy = torch.rot90(seed_1_copy, 1, (3, 2))
     
@@ -111,30 +113,38 @@ def main():
     
     # * run forward once
     with torch.no_grad():
-        for i in range(_ITER_):
+        for i in range(_ITER_): 
             mask = (torch.rand(seed_0[:, :1, :, :, :].shape) <= model.update_rate).to(model.device, torch.float32)
             seed_0 = model.forward(seed_0, _mask=mask, _comp=seed_1)
+            
+            # print (f'seed_0[:, -1:]: {seed_0[:, -1:]}')
             
             # * rotate mask
             rot_mask = torch.rot90(mask, 1, (2, 3))
             seed_1 = model.forward(seed_1, _mask=rot_mask)
             
+            # print (f'seed_1[:, -1:]: {seed_1[:, -1:]}')
+            
             # * compare seeds
             seed_1_copy = seed_1.detach().clone()
-            seed_1_copy = torch.rot90(seed_1, 1, (3, 2))
-    
-            # * rotate istropic channel(s)
+            seed_1_copy = torch.rot90(seed_1_copy, 1, (3, 2))
+            
+            # # * rotate istropic channel(s)
             if model.isotropic_type() == 1:
-                seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2))
+                seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2)) % (np.pi*2)
             elif model.isotropic_type() == 3:
-                seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2))
-                seed_1_copy[:, -2:-1] = torch.sub(seed_1_copy[:, -2:-1], (np.pi/2))
-                seed_1_copy[:, -3:-2] = torch.sub(seed_1_copy[:, -3:-2], (np.pi/2))
+                seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2)) % (np.pi*2)
+                seed_1_copy[:, -2:-1] = torch.sub(seed_1_copy[:, -2:-1], (np.pi/2)) % (np.pi*2)
+                seed_1_copy[:, -3:-2] = torch.sub(seed_1_copy[:, -3:-2], (np.pi/2)) % (np.pi*2)
+                
+            # print (f'seed_0[:, -1:]: {seed_0[:, -1:]}')
+            # print (f'seed_1_copy[:, -1:]: {seed_1_copy[:, -1:]}')
             
             dif = torch.abs(seed_0 - seed_1_copy)
             res = torch.all(dif < 0.0001)
             print (f'{i} comp: {res}')
             
+            # print (f'dif: {dif}')
             # dif += seed
             # Vox().load_from_tensor(dif).render(_show_grid=True)
             
@@ -144,11 +154,11 @@ def main():
     
     # * rotate istropic channel(s)
     if model.isotropic_type() == 1:
-        seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2))
+        seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2)) % (np.pi*2)
     elif model.isotropic_type() == 3:
-        seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2))
-        seed_1_copy[:, -2:-1] = torch.sub(seed_1_copy[:, -2:-1], (np.pi/2))
-        seed_1_copy[:, -3:-2] = torch.sub(seed_1_copy[:, -3:-2], (np.pi/2))
+        seed_1_copy[:, -1:] = torch.sub(seed_1_copy[:, -1:], (np.pi/2)) % (np.pi*2)
+        seed_1_copy[:, -2:-1] = torch.sub(seed_1_copy[:, -2:-1], (np.pi/2)) % (np.pi*2)
+        seed_1_copy[:, -3:-2] = torch.sub(seed_1_copy[:, -3:-2], (np.pi/2)) % (np.pi*2)
     
     dif = torch.abs(seed_0 - seed_1_copy)
     res = torch.all(dif < 0.0001)

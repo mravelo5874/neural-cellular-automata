@@ -156,12 +156,12 @@ class VoxelNCA(torch.nn.Module):
                 x = seeds[i]
                 # * randomize last channel(s)
                 if self.isotropic_type() == 0:
-                    x[:, -1:] = torch.rand(_size, _size, _size)*pi*2.0
+                    x[:, -1:] = (torch.rand(_size, _size, _size)*pi*2.0) % (pi*2)
                 elif self.isotropic_type() == 3:
                     pass
-                    _seed[:1, -1:] = torch.rand(_size, _size, _size)*pi*2.0
-                    _seed[:1, -2:-1] = torch.rand(_size, _size, _size)*pi*2.0
-                    _seed[:1, -3:-2] = torch.rand(_size, _size, _size)*pi*2.0
+                    _seed[:1, -1:] = (torch.rand(_size, _size, _size)*pi*2.0) % (pi*2)
+                    _seed[:1, -2:-1] = (torch.rand(_size, _size, _size)*pi*2.0) % (pi*2)
+                    _seed[:1, -3:-2] = (torch.rand(_size, _size, _size)*pi*2.0) % (pi*2)
 
                 # * still frames of seed
                 v = Vox().load_from_tensor(x)
@@ -263,11 +263,11 @@ class VoxelNCA(torch.nn.Module):
             
             # * rotate istropic channel(s)
             if self.isotropic_type() == 1:
-                c_clone[:, -1:] = torch.sub(c_clone[:, -1:], (pi/2))
+                c_clone[:, -1:] = (torch.sub(c_clone[:, -1:], (pi/2))) % (pi*2)
             elif self.isotropic_type() == 3:
-                c_clone[:, -1:] = torch.sub(c_clone[:, -1:], (pi/2))
-                c_clone[:, -2:-1] = torch.sub(c_clone[:, -2:-1], (pi/2))
-                c_clone[:, -3:-2] = torch.sub(c_clone[:, -3:-2], (pi/2))
+                c_clone[:, -1:] = (torch.sub(c_clone[:, -1:], (pi/2))) % (pi*2)
+                c_clone[:, -2:-1] = (torch.sub(c_clone[:, -2:-1], (pi/2))) % (pi*2)
+                c_clone[:, -3:-2] = (torch.sub(c_clone[:, -3:-2], (pi/2))) % (pi*2)
                 
             c_p_clone = c_p.detach().clone()
             c_p_clone = torch.rot90(c_p_clone, 1, (3, 2))
@@ -302,7 +302,7 @@ class VoxelNCA(torch.nn.Module):
                 res = torch.all(dif < 0.0001)
                 print (f'final cat comp: {res}')
             
-        if self.isotropic_type() == 3:
+        elif self.isotropic_type() == 3:
             states = _x[:, :-3]*alive_mask
             ax = _x[:, -1:] % (pi*2.0)
             ay = _x[:, -2:-1] % (pi*2.0)

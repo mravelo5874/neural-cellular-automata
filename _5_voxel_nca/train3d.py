@@ -13,7 +13,7 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'ghosty_iso2_v12'
+_NAME_ = 'cowboy16_iso2_v13'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_DIST_ = 2
@@ -26,7 +26,7 @@ _SEED_DIC_ = {
     'plus_z': None,
     'minus_z': None,
 }
-_TARGET_VOX_ = '../vox/ghosty.vox'
+_TARGET_VOX_ = '../vox/cowboy16.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V2
 _CHANNELS_ = 16

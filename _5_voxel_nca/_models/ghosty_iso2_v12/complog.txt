@@ -10,3 +10,517 @@ seed.shape: torch.Size([1, 16, 24, 24, 24])
 model.iso_type: 1
 elapsed time: 0:00:00
 ****************
+****************
+timestamp: 2023-12-14 16:47:14.760479
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 16:49:04.423216
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 16:54:38.366218
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 16:55:25.195630
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 16:56:42.106446
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 16:56:56.232984
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:17
+****************
+****************
+timestamp: 2023-12-14 16:57:40.965020
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 16:58:09.213090
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 16:59:28.905396
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 17:00:10.478857
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 17:00:35.434336
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 17:01:04.299517
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 17:01:57.795291
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 17:03:36.338811
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 17:04:38.281925
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+****************
+timestamp: 2023-12-14 17:05:00.277871
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 17:05:39.158848
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 17:05:52.211192
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 17:06:08.933192
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 17:08:03.322681
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 17:09:06.447366
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:01
+****************
+****************
+timestamp: 2023-12-14 17:09:29.864261
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:01
+****************
+****************
+timestamp: 2023-12-14 17:12:42.615884
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:01
+****************
+****************
+timestamp: 2023-12-14 17:14:01.423027
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:01
+****************
+****************
+timestamp: 2023-12-14 17:17:50.779206
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:01
+****************
+****************
+timestamp: 2023-12-14 17:18:16.252801
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:01
+****************
+****************
+timestamp: 2023-12-14 17:28:06.272790
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:01
+****************
+****************
+timestamp: 2023-12-14 17:29:02.276853
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:01
+****************
+****************
+timestamp: 2023-12-14 17:30:32.642093
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:02
+****************
+****************
+timestamp: 2023-12-14 17:48:30.991431
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:02
+****************
+****************
+timestamp: 2023-12-14 17:49:34.705368
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 17:56:32.530438
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:01
+****************
+****************
+timestamp: 2023-12-14 17:58:16.764154
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:02
+****************
+****************
+timestamp: 2023-12-14 17:58:57.419454
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:01
+****************
+****************
+timestamp: 2023-12-14 18:00:01.498959
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 18:01:14.096992
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:01
+****************
+****************
+timestamp: 2023-12-14 18:02:22.348243
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:02
+****************
+****************
+timestamp: 2023-12-14 18:03:50.508072
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 18:04:48.764509
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
+****************
+timestamp: 2023-12-14 18:06:06.782521
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:01
+****************
+****************
+timestamp: 2023-12-14 18:07:33.087008
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:01
+****************
+****************
+timestamp: 2023-12-14 18:08:22.070776
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:02
+****************
+****************
+timestamp: 2023-12-14 18:09:06.000700
+initializing comparison...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/ghosty_iso2_v12/ghosty_iso2_v12.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+model.iso_type: 1
+elapsed time: 0:00:00
+****************
