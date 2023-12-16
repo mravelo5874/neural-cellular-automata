@@ -8,7 +8,7 @@ from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as voxutil
 
 # * vidgen params
-_NAME_ = 'cowboy16_quat_2'
+_NAME_ = 'cowboy16_iso2_v13'
 _DIR_ = '_models'
 _DEVICE_ = 'cuda'
 _LOG_FILE_ = 'vidlog.txt'
