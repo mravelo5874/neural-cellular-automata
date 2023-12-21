@@ -1,11 +1,11 @@
 #version 330
 
-in vec2 in_pos;
-in vec2 in_uv;
-out vec2 v_uv;
+layout (location=0) in vec2 in_pos;
+layout (location=1) in vec2 in_uvs;
 
-void main()
-{
-    v_uv = in_uv;
-    gl_Position = vec4(in_position, 0.0, 1.0);
+out vec2 v_uvs;
+
+void main() {
+    v_uvs = in_uvs;
+    gl_Position = vec4(in_pos, 0.0, 1.0);
 }

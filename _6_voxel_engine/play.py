@@ -21,7 +21,7 @@ cwd = os.getcwd().split('\\')[:-1]
 cwd = '/'.join(cwd)
 
 class VoxelEngine:
-    def __init__(self, _win_size=(900, 500)):
+    def __init__(self, _win_size=(1200, 800)):
         # * init pygame modules
         pg.init()
         
@@ -48,7 +48,8 @@ class VoxelEngine:
         self.SHOW_VECT = False
         # * TODO gui
         self.UIMANAGER = gui.UIManager(_win_size)
-        self.SURF = pg.Surface(_win_size)
+        self.SURF = pg.Surface(_win_size, pg.SRCALPHA)
+        self.SURF.fill((0, 0, 0, 0))
         self.hello_button = gui.elements.UIButton(relative_rect=pg.Rect((0, 0), (200, 200)),
                                              text='Say Hello',
                                              manager=self.UIMANAGER)
@@ -126,7 +127,9 @@ class VoxelEngine:
         
         # * update gui
         self.UIMANAGER.update(self.delta_time)
-        self.gui.update()
+        self.SURF.fill((0, 0, 0, 0))
+        self.UIMANAGER.draw_ui(self.SURF)
+        self.gui.update(self.SURF)
         
         # * update player
         if self.CREATIVE_MODE:
@@ -162,16 +165,6 @@ class VoxelEngine:
             
         self.voxel.render()
         self.crosshair.render()
-        
-        # * TODO render gui using mgl
-        # * links: https://stackoverflow.com/questions/76697818/gui-with-pygame-and-moderngl
-        # *        https://stackoverflow.com/questions/66552579/how-can-i-draw-using-pygame-while-also-drawing-with-pyopengl/66552664#66552664
-        self.WINDOW.blit(self.SURF, (0, 0))
-        rgba_surf = pg.image.tostring(self.SURF, 'RGBA')
-        width, height = self.SURF.get_size()
-        # self.GUI.draw_ui(self.SURF)
-        
-        
         self.gui.render()
         
         # * swap buffers
@@ -188,11 +181,10 @@ class VoxelEngine:
             if event.type == gui.UI_BUTTON_PRESSED:
                 if event.ui_element == self.hello_button:
                     print ('hit hello button!')
-            
+                    
+            self.UIMANAGER.process_events(event)
             # ---------------------------------- #
             
-            # * gui
-            self.UIMANAGER.process_events(event)
             
             # -------- key press events -------- #
             if event.type == pg.KEYDOWN:
