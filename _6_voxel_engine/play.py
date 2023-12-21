@@ -14,13 +14,14 @@ from voxel import Voxel
 from crosshair import Crosshair
 from player import Player
 from vector import Vector
+from gui import Gui
 from nca_simulator import NCASimulator
 
 cwd = os.getcwd().split('\\')[:-1]
 cwd = '/'.join(cwd)
 
 class VoxelEngine:
-    def __init__(self, _win_size=(1800, 1000)):
+    def __init__(self, _win_size=(900, 500)):
         # * init pygame modules
         pg.init()
         
@@ -46,11 +47,11 @@ class VoxelEngine:
         self.SHOW_AXIS = False
         self.SHOW_VECT = False
         # * TODO gui
-        self.GUI = gui.UIManager(_win_size)
+        self.UIMANAGER = gui.UIManager(_win_size)
         self.SURF = pg.Surface(_win_size)
-        hello_button = gui.elements.UIButton(relative_rect=pg.Rect((350, 275), (100, 50)),
+        self.hello_button = gui.elements.UIButton(relative_rect=pg.Rect((0, 0), (200, 200)),
                                              text='Say Hello',
-                                             manager=self.GUI)
+                                             manager=self.UIMANAGER)
         # * interaction
         self.my_voxel = None
         # -------------------------- #
@@ -85,6 +86,7 @@ class VoxelEngine:
         self.axis = Axis(self)
         self.crosshair = Crosshair(self)
         self.wireframe = WireFrame(self)
+        self.gui = Gui(self)
         
         self.my_vector = (None, None)
         self.my_voxel = None
@@ -123,7 +125,8 @@ class VoxelEngine:
         pg.display.set_caption(f'fps: {self.clock.get_fps() :.0f}')
         
         # * update gui
-        self.GUI.update(self.delta_time)
+        self.UIMANAGER.update(self.delta_time)
+        self.gui.update()
         
         # * update player
         if self.CREATIVE_MODE:
@@ -164,7 +167,12 @@ class VoxelEngine:
         # * links: https://stackoverflow.com/questions/76697818/gui-with-pygame-and-moderngl
         # *        https://stackoverflow.com/questions/66552579/how-can-i-draw-using-pygame-while-also-drawing-with-pyopengl/66552664#66552664
         self.WINDOW.blit(self.SURF, (0, 0))
-        self.GUI.draw_ui(self.WINDOW)
+        rgba_surf = pg.image.tostring(self.SURF, 'RGBA')
+        width, height = self.SURF.get_size()
+        # self.GUI.draw_ui(self.SURF)
+        
+        
+        self.gui.render()
         
         # * swap buffers
         pg.display.flip()
@@ -175,8 +183,16 @@ class VoxelEngine:
             if event.type == pg.QUIT:
                 self.is_running = False
                 
+            # ----------- gui events ----------- #
+            
+            if event.type == gui.UI_BUTTON_PRESSED:
+                if event.ui_element == self.hello_button:
+                    print ('hit hello button!')
+            
+            # ---------------------------------- #
+            
             # * gui
-            self.GUI.process_events(event)
+            self.UIMANAGER.process_events(event)
             
             # -------- key press events -------- #
             if event.type == pg.KEYDOWN:
@@ -223,6 +239,13 @@ class VoxelEngine:
                     if self.sim != None:
                         self.sim.step_forward()
                         
+                # * toggle creative mode
+                if event.key == pg.K_c:
+                    self.CREATIVE_MODE = True
+                    # * hide mouse cursor
+                    pg.event.set_grab(True)
+                    pg.mouse.set_visible(False)
+                        
                 # * toggle axis
                 if event.key == pg.K_1:
                     self.SHOW_AXIS = not self.SHOW_AXIS
@@ -254,10 +277,12 @@ class VoxelEngine:
             if pg.mouse.get_pressed(3)[0]:
                 # * enter creative mode if click on screen
                 if not self.CREATIVE_MODE:
-                    self.CREATIVE_MODE = True
-                    # * hide mouse cursor
-                    pg.event.set_grab(True)
-                    pg.mouse.set_visible(False)
+                    pass
+                    # TODO fix this so it works with gui interactions
+                    # self.CREATIVE_MODE = True
+                    # # * hide mouse cursor
+                    # pg.event.set_grab(True)
+                    # pg.mouse.set_visible(False)
                 else:
                     if self.my_voxel != None:
                         if self.sim != None:
@@ -278,6 +303,7 @@ class VoxelEngine:
         self.axis.destroy()
         self.voxel.destroy()
         self.vector.destroy()
+        self.gui.destroy()
         
         # * quit application
         print ('exiting application...')
