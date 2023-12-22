@@ -103,6 +103,7 @@ class Cube:
                 self.texture.filter = mgl.LINEAR, mgl.LINEAR
             else:
                 self.texture.filter = mgl.NEAREST, mgl.NEAREST
+            return self.blend
     
     def get_shader_program(self, _name):
         with open(f'shaders/{_name}.vert') as file:

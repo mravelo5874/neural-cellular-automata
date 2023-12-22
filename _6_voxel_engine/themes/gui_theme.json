@@ -1,0 +1,94 @@
+{
+    "defaults":
+    {
+        "colours":
+        {
+            
+        }
+    },
+
+    "button":
+    {
+        "colours":
+        {
+            
+        },
+        "font":
+        {
+            "name": "fira_code",
+            "size": "16",
+            "bold": "0",
+            "italic": "0"
+        }
+    },
+    "#invisible_button":
+    {
+        "colours":
+        {
+            "normal_bg":"rgba(0, 0, 0, 0)",
+            "hovered_bg":"rgba(0, 0, 0, 0)",
+            "disabled_bg":"rgba(0, 0, 0, 0)",
+            "selected_bg":"rgba(0, 0, 0, 0)",
+            "active_bg": "rgba(0, 0, 0, 0)"
+        }
+    },
+
+    "drop_down_menu":
+    {
+        "misc":
+        {
+            "expand_direction": "down"
+        },
+
+        "colours":
+        {
+            "normal_bg": "#25292e",
+            "hovered_bg": "#35393e"
+        }
+    },
+    "drop_down_menu.#selected_option":
+    {
+        "misc":
+        {
+            "border_width": "1",
+            "open_button_width": "10"
+        }
+    },
+
+    "label":
+    {
+        "colours":
+        {
+            "normal_text": "white"
+        },
+        "font":
+        {
+            "name": "fira_code",
+            "size": "24",
+            "bold": "0",
+            "italic": "0"
+        },
+        "misc":
+        {
+            "text_shadow": "0",
+            "text_shadow_size": "0",
+            "text_shadow_offset": "0,0"
+        }
+    },
+    "#current_mode_label":
+    {
+        "font":
+        {
+            "name": "fira_code",
+            "size": "16",
+            "bold": "0",
+            "italic": "0"
+        },
+        "misc":
+        {
+            "text_horiz_alignment": "right",
+            "text_horiz_alignment_padding": "4",
+            "text_vert_alignment": "bottom"
+        }
+    }
+}
