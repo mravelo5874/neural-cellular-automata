@@ -75,7 +75,7 @@
             "text_shadow_offset": "0,0"
         }
     },
-    "#current_mode_label":
+    "#label_right":
     {
         "font":
         {
@@ -87,6 +87,22 @@
         "misc":
         {
             "text_horiz_alignment": "right",
+            "text_horiz_alignment_padding": "4",
+            "text_vert_alignment": "bottom"
+        }
+    },
+    "#label_left":
+    {
+        "font":
+        {
+            "name": "fira_code",
+            "size": "16",
+            "bold": "0",
+            "italic": "0"
+        },
+        "misc":
+        {
+            "text_horiz_alignment": "left",
             "text_horiz_alignment_padding": "4",
             "text_vert_alignment": "bottom"
         }

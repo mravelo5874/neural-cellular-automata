@@ -21,6 +21,7 @@ class Camera:
     def update(self):
         self.update_vectors()
         self.update_view_matrix()
+        # print (f'yaw: {self.yaw}, pitch: {self.pitch}')
         
     def update_view_matrix(self):
         self.m_view = glm.lookAt(self.pos, self.pos + self.forward, self.up)

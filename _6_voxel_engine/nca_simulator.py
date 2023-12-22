@@ -24,6 +24,7 @@ class NCASimulator:
         self.started = False
         self.device = _device
         self.mutex = threading.Lock()
+        self.iter = 0
         
         # * setup cuda if available
         torch.backends.cudnn.benchmark = True
@@ -38,6 +39,7 @@ class NCASimulator:
         
     def load_model(self, _model):
         # * load in params for seed
+        self.iter = 0
         params = {}
         with open(f'{cwd}/models/{_model}/{_model}_params.json', 'r') as openfile:
             params = json.load(openfile)
@@ -79,6 +81,7 @@ class NCASimulator:
                 self.mutex.acquire()
                 if not self.is_paused:
                     self.x = self.model(self.x)
+                    self.iter += 1
                     self.started = True
                 self.mutex.release()
                 
@@ -94,6 +97,7 @@ class NCASimulator:
             self.mutex.acquire()
             if self.is_paused:
                 self.x = self.model(self.x)
+                self.iter += 1
             self.mutex.release()
             
     def rot_seed(self, _axis='z'):
@@ -135,6 +139,7 @@ class NCASimulator:
     def reset(self):
         # * can only reset if running
         if self.is_running:
+            self.iter = 0
             self.is_running = False
             if self.worker:
                 self.worker.join()

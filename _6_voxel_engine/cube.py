@@ -96,14 +96,19 @@ class Cube:
         vbo = self.ctx.buffer(vertex_data)
         return vbo
     
-    def toggle_blend(self):
+    def set_blend(self, _opt):
         if self.texture != None:
-            self.blend = not self.blend
+            self.blend = _opt
             if self.blend:
                 self.texture.filter = mgl.LINEAR, mgl.LINEAR
             else:
                 self.texture.filter = mgl.NEAREST, mgl.NEAREST
             return self.blend
+    
+    def toggle_blend(self):
+        if self.texture != None:
+            self.blend = not self.blend
+            return self.set_blend(self.blend)
     
     def get_shader_program(self, _name):
         with open(f'shaders/{_name}.vert') as file:
