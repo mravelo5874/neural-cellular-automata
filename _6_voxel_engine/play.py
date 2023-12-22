@@ -47,7 +47,7 @@ class VoxelEngine:
         self.PLAYER_ROT_SPEED = 0.004
         self.PLAYER_POS = glm.vec3(1.4, -1.4, 1.4)
         self.MOUSE_SENS = 0.002
-        self.CREATIVE_MODE = True
+        self.CREATIVE_MODE = False
         self.SHOW_WIRE = False
         self.SHOW_AXIS = False
         self.SHOW_VECT = False
@@ -86,6 +86,10 @@ class VoxelEngine:
         self.delta_time = 0
         self.time = 0
         
+        # # * hide mouse cursor
+        # pg.event.set_grab(True)
+        # pg.mouse.set_visible(False)
+        
         # * init player and cube
         self.player = Player(self)
         self.cube = Cube(self)
@@ -106,10 +110,6 @@ class VoxelEngine:
             _app.sim = NCASimulator(_app.curr_model)
         threading.Thread(target=init_sim, args=[self]).start()
         
-        # * hide mouse cursor
-        pg.event.set_grab(True)
-        pg.mouse.set_visible(False)
-        
         # create gui elements
         w = self.WIN_SIZE[0]
         h = self.WIN_SIZE[1]
@@ -128,15 +128,15 @@ class VoxelEngine:
                                               object_id=obj(object_id='#label_left'))
         self.iter_text.set_tooltip('The number of iterations the model has performed. One iteration is a single forward function execution.')
         # * current mode label
-        self.mode_text = gui.elements.UILabel(relative_rect=pg.Rect((w-256, h-32), (256, 32)),
-                                              text='free cam',
+        self.mode_text = gui.elements.UILabel(relative_rect=pg.Rect((w-512, 0), (512, 32)),
+                                              text='gui',
                                               manager=self.UIMANAGER,
                                               object_id=obj(object_id='#label_right'))
         self.mode_text.set_tooltip('If in free cam mode, you can fly around using WASD, Space, and LShift. If in gui mode, you may interact with the gui.')
         # * current position label
         p = self.player.pos
         pos = '({:.3f}, {:.3f}, {:.3f})'.format(p[0], p[1], p[2])
-        self.pos_text = gui.elements.UILabel(relative_rect=pg.Rect((w-512, 0), (512, 32)),
+        self.pos_text = gui.elements.UILabel(relative_rect=pg.Rect((w-256, h-32), (256, 32)),
                                               text=f'{pos}', 
                                               manager=self.UIMANAGER,
                                               object_id=obj(object_id='#label_right'))
@@ -149,17 +149,14 @@ class VoxelEngine:
         self.fps_text.set_tooltip('The number of frames rendered per second.')
         # * creative mode button
         self.enter_creative_button = gui.elements.UIButton(relative_rect=pg.Rect((260, 0), (w-260, h)),
-                                                           text='',
+                                                           text='click here to enter free cam',
                                                            manager=self.UIMANAGER,
                                                            object_id=obj(object_id='#invisible_button'))
-        self.enter_creative_button.disable()
         self.GUI_ELEMENTS.append(self.enter_creative_button)
-        
         # * toggle axis
         self.toggle_axis = gui.elements.UIButton(relative_rect=pg.Rect((4, 64+4+32+4), (256, 32)),
                                                  text='toggle axis: _',
                                                  manager=self.UIMANAGER)
-        self.toggle_axis.disable()
         self.GUI_ELEMENTS.append(self.toggle_axis)
         self.toggle_axis.set_tooltip('Toggle to render axis lines.')
 
@@ -167,7 +164,6 @@ class VoxelEngine:
         self.toggle_border = gui.elements.UIButton(relative_rect=pg.Rect((4, 64+4+32+4+32+4), (256, 32)),
                                                  text='toggle border: _',
                                                  manager=self.UIMANAGER)
-        self.toggle_border.disable()
         self.GUI_ELEMENTS.append(self.toggle_border)
         self.toggle_border.set_tooltip('Toggle to render a wire-frame border around the volume.')
         
@@ -175,7 +171,6 @@ class VoxelEngine:
         self.toggle_vector = gui.elements.UIButton(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4), (256, 32)),
                                                  text='toggle vector: _',
                                                  manager=self.UIMANAGER)
-        self.toggle_vector.disable()
         self.GUI_ELEMENTS.append(self.toggle_vector)
         self.toggle_vector.set_tooltip('Toggle to render a vector whenever the user clicks in free cam mode.')
         
@@ -183,7 +178,6 @@ class VoxelEngine:
         self.render_mode = gui.elements.UIButton(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4), (256, 32)),
                                                  text='render mode: _',
                                                  manager=self.UIMANAGER, )
-        self.render_mode.disable()
         self.GUI_ELEMENTS.append(self.render_mode)
         self.render_mode.set_tooltip('Toggle between rendering voxels or blended.')
         
@@ -191,7 +185,6 @@ class VoxelEngine:
         self.model_select = gui.elements.UIDropDownMenu(self.models, self.curr_model,
                                                         relative_rect=pg.Rect((4, 4), (256, 32)),
                                                         manager=self.UIMANAGER)
-        self.model_select.disable()
         self.GUI_ELEMENTS.append(self.model_select)
         self.model_select.set_tooltip('Select a model to render.')
         
@@ -199,7 +192,6 @@ class VoxelEngine:
         self.reset_button = gui.elements.UIButton(relative_rect=pg.Rect((4, 4+32+4), (82, 32)),
                                                   text='reset',
                                                   manager=self.UIMANAGER)
-        self.reset_button.disable()
         self.GUI_ELEMENTS.append(self.reset_button)
         self.reset_button.set_tooltip('Reset to the model\'s starting seed.')
         
@@ -207,7 +199,6 @@ class VoxelEngine:
         self.pause_button = gui.elements.UIButton(relative_rect=pg.Rect((4+82+4, 4+32+4), (82, 32)),
                                                   text='pause',
                                                   manager=self.UIMANAGER)
-        self.pause_button.disable()
         self.GUI_ELEMENTS.append(self.pause_button)
         self.pause_button.set_tooltip('Pause the model\'s execution.')
         
@@ -215,7 +206,6 @@ class VoxelEngine:
         self.step_button = gui.elements.UIButton(relative_rect=pg.Rect((4+82+4+82+4, 4+32+4), (83, 32)),
                                                   text='step',
                                                   manager=self.UIMANAGER)
-        self.step_button.disable()
         self.GUI_ELEMENTS.append(self.step_button)
         self.step_button.set_tooltip('If paused, perform a single update step.')
         
@@ -223,7 +213,7 @@ class VoxelEngine:
         self.toggle_axis.set_text(f'toggle axis: {self.SHOW_AXIS}', )
         self.toggle_border.set_text(f'toggle border: {self.SHOW_WIRE}')
         self.toggle_vector.set_text(f'toggle vector: {self.SHOW_VECT}')
-        self.render_mode.set_text('render mode: voxels')
+        self.render_mode.set_text('render mode: voxel')
 
         # * game is running
         self.is_running = True
@@ -344,9 +334,13 @@ class VoxelEngine:
                     if not self.CREATIVE_MODE:
                         self.CREATIVE_MODE = True
                         self.mode_text.set_text('free cam')
+                        self.enter_creative_button.set_text('')
                         # * hide mouse cursor
                         pg.event.set_grab(True)
                         pg.mouse.set_visible(False)
+                        # * reset mouse position
+                        pg.mouse.set_pos(self.WIN_SIZE[0]/2, self.WIN_SIZE[1]/2)
+                        self.player.reset_mouse_rel()
                         # * disable gui elements
                         for e in self.GUI_ELEMENTS:
                             e.disable()
@@ -403,15 +397,14 @@ class VoxelEngine:
                     if self.CREATIVE_MODE:
                         self.CREATIVE_MODE = False
                         self.mode_text.set_text('gui')
+                        # * reset mouse position
+                        pg.mouse.set_pos(self.WIN_SIZE[0]/2, self.WIN_SIZE[1]/2)
                         # * show mouse cursor
                         pg.event.set_grab(False)
                         pg.mouse.set_visible(True)
                         # * enable gui elements
                         for e in self.GUI_ELEMENTS:
                             e.enable()
-                        self.toggle_axis.set_text(f'toggle axis: {self.SHOW_AXIS}', )
-                        self.toggle_border.set_text(f'toggle border: {self.SHOW_WIRE}')
-                        self.toggle_vector.set_text(f'toggle vector: {self.SHOW_VECT}')
                         
                 # * rotate seed xy
                 if event.key == pg.K_UP:
@@ -447,6 +440,7 @@ class VoxelEngine:
             
     def run(self):
         while self.is_running:
+            # TODO fix raycast through volume
             # self.fire_raycast()
             self.handle_events()
             self.update()

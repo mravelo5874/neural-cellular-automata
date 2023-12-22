@@ -18,6 +18,8 @@ class Camera:
         self.m_proj = glm.perspective(_app.V_FOV, _app.ASPECT_RATIO, _app.NEAR, _app.FAR)
         self.m_view = glm.mat4()
         
+        self.update()
+        
     def update(self):
         self.update_vectors()
         self.update_view_matrix()
