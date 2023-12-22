@@ -123,7 +123,7 @@ class VoxelEngine:
                                               object_id=obj(object_id='#label_left'))
         # * iterations label
         self.iter_text = gui.elements.UILabel(relative_rect=pg.Rect((260, 0), (256, 32)),
-                                              text='iter: 0',
+                                              text='0',
                                               manager=self.UIMANAGER,
                                               object_id=obj(object_id='#label_left'))
         self.iter_text.set_tooltip('The number of iterations the model has performed. One iteration is a single forward function execution.')
@@ -137,13 +137,13 @@ class VoxelEngine:
         p = self.player.pos
         pos = '({:.3f}, {:.3f}, {:.3f})'.format(p[0], p[1], p[2])
         self.pos_text = gui.elements.UILabel(relative_rect=pg.Rect((w-512, 0), (512, 32)),
-                                              text=f'pos: {pos}', 
+                                              text=f'{pos}', 
                                               manager=self.UIMANAGER,
                                               object_id=obj(object_id='#label_right'))
         self.pos_text.set_tooltip('Your current position in space.')
         # * current mode label
         self.fps_text = gui.elements.UILabel(relative_rect=pg.Rect((0, h-32), (256, 32)),
-                                              text='fps: ',
+                                              text='',
                                               manager=self.UIMANAGER,
                                               object_id=obj(object_id='#label_left'))
         self.fps_text.set_tooltip('The number of frames rendered per second.')
@@ -157,7 +157,7 @@ class VoxelEngine:
         
         # * toggle axis
         self.toggle_axis = gui.elements.UIButton(relative_rect=pg.Rect((4, 64+4+32+4), (256, 32)),
-                                                 text='toggle axis: False',
+                                                 text='toggle axis: _',
                                                  manager=self.UIMANAGER)
         self.toggle_axis.disable()
         self.GUI_ELEMENTS.append(self.toggle_axis)
@@ -165,7 +165,7 @@ class VoxelEngine:
 
         # * toggle wireframe border
         self.toggle_border = gui.elements.UIButton(relative_rect=pg.Rect((4, 64+4+32+4+32+4), (256, 32)),
-                                                 text='toggle border: False',
+                                                 text='toggle border: _',
                                                  manager=self.UIMANAGER)
         self.toggle_border.disable()
         self.GUI_ELEMENTS.append(self.toggle_border)
@@ -173,7 +173,7 @@ class VoxelEngine:
         
         # * toggle click vector
         self.toggle_vector = gui.elements.UIButton(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4), (256, 32)),
-                                                 text='toggle vector: False',
+                                                 text='toggle vector: _',
                                                  manager=self.UIMANAGER)
         self.toggle_vector.disable()
         self.GUI_ELEMENTS.append(self.toggle_vector)
@@ -181,8 +181,8 @@ class VoxelEngine:
         
         # * toggle render modes
         self.render_mode = gui.elements.UIButton(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4), (256, 32)),
-                                                 text='render mode: voxel',
-                                                 manager=self.UIMANAGER)
+                                                 text='render mode: _',
+                                                 manager=self.UIMANAGER, )
         self.render_mode.disable()
         self.GUI_ELEMENTS.append(self.render_mode)
         self.render_mode.set_tooltip('Toggle between rendering voxels or blended.')
@@ -220,7 +220,10 @@ class VoxelEngine:
         self.step_button.set_tooltip('If paused, perform a single update step.')
         
 
-        
+        self.toggle_axis.set_text(f'toggle axis: {self.SHOW_AXIS}', )
+        self.toggle_border.set_text(f'toggle border: {self.SHOW_WIRE}')
+        self.toggle_vector.set_text(f'toggle vector: {self.SHOW_VECT}')
+        self.render_mode.set_text('render mode: voxels')
 
         # * game is running
         self.is_running = True
@@ -240,7 +243,7 @@ class VoxelEngine:
         # * calculate fps
         self.delta_time = self.clock.tick()
         self.time = pg.time.get_ticks() * 0.001
-        self.fps_text.set_text(f'fps: {self.clock.get_fps() :.0f}')
+        self.fps_text.set_text(f'{self.clock.get_fps() :.0f}')
 
         # * update gui
         self.UIMANAGER.update(self.delta_time)
@@ -267,11 +270,11 @@ class VoxelEngine:
         # * update pos text
         p = self.player.pos
         pos = '({:.3f}, {:.3f}, {:.3f})'.format(p[0], p[1], p[2])
-        self.pos_text.set_text(f'pos: {pos}')
+        self.pos_text.set_text(f'{pos}')
         
         # * update iteration text
         if self.sim != None:
-            self.iter_text.set_text(f'iter: {self.sim.iter}')
+            self.iter_text.set_text(f'{self.sim.iter}')
             
         self.vector.update()
         self.cube.update()
@@ -309,6 +312,7 @@ class VoxelEngine:
                     def init_sim(_app):
                         _app.sim = NCASimulator(_app.curr_model)
                         _app.render_mode.set_text(f'render mode: voxel')
+                        _app.pause_button.set_text('pause')
                         _app.paused_text.set_text('')
                     threading.Thread(target=init_sim, args=[self]).start()
 
@@ -320,6 +324,8 @@ class VoxelEngine:
                 self.is_running = False
                 
             # ----------- gui events ----------- #
+            self.UIMANAGER.process_events(event)
+            
             # * load in new model from drop-down menu
             if event.type == gui.UI_DROP_DOWN_MENU_CHANGED:
                 if event.ui_element == self.model_select:
@@ -344,7 +350,7 @@ class VoxelEngine:
                         # * disable gui elements
                         for e in self.GUI_ELEMENTS:
                             e.disable()
-                
+
                 # * toggle axis lines           
                 if event.ui_element == self.toggle_axis:
                     self.SHOW_AXIS = not self.SHOW_AXIS
@@ -353,7 +359,7 @@ class VoxelEngine:
                 # * toggle wireframe border
                 if event.ui_element == self.toggle_border:
                     self.SHOW_WIRE = not self.SHOW_WIRE
-                    self.toggle_border.set_text(f'toggle axis: {self.SHOW_WIRE}')
+                    self.toggle_border.set_text(f'toggle border: {self.SHOW_WIRE}')
                 
                 # * toggle vector on click 
                 if event.ui_element == self.toggle_vector:
@@ -378,15 +384,15 @@ class VoxelEngine:
                         self.sim.toggle_pause()
                         if self.sim.is_paused:
                             self.paused_text.set_text('[PAUSED]')
+                            self.pause_button.set_text('play')
                         else:
                             self.paused_text.set_text('')
+                            self.pause_button.set_text('pause')
                             
                 # * step forward current model
                 if event.ui_element == self.step_button:
                     if self.sim != None:
                         self.sim.step_forward()
-            
-            self.UIMANAGER.process_events(event)
             # ---------------------------------- #
             
             
@@ -403,6 +409,9 @@ class VoxelEngine:
                         # * enable gui elements
                         for e in self.GUI_ELEMENTS:
                             e.enable()
+                        self.toggle_axis.set_text(f'toggle axis: {self.SHOW_AXIS}', )
+                        self.toggle_border.set_text(f'toggle border: {self.SHOW_WIRE}')
+                        self.toggle_vector.set_text(f'toggle vector: {self.SHOW_VECT}')
                         
                 # * rotate seed xy
                 if event.key == pg.K_UP:
@@ -418,6 +427,10 @@ class VoxelEngine:
                 if event.key == pg.K_RIGHT:
                     if self.sim != None:
                         self.sim.rot_seed('z')
+                        
+                if event.key == pg.K_1:
+                    if self.sim != None:
+                        self.sim.load_custom(0)
                     
             # ---------------------------------- #
                     
@@ -425,14 +438,7 @@ class VoxelEngine:
             # ---------- mouse events ---------- #
             if pg.mouse.get_pressed(3)[0]:
                 # * enter creative mode if click on screen
-                if not self.CREATIVE_MODE:
-                    pass
-                    # TODO fix this so it works with gui interactions
-                    # self.CREATIVE_MODE = True
-                    # # * hide mouse cursor
-                    # pg.event.set_grab(True)
-                    # pg.mouse.set_visible(False)
-                else:
+                if self.CREATIVE_MODE:
                     if self.my_voxel != None:
                         if self.sim != None:
                             self.sim.erase_sphere(self.my_voxel, 6)
@@ -441,7 +447,7 @@ class VoxelEngine:
             
     def run(self):
         while self.is_running:
-            self.fire_raycast()
+            # self.fire_raycast()
             self.handle_events()
             self.update()
             self.render()

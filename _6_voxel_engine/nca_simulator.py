@@ -53,7 +53,7 @@ class NCASimulator:
         _PAD_ = params['_PAD_']
         _SEED_DIST_ = params['_SEED_DIST_']
         _SEED_DIC_ = params['_SEED_DIC_']
-        self.size = _SIZE_+(2*_PAD_)*2
+        self.size = int(_SIZE_+(2.5*_PAD_)*2.5)
         self.seed = voxutil.custom_seed(_size=self.size, _channels=params['_CHANNELS_'], _dist=_SEED_DIST_, _center=_SEED_DIC_['center'], 
                                     _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
                                     _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
@@ -289,3 +289,53 @@ class NCASimulator:
         self.mutex.acquire()
         self.x = self.x*mask
         self.mutex.release()
+        
+    def load_custom(self, _num):
+        # can only load custom if not started
+        if not self.started:
+            if _num == 0:
+                print ('loading custom seed...')
+                self.seed = torch.zeros_like(self.seed)
+                # shape: [1, 16, 32, 32, 32]
+                
+                full=self.seed.shape[2]
+                half=full//2
+                chn=self.seed.shape[1]
+                rad=10
+                dist=2
+                
+                # red
+                # * top half
+                self.seed[:, 0, half+rad+dist, half+rad, half+rad] = 1.0 
+                self.seed[:, 0, half-rad-dist, half-rad, half+rad] = 1.0
+                # * bot half
+                self.seed[:, 0, half-rad, half+rad-dist, half-rad] = 1.0 
+                self.seed[:, 0, half+rad, half-rad+dist, half-rad] = 1.0
+                
+                
+                # green
+                # * top half
+                self.seed[:, 1, half+rad-dist, half+rad, half+rad] = 1.0
+                self.seed[:, 1, half-rad+dist, half-rad, half+rad] = 1.0
+                # * bot half
+                self.seed[:, 1, half-rad, half+rad+dist, half-rad] = 1.0
+                self.seed[:, 1, half+rad, half-rad-dist, half-rad] = 1.0
+            
+                # alpha + hidden channels
+                # * top half
+                self.seed[:, 3:chn, half+rad+dist, half+rad, half+rad] = 1.0
+                self.seed[:, 3:chn, half-rad-dist, half-rad, half+rad] = 1.0
+                self.seed[:, 3:chn, half+rad-dist, half+rad, half+rad] = 1.0
+                self.seed[:, 3:chn, half-rad+dist, half-rad, half+rad] = 1.0
+                # * bot half
+                self.seed[:, 3:chn, half-rad, half+rad-dist, half-rad] = 1.0 
+                self.seed[:, 3:chn, half+rad, half-rad+dist, half-rad] = 1.0
+                self.seed[:, 3:chn, half-rad, half+rad+dist, half-rad] = 1.0
+                self.seed[:, 3:chn, half+rad, half-rad-dist, half-rad] = 1.0
+                
+                # * random last state
+                self.seed[: -1:] = torch.rand(full, full, full)*np.pi*2.0
+                        
+                self.mutex.acquire()
+                self.x = self.seed.detach().clone()
+                self.mutex.release()
