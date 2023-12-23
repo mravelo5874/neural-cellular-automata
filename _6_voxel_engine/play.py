@@ -86,10 +86,6 @@ class VoxelEngine:
         self.delta_time = 0
         self.time = 0
         
-        # # * hide mouse cursor
-        # pg.event.set_grab(True)
-        # pg.mouse.set_visible(False)
-        
         # * init player and cube
         self.player = Player(self)
         self.cube = Cube(self)
@@ -191,21 +187,24 @@ class VoxelEngine:
         # * reset button
         self.reset_button = gui.elements.UIButton(relative_rect=pg.Rect((4, 4+32+4), (82, 32)),
                                                   text='reset',
-                                                  manager=self.UIMANAGER)
+                                                  manager=self.UIMANAGER,
+                                                  object_id=obj(object_id='#reset_button'))
         self.GUI_ELEMENTS.append(self.reset_button)
         self.reset_button.set_tooltip('Reset to the model\'s starting seed.')
         
         # * pause button
         self.pause_button = gui.elements.UIButton(relative_rect=pg.Rect((4+82+4, 4+32+4), (82, 32)),
                                                   text='pause',
-                                                  manager=self.UIMANAGER)
+                                                  manager=self.UIMANAGER,
+                                                  object_id=obj(object_id='#pause_button'))
         self.GUI_ELEMENTS.append(self.pause_button)
         self.pause_button.set_tooltip('Pause the model\'s execution.')
         
         # * step button
         self.step_button = gui.elements.UIButton(relative_rect=pg.Rect((4+82+4+82+4, 4+32+4), (83, 32)),
                                                   text='step',
-                                                  manager=self.UIMANAGER)
+                                                  manager=self.UIMANAGER,
+                                                  object_id=obj(object_id='#step_button'))
         self.GUI_ELEMENTS.append(self.step_button)
         self.step_button.set_tooltip('If paused, perform a single update step.')
         
