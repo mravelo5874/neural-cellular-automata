@@ -293,8 +293,10 @@ class NCASimulator:
     def load_custom(self, _num):
         # can only load custom if not started
         if not self.started:
-            if _num == 0:
-                print ('loading custom seed...')
+            print (f'loading custom seed {_num}...')
+            
+            # * four instances each facing a unique cardinal direction
+            if _num == 1:
                 self.seed = torch.zeros_like(self.seed)
                 # shape: [1, 16, 32, 32, 32]
                 
@@ -333,6 +335,31 @@ class NCASimulator:
                 self.seed[:, 3:chn, half-rad, half+rad+dist, half-rad] = 1.0
                 self.seed[:, 3:chn, half+rad, half-rad-dist, half-rad] = 1.0
                 
+                # * random last state
+                self.seed[: -1:] = torch.rand(full, full, full)*np.pi*2.0
+                        
+                self.mutex.acquire()
+                self.x = self.seed.detach().clone()
+                self.mutex.release()
+            
+            # * pi/2 diagonal
+            if _num == 2:
+                self.seed = torch.zeros_like(self.seed)
+                # shape: [1, 16, 32, 32, 32]
+                
+                full=self.seed.shape[2]
+                half=full//2
+                chn=self.seed.shape[1]
+                rad=3
+                
+                # red
+                self.seed[:, 0, half+rad, half+rad, half] = 1.0 
+                # green
+                self.seed[:, 1, half, half, half] = 1.0
+                # alpha + hidden channels
+                self.seed[:, 3:chn, half+rad, half+rad, half] = 1.0
+                self.seed[:, 3:chn, half, half, half] = 1.0
+
                 # * random last state
                 self.seed[: -1:] = torch.rand(full, full, full)*np.pi*2.0
                         

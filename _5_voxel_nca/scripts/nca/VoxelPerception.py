@@ -621,7 +621,7 @@ class VoxelPerception():
         rx = rxyz[:, 1]
         ry = rxyz[:, 2]
         rz = rxyz[:, 3]
-        return torch.cat([_x, rx, ry, rz, lap], 1)
+        return torch.cat([states, rx, ry, rz, lap], 1)
     
     def fast_quat_perception(self, _x):
         # * separate states and angle channels
