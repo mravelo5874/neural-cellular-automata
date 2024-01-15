@@ -17,12 +17,13 @@ from scripts.nca import VoxelUtil as voxutil
 from utils import Utils as utils
 
 class NCASimulator:
-    def __init__(self, _model, _device='cuda'):
+    def __init__(self, _model, _engine, _device='cuda'):
         self.is_loaded = False
         self.is_running = False
         self.is_paused = False
         self.started = False
         self.device = _device
+        self.engine = _engine
         self.mutex = threading.Lock()
         self.iter = 0
         
@@ -83,14 +84,36 @@ class NCASimulator:
                     self.x = self.model(self.x)
                     self.iter += 1
                     self.started = True
+                else:
+                    # * dummy forward (needed so engine does not lag when paused)
+                    self.model(self.x)
                 self.mutex.release()
                 
-    def run(self, _delay=0.5):
+    def run_raycaster(self):
+        while self.is_running:
+            # * fire raycast from mouse pos through volume
+            pos = self.engine.player.pos
+            vec = self.engine.player.forward
+            voxel = self.raycast_volume(pos, vec)
+            if voxel == None:
+                # * dummy forward (needed so engine does not lag)
+                self.model(self.x)
+                self.engine.my_voxel = [1e12, 1e12, 1e12]
+            else:
+                # * dummy forward (needed so engine does not lag)
+                self.model(self.x)
+                self.engine.my_voxel = voxel
+                
+    def run(self, _delay=0.0):
         # * can only start running if not running
         if self.is_running:
             return
+        # * start forward worker
         self.worker = threading.Thread(target=self.run_thread, args=[_delay], daemon=True)
         self.worker.start()
+        # * start raycaster
+        self.raycaster = threading.Thread(target=self.run_raycaster, daemon=True)
+        self.raycaster.start()
         
     def step_forward(self):
         with torch.no_grad():
@@ -119,6 +142,8 @@ class NCASimulator:
         self.is_paused = False
         self.started = False
         self.mutex.release()
+        # * join any running threads
+        self.raycaster.join()
         self.worker.join()
         
     def unload(self):
@@ -141,8 +166,12 @@ class NCASimulator:
         if self.is_running:
             self.iter = 0
             self.is_running = False
+            # * join any running threads
             if self.worker:
                 self.worker.join()
+            if self.raycaster:
+                self.raycaster.join()
+            # * reset seed
             self.mutex.acquire()
             self.started = False
             self.x = self.seed.detach().clone()
@@ -173,6 +202,7 @@ class NCASimulator:
         
         # * find where ray intersects volume on the surface
         t_min, t_max = utils.ray_box_intersection(pos, vec, glm.vec3(-1), glm.vec3(0.999))
+        
         # * exit if no intersection found
         if t_min == None or t_max == None:
             return None
@@ -182,15 +212,16 @@ class NCASimulator:
             # * normalize point to be within 0, 1
             norm_pos = (pos+1)/2
             # * multiply by size to get approximate voxel
-            vox = glm.ceil(norm_pos*self.size)
+            vox = glm.floor(norm_pos*self.size)
+            
         # * outside volume
         else:
             # * normalize point to be within 0, 1
             int_pos = pos+(vec*t_min)
             norm_pos = (int_pos+1)/2
             # * multiply by size to get approximate voxel
-            vox = glm.ceil(norm_pos*self.size)
-
+            vox = glm.floor(norm_pos*self.size)
+    
         # * run fast voxel traversal algorithm
         # * ref: https://github.com/cgyurgyik/fast-voxel-traversal-algorithm/blob/master/overview/FastVoxelTraversalOverview.md
         
@@ -210,11 +241,11 @@ class NCASimulator:
         if vec.x > 0:
             step_x = 1
             t_delta_x = vox_size/_vec.x
-            t_max_x = t_min + (-1 + vox.x * vox_size - _pos.x) / _vec.x
+            t_max_x = t_min + (-1.0 + vox.x * vox_size - _pos.x) / _vec.x
         elif vec.x < 0:
             step_x = -1
             t_delta_x = -vox_size/_vec.x
-            t_max_x = t_min + (-1 + (vox.x-1) * vox_size - _pos.x) / _vec.x
+            t_max_x = t_min + (-1.0 + (vox.x-1) * vox_size - _pos.x) / _vec.x
         else:
             step_x = 0
             t_delta_x = t_max
@@ -223,11 +254,11 @@ class NCASimulator:
         if vec.y > 0:
             step_y = 1
             t_delta_y = vox_size/_vec.y
-            t_max_y = t_min + (-1 + vox.y * vox_size - _pos.y) / _vec.y
+            t_max_y = t_min + (-1.0 + vox.y * vox_size - _pos.y) / _vec.y
         elif vec.y < 0:
             step_y = -1
             t_delta_y = -vox_size/_vec.y
-            t_max_y = t_min + (-1 + (vox.y-1) * vox_size - _pos.y) / _vec.y
+            t_max_y = t_min + (-1.0 + (vox.y-1) * vox_size - _pos.y) / _vec.y
         else:
             step_y = 0
             t_delta_y = t_max
@@ -236,11 +267,11 @@ class NCASimulator:
         if vec.z > 0:
             step_z = 1
             t_delta_z = vox_size/_vec.z
-            t_max_z = t_min + (-1 + vox.z * vox_size - _pos.z) / _vec.z
+            t_max_z = t_min + (-1.0 + vox.z * vox_size - _pos.z) / _vec.z
         elif vec.z < 0:
             step_z = -1
             t_delta_z = -vox_size/_vec.z
-            t_max_z = t_min + (-1 + (vox.z-1) * vox_size - _pos.z) / _vec.z
+            t_max_z = t_min + (-1.0 + (vox.z-1) * vox_size - _pos.z) / _vec.z
         else:
             step_z = 0
             t_delta_z = t_max

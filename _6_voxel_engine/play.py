@@ -95,7 +95,7 @@ class VoxelEngine:
         self.gui = Gui(self)
         
         self.my_vector = (None, None)
-        self.my_voxel = None
+        self.my_voxel = [1e12, 1e12, 1e12]
         
         self.vector = Vector(self)
         self.voxel = Voxel(self)
@@ -103,7 +103,7 @@ class VoxelEngine:
         # * init simulator
         self.sim = None
         def init_sim(_app):
-            _app.sim = NCASimulator(_app.curr_model)
+            _app.sim = NCASimulator(_app.curr_model, self)
         threading.Thread(target=init_sim, args=[self]).start()
         
         # create gui elements
@@ -216,17 +216,6 @@ class VoxelEngine:
 
         # * game is running
         self.is_running = True
-    
-    def fire_raycast(self):
-        if self.sim != None:
-            # * fire raycast from mouse pos through volume
-            pos = self.player.pos
-            vec = self.player.forward
-            voxel = self.sim.raycast_volume(pos, vec)
-            if voxel != None:
-                self.my_voxel = voxel
-            else:
-                self.my_voxel = [1e12, 1e12, 1e12]
         
     def update(self):
         # * calculate fps
@@ -299,7 +288,7 @@ class VoxelEngine:
                     self.cube.destroy()
                     self.cube = Cube(self)
                     def init_sim(_app):
-                        _app.sim = NCASimulator(_app.curr_model)
+                        _app.sim = NCASimulator(_app.curr_model, self)
                         _app.render_mode.set_text(f'render mode: voxel')
                         _app.pause_button.set_text('pause')
                         _app.paused_text.set_text('')
@@ -443,12 +432,13 @@ class VoxelEngine:
             
     def run(self):
         while self.is_running:
-            # TODO fix raycast through volume
-            # self.fire_raycast()
             self.handle_events()
             self.update()
             self.render()
-            
+        
+        # * stop sim
+        self.sim.stop()
+        
         # * destroy scene
         self.cube.destroy()
         self.wireframe.destroy()
