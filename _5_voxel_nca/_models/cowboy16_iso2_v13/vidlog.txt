@@ -1,0 +1,15 @@
+****************
+timestamp: 2023-12-15 23:21:55.581555
+initializing video generation...
+device: cuda
+****************
+timestamp: 2023-12-15 23:23:39.891105
+initializing video generation...
+device: cuda
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+loaded model from: _models/cowboy16_iso2_v13/cowboy16_iso2_v13.pt
+seed.shape: torch.Size([1, 16, 24, 24, 24])
+starting time: 23:23:59
+generating videos...

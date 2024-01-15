@@ -392,3 +392,20 @@ train time: 1:46:17
 model [cowboy16_iso2_v13] saved to _models...
 elapsed time: 1:46:43
 ****************
+****************
+timestamp: 2023-12-15 23:22:47.196275
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: cowboy16_iso2_v13
+type: 5
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 24, 24, 24]
+target.shape: [4, 4, 24, 24, 24]
+starting training w/ 20001 epochs...

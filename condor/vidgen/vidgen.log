@@ -1,0 +1,16 @@
+000 (807912.000.000) 2023-12-15 18:52:46 Job submitted from host: <128.83.120.183:9618?addrs=128.83.120.183-9618&alias=darmok.cs.utexas.edu&noUDP&sock=schedd_1340_b4ff>
+...
+001 (807912.000.000) 2023-12-15 18:53:03 Job executing on host: <128.83.120.196:9618?addrs=128.83.120.196-9618&alias=nandor-5.cs.utexas.edu&noUDP&sock=startd_2561_3622>
+...
+007 (807912.000.000) 2023-12-15 18:53:03 Shadow exception!
+	Error from slot1_1@nandor-5.cs.utexas.edu: Failed to execute '/u/marco/github/neural-cellular-automata/condor/vidgen/vidgen.sh': (errno=13: 'Permission denied')
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+...
+012 (807912.000.000) 2023-12-15 18:53:03 Job was held.
+	Error from slot1_1@nandor-5.cs.utexas.edu: Failed to execute '/u/marco/github/neural-cellular-automata/condor/vidgen/vidgen.sh': (errno=13: 'Permission denied')
+	Code 6 Subcode 13
+...
+009 (807912.000.000) 2023-12-15 23:16:56 Job was aborted.
+	via condor_rm (by user marco)
+...
