@@ -23,29 +23,17 @@ class RadialAutomata:
         self.cells = []
 
         # * init first cell(s)
-        pos = np.array([0.0, 0.5-(1/(np.sqrt(3)*4)), 0.0])
-        color = np.array([0.0, 0.0, 1.0, 1.0])
-        angle = np.random.random() * np.pi * 2.0
-        hidden = np.random.random(12)
-        cell = RadialCell(pos, color, angle, hidden)
-        self.grid.add_cell(cell)
-        self.cells.append(cell)
-
-        pos = np.array([0.25, -(1/(np.sqrt(3)*4)), 0.0])
-        color = np.array([1.0, 0.0, 0.0, 1.0])
-        angle = np.random.random(1) * np.pi * 2.0
-        hidden = np.random.random(12)
-        cell = RadialCell(pos, color, angle, hidden)
-        self.grid.add_cell(cell)
-        self.cells.append(cell)
-        
-        pos = np.array([-0.25, -(1/(np.sqrt(3)*4)), 0.0])
-        color = np.array([1.0, 0.0, 0.0, 1.0])
-        angle = np.random.random(1) * np.pi * 2.0
-        hidden = np.random.random(12)
-        cell = RadialCell(pos, color, angle, hidden)
-        self.grid.add_cell(cell)
-        self.cells.append(cell)
+        n = 16
+        h = n//2
+        for x in range(n):
+            for y in range(n):
+                pos = np.array([x-h, y-h])
+                color = np.array([0.5, 0.5, 0.5, 1.0])
+                angle = np.random.random() * np.pi * 2.0
+                hidden = np.random.random(12)
+                cell = RadialCell(pos, color, angle, hidden)
+                self.grid.add_cell(cell)
+                self.cells.append(cell)
 
     def pixelize(self, _scale, _size):
         image = np.ones([_size, _size, 3]).astype(np.float32)
@@ -54,12 +42,12 @@ class RadialAutomata:
         # * find center-most cell and use as origin
         cen = np.array([0.0, 0.0])
         for cell in self.cells:
-            cen += cell.pos
+            cen += cell.pos.xy()
         cen /= len(self.cells)
         
         for cell in self.cells:
             cell_pos = cell.pos.xy()
-            pos = ((cell_pos - cen) * _scale) + (_size/2, _size/2, 0.0)
+            pos = ((cell_pos - cen) * _scale) + (_size/2, _size/2)
             pos = pos.astype(int)
             if pos[0] < _size and pos[0] >= 0 and pos[1] < _size and pos[1] >= 0:
                 color = cell.color.rgba()
@@ -90,7 +78,7 @@ class RadialAutomata:
         self.perform(active_cells, perception, neighbors)
         
     def percieve(self, _active_cells):
-        perception = torch.zeros([len(_active_cells), 8, self.pmap_res*2+1, self.pmap_res*2+1])
+        perception = torch.zeros([len(_active_cells), 16, self.pmap_res*2+1, self.pmap_res*2+1])
         neighbors_count = []
 
         for i, c in enumerate(_active_cells):
@@ -132,36 +120,41 @@ class RadialAutomata:
         for i in range(len(_cells)):
             cell = self.cells[_cells[i]]
             perception = _perception[i]
-            res = self.nn(perception).detach().numpy()
+            res = self.nn(perception).cpu().detach().numpy()
             
             nn_color = res[0:4] * self.color_scale
             nn_hidden = res[4:16]
             nn_move = res[16:18] * self.move_scale
             nn_angle = res[18]
             
+            # print (f'nn_color: {nn_color}')
+            # print (f'nn_hidden: {nn_hidden}')
+            # print (f'nn_move: {nn_move}')
+            # print (f'nn_angle: {nn_angle}')
+            
             cell.update(nn_color, nn_hidden, nn_move, nn_angle)
             self.grid.update_cell_chunk(cell)
                 
         # * perform size-changing actions:
-        new_cells = self.cells.copy()
-        for i in range(len(_cells)):
-            cell = self.cells[_cells[i]]
-            neighbors = _neighbors[i]
+        # new_cells = self.cells.copy()
+        # for i in range(len(_cells)):
+        #     cell = self.cells[_cells[i]]
+        #     neighbors = _neighbors[i]
 
-            # * duplicate cell in random direction
-            if action == 0 and len(new_cells) < self.cell_limit and _neighbors[i] <= self.neighbor_limit:
-                #print ('duplicate!')
-                dup_pos = cell.pos + ((np.random.rand(3) * 2.0) - 1) * self.move_scale
-                dup_pos[2] = 0.0
-                new_cell = RadialCell(dup_pos, cell.channels, self.id_count)
-                self.grid.add_cell(new_cell)
-                new_cells.append(new_cell)
-                self.id_count += 1
+        #     # * duplicate cell in random direction
+        #     if action == 0 and len(new_cells) < self.cell_limit and _neighbors[i] <= self.neighbor_limit:
+        #         #print ('duplicate!')
+        #         dup_pos = cell.pos + ((np.random.rand(3) * 2.0) - 1) * self.move_scale
+        #         dup_pos[2] = 0.0
+        #         new_cell = RadialCell(dup_pos, cell.channels, self.id_count)
+        #         self.grid.add_cell(new_cell)
+        #         new_cells.append(new_cell)
+        #         self.id_count += 1
                 
-            # * destroy cell
-            if self.cells[cell].color.a < 0.1:
-                old_cell = self.cells[cell]
-                new_cells.remove(old_cell)
-                self.grid.remove_cell(old_cell)
+        #     # * destroy cell
+        #     if self.cells[cell].color.a < 0.1:
+        #         old_cell = self.cells[cell]
+        #         new_cells.remove(old_cell)
+        #         self.grid.remove_cell(old_cell)
 
-        self.cells = new_cells
+        # self.cells = new_cells

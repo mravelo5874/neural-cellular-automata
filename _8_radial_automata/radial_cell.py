@@ -39,7 +39,7 @@ class RadialCell:
         self.hidden = _hidden
         
     def state(self):
-        return np.concatenate(self.color.rgba(), self.hidden)
+        return np.concatenate([self.color.rgba(), self.hidden])
     
     def update(self, _color_mod, _hidden_mod, _move_mod, _angle_mod):
         self.color.mod(_color_mod)

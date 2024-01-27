@@ -26,7 +26,7 @@ class ChunkSystem:
             self.add_cell(_cell)
 
     def pos_to_chunk(self, _pos):
-        return np.ceil(_pos / self.size).astype(int)
+        return np.ceil(_pos.xy() / self.size).astype(int)
 
     def query_neighbors_in_radius(self, _cell):
         neighbors = []

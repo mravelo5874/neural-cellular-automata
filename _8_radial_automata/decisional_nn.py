@@ -32,14 +32,5 @@ class DecisionalNN(torch.nn.Module):
         x = torch.relu(x)
         x = self.dense2(x)
         #print (f'dense2 x: {x.shape}')
-        x = torch.relu(x)
-
-        # * normalize
-        # x -= x.min() 
-        # x /= x.max()
-        n = torch.norm(x)
-        if n == 0.0:
-            n = 1e-10
-        x /= n
 
         return x
