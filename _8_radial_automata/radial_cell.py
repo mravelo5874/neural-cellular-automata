@@ -32,11 +32,12 @@ class Color:
         self.a += _delta[3]
 
 class RadialCell:
-    def __init__(self, _pos, _color, _angle, _hidden):
+    def __init__(self, _pos, _color, _angle, _hidden, _id):
         self.pos = Position(_pos)
         self.color = Color(_color)
         self.angle = _angle
         self.hidden = _hidden
+        self.id = _id
         
     def state(self):
         return np.concatenate([self.color.rgba(), self.hidden])

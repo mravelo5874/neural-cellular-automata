@@ -4,6 +4,9 @@ class ChunkSystem:
     def __init__(self, _size):
         self.size = _size
         self.chunks = {}
+        
+    def print_state(self):
+        print (f'chunk_system_state:\n{self.chunks}')
 
     def add_cell(self, _cell):
         c = self.pos_to_chunk(_cell.pos)
@@ -30,15 +33,14 @@ class ChunkSystem:
 
     def query_neighbors_in_radius(self, _cell):
         neighbors = []
-        pos = _cell.pos
         chunk = _cell.chunk
         for x in range(int(chunk[0])-1, int(chunk[0])+2, 1):
             for y in range(int(chunk[1])-1, int(chunk[1])+2, 1):
-                k = str(np.array([x, y, 0]).astype(int))
+                k = str(np.array([x, y]).astype(int))
                 if k in self.chunks:
                     for cell in self.chunks[k]:
                         if cell.id != _cell.id:
-                            dis = math.dist(pos, cell.pos)
+                            dis = math.dist(_cell.pos.xy(), cell.pos.xy())
                             if dis < self.size:
                                 neighbors.append(cell)
         return neighbors

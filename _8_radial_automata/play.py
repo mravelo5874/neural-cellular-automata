@@ -10,6 +10,7 @@ _AUTO_RUN_ = True
 
 _RADIUS_ = 1.0
 _RATE_ = 0.1
+_NUM_ = 16
 
 # * sets the device  
 _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -21,7 +22,7 @@ pygame.init()
 pygame.display.set_caption('radial automata simulation')
 
 window = pygame.display.set_mode((_SIZE_, _SIZE_))
-automata = RadialAutomata(_RADIUS_, _rate=_RATE_)
+automata = RadialAutomata(_RADIUS_, _RATE_, _NUM_)
 
 # * create clock for fps
 clock = pygame.time.Clock()
@@ -69,11 +70,10 @@ while running:
             if event.key == pygame.K_p:
                 image = automata.pixelize(2, 32)
                 image = np.rot90(image, 1)
-                scale = 8
-                cv2.imshow('pixelized', cv2.resize(image, (32*scale, 32*scale), interpolation=cv2.INTER_NEAREST))
-                cv2.waitKey(0)
-                cv2.destroyAllWindows()
-    
+                plt.axis('off')
+                plt.imshow(image)
+                plt.show()
+        
     # * draw tensor to window
     window.fill(_WINDOW_BG_COLOR_)
     
