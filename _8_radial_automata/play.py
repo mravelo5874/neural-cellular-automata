@@ -1,28 +1,32 @@
 from utility import *
 
 from radial_automata import RadialAutomata
+from decisional_nn import DecisionalNN
 
 _WINDOW_BG_COLOR_ = (255, 255, 255)
 _WINDOW_TEXT_COLOR_ = (0, 0, 0)
-_SIZE_ = 800
-_SCALE_ = 32
+_SIZE_ = 512
+_SCALE_ = 64
 _AUTO_RUN_ = True
 
 _RADIUS_ = 1.0
 _RATE_ = 0.1
-_NUM_ = 16
+_NUM_ = 6
+_BOUND_ = 3.0
 
 # * sets the device  
 _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
 torch.backends.cudnn.benchmark = True
 torch.cuda.empty_cache()
-torch.set_default_tensor_type('torch.cuda.FloatTensor')
+if _DEVICE_ == 'cuda':
+    torch.set_default_tensor_type('torch.cuda.FloatTensor')
 
 pygame.init()
 pygame.display.set_caption('radial automata simulation')
 
 window = pygame.display.set_mode((_SIZE_, _SIZE_))
-automata = RadialAutomata(_RADIUS_, _RATE_, _NUM_)
+model = DecisionalNN(16, 19, _device=_DEVICE_)
+automata = RadialAutomata(_RADIUS_, _RATE_, _NUM_, _BOUND_)
 
 # * create clock for fps
 clock = pygame.time.Clock()
@@ -42,7 +46,7 @@ def run_sim(_delay):
     time.sleep(_delay)
     while running:
         mutex.acquire()
-        automata.update()
+        automata.update(model)
         mutex.release()
 
 # # * start forward worker
@@ -61,11 +65,12 @@ while running:
                 break
             if event.key == pygame.K_RETURN:
                 mutex.acquire()
-                automata.update()
+                automata.update(model)
                 mutex.release()
             if event.key == pygame.K_r:
                 mutex.acquire()
-                automata = RadialAutomata(_RADIUS_, _rate=_RATE_)
+                model = DecisionalNN(16, 19, _device=_DEVICE_)
+                automata = RadialAutomata(_RADIUS_, _RATE_, _NUM_, _BOUND_)
                 mutex.release()
             if event.key == pygame.K_p:
                 image = automata.pixelize(2, 32)

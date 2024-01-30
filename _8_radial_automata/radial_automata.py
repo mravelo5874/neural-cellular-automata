@@ -10,11 +10,12 @@ class RadialAutomataState:
         self.cells = _cells
 
 class RadialAutomata:
-    def __init__(self, _radius, _rate, _num, _pmap_res=8, _color_scale=0.2, _move_scale=0.1, _cell_limit=2048, _neighbor_limit=32):
+    def __init__(self, _radius, _rate, _num, _bound=4.0, _pmap_res=8, _color_scale=0.2, _move_scale=0.1, _cell_limit=2048, _neighbor_limit=32):
         self.radius = _radius
         self.rate = _rate
         self.num = _num
         
+        self.bound=_bound
         self.pmap_res = _pmap_res
         self.color_scale = _color_scale
         self.move_scale = _move_scale
@@ -38,7 +39,7 @@ class RadialAutomata:
                 color[3] = 1.0
                 angle = np.random.random() * np.pi * 2.0
                 hidden = np.random.random(12)
-                cell = RadialCell(pos, color, angle, hidden, cid)
+                cell = RadialCell(pos, color, angle, hidden, cid, self.bound)
                 self.grid.add_cell(cell)
                 self.cells.append(cell)
                 cid += 1
@@ -52,7 +53,7 @@ class RadialAutomata:
         return state
 
     def pixelize(self, _scale, _size):
-        image = np.ones([_size, _size, 4]).astype(np.float32)
+        image = np.ones([_size, _size, 3]).astype(np.float32)
         num_cells = {}
         
         # * find center-most cell and use as origin
@@ -67,6 +68,8 @@ class RadialAutomata:
             pos = pos.astype(int)
             if pos[0] < _size and pos[0] >= 0 and pos[1] < _size and pos[1] >= 0:
                 color = cell.color.rgba()
+                rgb, a = color[:3], color[3:4]
+                color = np.clip(1.0 - a + rgb, 0.0, 1.0)
                 # * blend color if pixel already colored
                 key = str(pos)
                 if key in num_cells:

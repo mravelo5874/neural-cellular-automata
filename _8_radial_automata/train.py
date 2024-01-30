@@ -84,7 +84,7 @@ torch.set_default_tensor_type('torch.cuda.FloatTensor')
 force_cudnn_initialization()
 
 # * create model
-model = DecisionalNN(16, 19) # input: [[0-3]rgba(4), [4-15]hidden(12)] output: [[0-3]rgba(4), [4-15]hidden(12), [16-17]move(2), [18]angle(1)]
+model = DecisionalNN(16, 19, _device=_DEVICE_) # input: [[0-3]rgba(4), [4-15]hidden(12)] output: [[0-3]rgba(4), [4-15]hidden(12), [16-17]move(2), [18]angle(1)]
 logprint(f'_models/{_NAME_}/{_LOG_}', 'training new model from scratch...')
 
 # * create optimizer and learning-rate scheduler
