@@ -8,9 +8,19 @@ class Position:
     def xy(self):
         return np.array([self.x, self.y])
     
-    def mod(self, _delta):
+    def mod(self, _delta, _bound):
         self.x += _delta[0]
         self.y += _delta[1]
+
+        # * keep cell within bounds
+        if self.x > _bound:
+            self.x = _bound
+        if self.x < -_bound:
+            self.x = -_bound
+        if self.y > _bound:
+            self.y = _bound
+        if self.y < -_bound:
+            self.y = -_bound
         
 class Color:
     def __init__(self, _color):
@@ -32,19 +42,20 @@ class Color:
         self.a += _delta[3]
 
 class RadialCell:
-    def __init__(self, _pos, _color, _angle, _hidden, _id):
+    def __init__(self, _pos, _color, _angle, _hidden, _id, _bound):
         self.pos = Position(_pos)
         self.color = Color(_color)
         self.angle = _angle
         self.hidden = _hidden
         self.id = _id
+        self.bound = _bound
         
     def state(self):
         return np.concatenate([self.color.rgba(), self.hidden])
     
     def update(self, _color_mod, _hidden_mod, _move_mod, _angle_mod):
         self.color.mod(_color_mod)
-        self.pos.mod(_move_mod)
+        self.pos.mod(_move_mod, self.bound)
         
         self.hidden += _hidden_mod
         self.angle += _angle_mod
