@@ -224,3 +224,47 @@ train time: 4:38:55
 model [cowboy16_quat_v0] saved to _models...
 elapsed time: 4:39:38
 ****************
+****************
+timestamp: 2024-01-30 19:56:03.149238
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+****************
+timestamp: 2024-01-30 19:58:27.222515
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+****************
+timestamp: 2024-01-30 19:59:53.250623
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 65
+nca parameter count: 10496
+nca isotropic type: 3
+training new model from scratch...
+model: cowboy16_quat_v0
+type: Perception.QUATERNION
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 24, 24, 24]
+target.shape: [4, 4, 24, 24, 24]
+starting training w/ 20001 epochs...
+****************
+timestamp: 2024-01-30 20:01:54.078842
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 65
+nca parameter count: 10496
+nca isotropic type: 3
+training new model from scratch...
+model: cowboy16_quat_v0
+type: Perception.QUATERNION
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 24, 24, 24]
+target.shape: [4, 4, 24, 24, 24]
+starting training w/ 20001 epochs...

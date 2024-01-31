@@ -2,7 +2,7 @@ import torch
 import torch.nn.functional as func
 import numpy as np
 import scipy.spatial.transform as sci
-# import pytorch3d.transforms as T
+from pytorch3d.transforms import quaternion_multiply 
 
 from enum import Enum
 from scripts.nca import VoxelUtil as voxutil
@@ -607,14 +607,26 @@ class VoxelPerception():
         az = az.reshape([bs, a, sx*sy*sz])
         quats = voxutil.euler_to_quaternion(ax, ay, az)
         
-        # * rotate perception tensors
+        # * concat and prepare for rotation
         pxyz = torch.cat([p0, px, py, pz], 1)
         bs, p4, hc, sx, sy, sz = pxyz.shape
         pxyz = pxyz.reshape([bs, p4, hc, sx*sy*sz])
         conj = torch.conj(quats)
+        
+        # * permute to get [4] on last dim
+        # * needed for: quaternion_multiply()
+        pxyz = pxyz.permute([0, 3, 2, 1])
+        conj = conj.permute([0, 2, 1])
+        quats = quats.permute([0, 2, 1])
+        
+        # * rotate perception tensors
         rxyz = torch.zeros_like(pxyz)
         for t in range(hc):
-            rxyz[:, :, t] = quats * pxyz[:, :, t] * conj
+            res = quaternion_multiply(quats, pxyz[:, :, t])
+            res = quaternion_multiply(res, conj)
+            rxyz[:, :, t] = res
+            
+        rxyz = rxyz.permute([0, 3, 2, 1])
         rxyz = rxyz.reshape([bs, p4, hc, sx, sy, sz])
         
         # * extract rotated perception tensors
