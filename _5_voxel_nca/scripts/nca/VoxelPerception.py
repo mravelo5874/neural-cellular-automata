@@ -2,7 +2,7 @@ import torch
 import torch.nn.functional as func
 import numpy as np
 import scipy.spatial.transform as sci
-from pytorch3d.transforms import quaternion_multiply 
+from pytorch3d.transforms import quaternion_apply 
 
 from enum import Enum
 from scripts.nca import VoxelUtil as voxutil
@@ -594,11 +594,13 @@ class VoxelPerception():
         pz = self.per_channel_conv3d(states, Z_SOBEL_KERN[None, :])
         lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
         
-        # * combine perception tensors
-        px = px[:, None, ...]
-        py = py[:, None, ...]
-        pz = pz[:, None, ...]
-        p0 = torch.zeros_like(px)
+        # * get perception tensors
+        px = px[..., None]
+        py = py[..., None]
+        pz = pz[..., None]
+        pxyz = torch.cat([px, py, pz], 5)
+        bs, hc, sx, sy, sz, p3 = pxyz.shape
+        pxyz = pxyz.reshape([bs, hc, sx*sy*sz, p3])
         
         # * get quat values
         bs, a, sx, sy, sz = ax.shape
@@ -606,33 +608,18 @@ class VoxelPerception():
         ay = ay.reshape([bs, a, sx*sy*sz])
         az = az.reshape([bs, a, sx*sy*sz])
         quats = voxutil.euler_to_quaternion(ax, ay, az)
-        
-        # * concat and prepare for rotation
-        pxyz = torch.cat([p0, px, py, pz], 1)
-        bs, p4, hc, sx, sy, sz = pxyz.shape
-        pxyz = pxyz.reshape([bs, p4, hc, sx*sy*sz])
-        conj = torch.conj(quats)
-        
-        # * permute to get [4] on last dim
-        # * needed for: quaternion_multiply()
-        pxyz = pxyz.permute([0, 3, 2, 1])
-        conj = conj.permute([0, 2, 1])
-        quats = quats.permute([0, 2, 1])
+        quats = quats.reshape([bs, 4, sx*sy*sz]).permute([0, 2, 1])
         
         # * rotate perception tensors
         rxyz = torch.zeros_like(pxyz)
-        for t in range(hc):
-            res = quaternion_multiply(quats, pxyz[:, :, t])
-            res = quaternion_multiply(res, conj)
-            rxyz[:, :, t] = res
-            
-        rxyz = rxyz.permute([0, 3, 2, 1])
-        rxyz = rxyz.reshape([bs, p4, hc, sx, sy, sz])
+        for i in range(hc):
+            rxyz[:, i] = quaternion_apply(quats, pxyz[:, i])
+        rxyz = rxyz.reshape([bs, hc, sx, sy, sz, p3])
         
         # * extract rotated perception tensors
-        rx = rxyz[:, 1]
-        ry = rxyz[:, 2]
-        rz = rxyz[:, 3]
+        rx = rxyz[:, :, :, :, :, 0]
+        ry = rxyz[:, :, :, :, :, 1]
+        rz = rxyz[:, :, :, :, :, 2]
         return torch.cat([states, rx, ry, rz, lap], 1)
     
     def fast_quat_perception(self, _x):

@@ -13,17 +13,17 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_quat_v1'
+_NAME_ = 'cowboy16_quat_v2'
 _SIZE_ = 16
 _PAD_ = 4
 _SEED_DIST_ = 2
 _SEED_DIC_ = {
-    'center': None,
-    'plus_x': None,
+    'center': 'white',
+    'plus_x': 'red',
     'minus_x': None,
-    'plus_y': 'red',
-    'minus_y': 'green',
-    'plus_z': None,
+    'plus_y': 'green',
+    'minus_y': None,
+    'plus_z': 'blue',
     'minus_z': None,
 }
 _TARGET_VOX_ = '../vox/cowboy16.vox'
@@ -31,7 +31,7 @@ _TARGET_VOX_ = '../vox/cowboy16.vox'
 _MODEL_TYPE_ = Perception.QUATERNION
 _CHANNELS_ = 16
 # * training parameters
-_EPOCHS_ = 20_000
+_EPOCHS_ = 10_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
@@ -42,7 +42,7 @@ _DAMG_RATE_ = 5
 # * logging parameters
 _LOG_FILE_ = 'trainlog.txt'
 _INFO_RATE_ = 100
-_SAVE_RATE_ = 4000
+_SAVE_RATE_ = 2000
 
 # * load from checkpoint
 load_checkpoint = False
