@@ -1,0 +1,28 @@
+{
+    "_NAME_": "cowboy16_quat_v1",
+    "_SIZE_": 16,
+    "_PAD_": 4,
+    "_SEED_DIST_": 2,
+    "_SEED_DIC_": {
+        "center": null,
+        "plus_x": null,
+        "minus_x": null,
+        "plus_y": "red",
+        "minus_y": "green",
+        "plus_z": null,
+        "minus_z": null
+    },
+    "_TARGET_VOX_": "../vox/cowboy16.vox",
+    "_MODEL_TYPE_": 2,
+    "_CHANNELS_": 16,
+    "_EPOCHS_": 20000,
+    "_BATCH_SIZE_": 4,
+    "_POOL_SIZE_": 32,
+    "_UPPER_LR_": 0.0005,
+    "_LOWER_LR_": 1e-05,
+    "_LR_STEP_": 2000,
+    "_NUM_DAMG_": 2,
+    "_DAMG_RATE_": 5,
+    "_INFO_RATE_": 100,
+    "_SAVE_RATE_": 4000
+}
