@@ -187,7 +187,7 @@ class VoxelNCA(torch.nn.Module):
     def get_alive_mask(self, _x):
         return func.max_pool3d(_x[:, 3:4, :, :, :], kernel_size=3, stride=1, padding=1) > 0.1
         
-    def forward(self, _x, _print=False, _mask=None, _comp=None):
+    def forward_comp(self, _x, _print=False, _mask=None, _comp=None):
         if _print: print ('init _x.shape:',_x.shape)
         
         # * get alive mask
@@ -313,6 +313,51 @@ class VoxelNCA(torch.nn.Module):
             if _comp != None:
                 _c = _c * c_alive_mask
             
+        if _print: print ('final _x.shape:',_x.shape)
+        if _print: print ('********')
+        return _x
+    
+    def forward(self, _x, _print=False):
+        if _print: print ('init _x.shape:',_x.shape)
+        
+        # * get alive mask
+        alive_mask = self.get_alive_mask(_x).to(self.device)
+        if _print: print ('init alive_mask.shape:',alive_mask.shape)
+        
+        # * send to device
+        _x = _x.to(self.device)
+    
+        # * perception step
+        p = self.p.perception[self.model_type](self.p, _x)
+        if _print: print ('perception p.shape:',p.shape)
+        
+        # * update step
+        p = self.conv2(torch.relu(self.conv1(p)))
+        if _print: print ('update p.shape:',p.shape)
+        
+        # * create stochastic mask
+        stochastic_mask = (torch.rand(_x[:, :1, :, :, :].shape) <= self.update_rate).to(self.device, torch.float32)
+        if _print: print ('stochastic_mask.shape:',stochastic_mask.shape)
+        
+        # * perform stochastic update
+        _x = _x + p * stochastic_mask
+        
+        # * final isotropic concatination + apply alive mask
+        if self.isotropic_type() == 1:
+            states = _x[:, :-1]*alive_mask
+            angle = _x[:, -1:] % (pi*2.0)
+            _x = torch.cat([states, angle], 1)
+            
+            
+        elif self.isotropic_type() == 3:
+            states = _x[:, :-3]*alive_mask
+            ax = _x[:, -1:] % (pi*2.0)
+            ay = _x[:, -2:-1] % (pi*2.0)
+            az = _x[:, -3:-2] % (pi*2.0)
+            _x = torch.cat([states, az, ay, ax], 1)
+        else:
+            _x = _x * alive_mask
+           
         if _print: print ('final _x.shape:',_x.shape)
         if _print: print ('********')
         return _x

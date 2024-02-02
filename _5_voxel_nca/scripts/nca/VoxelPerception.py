@@ -6,7 +6,6 @@ from pytorch3d.transforms import quaternion_apply
 
 from enum import Enum
 from scripts.nca import VoxelUtil as voxutil
-from scripts.vox.Vox import Vox
 
 class Perception(int, Enum):
     ANISOTROPIC: int = 0                                      
@@ -289,10 +288,6 @@ class VoxelPerception():
             print (f'lap comp: {res}')
             
         return torch.cat([_x, px, py, gz, lap], 1)
-    
-    
-    
-    
     
     def yaw_isotropic_v2_perception(self, _x, _c=None, _iso_type=5):
         # * separate states and angle channels
@@ -622,92 +617,10 @@ class VoxelPerception():
         rz = rxyz[:, :, :, :, :, 2]
         return torch.cat([states, rx, ry, rz, lap], 1)
     
-    def fast_quat_perception(self, _x):
-        # * separate states and angle channels
-        states, ax, ay, az = _x[:, :-3], _x[:, -1:], _x[:, -2:-1], _x[:, -3:-2]
-        
-        # * per channel convolutions
-        px = self.per_channel_conv3d(states, X_SOBEL_KERN[None, :])
-        py = self.per_channel_conv3d(states, Y_SOBEL_KERN[None, :])
-        pz = self.per_channel_conv3d(states, Z_SOBEL_KERN[None, :])
-        lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
-        
-        # * combine perception tensors
-        px = px[None, ...]
-        py = py[None, ...]
-        pz = pz[None, ...]
-        pxyz = torch.cat([px, py, pz], 0)
-        p3, bs, hc, sx, sy, sz = pxyz.shape
-        pxyz = torch.permute(pxyz, (2, 1, 3, 4, 5, 0))
-        pxyz = pxyz.reshape([hc, bs*sx*sy*sz, p3])
-        
-        # * get quat values
-        axyz = torch.cat([ax, ay, az], 1)
-        bs, a, sx, sy, sz = axyz.shape
-        axyz = torch.permute(axyz, (0, 2, 3, 4, 1))
-        axyz = axyz.reshape([sx*sy*sz*bs, a])
-        #quat = T.axis_angle_to_quaternion(axyz)
-        
-        # * apply quat rotations
-        rxyz = torch.zeros_like(pxyz)
-        for t in range(hc):
-            #rxyz[t] = T.quaternion_apply(quat, pxyz[t])
-            rxyz[t] = pxyz[t]
-        rxyz = torch.permute(rxyz, (2, 0, 1))
-        rxyz = rxyz.reshape([bs, p3, hc, sx, sy, sz])
-
-        # * extract rotated perception tensors
-        rx = rxyz[:, 0]
-        ry = rxyz[:, 1]
-        rz = rxyz[:, 2]
-        return torch.cat([_x, rx, ry, rz, lap], 1)
-    
-    def euler_perception(self, _x):
-        # * separate states and angle channels
-        states, ax, ay, az = _x[:, :-3], _x[:, -1:], _x[:, -2:-1], _x[:, -3:-2]
-
-        # * per channel convolutions
-        px = self.per_channel_conv3d(states, X_SOBEL_KERN[None, :])
-        py = self.per_channel_conv3d(states, Y_SOBEL_KERN[None, :])
-        pz = self.per_channel_conv3d(states, Z_SOBEL_KERN[None, :])
-        lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
-        
-        # * combine perception tensors
-        px = px[None, ...]
-        py = py[None, ...]
-        pz = pz[None, ...]
-        pxyz = torch.cat([px, py, pz], 0)
-        p3, bs, hc, sx, sy, sz = pxyz.shape
-        pxyz = torch.permute(pxyz, (2, 1, 3, 4, 5, 0))
-        pxyz = pxyz.reshape([hc, bs*sx*sy*sz, p3])
- 
-        # * get quat values
-        axyz = torch.cat([ax, ay, az], 1)
-        bs, a, sx, sy, sz = axyz.shape
-        axyz = torch.permute(axyz, (0, 2, 3, 4, 1))
-        axyz = axyz.reshape([sx*sy*sz*bs, a])
-
-        # * perform rotations
-        rots = sci.Rotation.from_euler('xyz', axyz.cpu().detach().numpy(), degrees=False)
-        rxyz = np.zeros_like(pxyz.cpu().detach().numpy())
-        for t in range(hc):
-            rxyz[t] = rots.apply(pxyz[t].cpu().detach().numpy())
-        rxyz = torch.tensor(rxyz)
-        rxyz = torch.permute(rxyz, (2, 0, 1))
-        rxyz = rxyz.reshape([bs, p3, hc, sx, sy, sz])
-
-        # * extract rotated perception tensors
-        rx = rxyz[:, 0]
-        ry = rxyz[:, 1]
-        rz = rxyz[:, 2]
-        return torch.cat([_x, rx, ry, rz, lap], 1)
-        
     perception = {
         Perception.ANISOTROPIC: anisotropic_perception,
         Perception.YAW_ISO: yaw_isotropic_perception,
         Perception.QUATERNION: quaternion_perception,
-        Perception.FAST_QUAT: fast_quat_perception,
-        Perception.EULER: euler_perception,
         Perception.YAW_ISO_V2: yaw_isotropic_v2_perception,
         Perception.YAW_ISO_V3: yaw_isotropic_v3_perception,
     }
