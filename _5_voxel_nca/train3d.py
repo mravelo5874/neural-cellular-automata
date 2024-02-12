@@ -13,17 +13,17 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_iso2_v0'
+_NAME_ = 'rubiks_iso2_v1'
 _SIZE_ = 15
 _PAD_ = 5
 _SEED_DIST_ = 2
 _SEED_DIC_ = {
     'center': None,
     'plus_x': 'red',
-    'minus_x': 'green',
-    'plus_y': None,
+    'minus_x': None,
+    'plus_y': 'green',
     'minus_y': None,
-    'plus_z': None,
+    'plus_z': 'blue',
     'minus_z': None,
 }
 _TARGET_VOX_ = '../vox/rubiks.vox'
