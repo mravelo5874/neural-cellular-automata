@@ -14,7 +14,6 @@ sys.path.insert(1, cwd+'/_5_voxel_nca')
 
 from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as voxutil
-from scripts.vox.Vox import Vox
 from utils import Utils as utils
 
 class NCASimulator:
@@ -329,22 +328,24 @@ class NCASimulator:
             
             # * copy seed in each quadrant with a different rotation
             if _num == 0:
-                self.seed = torch.zeros_like(self.seed)
                 full=self.seed.shape[2]
                 half=full//2
                 q=half//2
+                d=8
+     
+                clone = self.seed.detach().clone()[:, :, half-d:half+d, half-d:half+d, half-d:half+d]
+                self.seed = torch.zeros_like(self.seed)
                 
-                print (f'seed.shape: {self.seed.shape}')
-
-                clone = self.seed.detach().clone()[:, :, half-4:half+4, half-4:half+4, half-4:half+4]
-                print (f'clone.shape: {clone.shape}')
-                
-                Vox().load_from_tensor(clone).render()
-                
-                self.seed[:, :, q-4:q+4, q-4:q+4, q-4:q+4] = clone
-                self.seed[:, :, (q*3)-4:(q*3)+4, q-4:q+4, q-4:q+4] = clone
-                self.seed[:, :, (q*3)-4:(q*3)+4, (q*3)-4:(q*3)+4, q-4:q+4] = clone
-                self.seed[:, :, q-4:q+4, (q*3)-4:(q*3)+4, q-4:q+4] = clone
+                # * bottom half
+                self.seed[:, :,         q-d:q+d,            q-d:q+d,            q-d:q+d] = torch.rot90(clone, 1, (2, 3))
+                self.seed[:, :, (q*3)-d:(q*3)+d,            q-d:q+d,            q-d:q+d] = torch.rot90(clone, 2, (2, 3))
+                self.seed[:, :, (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d,            q-d:q+d] = torch.rot90(clone, 3, (2, 3))
+                self.seed[:, :,         q-d:q+d,    (q*3)-d:(q*3)+d,            q-d:q+d] = torch.rot90(clone, 4, (2, 3))
+                # * top half
+                self.seed[:, :,         q-d:q+d,            q-d:q+d,    (q*3)-d:(q*3)+d] = torch.rot90(clone, 3, (2, 3))
+                self.seed[:, :, (q*3)-d:(q*3)+d,            q-d:q+d,    (q*3)-d:(q*3)+d] = torch.rot90(clone, 4, (2, 3))
+                self.seed[:, :, (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d] = torch.rot90(clone, 1, (2, 3))
+                self.seed[:, :,         q-d:q+d,    (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d] = torch.rot90(clone, 2, (2, 3))
                 
                 self.mutex.acquire()
                 self.x = self.seed.detach().clone()
