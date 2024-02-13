@@ -14,6 +14,7 @@ sys.path.insert(1, cwd+'/_5_voxel_nca')
 
 from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as voxutil
+from scripts.vox.Vox import Vox
 from utils import Utils as utils
 
 class NCASimulator:
@@ -325,6 +326,29 @@ class NCASimulator:
         # can only load custom if not started
         if not self.started:
             print (f'loading custom seed {_num}...')
+            
+            # * copy seed in each quadrant with a different rotation
+            if _num == 0:
+                self.seed = torch.zeros_like(self.seed)
+                full=self.seed.shape[2]
+                half=full//2
+                q=half//2
+                
+                print (f'seed.shape: {self.seed.shape}')
+
+                clone = self.seed.detach().clone()[:, :, half-4:half+4, half-4:half+4, half-4:half+4]
+                print (f'clone.shape: {clone.shape}')
+                
+                Vox().load_from_tensor(clone).render()
+                
+                self.seed[:, :, q-4:q+4, q-4:q+4, q-4:q+4] = clone
+                self.seed[:, :, (q*3)-4:(q*3)+4, q-4:q+4, q-4:q+4] = clone
+                self.seed[:, :, (q*3)-4:(q*3)+4, (q*3)-4:(q*3)+4, q-4:q+4] = clone
+                self.seed[:, :, q-4:q+4, (q*3)-4:(q*3)+4, q-4:q+4] = clone
+                
+                self.mutex.acquire()
+                self.x = self.seed.detach().clone()
+                self.mutex.release()
             
             # * four instances each facing a unique cardinal direction
             if _num == 1:

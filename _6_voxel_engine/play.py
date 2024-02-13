@@ -409,7 +409,10 @@ class VoxelEngine:
                     if self.sim != None:
                         self.sim.rot_seed('z')
                 
-                # * load custom seeds    
+                # * load custom seeds
+                if event.key == pg.K_0:
+                    if self.sim != None:
+                        self.sim.load_custom(0) 
                 if event.key == pg.K_1:
                     if self.sim != None:
                         self.sim.load_custom(1)
