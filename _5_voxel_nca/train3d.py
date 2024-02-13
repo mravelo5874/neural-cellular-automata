@@ -36,13 +36,13 @@ _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
 _LOWER_LR_ = 1e-5
-_LR_STEP_ = 5000
+_LR_STEP_ = 2000
 _NUM_DAMG_ = 2
 _DAMG_RATE_ = 5
 # * logging parameters
 _LOG_FILE_ = 'trainlog.txt'
 _INFO_RATE_ = 100
-_SAVE_RATE_ = 2000
+_SAVE_RATE_ = 5000
 
 # * load from checkpoint
 load_checkpoint = False
