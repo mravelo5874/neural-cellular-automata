@@ -13,7 +13,7 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_iso2_v2'
+_NAME_ = 'rubiks_struct_iso2_v0'
 _SIZE_ = 15
 _PAD_ = 5
 _SEED_DIST_ = 2
@@ -26,17 +26,17 @@ _SEED_DIC_ = {
     'plus_z': 'blue',
     'minus_z': None,
 }
-_TARGET_VOX_ = '../vox/rubiks.vox'
+_TARGET_VOX_ = '../vox/rubiks_struct.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V2
 _CHANNELS_ = 16
 # * training parameters
-_EPOCHS_ = 20_000
+_EPOCHS_ = 10_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
 _LOWER_LR_ = 1e-5
-_LR_STEP_ = 4000
+_LR_STEP_ = 2000
 _NUM_DAMG_ = 2
 _DAMG_RATE_ = 5
 # * logging parameters
