@@ -8,6 +8,8 @@ from enum import Enum
 from scripts.nca import VoxelUtil as voxutil
 
 class Perception(int, Enum):
+    def __str__(self):
+        return str(self.name)
     ANISOTROPIC: int = 0                                      
     YAW_ISO: int = 1                                       
     QUATERNION: int = 2
