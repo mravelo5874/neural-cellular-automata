@@ -1,0 +1,28 @@
+{
+    "_NAME_": "rubiks_iso2_v2",
+    "_SIZE_": 15,
+    "_PAD_": 5,
+    "_SEED_DIST_": 2,
+    "_SEED_DIC_": {
+        "center": null,
+        "plus_x": "red",
+        "minus_x": null,
+        "plus_y": "green",
+        "minus_y": null,
+        "plus_z": "blue",
+        "minus_z": null
+    },
+    "_TARGET_VOX_": "../vox/rubiks.vox",
+    "_MODEL_TYPE_": 5,
+    "_CHANNELS_": 16,
+    "_EPOCHS_": 20000,
+    "_BATCH_SIZE_": 4,
+    "_POOL_SIZE_": 32,
+    "_UPPER_LR_": 0.0005,
+    "_LOWER_LR_": 1e-05,
+    "_LR_STEP_": 4000,
+    "_NUM_DAMG_": 2,
+    "_DAMG_RATE_": 5,
+    "_INFO_RATE_": 100,
+    "_SAVE_RATE_": 2000
+}
