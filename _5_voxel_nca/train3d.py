@@ -184,6 +184,7 @@ def main():
     # * print out parameters
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'model: {_NAME_}')
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'type: {_MODEL_TYPE_}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'hidden-seed-info: {_SEED_HID_INFO_}')
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'batch-size: {_BATCH_SIZE_}')
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool-size: {_POOL_SIZE_}')
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'lr: {_UPPER_LR_}>{_LOWER_LR_} w/ {_LR_STEP_} step')
@@ -300,6 +301,8 @@ def main():
                 pass
             else:
                 loss_log.append(_loss)
+                
+            print (f'loss: {_loss}')
                 
             # * detect invalid loss values :(
             if torch.isnan(loss) or torch.isinf(loss) or torch.isneginf(loss):
