@@ -317,27 +317,21 @@ class VoxelNCA(torch.nn.Module):
         if _print: print ('********')
         return _x
     
-    def forward(self, _x, _print=False):
-        if _print: print ('init _x.shape:',_x.shape)
-        
+    def forward(self, _x):
         # * get alive mask
         alive_mask = self.get_alive_mask(_x).to(self.device)
-        if _print: print ('init alive_mask.shape:',alive_mask.shape)
-        
+             
         # * send to device
         _x = _x.to(self.device)
     
         # * perception step
         p = self.p.perception[self.model_type](self.p, _x)
-        if _print: print ('perception p.shape:',p.shape)
         
         # * update step
         p = self.conv2(torch.relu(self.conv1(p)))
-        if _print: print ('update p.shape:',p.shape)
         
         # * create stochastic mask
         stochastic_mask = (torch.rand(_x[:, :1, :, :, :].shape) <= self.update_rate).to(self.device, torch.float32)
-        if _print: print ('stochastic_mask.shape:',stochastic_mask.shape)
         
         # * perform stochastic update
         _x = _x + p * stochastic_mask
@@ -358,6 +352,4 @@ class VoxelNCA(torch.nn.Module):
         else:
             _x = _x * alive_mask
            
-        if _print: print ('final _x.shape:',_x.shape)
-        if _print: print ('********')
         return _x
