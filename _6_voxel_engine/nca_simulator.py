@@ -94,7 +94,9 @@ class NCASimulator:
             # * fire raycast from mouse pos through volume
             pos = self.engine.player.pos
             vec = self.engine.player.forward
-            voxel = self.raycast_volume(pos, vec)
+            voxel = None
+            if self.engine.SEND_RAYCASTS:
+                voxel = self.raycast_volume(pos, vec)
             if voxel == None:
                 # * dummy forward (needed so engine does not lag)
                 self.model(self.x)

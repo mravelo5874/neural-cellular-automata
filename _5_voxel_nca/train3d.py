@@ -13,7 +13,7 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_slice_iso2_v0'
+_NAME_ = 'rubiks_slice_iso2_v1'
 _SIZE_ = 15
 _PAD_ = 5
 _SEED_DIST_ = 3
@@ -31,7 +31,7 @@ _TARGET_VOX_ = '../vox/rubiks_slice.vox'
 _MODEL_TYPE_ = Perception.YAW_ISO_V2
 _CHANNELS_ = 16
 # * training parameters
-_EPOCHS_ = 10_000
+_EPOCHS_ = 20_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4

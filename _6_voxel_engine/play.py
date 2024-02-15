@@ -51,6 +51,7 @@ class VoxelEngine:
         self.SHOW_WIRE = False
         self.SHOW_AXIS = False
         self.SHOW_VECT = False
+        self.SEND_RAYCASTS = True
         # * gui
         self.UIMANAGER = gui.UIManager(_win_size, 'themes/gui_theme.json')
         self.UIMANAGER.preload_fonts([{'name': 'fira_code', 'point_size': 24, 'style': 'bold_italic'}])
@@ -177,6 +178,13 @@ class VoxelEngine:
         self.GUI_ELEMENTS.append(self.render_mode)
         self.render_mode.set_tooltip('Toggle between rendering voxels or blended.')
         
+        # * toggle raycast volume
+        self.raycast_vol = gui.elements.UIButton(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
+                                                 text='raycast vol: _',
+                                                 manager=self.UIMANAGER, )
+        self.GUI_ELEMENTS.append(self.raycast_vol)
+        self.raycast_vol.set_tooltip('Toggle raycasting the volume in order to damage the automata.')
+        
         # * model dropdown menu
         self.model_select = gui.elements.UIDropDownMenu(self.models, self.curr_model,
                                                         relative_rect=pg.Rect((4, 4), (256, 32)),
@@ -212,6 +220,7 @@ class VoxelEngine:
         self.toggle_axis.set_text(f'toggle axis: {self.SHOW_AXIS}', )
         self.toggle_border.set_text(f'toggle border: {self.SHOW_WIRE}')
         self.toggle_vector.set_text(f'toggle vector: {self.SHOW_VECT}')
+        self.raycast_vol.set_text(f'raycast_vol: {self.SEND_RAYCASTS}')
         self.render_mode.set_text('render mode: voxel')
 
         # * game is running
@@ -243,7 +252,8 @@ class VoxelEngine:
             
         # * update voxel
         if self.my_voxel != None and self.sim != None:
-            self.voxel.update()
+            if self.SEND_RAYCASTS:
+                self.voxel.update()
             
         # * update pos text
         p = self.player.pos
@@ -269,8 +279,9 @@ class VoxelEngine:
             self.axis.render()
         if self.SHOW_VECT:
             self.vector.render()
+        if self.SEND_RAYCASTS:
+            self.voxel.render()
             
-        self.voxel.render()
         self.crosshair.render()
         self.gui.render()
         
@@ -354,6 +365,11 @@ class VoxelEngine:
                         self.render_mode.set_text(f'render mode: blend')
                     else:
                         self.render_mode.set_text(f'render mode: voxel')
+                        
+                # * toggle raycast volume 
+                if event.ui_element == self.raycast_vol:
+                    self.SEND_RAYCASTS = not self.SEND_RAYCASTS
+                    self.raycast_vol.set_text(f'raycast vol: {self.SEND_RAYCASTS}')
                 
                 # * reset current model
                 if event.ui_element == self.reset_button:
@@ -429,8 +445,9 @@ class VoxelEngine:
                 if self.CREATIVE_MODE:
                     if self.my_voxel != None:
                         if self.sim != None:
-                            self.sim.erase_sphere(self.my_voxel, 6)
-                            self.my_vector = (glm.vec3(self.player.pos), glm.normalize(glm.vec3(self.player.forward)))
+                            if self.SEND_RAYCASTS:
+                                self.sim.erase_sphere(self.my_voxel, 6)
+                                self.my_vector = (glm.vec3(self.player.pos), glm.normalize(glm.vec3(self.player.forward)))
             # ---------------------------------- #
             
     def run(self):
