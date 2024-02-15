@@ -449,7 +449,7 @@ class VoxelPerception():
         
         return torch.cat([states, px, py, gz, lap], 1)
     
-    def yaw_isotropic_v2_perception(self, _x):
+    def yaw_isotropic_v3_perception(self, _x):
         # * separate states and angle channels
         states, angle = _x[:, :-1], _x[:, -1:]
         
