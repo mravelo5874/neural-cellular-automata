@@ -301,9 +301,7 @@ def main():
                 pass
             else:
                 loss_log.append(_loss)
-                
-            print (f'loss: {_loss}')
-                
+                                
             # * detect invalid loss values :(
             if torch.isnan(loss) or torch.isinf(loss) or torch.isneginf(loss):
                 voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'detected invalid loss value: {loss}')

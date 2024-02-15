@@ -146,7 +146,7 @@ class VoxelEngine:
         self.fps_text.set_tooltip('The number of frames rendered per second.')
         # * creative mode button
         self.enter_creative_button = gui.elements.UIButton(relative_rect=pg.Rect((260, 0), (w-260, h)),
-                                                           text='click here to enter free cam',
+                                                           text='',
                                                            manager=self.UIMANAGER,
                                                            object_id=obj(object_id='#invisible_button'))
         self.GUI_ELEMENTS.append(self.enter_creative_button)
