@@ -89,7 +89,8 @@ def color_to_channels(_color='BLACK'):
     elif color == 'white':
         return [0, 1, 2]
 
-def custom_seed(_size=16, _channels=16, _dist=5, _center=None, 
+def custom_seed(_size=16, _channels=16, _dist=5, _hidden_info=False, 
+                _center=None, 
                 _plus_x=None, _minus_x=None, 
                 _plus_y=None, _minus_y=None, 
                 _plus_z=None, _minus_z=None):
@@ -101,42 +102,63 @@ def custom_seed(_size=16, _channels=16, _dist=5, _center=None,
         x[3:_channels, half, half, half] = 1.0
         for i in range(len(chns)):
             x[chns[i], half, half, half] = 1.0
+        if _hidden_info:
+            for i in range(len(chns)):
+                x[chns[i]+4, half, half, half] = 1.0
             
     if _plus_x != None:
         chns = color_to_channels(_plus_x)
         x[3:_channels, half+_dist, half, half] = 1.0
         for i in range(len(chns)):
             x[chns[i], half+_dist, half, half] = 1.0
+        if _hidden_info:
+            for i in range(len(chns)):
+                x[chns[i]+4, half+_dist, half, half] = 1.0
             
     if _minus_x != None:
         chns = color_to_channels(_minus_x)
         x[3:_channels, half-_dist, half, half] = 1.0
         for i in range(len(chns)):
             x[chns[i], half-_dist, half, half] = 1.0
+        if _hidden_info:
+            for i in range(len(chns)):
+                x[chns[i]+4, half-_dist, half, half] = 1.0
     
     if _plus_y != None:
         chns = color_to_channels(_plus_y)
         x[3:_channels, half, half+_dist, half] = 1.0
         for i in range(len(chns)):
             x[chns[i], half, half+_dist, half] = 1.0
+        if _hidden_info:
+            for i in range(len(chns)):
+                x[chns[i]+4, half, half+_dist, half] = 1.0
             
     if _minus_y != None:
         chns = color_to_channels(_minus_y)
         x[3:_channels, half, half-_dist, half] = 1.0
         for i in range(len(chns)):
             x[chns[i], half, half-_dist, half] = 1.0
+        if _hidden_info:
+            for i in range(len(chns)):
+                x[chns[i]+4, half, half-_dist, half] = 1.0
             
     if _plus_z != None:
         chns = color_to_channels(_plus_z)
         x[3:_channels, half, half, half+_dist] = 1.0
         for i in range(len(chns)):
             x[chns[i], half, half, half+_dist] = 1.0
+        if _hidden_info:
+            for i in range(len(chns)):
+                x[chns[i]+4, half, half, half+_dist] = 1.0
             
     if _minus_z != None:
         chns = color_to_channels(_minus_z)
         x[3:_channels, half, half, half-_dist] = 1.0
         for i in range(len(chns)):
             x[chns[i], half, half, half-_dist] = 1.0
+        if _hidden_info:
+            for i in range(len(chns)):
+                x[chns[i]+4, half, half, half-_dist] = 1.0
 
     return x
 

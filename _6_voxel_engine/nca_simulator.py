@@ -54,8 +54,10 @@ class NCASimulator:
         _PAD_ = params['_PAD_']
         _SEED_DIST_ = params['_SEED_DIST_']
         _SEED_DIC_ = params['_SEED_DIC_']
+        _SEED_HID_INFO_ = params['_SEED_HID_INFO_']
         self.size = int(_SIZE_+(2.5*_PAD_)*2.5)
-        self.seed = voxutil.custom_seed(_size=self.size, _channels=params['_CHANNELS_'], _dist=_SEED_DIST_, _center=_SEED_DIC_['center'], 
+        self.seed = voxutil.custom_seed(_size=self.size, _channels=params['_CHANNELS_'], _dist=_SEED_DIST_, _hidden_info=_SEED_HID_INFO_,
+                                    _center=_SEED_DIC_['center'], 
                                     _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
                                     _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
                                     _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(self.device)

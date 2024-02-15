@@ -3,6 +3,7 @@
     "_SIZE_": 15,
     "_PAD_": 5,
     "_SEED_DIST_": 2,
+    "_SEED_HID_INFO_": false,
     "_SEED_DIC_": {
         "center": null,
         "plus_x": "red",

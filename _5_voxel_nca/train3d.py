@@ -26,6 +26,7 @@ _SEED_DIC_ = {
     'plus_z': None,
     'minus_z': None,
 }
+_SEED_HID_INFO_ = False
 _TARGET_VOX_ = '../vox/rubiks_slice.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V3
@@ -34,7 +35,7 @@ _CHANNELS_ = 16
 _EPOCHS_ = 10_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
-_UPPER_LR_ = 1e-3
+_UPPER_LR_ = 5e-4
 _LOWER_LR_ = 1e-5
 _LR_STEP_ = 2000
 _NUM_DAMG_ = 2
@@ -86,6 +87,7 @@ def main():
             '_PAD_': _PAD_,
             '_SEED_DIST_': _SEED_DIST_,
             '_SEED_DIC_' : _SEED_DIC_,
+            '_SEED_HID_INFO_': _SEED_HID_INFO_,
             '_TARGET_VOX_': _TARGET_VOX_,
             # * model parameters
             '_MODEL_TYPE_': _MODEL_TYPE_,
@@ -117,6 +119,7 @@ def main():
             global _PAD_
             global _SEED_DIST_
             global _SEED_DIC_
+            global _SEED_HID_INFO_
             global _TARGET_VOX_
             global _MODEL_TYPE_
             global _CHANNELS_
@@ -137,6 +140,7 @@ def main():
             _PAD_ = params['_PAD_']
             _SEED_DIC_ = params['_SEED_DIC_']
             _SEED_DIST_ = params['_SEED_DIST_']
+            _SEED_HID_INFO_ = params['_SEED_HID_INFO_']
             _TARGET_VOX_ = params['_TARGET_VOX_']
             # * model parameters
             _MODEL_TYPE_ = params['_MODEL_TYPE_']
@@ -186,7 +190,8 @@ def main():
 
     # * create seed
     PAD_SIZE = _SIZE_+(2*_PAD_)
-    seed_ten = voxutil.custom_seed(_size=PAD_SIZE, _channels=_CHANNELS_, _dist=_SEED_DIST_, _center=_SEED_DIC_['center'], 
+    seed_ten = voxutil.custom_seed(_size=PAD_SIZE, _channels=_CHANNELS_, _dist=_SEED_DIST_, _hidden_info=_SEED_HID_INFO_,
+                                _center=_SEED_DIC_['center'], 
                                 _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
                                 _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
                                 _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(_DEVICE_)
