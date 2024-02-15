@@ -464,7 +464,7 @@ class VoxelPerception():
         
         # * calculate gz and lap
         gz = self.per_channel_conv3d(states, Z_SOBEL_KERN[None, :])
-        lap = self.per_channel_conv3d(states, LAP_KERN_v2[None, :])
+        lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
         
         return torch.cat([states, px, py, gz, lap], 1)
     
