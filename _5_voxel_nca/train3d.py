@@ -13,7 +13,12 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_slice_iso3_v1'
+_NAME_ = 'rubiks_slice_iso3_v2'
+_NOTE_ = '''
+trying newly added feature: info to hidden channels in 
+the starting seed! (also updated yaw_iso3 with correct 
+rotations...)
+'''
 _SIZE_ = 15
 _PAD_ = 5
 _SEED_DIST_ = 3
@@ -26,7 +31,7 @@ _SEED_DIC_ = {
     'plus_z': None,
     'minus_z': None,
 }
-_SEED_HID_INFO_ = False
+_SEED_HID_INFO_ = True
 _TARGET_VOX_ = '../vox/rubiks_slice.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V3
@@ -83,6 +88,7 @@ def main():
         dict = {
             # * target/seed parameters
             '_NAME_': _NAME_,
+            '_NOTE_': _NOTE_,
             '_SIZE_': _SIZE_,
             '_PAD_': _PAD_,
             '_SEED_DIST_': _SEED_DIST_,
