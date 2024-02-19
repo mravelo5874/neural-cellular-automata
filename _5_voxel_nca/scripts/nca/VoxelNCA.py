@@ -342,7 +342,6 @@ class VoxelNCA(torch.nn.Module):
             angle = _x[:, -1:] % (pi*2.0)
             _x = torch.cat([states, angle], 1)
             
-            
         elif self.isotropic_type() == 3:
             states = _x[:, :-3]*alive_mask
             ax = _x[:, -1:] % (pi*2.0)
