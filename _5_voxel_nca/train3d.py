@@ -13,11 +13,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_slice_ansio_v0'
+_NAME_ = 'rubiks_aniso_v0'
 _NOTE_ = '''
-So isometric perception is failing (cant break symmetries), so
-lets try a simple anisomentric perception to see if this at least
-works decently enough and work off of that.
+Now lets try the whole cube with anisotropic perception!
 '''
 _SIZE_ = 15
 _PAD_ = 5
@@ -32,7 +30,7 @@ _SEED_DIC_ = {
     'minus_z': None,
 }
 _SEED_HID_INFO_ = True
-_TARGET_VOX_ = '../vox/rubiks_slice.vox'
+_TARGET_VOX_ = '../vox/rubiks.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.ANISOTROPIC
 _CHANNELS_ = 16

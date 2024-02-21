@@ -1,5 +1,5 @@
 {
-    "_NAME_": "rubiks_slice_ansio_v0",
+    "_NAME_": "rubiks_slice_aniso_v0",
     "_NOTE_": "\nSo isometric perception is failing (cant break symmetries), so\nlets try a simple anisomentric perception to see if this at least\nworks decently enough and work off of that.\n",
     "_SIZE_": 15,
     "_PAD_": 5,
