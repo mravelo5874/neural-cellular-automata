@@ -25,7 +25,7 @@ class Plane:
         pos = glm.vec3(p[0], p[1], p[2])
         self.program['u_plane_pos'].write(pos)
         r = np.array(self.app.plane_rot)
-        rot = glm.mat4(glm.quat(glm.vec3(r[0]*PI, r[1]*PI, r[2]*PI)))
+        rot = glm.mat4(glm.quat(glm.vec3(r[0]*PI, r[1]*PI, r[2]*PI)))        
         self.program['u_plane_rot'].write(rot)
         
     def render(self):

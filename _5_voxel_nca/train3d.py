@@ -13,17 +13,17 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_iso3_v2'
+_NAME_ = 'rubiks_iso3_v3'
 _NOTE_ = '''
-Doubling the training epochs didnt seem to do much, lets try doubling the hidden channels!
+doubling the hidden channels also did not work,
 '''
 _SIZE_ = 15
 _PAD_ = 5
 _SEED_DIST_ = 3
 _SEED_DIC_ = {
     'center': None,
-    'plus_x': None,
-    'minus_x': None,
+    'plus_x': 'green',
+    'minus_x': 'pink',
     'plus_y': 'cyan',
     'minus_y': 'red',
     'plus_z': None,
@@ -33,7 +33,7 @@ _SEED_HID_INFO_ = False
 _TARGET_VOX_ = '../vox/rubiks.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V3
-_CHANNELS_ = 32
+_CHANNELS_ = 16
 # * training parameters
 _EPOCHS_ = 10_000
 _BATCH_SIZE_ = 4
