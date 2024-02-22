@@ -52,14 +52,15 @@ class VoxelEngine:
         self.SHOW_WIRE = False
         self.SHOW_AXIS = False
         self.SHOW_VECT = False
-        self.SHOW_PLANE = True
-        self.SEND_RAYCASTS = True
+        self.SHOW_PLANE = False
+        self.SEND_RAYCASTS = False
         # * gui
         self.UIMANAGER = gui.UIManager(_win_size, 'themes/gui_theme.json')
         self.UIMANAGER.preload_fonts([{'name': 'fira_code', 'point_size': 24, 'style': 'bold_italic'}])
         self.SURF = pg.Surface(_win_size, pg.SRCALPHA)
         self.SURF.fill((0, 0, 0, 0))
         self.GUI_ELEMENTS = []
+        self.PLANE_GUI_ELEMENTS = []
         # * slice plane
         self.plane_pos = [0.0, 0.0, 0.0]
         self.plane_rot = [1/4, 1/4, 1/4] # (PI/4, PI/4, PI/4)
@@ -100,7 +101,6 @@ class VoxelEngine:
         self.crosshair = Crosshair(self)
         self.wireframe = WireFrame(self)
         self.gui = Gui(self)
-        
         
         self.plane = Plane(self)
         self.vector = Vector(self)
@@ -224,7 +224,7 @@ class VoxelEngine:
                                                  value_range=[-2.0, 2.0],
                                                  click_increment=0.01,
                                                  manager=self.UIMANAGER, )
-        self.GUI_ELEMENTS.append(self.plane_pos_x_slider)
+        self.PLANE_GUI_ELEMENTS.append(self.plane_pos_x_slider)
         
         # * plane y pos label
         self.plane_pos_y_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (90, 32)),
@@ -239,7 +239,7 @@ class VoxelEngine:
                                                  value_range=[-2.0, 2.0],
                                                  click_increment=0.01,
                                                  manager=self.UIMANAGER, )
-        self.GUI_ELEMENTS.append(self.plane_pos_y_slider)
+        self.PLANE_GUI_ELEMENTS.append(self.plane_pos_y_slider)
         
         # * plane z pos label
         self.plane_pos_z_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (90, 32)),
@@ -254,7 +254,7 @@ class VoxelEngine:
                                                  value_range=[-2.0, 2.0],
                                                  click_increment=0.01,
                                                  manager=self.UIMANAGER, )
-        self.GUI_ELEMENTS.append(self.plane_pos_z_slider)
+        self.PLANE_GUI_ELEMENTS.append(self.plane_pos_z_slider)
         
          # * plane rotation label text
         self.slice_plane_rot_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
@@ -276,7 +276,7 @@ class VoxelEngine:
                                                  value_range=[0.0, 2.0],
                                                  click_increment=0.01,
                                                  manager=self.UIMANAGER, )
-        self.GUI_ELEMENTS.append(self.plane_rot_x_slider)
+        self.PLANE_GUI_ELEMENTS.append(self.plane_rot_x_slider)
         
         # * plane y rot label
         self.plane_rot_y_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (90, 32)),
@@ -291,7 +291,7 @@ class VoxelEngine:
                                                  value_range=[0.0, 2.0],
                                                  click_increment=0.01,
                                                  manager=self.UIMANAGER, )
-        self.GUI_ELEMENTS.append(self.plane_rot_y_slider)
+        self.PLANE_GUI_ELEMENTS.append(self.plane_rot_y_slider)
         
         # * plane z rot label
         self.plane_rot_z_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (90, 32)),
@@ -306,7 +306,7 @@ class VoxelEngine:
                                                  value_range=[0.0, 2.0],
                                                  click_increment=0.01,
                                                  manager=self.UIMANAGER, )
-        self.GUI_ELEMENTS.append(self.plane_rot_z_slider)
+        self.PLANE_GUI_ELEMENTS.append(self.plane_rot_z_slider)
         
         # * model dropdown menu
         self.model_select = gui.elements.UIDropDownMenu(self.models, self.curr_model,
@@ -339,13 +339,19 @@ class VoxelEngine:
         self.GUI_ELEMENTS.append(self.step_button)
         self.step_button.set_tooltip('If paused, perform a single update step.')
         
+        # * enable/disable plane gui options
+        if self.SHOW_PLANE:
+            for e in self.PLANE_GUI_ELEMENTS:
+                e.enable()
+        else:
+            for e in self.PLANE_GUI_ELEMENTS:
+                e.disable()
 
         self.toggle_axis.set_text(f'toggle axis: {self.SHOW_AXIS}', )
         self.toggle_border.set_text(f'toggle border: {self.SHOW_WIRE}')
         self.toggle_vector.set_text(f'toggle vector: {self.SHOW_VECT}')
         self.raycast_vol.set_text(f'raycast vol: {self.SEND_RAYCASTS}')
         self.toggle_plane.set_text(f'slice plane: {self.SHOW_PLANE}')
-    
         self.render_mode.set_text('render mode: voxel')
 
         # * game is running
@@ -498,6 +504,8 @@ class VoxelEngine:
                         # * disable gui elements
                         for e in self.GUI_ELEMENTS:
                             e.disable()
+                        for e in self.PLANE_GUI_ELEMENTS:
+                            e.disable()
 
                 # * toggle axis lines           
                 if event.ui_element == self.toggle_axis:
@@ -530,6 +538,14 @@ class VoxelEngine:
                 if event.ui_element == self.toggle_plane:
                     self.SHOW_PLANE = not self.SHOW_PLANE
                     self.toggle_plane.set_text(f'slice plane: {self.SHOW_PLANE}')
+                    
+                    # * enable/disable plane gui options
+                    if self.SHOW_PLANE:
+                        for e in self.PLANE_GUI_ELEMENTS:
+                            e.enable()
+                    else:
+                        for e in self.PLANE_GUI_ELEMENTS:
+                            e.disable()
                 
                 # * reset current model
                 if event.ui_element == self.reset_button:
@@ -569,6 +585,9 @@ class VoxelEngine:
                         # * enable gui elements
                         for e in self.GUI_ELEMENTS:
                             e.enable()
+                        if self.SHOW_PLANE:
+                            for e in self.PLANE_GUI_ELEMENTS:
+                                e.enable()
                         
                 # * rotate seed xy
                 if event.key == pg.K_UP:

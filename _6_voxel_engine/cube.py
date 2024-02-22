@@ -29,11 +29,15 @@ class Cube:
         self.program['u_view'].write(self.app.player.m_view)
         self.program['u_eye'].write(self.app.player.pos)
         
-        # * set plane position and normal vector
+        # * set plane boolean
+        self.program['u_plane_on'].write(glm.bool_(self.app.SHOW_PLANE))
+        
+        # * set plane position 
         p = np.array(self.app.plane_pos)
         pos = glm.vec3(p[0], p[1], p[2])
         self.program['u_plane_pos'].write(pos)
         
+        # * set plane normal vector
         r = np.array(self.app.plane_rot)
         rot = glm.mat4(glm.quat(glm.vec3(r[0]*PI, r[1]*PI, r[2]*PI)))
         norm = glm.vec4(0.0, 0.0, 1.0, 1.0)

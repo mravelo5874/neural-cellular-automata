@@ -6,6 +6,7 @@ uniform sampler3D u_volume;
 
 uniform vec3 u_plane_pos;
 uniform vec3 u_plane_norm;
+uniform bool u_plane_on;
 
 in vec3 v_eye;
 in vec3 v_ray;
@@ -55,7 +56,7 @@ void main() {
         vec3 pos = (p/2.0)+0.5;
 
         // * check to make sure point is on the correct side of the plane
-        if (norm_side_plane(p)) {
+        if (u_plane_on && norm_side_plane(p)) {
             p += ray * dt;
             continue;
         }
