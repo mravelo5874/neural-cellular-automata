@@ -13,9 +13,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_iso3_v0'
+_NAME_ = 'rubiks_iso3_v1'
 _NOTE_ = '''
-Lets try to solve rubiks iso3...
+So the prev version seemed okay, still cannot break the last axis of symmetry; opposite faces along the xy plane are the same. lets try training for longer!
 '''
 _SIZE_ = 15
 _PAD_ = 5
@@ -35,7 +35,7 @@ _TARGET_VOX_ = '../vox/rubiks.vox'
 _MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
 # * training parameters
-_EPOCHS_ = 10_000
+_EPOCHS_ = 20_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4

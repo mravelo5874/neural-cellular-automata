@@ -204,11 +204,42 @@ class VoxelEngine:
         self.GUI_ELEMENTS.append(self.toggle_plane)
         #self.toggle_plane.set_tooltip('Toggle raycasting the volume in order to damage the automata.')
         
-        self.plane_pos_x = gui.elements.UIHorizontalSlider(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
+        # * plane label text
+        self.slice_plane_pos_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
+                                                 text='position',
+                                                 manager=self.UIMANAGER, 
+                                                 object_id=obj(object_id='#label_left'))
+        self.GUI_ELEMENTS.append(self.slice_plane_pos_label)
+        
+        # * plane x pos slider
+        self.plane_pos_x_slider = gui.elements.UIHorizontalSlider(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
                                                  start_value=self.plane_pos[0],
                                                  value_range=[-1.0, 1.0],
+                                                 click_increment=0.01,
                                                  manager=self.UIMANAGER, )
-        self.GUI_ELEMENTS.append(self.plane_pos_x)
+        self.GUI_ELEMENTS.append(self.plane_pos_x_slider)
+        
+        # * plane x pos label
+        self.plane_pos_x_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
+                                                  text=f'x: {round(self.plane_pos[0], 2)}',
+                                                  manager=self.UIMANAGER, 
+                                                  object_id=obj(object_id='#label_center'))
+        self.GUI_ELEMENTS.append(self.plane_pos_x_label)
+        
+        # * plane y pos slider
+        self.plane_pos_y_slider = gui.elements.UIHorizontalSlider(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
+                                                 start_value=self.plane_pos[1],
+                                                 value_range=[-1.0, 1.0],
+                                                 click_increment=0.01,
+                                                 manager=self.UIMANAGER, )
+        self.GUI_ELEMENTS.append(self.plane_pos_y_slider)
+        
+        # * plane y pos label
+        self.plane_pos_y_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
+                                                  text=f'y: {round(self.plane_pos[1], 2)}',
+                                                  manager=self.UIMANAGER, 
+                                                  object_id=obj(object_id='#label_center'))
+        self.GUI_ELEMENTS.append(self.plane_pos_y_label)
         
         # * model dropdown menu
         self.model_select = gui.elements.UIDropDownMenu(self.models, self.curr_model,
@@ -345,6 +376,16 @@ class VoxelEngine:
                 
             # ----------- gui events ----------- #
             self.UIMANAGER.process_events(event)
+            
+            # * check for gui button presses
+            if event.type == gui.UI_HORIZONTAL_SLIDER_MOVED:
+                if event.ui_element == self.plane_pos_x_slider:
+                    self.plane_pos[0] = event.value
+                    self.plane_pos_x_label.set_text(f'x: {round(self.plane_pos[0], 2)}')
+                    
+                if event.ui_element == self.plane_pos_y_slider:
+                    self.plane_pos[1] = event.value
+                    self.plane_pos_y_label.set_text(f'y: {round(self.plane_pos[1], 2)}')
             
             # * load in new model from drop-down menu
             if event.type == gui.UI_DROP_DOWN_MENU_CHANGED:
