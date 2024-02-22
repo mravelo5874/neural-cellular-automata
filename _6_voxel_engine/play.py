@@ -22,7 +22,7 @@ from nca_simulator import NCASimulator
 
 cwd = os.getcwd().split('\\')[:-1]
 cwd = '/'.join(cwd)
-PI = math.pi
+
 DEBUG_MODE = False
 
 class VoxelEngine:
@@ -62,7 +62,7 @@ class VoxelEngine:
         self.GUI_ELEMENTS = []
         # * slice plane
         self.plane_pos = [0.0, 0.0, 0.0]
-        self.plane_rot = [0.0, 0.0, 0.0] # (PI/4, PI/4, PI/4)
+        self.plane_rot = [1/4, 1/4, 1/4] # (PI/4, PI/4, PI/4)
         
         # * interaction
         self.my_vector = (None, None)
@@ -192,7 +192,7 @@ class VoxelEngine:
         
         # * plane label text
         self.slice_plane_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
-                                                 text='Slice Plane',
+                                                 text='slice plane opts',
                                                  manager=self.UIMANAGER, 
                                                  object_id=obj(object_id='#label_left'))
         self.GUI_ELEMENTS.append(self.slice_plane_label)
@@ -204,42 +204,109 @@ class VoxelEngine:
         self.GUI_ELEMENTS.append(self.toggle_plane)
         #self.toggle_plane.set_tooltip('Toggle raycasting the volume in order to damage the automata.')
         
-        # * plane label text
+        # * plane position label text
         self.slice_plane_pos_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
                                                  text='position',
                                                  manager=self.UIMANAGER, 
                                                  object_id=obj(object_id='#label_left'))
         self.GUI_ELEMENTS.append(self.slice_plane_pos_label)
         
+        # * plane x pos label
+        self.plane_pos_x_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (90, 32)),
+                                                  text=f'x: {round(self.plane_pos[0], 2)}',
+                                                  manager=self.UIMANAGER, 
+                                                  object_id=obj(object_id='#label_left'))
+        self.GUI_ELEMENTS.append(self.plane_pos_x_label)
+        
         # * plane x pos slider
-        self.plane_pos_x_slider = gui.elements.UIHorizontalSlider(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
+        self.plane_pos_x_slider = gui.elements.UIHorizontalSlider(relative_rect=pg.Rect((90+4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (166, 32)),
                                                  start_value=self.plane_pos[0],
-                                                 value_range=[-1.0, 1.0],
+                                                 value_range=[-2.0, 2.0],
                                                  click_increment=0.01,
                                                  manager=self.UIMANAGER, )
         self.GUI_ELEMENTS.append(self.plane_pos_x_slider)
         
-        # * plane x pos label
-        self.plane_pos_x_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
-                                                  text=f'x: {round(self.plane_pos[0], 2)}',
+        # * plane y pos label
+        self.plane_pos_y_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (90, 32)),
+                                                  text=f'y: {round(self.plane_pos[1], 2)}',
                                                   manager=self.UIMANAGER, 
-                                                  object_id=obj(object_id='#label_center'))
-        self.GUI_ELEMENTS.append(self.plane_pos_x_label)
+                                                  object_id=obj(object_id='#label_left'))
+        self.GUI_ELEMENTS.append(self.plane_pos_y_label)
         
         # * plane y pos slider
-        self.plane_pos_y_slider = gui.elements.UIHorizontalSlider(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
+        self.plane_pos_y_slider = gui.elements.UIHorizontalSlider(relative_rect=pg.Rect((90+4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (166, 32)),
                                                  start_value=self.plane_pos[1],
-                                                 value_range=[-1.0, 1.0],
+                                                 value_range=[-2.0, 2.0],
                                                  click_increment=0.01,
                                                  manager=self.UIMANAGER, )
         self.GUI_ELEMENTS.append(self.plane_pos_y_slider)
         
-        # * plane y pos label
-        self.plane_pos_y_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
-                                                  text=f'y: {round(self.plane_pos[1], 2)}',
+        # * plane z pos label
+        self.plane_pos_z_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (90, 32)),
+                                                  text=f'z: {round(self.plane_pos[2], 2)}',
                                                   manager=self.UIMANAGER, 
-                                                  object_id=obj(object_id='#label_center'))
-        self.GUI_ELEMENTS.append(self.plane_pos_y_label)
+                                                  object_id=obj(object_id='#label_left'))
+        self.GUI_ELEMENTS.append(self.plane_pos_z_label)
+        
+        # * plane z pos slider
+        self.plane_pos_z_slider = gui.elements.UIHorizontalSlider(relative_rect=pg.Rect((90+4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (166, 32)),
+                                                 start_value=self.plane_pos[2],
+                                                 value_range=[-2.0, 2.0],
+                                                 click_increment=0.01,
+                                                 manager=self.UIMANAGER, )
+        self.GUI_ELEMENTS.append(self.plane_pos_z_slider)
+        
+         # * plane rotation label text
+        self.slice_plane_rot_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
+                                                 text='rotation',
+                                                 manager=self.UIMANAGER, 
+                                                 object_id=obj(object_id='#label_left'))
+        self.GUI_ELEMENTS.append(self.slice_plane_rot_label)
+        
+        # * plane x rot label
+        self.plane_rot_x_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (90, 32)),
+                                                  text=f'x: {round(self.plane_rot[0], 2)}π',
+                                                  manager=self.UIMANAGER, 
+                                                  object_id=obj(object_id='#label_left'))
+        self.GUI_ELEMENTS.append(self.plane_rot_x_label)
+        
+        # * plane x rot slider
+        self.plane_rot_x_slider = gui.elements.UIHorizontalSlider(relative_rect=pg.Rect((90+4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (166, 32)),
+                                                 start_value=self.plane_rot[0],
+                                                 value_range=[0.0, 2.0],
+                                                 click_increment=0.01,
+                                                 manager=self.UIMANAGER, )
+        self.GUI_ELEMENTS.append(self.plane_rot_x_slider)
+        
+        # * plane y rot label
+        self.plane_rot_y_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (90, 32)),
+                                                  text=f'y: {round(self.plane_rot[1], 2)}π',
+                                                  manager=self.UIMANAGER, 
+                                                  object_id=obj(object_id='#label_left'))
+        self.GUI_ELEMENTS.append(self.plane_rot_y_label)
+        
+        # * plane y rot slider
+        self.plane_rot_y_slider = gui.elements.UIHorizontalSlider(relative_rect=pg.Rect((90+4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (166, 32)),
+                                                 start_value=self.plane_rot[1],
+                                                 value_range=[0.0, 2.0],
+                                                 click_increment=0.01,
+                                                 manager=self.UIMANAGER, )
+        self.GUI_ELEMENTS.append(self.plane_rot_y_slider)
+        
+        # * plane z rot label
+        self.plane_rot_z_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (90, 32)),
+                                                  text=f'z: {round(self.plane_rot[2], 2)}π',
+                                                  manager=self.UIMANAGER, 
+                                                  object_id=obj(object_id='#label_left'))
+        self.GUI_ELEMENTS.append(self.plane_rot_z_label)
+        
+        # * plane z rot slider
+        self.plane_rot_z_slider = gui.elements.UIHorizontalSlider(relative_rect=pg.Rect((90+4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (166, 32)),
+                                                 start_value=self.plane_rot[2],
+                                                 value_range=[0.0, 2.0],
+                                                 click_increment=0.01,
+                                                 manager=self.UIMANAGER, )
+        self.GUI_ELEMENTS.append(self.plane_rot_z_slider)
         
         # * model dropdown menu
         self.model_select = gui.elements.UIDropDownMenu(self.models, self.curr_model,
@@ -386,6 +453,22 @@ class VoxelEngine:
                 if event.ui_element == self.plane_pos_y_slider:
                     self.plane_pos[1] = event.value
                     self.plane_pos_y_label.set_text(f'y: {round(self.plane_pos[1], 2)}')
+                    
+                if event.ui_element == self.plane_pos_z_slider:
+                    self.plane_pos[2] = event.value
+                    self.plane_pos_z_label.set_text(f'z: {round(self.plane_pos[2], 2)}')
+                    
+                if event.ui_element == self.plane_rot_x_slider:
+                    self.plane_rot[0] = event.value
+                    self.plane_rot_x_label.set_text(f'x: {round(self.plane_rot[0], 1)}π')
+                    
+                if event.ui_element == self.plane_rot_y_slider:
+                    self.plane_rot[1] = event.value
+                    self.plane_rot_y_label.set_text(f'y: {round(self.plane_rot[1], 1)}π')
+                    
+                if event.ui_element == self.plane_rot_z_slider:
+                    self.plane_rot[2] = event.value
+                    self.plane_rot_z_label.set_text(f'z: {round(self.plane_rot[2], 1)}π')
             
             # * load in new model from drop-down menu
             if event.type == gui.UI_DROP_DOWN_MENU_CHANGED:

@@ -4,6 +4,9 @@ layout (location=0) out vec4 fragColor;
 
 uniform sampler3D u_volume;
 
+uniform vec3 u_plane_pos;
+uniform vec3 u_plane_norm;
+
 in vec3 v_eye;
 in vec3 v_ray;
 
@@ -18,6 +21,11 @@ vec2 intersect_box(vec3 orig, vec3 dir) {
 	float t0 = max(tmin.x, max(tmin.y, tmin.z));
 	float t1 = min(tmax.x, min(tmax.y, tmax.z));
 	return vec2(t0, t1);
+}
+
+bool norm_side_plane(vec3 p) {
+    float d = dot(normalize(u_plane_norm), p - u_plane_pos);
+    return  d > 0;
 }
 
 void main() {   
@@ -45,6 +53,13 @@ void main() {
     for (float t = t_hit.x; t < t_hit.y; t += dt) {
         // step 5: sample volume
         vec3 pos = (p/2.0)+0.5;
+
+        // * check to make sure point is on the correct side of the plane
+        if (norm_side_plane(p)) {
+            p += ray * dt;
+            continue;
+        }
+
         vec4 rgba = texture(u_volume, pos);
 
         // Step 6: Accumulate the color and opacity using 
