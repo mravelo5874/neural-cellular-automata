@@ -13,9 +13,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_aniso_v1'
+_NAME_ = 'rubiks_iso3_v0'
 _NOTE_ = '''
-No hidden seed information this time...
+Lets try to solve rubiks iso3...
 '''
 _SIZE_ = 15
 _PAD_ = 5
@@ -32,7 +32,7 @@ _SEED_DIC_ = {
 _SEED_HID_INFO_ = False
 _TARGET_VOX_ = '../vox/rubiks.vox'
 # * model parameters
-_MODEL_TYPE_ = Perception.ANISOTROPIC
+_MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
 # * training parameters
 _EPOCHS_ = 10_000
