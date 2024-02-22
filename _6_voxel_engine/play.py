@@ -16,12 +16,13 @@ from voxel import Voxel
 from crosshair import Crosshair
 from player import Player
 from vector import Vector
+from plane import Plane
 from gui import Gui
 from nca_simulator import NCASimulator
 
 cwd = os.getcwd().split('\\')[:-1]
 cwd = '/'.join(cwd)
-
+PI = math.pi
 DEBUG_MODE = False
 
 class VoxelEngine:
@@ -51,6 +52,7 @@ class VoxelEngine:
         self.SHOW_WIRE = False
         self.SHOW_AXIS = False
         self.SHOW_VECT = False
+        self.SHOW_PLANE = True
         self.SEND_RAYCASTS = True
         # * gui
         self.UIMANAGER = gui.UIManager(_win_size, 'themes/gui_theme.json')
@@ -58,9 +60,13 @@ class VoxelEngine:
         self.SURF = pg.Surface(_win_size, pg.SRCALPHA)
         self.SURF.fill((0, 0, 0, 0))
         self.GUI_ELEMENTS = []
+        # * slice plane
+        self.plane_pos = [0.0, 0.0, 0.0]
+        self.plane_rot = [0.0, 0.0, 0.0] # (PI/4, PI/4, PI/4)
         
         # * interaction
-        self.my_voxel = None
+        self.my_vector = (None, None)
+        self.my_voxel = [1e12, 1e12, 1e12]
         # -------------------------- #
         
         # * get list of models
@@ -95,9 +101,8 @@ class VoxelEngine:
         self.wireframe = WireFrame(self)
         self.gui = Gui(self)
         
-        self.my_vector = (None, None)
-        self.my_voxel = [1e12, 1e12, 1e12]
         
+        self.plane = Plane(self)
         self.vector = Vector(self)
         self.voxel = Voxel(self)
         
@@ -185,6 +190,26 @@ class VoxelEngine:
         self.GUI_ELEMENTS.append(self.raycast_vol)
         self.raycast_vol.set_tooltip('Toggle raycasting the volume in order to damage the automata.')
         
+        # * plane label text
+        self.slice_plane_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
+                                                 text='Slice Plane',
+                                                 manager=self.UIMANAGER, 
+                                                 object_id=obj(object_id='#label_left'))
+        self.GUI_ELEMENTS.append(self.slice_plane_label)
+        
+        # * toggle plane
+        self.toggle_plane = gui.elements.UIButton(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
+                                                 text='slice place: _',
+                                                 manager=self.UIMANAGER, )
+        self.GUI_ELEMENTS.append(self.toggle_plane)
+        #self.toggle_plane.set_tooltip('Toggle raycasting the volume in order to damage the automata.')
+        
+        self.plane_pos_x = gui.elements.UIHorizontalSlider(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
+                                                 start_value=self.plane_pos[0],
+                                                 value_range=[-1.0, 1.0],
+                                                 manager=self.UIMANAGER, )
+        self.GUI_ELEMENTS.append(self.plane_pos_x)
+        
         # * model dropdown menu
         self.model_select = gui.elements.UIDropDownMenu(self.models, self.curr_model,
                                                         relative_rect=pg.Rect((4, 4), (256, 32)),
@@ -220,7 +245,9 @@ class VoxelEngine:
         self.toggle_axis.set_text(f'toggle axis: {self.SHOW_AXIS}', )
         self.toggle_border.set_text(f'toggle border: {self.SHOW_WIRE}')
         self.toggle_vector.set_text(f'toggle vector: {self.SHOW_VECT}')
-        self.raycast_vol.set_text(f'raycast_vol: {self.SEND_RAYCASTS}')
+        self.raycast_vol.set_text(f'raycast vol: {self.SEND_RAYCASTS}')
+        self.toggle_plane.set_text(f'slice plane: {self.SHOW_PLANE}')
+    
         self.render_mode.set_text('render mode: voxel')
 
         # * game is running
@@ -249,6 +276,8 @@ class VoxelEngine:
             self.axis.update()
         if self.SHOW_VECT:
             self.vector.update()
+        if self.SHOW_PLANE:
+            self.plane.update()
             
         # * update voxel
         if self.my_voxel != None and self.sim != None:
@@ -281,6 +310,8 @@ class VoxelEngine:
             self.vector.render()
         if self.SEND_RAYCASTS:
             self.voxel.render()
+        if self.SHOW_PLANE:
+            self.plane.render()
             
         self.crosshair.render()
         self.gui.render()
@@ -370,6 +401,11 @@ class VoxelEngine:
                 if event.ui_element == self.raycast_vol:
                     self.SEND_RAYCASTS = not self.SEND_RAYCASTS
                     self.raycast_vol.set_text(f'raycast vol: {self.SEND_RAYCASTS}')
+                    
+                # * toggle slice plane
+                if event.ui_element == self.toggle_plane:
+                    self.SHOW_PLANE = not self.SHOW_PLANE
+                    self.toggle_plane.set_text(f'slice plane: {self.SHOW_PLANE}')
                 
                 # * reset current model
                 if event.ui_element == self.reset_button:
@@ -466,6 +502,7 @@ class VoxelEngine:
         self.voxel.destroy()
         self.vector.destroy()
         self.gui.destroy()
+        self.plane.destroy()
         
         # * quit application
         print ('exiting application...')
