@@ -13,7 +13,7 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_iso3_v3'
+_NAME_ = 'rubiks_iso3_v4'
 _NOTE_ = '''
 doubling the hidden channels also did not work, so lets try adding more starting seeds in the x-direction, ALSO hidden seed info!
 '''
@@ -29,7 +29,7 @@ _SEED_DIC_ = {
     'plus_z': None,
     'minus_z': None,
 }
-_SEED_HID_INFO_ = False
+_SEED_HID_INFO_ = True
 _TARGET_VOX_ = '../vox/rubiks.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V3
