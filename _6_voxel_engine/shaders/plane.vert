@@ -13,8 +13,8 @@ uniform mat4 u_plane_rot;
 out vec3 v_color;
 
 void main() {
-    vec4 pos = vec4(in_pos + u_plane_pos, 1.0);
-    gl_Position = u_model * u_proj * u_view * u_plane_rot * pos;
+    vec4 pos = u_model * u_proj * u_view * u_plane_rot * vec4(in_pos, 1.0);
+    gl_Position = pos + vec4(u_plane_pos, 0.0);
     
     v_color = in_color;
 }

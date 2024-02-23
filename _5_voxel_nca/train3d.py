@@ -15,7 +15,7 @@ from scripts.vox.Vox import Vox
 # * target/seed parameters
 _NAME_ = 'rubiks_iso3_v3'
 _NOTE_ = '''
-doubling the hidden channels also did not work,
+doubling the hidden channels also did not work, so lets try adding more starting seeds in the x-direction, ALSO hidden seed info!
 '''
 _SIZE_ = 15
 _PAD_ = 5
