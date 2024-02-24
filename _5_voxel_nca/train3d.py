@@ -13,17 +13,16 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_iso3_v4'
+_NAME_ = 'rubiks_iso3_v5'
 _NOTE_ = '''
-doubling the hidden channels also did not work, so lets try adding more starting seeds in the x-direction, ALSO hidden seed info!
-'''
+Lets cut back the starting seeds, seems to mess things up. keep hidden seed info tho'''
 _SIZE_ = 15
 _PAD_ = 5
 _SEED_DIST_ = 3
 _SEED_DIC_ = {
     'center': None,
-    'plus_x': 'green',
-    'minus_x': 'pink',
+    'plus_x': None,
+    'minus_x': None,
     'plus_y': 'cyan',
     'minus_y': 'red',
     'plus_z': None,
