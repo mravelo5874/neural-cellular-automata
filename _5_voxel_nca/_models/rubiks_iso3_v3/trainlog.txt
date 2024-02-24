@@ -122,3 +122,22 @@ train time: 0:59:45
 model [rubiks_iso3_v3] saved to _models...
 elapsed time: 0:59:51
 ****************
+****************
+timestamp: 2024-02-23 16:28:57.770315
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: rubiks_iso3_v3
+type: YAW_ISO_V3
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 25, 25, 25]
+target.shape: [4, 4, 25, 25, 25]
+starting training w/ 10001 epochs...
+[100/10001]	 2.564it/s	 time: 0:00:39~1:04:20	 loss: 1080.437>17.29	 lr: 3.474e-05 ▲
