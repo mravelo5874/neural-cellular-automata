@@ -13,9 +13,10 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_iso3_v5'
+_NAME_ = 'rubiks_iso3_v6'
 _NOTE_ = '''
-Lets cut back the starting seeds, seems to mess things up. keep hidden seed info tho'''
+Switching to original 3D sobel kernels for x and y perception!
+'''
 _SIZE_ = 15
 _PAD_ = 5
 _SEED_DIST_ = 3
@@ -28,7 +29,7 @@ _SEED_DIC_ = {
     'plus_z': None,
     'minus_z': None,
 }
-_SEED_HID_INFO_ = True
+_SEED_HID_INFO_ = False
 _TARGET_VOX_ = '../vox/rubiks.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V3

@@ -63,7 +63,7 @@ class VoxelEngine:
         self.PLANE_GUI_ELEMENTS = []
         # * slice plane
         self.plane_pos = [0.0, 0.0, 0.0]
-        self.plane_rot = [1/4, 1/4, 1/4] # (PI/4, PI/4, PI/4)
+        self.plane_rot = [0.0, 0.0, 0.0] # (PI/4, PI/4, PI/4)
         
         # * interaction
         self.my_vector = (None, None)
