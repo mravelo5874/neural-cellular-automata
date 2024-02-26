@@ -13,9 +13,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_flatiso_v0'
+_NAME_ = 'rubiks_flatiso_v1'
 _NOTE_ = '''
-Trying to replicate 2d angle steering in 3d to find differences.
+Trying to replicate 2d angle steering in 3d to find differences. Time to try the whole cube! (probably and shouldnt work)
 '''
 _SIZE_ = 15
 _PAD_ = 5
@@ -30,7 +30,7 @@ _SEED_DIC_ = {
     'minus_z': None,
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/rubiks_slice.vox'
+_TARGET_VOX_ = '../vox/rubiks.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.FLAT_ISO
 _CHANNELS_ = 16
