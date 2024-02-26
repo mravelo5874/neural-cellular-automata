@@ -13,9 +13,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_iso3_v6'
+_NAME_ = 'rubiks_flatiso_v0'
 _NOTE_ = '''
-Switching to original 3D sobel kernels for x and y perception!
+Trying to replicate 2d angle steering in 3d to find differences.
 '''
 _SIZE_ = 15
 _PAD_ = 5
@@ -30,9 +30,9 @@ _SEED_DIC_ = {
     'minus_z': None,
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/rubiks.vox'
+_TARGET_VOX_ = '../vox/rubiks_slice.vox'
 # * model parameters
-_MODEL_TYPE_ = Perception.YAW_ISO_V3
+_MODEL_TYPE_ = Perception.FLAT_ISO
 _CHANNELS_ = 16
 # * training parameters
 _EPOCHS_ = 10_000

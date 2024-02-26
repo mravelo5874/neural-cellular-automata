@@ -17,6 +17,7 @@ class Perception(int, Enum):
     EULER: int = 4
     YAW_ISO_V2: int = 5
     YAW_ISO_V3: int = 6
+    FLAT_ISO: int = 7
 
 # 3D-filters
 X_SOBEL_KERN = torch.tensor([
@@ -97,6 +98,19 @@ Y_SOBEL_2D_KERN = torch.tensor([
    [[0., 1., 0.], 
     [0., 0., 0.], 
     [0., -1., 0.]]])
+
+LAP_2D_KERN = torch.tensor([
+   [[0., 1., 0.], 
+    [0., 2., 0.], 
+    [0., 1., 0.]],
+   
+   [[0., 2., 0.], 
+    [0., -12., 0.], 
+    [0., 2., 0.]],
+   
+   [[0., 1., 0.], 
+    [0., 2., 0.], 
+    [0., 1., 0.]]])
 
 class VoxelPerception():
     def __init__(self, _device='cuda'):
@@ -403,8 +417,8 @@ class VoxelPerception():
         states, angle = _x[:, :-1], _x[:, -1:]
         
         # * calculate gx and gy
-        gx = self.per_channel_conv3d(states, X_SOBEL_KERN[None, :])
-        gy = self.per_channel_conv3d(states, Y_SOBEL_KERN[None, :])
+        gx = self.per_channel_conv3d(states, X_SOBEL_2D_KERN[None, :])
+        gy = self.per_channel_conv3d(states, Y_SOBEL_2D_KERN[None, :])
            
         # * compute px and py 
         _cos, _sin = angle.cos(), angle.sin()
@@ -416,6 +430,22 @@ class VoxelPerception():
         lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
         
         return torch.cat([states, lap, px, py, gz], 1)
+    
+    def flat_isotropic_perception(self, _x):
+        # * separate states and angle channels
+        states, angle = _x[:, :-1], _x[:, -1:]
+        
+        # * calculate gx and gy
+        gx = self.per_channel_conv3d(states, X_SOBEL_2D_KERN[None, :])
+        gy = self.per_channel_conv3d(states, Y_SOBEL_2D_KERN[None, :])
+        lap = self.per_channel_conv3d(states, LAP_2D_KERN[None, :])
+           
+        # * compute px and py 
+        _cos, _sin = angle.cos(), angle.sin()
+        px = (gx*_cos)+(gy*_sin)
+        py = (gy*_cos)-(gx*_sin)
+        
+        return torch.cat([states, lap, px, py], 1)
     
     def quaternion_perception(self, _x):
         # * separate states and angle channels
@@ -461,4 +491,5 @@ class VoxelPerception():
         Perception.QUATERNION: quaternion_perception,
         Perception.YAW_ISO_V2: yaw_isotropic_v2_perception,
         Perception.YAW_ISO_V3: yaw_isotropic_v3_perception,
+        Perception.FLAT_ISO: flat_isotropic_perception,
     }
