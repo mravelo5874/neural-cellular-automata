@@ -3,6 +3,8 @@
     "_NOTE_": "\nTrying to replicate 2d angle steering in 3d to find differences. Time to try the whole cube! (probably and shouldnt work)\n",
     "_SIZE_": 15,
     "_PAD_": 5,
+    "_USE_SPHERE_SEED_": false,
+    "_SEED_POINTS_": 0,
     "_SEED_DIST_": 3,
     "_SEED_DIC_": {
         "center": null,

@@ -3,6 +3,8 @@
     "_NOTE_": "\nSo isometric perception is failing (cant break symmetries), so\nlets try a simple anisomentric perception to see if this at least\nworks decently enough and work off of that.\n",
     "_SIZE_": 15,
     "_PAD_": 5,
+    "_USE_SPHERE_SEED_": false,
+    "_SEED_POINTS_": 0,
     "_SEED_DIST_": 3,
     "_SEED_DIC_": {
         "center": null,

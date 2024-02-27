@@ -2,6 +2,8 @@
     "_NAME_": "earth_yawiso_0",
     "_SIZE_": 24,
     "_PAD_": 4,
+    "_USE_SPHERE_SEED_": false,
+    "_SEED_POINTS_": 0,
     "_SEED_DIST_": 5,
     "_SEED_HID_INFO_": false,
     "_SEED_DIC_": {
