@@ -105,7 +105,7 @@ def custom_seed(_size=16, _channels=16, _dist=5, _hidden_info=False,
             x[chns[i], half, half, half] = 1.0
         if _hidden_info:
             for i in range(len(chns)):
-                x[chns[i]+4, half, half, half] = 1.0
+                x[chns[i]+4, half, half, half] = 0.0
             
     if _plus_x != None:
         chns = color_to_channels(_plus_x)
@@ -114,7 +114,7 @@ def custom_seed(_size=16, _channels=16, _dist=5, _hidden_info=False,
             x[chns[i], half+_dist, half, half] = 1.0
         if _hidden_info:
             for i in range(len(chns)):
-                x[chns[i]+4, half+_dist, half, half] = 1.0
+                x[chns[i]+4, half+_dist, half, half] = 0.0
             
     if _minus_x != None:
         chns = color_to_channels(_minus_x)
@@ -123,7 +123,7 @@ def custom_seed(_size=16, _channels=16, _dist=5, _hidden_info=False,
             x[chns[i], half-_dist, half, half] = 1.0
         if _hidden_info:
             for i in range(len(chns)):
-                x[chns[i]+4, half-_dist, half, half] = 1.0
+                x[chns[i]+4, half-_dist, half, half] = 0.0
     
     if _plus_y != None:
         chns = color_to_channels(_plus_y)
@@ -132,7 +132,7 @@ def custom_seed(_size=16, _channels=16, _dist=5, _hidden_info=False,
             x[chns[i], half, half+_dist, half] = 1.0
         if _hidden_info:
             for i in range(len(chns)):
-                x[chns[i]+4, half, half+_dist, half] = 1.0
+                x[chns[i]+4, half, half+_dist, half] = 0.0
             
     if _minus_y != None:
         chns = color_to_channels(_minus_y)
@@ -141,7 +141,7 @@ def custom_seed(_size=16, _channels=16, _dist=5, _hidden_info=False,
             x[chns[i], half, half-_dist, half] = 1.0
         if _hidden_info:
             for i in range(len(chns)):
-                x[chns[i]+4, half, half-_dist, half] = 1.0
+                x[chns[i]+4, half, half-_dist, half] = 0.0
             
     if _plus_z != None:
         chns = color_to_channels(_plus_z)
@@ -150,7 +150,7 @@ def custom_seed(_size=16, _channels=16, _dist=5, _hidden_info=False,
             x[chns[i], half, half, half+_dist] = 1.0
         if _hidden_info:
             for i in range(len(chns)):
-                x[chns[i]+4, half, half, half+_dist] = 1.0
+                x[chns[i]+4, half, half, half+_dist] = 0.0
             
     if _minus_z != None:
         chns = color_to_channels(_minus_z)
@@ -159,7 +159,7 @@ def custom_seed(_size=16, _channels=16, _dist=5, _hidden_info=False,
             x[chns[i], half, half, half-_dist] = 1.0
         if _hidden_info:
             for i in range(len(chns)):
-                x[chns[i]+4, half, half, half-_dist] = 1.0
+                x[chns[i]+4, half, half, half-_dist] = 0.0
 
     return x
 
