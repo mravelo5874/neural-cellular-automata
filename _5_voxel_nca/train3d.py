@@ -13,19 +13,19 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_iso3_v7'
+_NAME_ = 'rubiks_iso3_v8'
 _NOTE_ = '''
-Added sobel filter z down AND up
+Trying up and down z sobel filter w/ more starting seeds to hopefully break symmetries
 '''
 _SIZE_ = 15
 _PAD_ = 5
 _SEED_DIST_ = 3
 _SEED_DIC_ = {
     'center': None,
-    'plus_x': None,
-    'minus_x': None,
-    'plus_y': 'cyan',
-    'minus_y': 'red',
+    'plus_x': 'red',
+    'minus_x': 'green',
+    'plus_y': 'blue',
+    'minus_y': 'white',
     'plus_z': None,
     'minus_z': None,
 }
