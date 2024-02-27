@@ -1,6 +1,7 @@
 import torch
 import numpy as np
 import matplotlib.gridspec as gridspec
+from colorsys import hsv_to_rgb
 from matplotlib import pyplot as plt
 from scripts.vox.Vox import Vox
 
@@ -160,6 +161,25 @@ def custom_seed(_size=16, _channels=16, _dist=5, _hidden_info=False,
             for i in range(len(chns)):
                 x[chns[i]+4, half, half, half-_dist] = 1.0
 
+    return x
+
+def rgb_linspace(n):
+    '''Generates n visually distinct rgb combinations'''
+    return torch.tensor([hsv_to_rgb(i / n, 1.0, 1.0) for i in range(n)], dtype=torch.float32)
+
+def seed_3d(_size=128, _channels=16, _points=3, _radius=4, _xyz=None, _rgb_dist=rgb_linspace):
+    '''Generates a uniform p-point structured seed of radius r in 3D'''
+    x = torch.zeros(_channels, _size, _size, _size)
+    # Initialize p points equidistant around a sphere of radius r
+    indices = np.arange(0, _points, dtype=float) + 0.5
+    phi = (np.arccos(1 - 2*indices/_points))
+    theta = np.pi * (1 + 5**0.5) * indices
+    if _xyz is None:
+        dx, dy, dz = (np.c_[_radius*np.cos(theta)*np.sin(phi), _radius*np.sin(theta)*np.sin(phi), _radius*np.cos(phi)]+(_size//2)).astype(np.int32).T
+        _xyz = np.array([dx, dy, dz])
+    # Assign distinct rgb values to each point
+    x[0:3, _xyz[0], _xyz[1], _xyz[2]] =  _rgb_dist(_xyz.shape[1]).T
+    x[3:_channels, _xyz[0], _xyz[1], _xyz[2]] = 1.0
     return x
 
 def half_volume_mask(_size, _type):

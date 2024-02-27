@@ -52,15 +52,21 @@ class NCASimulator:
         # * create seed
         _SIZE_ = params['_SIZE_']
         _PAD_ = params['_PAD_']
+        _CHANNELS_ = params['_CHANNELS_']
+        _USE_SPHERE_SEED_ = params['_USE_SPHERE_SEED_']
+        _SEED_POINTS_ = params['_SEED_POINTS_']
         _SEED_DIST_ = params['_SEED_DIST_']
         _SEED_DIC_ = params['_SEED_DIC_']
         _SEED_HID_INFO_ = params['_SEED_HID_INFO_']
         self.size = int(_SIZE_+(2.5*_PAD_)*2.5)
-        self.seed = voxutil.custom_seed(_size=self.size, _channels=params['_CHANNELS_'], _dist=_SEED_DIST_, _hidden_info=_SEED_HID_INFO_,
-                                    _center=_SEED_DIC_['center'], 
-                                    _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
-                                    _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
-                                    _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(self.device)
+        if _USE_SPHERE_SEED_:
+            self.seed = voxutil.seed_3d(_size=self.size, _channels=_CHANNELS_, _points=_SEED_POINTS_, _radius=_SEED_DIST_).unsqueeze(0).to(_DEVICE_)
+        else:
+            self.seed_ten = voxutil.custom_seed(_size=self.size, _channels=_CHANNELS_, _dist=_SEED_DIST_, _hidden_info=_SEED_HID_INFO_,
+                                        _center=_SEED_DIC_['center'], 
+                                        _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
+                                        _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
+                                        _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(self.device)
         # * randomize channels
         if model.isotropic_type() == 1:
                 self.seed[:1, -1:] = torch.rand(self.size, self.size, self.size)*np.pi*2.0

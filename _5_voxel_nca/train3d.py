@@ -13,12 +13,14 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_iso3_v8'
+_NAME_ = 'rubiks_iso3_v9'
 _NOTE_ = '''
-Trying up and down z sobel filter w/ more starting seeds to hopefully break symmetries
+Created new spherical seed structure where points are no longer colinear
 '''
 _SIZE_ = 15
 _PAD_ = 5
+_USE_SPHERE_SEED_ = True
+_SEED_POINTS_ = 3
 _SEED_DIST_ = 3
 _SEED_DIC_ = {
     'center': None,
@@ -89,6 +91,8 @@ def main():
             '_NOTE_': _NOTE_,
             '_SIZE_': _SIZE_,
             '_PAD_': _PAD_,
+            '_USE_SPHERE_SEED_': _USE_SPHERE_SEED_,
+            '_SEED_POINTS_': _SEED_POINTS_,
             '_SEED_DIST_': _SEED_DIST_,
             '_SEED_DIC_' : _SEED_DIC_,
             '_SEED_HID_INFO_': _SEED_HID_INFO_,
@@ -121,6 +125,8 @@ def main():
             global _NAME_
             global _SIZE_
             global _PAD_
+            global _USE_SPHERE_SEED_
+            global _SEED_POINTS_
             global _SEED_DIST_
             global _SEED_DIC_
             global _SEED_HID_INFO_
@@ -142,6 +148,8 @@ def main():
             _NAME_ = params['_NAME_']+'_from_checkpoint'
             _SIZE_ = params['_SIZE_']
             _PAD_ = params['_PAD_']
+            _USE_SPHERE_SEED_ = params['_USE_SPHERE_SEED_']
+            _SEED_POINTS_ = params['_SEED_POINTS_']
             _SEED_DIC_ = params['_SEED_DIC_']
             _SEED_DIST_ = params['_SEED_DIST_']
             _SEED_HID_INFO_ = params['_SEED_HID_INFO_']
@@ -195,11 +203,14 @@ def main():
 
     # * create seed
     PAD_SIZE = _SIZE_+(2*_PAD_)
-    seed_ten = voxutil.custom_seed(_size=PAD_SIZE, _channels=_CHANNELS_, _dist=_SEED_DIST_, _hidden_info=_SEED_HID_INFO_,
-                                _center=_SEED_DIC_['center'], 
-                                _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
-                                _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
-                                _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(_DEVICE_)
+    if _USE_SPHERE_SEED_:
+        seed_ten = voxutil.seed_3d(_size=PAD_SIZE, _channels=_CHANNELS_, _points=_SEED_POINTS_, _radius=_SEED_DIST_).unsqueeze(0).to(_DEVICE_)
+    else:
+        seed_ten = voxutil.custom_seed(_size=PAD_SIZE, _channels=_CHANNELS_, _dist=_SEED_DIST_, _hidden_info=_SEED_HID_INFO_,
+                                    _center=_SEED_DIC_['center'], 
+                                    _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
+                                    _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
+                                    _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(_DEVICE_)
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'seed.shape: {list(seed_ten.shape)}')
     
     # * load target vox
