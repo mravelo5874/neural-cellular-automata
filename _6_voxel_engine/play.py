@@ -26,7 +26,7 @@ cwd = '/'.join(cwd)
 DEBUG_MODE = False
 
 class VoxelEngine:
-    def __init__(self, _win_size=(900, 450)): # * small window: (900, 450), large window: (1200, 800)
+    def __init__(self, _win_size=(1200, 800)): # * small window: (900, 450), large window: (1200, 800)
         # * init pygame modules
         pg.init()
         pg.display.set_caption('Neural Cellular Automata Renderer')

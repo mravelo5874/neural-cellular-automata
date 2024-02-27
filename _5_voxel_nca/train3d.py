@@ -13,28 +13,28 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_iso3_v11'
+_NAME_ = 'rubiks_rod_slice_flatiso_v0'
 _NOTE_ = '''
-Lets go back to 3 spherical points, and fixed hidden info to **actually** do something.
+Trying out flatiso on rubiks rod slice.
 '''
 _SIZE_ = 15
 _PAD_ = 5
-_USE_SPHERE_SEED_ = True
-_SEED_POINTS_ = 3
+_USE_SPHERE_SEED_ = False
+_SEED_POINTS_ = 2
 _SEED_DIST_ = 3
 _SEED_DIC_ = {
     'center': None,
-    'plus_x': 'red',
-    'minus_x': 'green',
-    'plus_y': 'blue',
-    'minus_y': 'white',
+    'plus_x': None,
+    'minus_x': None,
+    'plus_y': 'cyan',
+    'minus_y': 'red',
     'plus_z': None,
-    'minus_z': None,
+    'minus_z': None
 }
 _SEED_HID_INFO_ = True
-_TARGET_VOX_ = '../vox/rubiks.vox'
+_TARGET_VOX_ = '../vox/rubiks_rod_slice.vox'
 # * model parameters
-_MODEL_TYPE_ = Perception.YAW_ISO_V3
+_MODEL_TYPE_ = Perception.FLAT_ISO
 _CHANNELS_ = 16
 # * training parameters
 _EPOCHS_ = 10_000
