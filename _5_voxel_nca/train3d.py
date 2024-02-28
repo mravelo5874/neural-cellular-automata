@@ -13,9 +13,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_black_slice_iso3_v2'
+_NAME_ = 'rubiks_black_slice_iso3_v3'
 _NOTE_ = '''
-REadding lap3 to hopefullly improve model results...
+V2 did not work, doubling hidden channels to see if larger nn is needed!
 '''
 _SIZE_ = 15
 _PAD_ = 5
@@ -36,6 +36,7 @@ _TARGET_VOX_ = '../vox/rubiks_black_slice.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
+_HIDDEN_ = 256
 # * training parameters
 _EPOCHS_ = 10_000
 _BATCH_SIZE_ = 4
@@ -100,6 +101,7 @@ def main():
             # * model parameters
             '_MODEL_TYPE_': _MODEL_TYPE_,
             '_CHANNELS_': _CHANNELS_,
+            '_HIDDEN_': _HIDDEN_,
             # * training parameters
             '_EPOCHS_': _EPOCHS_,
             '_BATCH_SIZE_': _BATCH_SIZE_,
@@ -133,6 +135,7 @@ def main():
             global _TARGET_VOX_
             global _MODEL_TYPE_
             global _CHANNELS_
+            global _HIDDEN_
             global _EPOCHS_
             global _BATCH_SIZE_
             global _POOL_SIZE_
@@ -157,6 +160,7 @@ def main():
             # * model parameters
             _MODEL_TYPE_ = params['_MODEL_TYPE_']
             _CHANNELS_ = params['_CHANNELS_']
+            _HIDDEN_ = params['_HIDDEN_']
             # * training parameters
             _EPOCHS_ = params['_EPOCHS_']
             _BATCH_SIZE_ = params['_BATCH_SIZE_']
@@ -180,11 +184,11 @@ def main():
     
     # * create / load model
     if not load_checkpoint:
-        model = NCA(_name=_NAME_, _log_file=_LOG_FILE_, _channels=_CHANNELS_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
+        model = NCA(_name=_NAME_, _log_file=_LOG_FILE_, _channels=_CHANNELS_, _hidden=_HIDDEN_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
         voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'training new model from scratch...')
     else:
         load_model(checkpoint_dir, checkpoint_model)
-        model = NCA(_name=_NAME_, _log_file=_LOG_FILE_, _channels=_CHANNELS_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
+        model = NCA(_name=_NAME_, _log_file=_LOG_FILE_, _channels=_CHANNELS_, _hidden=_HIDDEN_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
         model.load_state_dict(torch.load(checkpoint_dir+'/'+checkpoint_model+'.pt', map_location=_DEVICE_))
         model.train()
         voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'loading checkpoint: {checkpoint_dir}/{checkpoint_model}...')
@@ -196,6 +200,8 @@ def main():
     # * print out parameters
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'model: {_NAME_}')
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'type: {_MODEL_TYPE_}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'channels: {_CHANNELS_}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'hidden: {_HIDDEN_}')
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'hidden-seed-info: {_SEED_HID_INFO_}')
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'batch-size: {_BATCH_SIZE_}')
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool-size: {_POOL_SIZE_}')

@@ -18,6 +18,7 @@
     "_TARGET_VOX_": "../vox/earth.vox",
     "_MODEL_TYPE_": 1,
     "_CHANNELS_": 16,
+    "_HIDDEN_": 128,
     "_EPOCHS_": 20000,
     "_BATCH_SIZE_": 4,
     "_POOL_SIZE_": 32,

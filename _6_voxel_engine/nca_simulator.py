@@ -44,7 +44,8 @@ class NCASimulator:
         params = {}
         with open(f'{cwd}/models/{_model}/{_model}_params.json', 'r') as openfile:
             params = json.load(openfile)
-        model = NCA(_name=params['_NAME_'], _channels=params['_CHANNELS_'], _device=self.device, _model_type=params['_MODEL_TYPE_'])
+            
+        model = NCA(_name=params['_NAME_'], _channels=params['_CHANNELS_'], _hidden=params['_HIDDEN_'], _device=self.device, _model_type=params['_MODEL_TYPE_'])
         model.load_state_dict(torch.load(f'{cwd}/models/{_model}/{_model}.pt', map_location=self.device))
         model.eval()
         self.model = model
