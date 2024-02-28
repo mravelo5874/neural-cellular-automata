@@ -13,7 +13,7 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_rod_slice_flatiso_v0'
+_NAME_ = 'rubiks_black_slice_flatiso_v0'
 _NOTE_ = '''
 Trying out flatiso on rubiks rod slice.
 '''
@@ -31,8 +31,8 @@ _SEED_DIC_ = {
     'plus_z': None,
     'minus_z': None
 }
-_SEED_HID_INFO_ = True
-_TARGET_VOX_ = '../vox/rubiks_rod_slice.vox'
+_SEED_HID_INFO_ = False
+_TARGET_VOX_ = '../vox/rubiks_black_slice.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.FLAT_ISO
 _CHANNELS_ = 16
