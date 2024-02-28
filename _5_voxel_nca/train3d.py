@@ -13,9 +13,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_black_slab_iso3_v0'
+_NAME_ = 'rubiks_black_slice_iso3_v0'
 _NOTE_ = '''
-Trying on 3 block slab now.
+Trying iso3 perception with rubiks slice. The slice is easily buildable by flatiso, maybe iso3 is bad!
 '''
 _SIZE_ = 15
 _PAD_ = 5
@@ -32,7 +32,7 @@ _SEED_DIC_ = {
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/rubiks_black_slab.vox'
+_TARGET_VOX_ = '../vox/rubiks_black_slice.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
