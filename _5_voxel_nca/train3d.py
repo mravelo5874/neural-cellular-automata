@@ -13,9 +13,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_black_slice_iso3_v1'
+_NAME_ = 'rubiks_black_slice_iso3_v2'
 _NOTE_ = '''
-Added 2d laplacian to iso3, removed lap3 but can re-add it if needed!~
+REadding lap3 to hopefullly improve model results...
 '''
 _SIZE_ = 15
 _PAD_ = 5

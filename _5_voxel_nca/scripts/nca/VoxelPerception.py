@@ -444,7 +444,7 @@ class VoxelPerception():
         #gz_up = self.per_channel_conv3d(states, Z_SOBEL_KERN_UP[None, :])
         lap3 = self.per_channel_conv3d(states, LAP_KERN[None, :])
         
-        return torch.cat([states, lap2, px, py, gz_dn], 1)
+        return torch.cat([states, lap2, px, py, gz_dn, lap3], 1)
     
     def flat_isotropic_perception(self, _x):
         # * separate states and angle channels
