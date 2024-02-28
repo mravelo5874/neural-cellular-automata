@@ -13,9 +13,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_black_slice_iso3_v0'
+_NAME_ = 'rubiks_black_slice_iso3_v1'
 _NOTE_ = '''
-Trying iso3 perception with rubiks slice. The slice is easily buildable by flatiso, maybe iso3 is bad!
+Added 2d laplacian to iso3, removed lap3 but can re-add it if needed!~
 '''
 _SIZE_ = 15
 _PAD_ = 5
