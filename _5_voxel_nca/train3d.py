@@ -13,9 +13,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_black_slice_iso3_v4'
+_NAME_ = 'rubiks_black_slice_iso3_v5'
 _NOTE_ = '''
-configured iso3 to be identical to flatiso
+configured iso3 to be identical to flatiso, same as v4, lets try it again...
 '''
 _SIZE_ = 15
 _PAD_ = 5
@@ -361,18 +361,6 @@ def main():
                 
     # * save final model
     save_model('_models', model, _NAME_)
-    
-    # * generate videos
-    s = _SIZE_+(2*_PAD_)
-    curr = datetime.datetime.now().strftime("%H:%M:%S")
-    # voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting time: {curr}')
-    # voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'generating videos...')
-    # with torch.no_grad():
-    #     model.generate_video(f'_models/{_NAME_}/vidtrain_grow.mp4', seed_ten, _size=s)
-    #     if _NUM_DAMG_ > 0:
-    #         model.regen_video(f'_models/{_NAME_}/vidtrain_multi_regen.mp4', seed_ten, _size=s, _mask_types=['x+', 'y+', 'z+'])
-    #     if model.isotropic_type() > 0:
-    #         model.rotate_yawiso_video(f'_models/{_NAME_}/vidtrain_multi_rotate.mp4', seed_ten, _size=s, _show_grid=True)
     
     # * calculate elapsed time
     secs = (datetime.datetime.now()-start).seconds

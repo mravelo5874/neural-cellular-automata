@@ -82,6 +82,9 @@ class NCASimulator:
         self.mutex.release()
         self.is_loaded = True
         
+        name = params['_NAME_']
+        print (f'loaded model: {name}')
+        
     def run_thread(self, _delay):
         # * wait 3 seconds to show off seed
         time.sleep(_delay)

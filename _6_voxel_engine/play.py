@@ -311,7 +311,8 @@ class VoxelEngine:
         # * model dropdown menu
         self.model_select = gui.elements.UIDropDownMenu(self.models, self.curr_model,
                                                         relative_rect=pg.Rect((4, 4), (256, 32)),
-                                                        manager=self.UIMANAGER)
+                                                        manager=self.UIMANAGER,
+                                                        object_id=obj(object_id='#drop_down'))
         self.GUI_ELEMENTS.append(self.model_select)
         self.model_select.set_tooltip('Select a model to render.')
         

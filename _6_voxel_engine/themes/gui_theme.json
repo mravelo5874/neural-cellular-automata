@@ -7,6 +7,34 @@
         }
     },
 
+    "#drop_down":
+    {
+        "misc":
+        {
+            "expand_direction": "down"
+        }
+    },
+    "#drop_down.button":
+    {
+        "font":
+        {
+            "name": "fira_code",
+            "size": "12",
+            "bold": "0",
+            "italic": "0"
+        }
+    },
+    "#drop_down.#drop_down_options_list.button":
+    {
+        "font":
+        {
+            "name": "fira_code",
+            "size": "12",
+            "bold": "0",
+            "italic": "0"
+        }
+    },
+
     "button":
     {
         "colours":
@@ -16,7 +44,7 @@
         "font":
         {
             "name": "fira_code",
-            "size": "16",
+            "size": "12",
             "bold": "0",
             "italic": "0"
         }
@@ -80,7 +108,7 @@
         "font":
         {
             "name": "fira_code",
-            "size": "16",
+            "size": "12",
             "bold": "0",
             "italic": "0"
         },
@@ -96,7 +124,7 @@
         "font":
         {
             "name": "fira_code",
-            "size": "16",
+            "size": "12",
             "bold": "0",
             "italic": "0"
         },
@@ -112,7 +140,7 @@
         "font":
         {
             "name": "fira_code",
-            "size": "16",
+            "size": "12",
             "bold": "0",
             "italic": "0"
         },

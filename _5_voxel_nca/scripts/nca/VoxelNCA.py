@@ -9,7 +9,7 @@ from scripts.nca.VoxelPerception import Perception
 from scripts.nca import VoxelUtil as voxutil
     
 class VoxelNCA(torch.nn.Module):
-    def __init__(self, _name, _log_file=None, _channels=16, _hidden=128, _device='cuda', _model_type='ANISOTROPIC', _update_rate=0.5):
+    def __init__(self, _name, _log_file=None, _channels=16, _hidden=128, _device='cuda', _model_type=Perception.ANISOTROPIC, _update_rate=0.5):
         super().__init__()
         self.device = _device
         self.model_type = _model_type
@@ -348,6 +348,7 @@ class VoxelNCA(torch.nn.Module):
             ay = _x[:, -2:-1] % (pi*2.0)
             az = _x[:, -3:-2] % (pi*2.0)
             _x = torch.cat([states, az, ay, ax], 1)
+            
         else:
             _x = _x * alive_mask
            
