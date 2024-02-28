@@ -44,7 +44,7 @@
         "font":
         {
             "name": "fira_code",
-            "size": "12",
+            "size": "16",
             "bold": "0",
             "italic": "0"
         }
@@ -108,7 +108,7 @@
         "font":
         {
             "name": "fira_code",
-            "size": "12",
+            "size": "16",
             "bold": "0",
             "italic": "0"
         },
@@ -124,7 +124,7 @@
         "font":
         {
             "name": "fira_code",
-            "size": "12",
+            "size": "16",
             "bold": "0",
             "italic": "0"
         },
@@ -140,7 +140,7 @@
         "font":
         {
             "name": "fira_code",
-            "size": "12",
+            "size": "16",
             "bold": "0",
             "italic": "0"
         },
