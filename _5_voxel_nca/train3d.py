@@ -13,9 +13,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_black_slice_flatiso_v0'
+_NAME_ = 'rubiks_black_slab_iso3_v0'
 _NOTE_ = '''
-Trying out flatiso on rubiks rod slice.
+Trying on 3 block slab now.
 '''
 _SIZE_ = 15
 _PAD_ = 5
@@ -32,9 +32,9 @@ _SEED_DIC_ = {
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/rubiks_black_slice.vox'
+_TARGET_VOX_ = '../vox/rubiks_black_slab.vox'
 # * model parameters
-_MODEL_TYPE_ = Perception.FLAT_ISO
+_MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
 # * training parameters
 _EPOCHS_ = 10_000
