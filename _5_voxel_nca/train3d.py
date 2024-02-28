@@ -13,9 +13,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_black_slice_iso3_v3'
+_NAME_ = 'rubiks_black_slice_iso3_v4'
 _NOTE_ = '''
-V2 did not work, doubling hidden channels to see if larger nn is needed!
+configured iso3 to be identical to flatiso
 '''
 _SIZE_ = 15
 _PAD_ = 5
@@ -36,7 +36,7 @@ _TARGET_VOX_ = '../vox/rubiks_black_slice.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
-_HIDDEN_ = 256
+_HIDDEN_ = 128
 # * training parameters
 _EPOCHS_ = 10_000
 _BATCH_SIZE_ = 4
