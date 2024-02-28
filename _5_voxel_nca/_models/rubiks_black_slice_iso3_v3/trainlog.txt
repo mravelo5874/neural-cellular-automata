@@ -124,3 +124,6 @@ train time: 1:25:38
 model [rubiks_black_slice_iso3_v3] saved to _models...
 elapsed time: 1:25:44
 ****************
+****************
+timestamp: 2024-02-28 13:18:30.069487
+initializing training...
