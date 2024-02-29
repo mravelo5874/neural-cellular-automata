@@ -14,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_black_cube_iso3_v1'
+_NAME_ = 'rubiks_black_cube_iso3_v2'
 _NOTE_ = '''
-v1 was not able to break symmetries, so lets add an additional seed in the z-direction!
+v1 worked, but the vox model was incorrect, fixed model and retraining w 20_000 epochs.
 '''
 _SIZE_ = 15
 _PAD_ = 5
@@ -39,7 +39,7 @@ _MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
-_EPOCHS_ = 15_000
+_EPOCHS_ = 20_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
