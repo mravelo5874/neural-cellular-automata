@@ -13,9 +13,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_black_slice_iso3_v6'
+_NAME_ = 'rubiks_black_slice_iso3_v7'
 _NOTE_ = '''
-Readded lap3d and sobelz perception, can this work with more perceptions + 15_000 epochs?
+Trying new 3d laplacian kernel
 '''
 _SIZE_ = 15
 _PAD_ = 5

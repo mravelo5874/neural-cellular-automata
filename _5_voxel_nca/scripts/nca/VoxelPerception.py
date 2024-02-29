@@ -85,6 +85,19 @@ LAP_KERN = torch.tensor([
     [3., 6., 3.], 
     [2., 3., 2.]]])/26.0
 
+LAP_KERN_N = torch.tensor([
+   [[0., 0., 0.], 
+    [0., 1., 0.], 
+    [0., 0., 0.]],
+   
+   [[0., 1., 0.], 
+    [1.,-6., 1.], 
+    [0., 1., 0.]],
+   
+   [[0., 0., 0.], 
+    [0., 1., 0.], 
+    [0., 0., 0.]]])
+
 # (2D) 3D-filters
 X_SOBEL_2D_KERN = torch.tensor([
    [[0., 1., 0.], 
@@ -442,7 +455,7 @@ class VoxelPerception():
         # * calculate gz and lap
         gz_dn = self.per_channel_conv3d(states, Z_SOBEL_KERN_DN[None, :])
         #gz_up = self.per_channel_conv3d(states, Z_SOBEL_KERN_UP[None, :])
-        lap3d = self.per_channel_conv3d(states, LAP_KERN[None, :])
+        lap3d = self.per_channel_conv3d(states, LAP_KERN_N[None, :])
         
         return torch.cat([states, lap2d, px, py, lap3d, gz_dn], 1)
     
