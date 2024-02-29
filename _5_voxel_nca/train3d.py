@@ -13,9 +13,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_black_slice_iso3_v7'
+_NAME_ = 'rubiks_black_slice_iso3_v8'
 _NOTE_ = '''
-Trying new 3d laplacian kernel
+Perception using [states, lap2d, px, py, lap3d] ONLY, also adding green seed to break symmetry
 '''
 _SIZE_ = 15
 _PAD_ = 5
@@ -24,7 +24,7 @@ _SEED_POINTS_ = 2
 _SEED_DIST_ = 3
 _SEED_DIC_ = {
     'center': None,
-    'plus_x': None,
+    'plus_x': 'green',
     'minus_x': None,
     'plus_y': 'cyan',
     'minus_y': 'red',

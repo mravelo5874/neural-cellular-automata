@@ -19,16 +19,16 @@ class VoxelNCA(torch.nn.Module):
         self.log_file = _log_file
 
         # * determine number of perceived channels
-        perception_channels = self.p.perception[self.model_type](self.p, torch.zeros([1, _channels, 8, 8, 8])).shape[1]
+        self.perception_channels = self.p.perception[self.model_type](self.p, torch.zeros([1, _channels, 8, 8, 8])).shape[1]
         if self.log_file != None:
-            voxutil.logprint(f'_models/{_name}/{_log_file}', f'nca perception channels: {perception_channels}')
+            voxutil.logprint(f'_models/{_name}/{_log_file}', f'nca perception channels: {self.perception_channels}')
         
         # * determine hidden channels (equalize the parameter count btwn model types)
-        hidden_channels = 8*1024 // (perception_channels+_channels)
+        hidden_channels = 8*1024 // (self.perception_channels+_channels)
         hidden_channels = (_hidden+31) // 32*32
         
         # * model layers
-        self.conv1 = torch.nn.Conv3d(perception_channels, hidden_channels, 1)
+        self.conv1 = torch.nn.Conv3d(self.perception_channels, hidden_channels, 1)
         self.conv2 = torch.nn.Conv3d(hidden_channels, _channels, 1, bias=False)
         with torch.no_grad():
             self.conv2.weight.data.zero_()
