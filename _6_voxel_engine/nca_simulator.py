@@ -50,7 +50,7 @@ class NCASimulator:
         pfunc = None
         ppath = f'{cwd}/models/{_model}/{_model}_perception_func.pyc'
         if os.path.exists(ppath):
-            with open(f'{cwd}/models/{_model}/{_model}_perception_func.pyc', 'r') as pfile:
+            with open(ppath, 'rb') as pfile:
                 pfunc = pickle.load(pfile)
                 pfile.close()
             
