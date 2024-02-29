@@ -455,7 +455,7 @@ class VoxelPerception():
         py = (gy*_cos)-(gx*_sin)
         
         # * calculate gz and lap
-        gz_dn = self.per_channel_conv3d(states, Z_SOBEL_KERN_DN[None, :])
+        # gz_dn = self.per_channel_conv3d(states, Z_SOBEL_KERN_DN[None, :])
         #gz_up = self.per_channel_conv3d(states, Z_SOBEL_KERN_UP[None, :])
         lap3d = self.per_channel_conv3d(states, LAP_KERN_N[None, :])
         

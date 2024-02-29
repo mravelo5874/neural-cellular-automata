@@ -14,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_black_cube_iso3_v0'
+_NAME_ = 'rubiks_black_cube_iso3_v1'
 _NOTE_ = '''
-rubiks_black_slab_iso3_v1 worked well! lets try rubiks cube!
+v1 was not able to break symmetries, so lets add an additional seed in the z-direction!
 '''
 _SIZE_ = 15
 _PAD_ = 5
@@ -29,7 +29,7 @@ _SEED_DIC_ = {
     'minus_x': None,
     'plus_y': 'cyan',
     'minus_y': 'red',
-    'plus_z': None,
+    'plus_z': 'white',
     'minus_z': None
 }
 _SEED_HID_INFO_ = False

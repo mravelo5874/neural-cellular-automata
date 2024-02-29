@@ -1,6 +1,6 @@
 {
-    "_NAME_": "rubiks_black_slice_iso3_v3",
-    "_NOTE_": "\nV2 did not work, doubling hidden channels to see if larger nn is needed!\n",
+    "_NAME_": "rubiks_black_cube_iso3_v0",
+    "_NOTE_": "\nrubiks_black_slab_iso3_v1 worked well! lets try rubiks cube!\n",
     "_SIZE_": 15,
     "_PAD_": 5,
     "_USE_SPHERE_SEED_": false,
@@ -8,7 +8,7 @@
     "_SEED_DIST_": 3,
     "_SEED_DIC_": {
         "center": null,
-        "plus_x": null,
+        "plus_x": "green",
         "minus_x": null,
         "plus_y": "cyan",
         "minus_y": "red",
@@ -16,11 +16,11 @@
         "minus_z": null
     },
     "_SEED_HID_INFO_": false,
-    "_TARGET_VOX_": "../vox/rubiks_black_slice.vox",
+    "_TARGET_VOX_": "../vox/rubiks_black_cube.vox",
     "_MODEL_TYPE_": 6,
     "_CHANNELS_": 16,
-    "_HIDDEN_": 256,
-    "_EPOCHS_": 10000,
+    "_HIDDEN_": 128,
+    "_EPOCHS_": 15000,
     "_BATCH_SIZE_": 4,
     "_POOL_SIZE_": 32,
     "_UPPER_LR_": 0.0005,
