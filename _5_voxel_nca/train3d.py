@@ -6,6 +6,7 @@ import numpy as np
 import torch
 import torch.nn.functional as func
 import matplotlib.pylab as pl
+import pickle
 
 from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca.VoxelPerception import Perception
@@ -13,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_black_slice_iso3_v8'
+_NAME_ = 'rubiks_black_slab_iso3_v1'
 _NOTE_ = '''
-Perception using [states, lap2d, px, py, lap3d] ONLY, also adding green seed to break symmetry
+rubiks_black_slice_iso3_v8 worked well! lets try rubiks slab!
 '''
 _SIZE_ = 15
 _PAD_ = 5
@@ -32,7 +33,7 @@ _SEED_DIC_ = {
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/rubiks_black_slice.vox'
+_TARGET_VOX_ = '../vox/rubiks_black_slab.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
@@ -85,6 +86,10 @@ def main():
         model_path.mkdir(parents=True, exist_ok=True)
         torch.save(_model.state_dict(), f'{model_path.absolute()}/{_name}.pt')
         
+        # * pickle perception function
+        with open(f'{model_path.absolute()}/{_name}_perception_func.pyc', 'ab') as pfile:
+            pickle.dump(_model.p.perception[_model.model_type], pfile)
+
         # * save model parameters
         dict = {
             # * target/seed parameters

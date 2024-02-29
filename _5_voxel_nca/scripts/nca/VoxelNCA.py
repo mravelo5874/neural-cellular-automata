@@ -9,7 +9,7 @@ from scripts.nca.VoxelPerception import Perception
 from scripts.nca import VoxelUtil as voxutil
     
 class VoxelNCA(torch.nn.Module):
-    def __init__(self, _name, _log_file=None, _channels=16, _hidden=128, _device='cuda', _model_type=Perception.ANISOTROPIC, _update_rate=0.5):
+    def __init__(self, _name, _log_file=None, _channels=16, _hidden=128, _device='cuda', _model_type=Perception.ANISOTROPIC, _update_rate=0.5, _pfunc=None):
         super().__init__()
         self.device = _device
         self.model_type = _model_type
@@ -17,9 +17,14 @@ class VoxelNCA(torch.nn.Module):
         self.p = vp(_device)
         self.name = _name
         self.log_file = _log_file
+        
+        if _pfunc != None:
+            self.perception = _pfunc
+        else:
+            self.perception = self.p.perception[self.model_type]
 
         # * determine number of perceived channels
-        self.perception_channels = self.p.perception[self.model_type](self.p, torch.zeros([1, _channels, 8, 8, 8])).shape[1]
+        self.perception_channels = self.perception(self.p, torch.zeros([1, _channels, 8, 8, 8])).shape[1]
         if self.log_file != None:
             voxutil.logprint(f'_models/{_name}/{_log_file}', f'nca perception channels: {self.perception_channels}')
         
@@ -210,16 +215,16 @@ class VoxelNCA(torch.nn.Module):
         # * compare inner perception
         if _comp != None:
             _c = _comp.to(self.device)
-            self.p.perception[self.model_type](self.p, _x, _c, self.isotropic_type())
+            self.perception(self.p, _x, _c, self.isotropic_type())
 
         # * perception step
-        p = self.p.perception[self.model_type](self.p, _x)
+        p = self.perception(self.p, _x)
         if _print: print ('perception p.shape:',p.shape)
         
         # compare perception output
         if _comp != None:
             _c = _comp.to(self.device)
-            c_p = self.p.perception[self.model_type](self.p, _c)
+            c_p = self.perception(self.p, _c)
             
             c_clone = c_p.detach().clone()
             c_clone = torch.rot90(c_clone, 1, (3, 2))
@@ -325,7 +330,7 @@ class VoxelNCA(torch.nn.Module):
         _x = _x.to(self.device)
     
         # * perception step
-        p = self.p.perception[self.model_type](self.p, _x)
+        p = self.perception(self.p, _x)
         
         # * update step
         p = self.conv2(torch.relu(self.conv1(p)))

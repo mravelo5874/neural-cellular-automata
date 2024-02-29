@@ -4,6 +4,7 @@ import glm
 import json
 import time
 import torch
+import pickle
 import threading
 import numpy as np
 
@@ -44,8 +45,16 @@ class NCASimulator:
         params = {}
         with open(f'{cwd}/models/{_model}/{_model}_params.json', 'r') as openfile:
             params = json.load(openfile)
+        
+        # * get perception function
+        pfunc = None
+        ppath = f'{cwd}/models/{_model}/{_model}_perception_func.pyc'
+        if os.path.exists(ppath):
+            with open(f'{cwd}/models/{_model}/{_model}_perception_func.pyc', 'r') as pfile:
+                pfunc = pickle.load(pfile)
+                pfile.close()
             
-        model = NCA(_name=params['_NAME_'], _channels=params['_CHANNELS_'], _hidden=params['_HIDDEN_'], _device=self.device, _model_type=params['_MODEL_TYPE_'])
+        model = NCA(_name=params['_NAME_'], _channels=params['_CHANNELS_'], _hidden=params['_HIDDEN_'], _device=self.device, _model_type=params['_MODEL_TYPE_'], _pfunc=pfunc)
         model.load_state_dict(torch.load(f'{cwd}/models/{_model}/{_model}.pt', map_location=self.device))
         model.eval()
         self.model = model
