@@ -14,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'sphere32_iso3_v0'
+_NAME_ = 'rubiks_black_cube_iso3_v4'
 _NOTE_ = '''
-lets try training a LARGE model and a NPY loading!
+REtraining cube with old laplacian filter!
 '''
 _SIZE_ = 32
 _PAD_ = 4
@@ -33,13 +33,13 @@ _SEED_DIC_ = {
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../voxnp/sphere32.npy'
+_TARGET_VOX_ = '../vox/rubiks_black_cube.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
-_EPOCHS_ = 10_000
+_EPOCHS_ = 20_000
 _BATCH_SIZE_ = 2
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
