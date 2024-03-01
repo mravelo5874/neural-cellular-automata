@@ -14,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_black_cube_iso3_v2'
+_NAME_ = 'rubiks_black_cube_iso3_v3'
 _NOTE_ = '''
-v1 worked, but the vox model was incorrect, fixed model and retraining w 20_000 epochs.
+v2 did not work, trying again!
 '''
 _SIZE_ = 15
 _PAD_ = 5
