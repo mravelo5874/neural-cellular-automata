@@ -18,7 +18,7 @@ _NAME_ = 'sphere32_iso3_v0'
 _NOTE_ = '''
 lets try training a LARGE model and a NPY loading!
 '''
-_SIZE_ = 16
+_SIZE_ = 32
 _PAD_ = 4
 _USE_SPHERE_SEED_ = False
 _SEED_POINTS_ = 2
