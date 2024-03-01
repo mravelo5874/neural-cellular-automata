@@ -14,12 +14,12 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_black_cube_iso3_v3'
+_NAME_ = 'sphere32_iso3_v0'
 _NOTE_ = '''
-v2 did not work, trying again!
+lets try training a LARGE model and a NPY loading!
 '''
-_SIZE_ = 15
-_PAD_ = 5
+_SIZE_ = 16
+_PAD_ = 4
 _USE_SPHERE_SEED_ = False
 _SEED_POINTS_ = 2
 _SEED_DIST_ = 3
@@ -33,13 +33,13 @@ _SEED_DIC_ = {
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/rubiks_black_cube.vox'
+_TARGET_VOX_ = '../vox/sphere16.npy'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
-_EPOCHS_ = 20_000
+_EPOCHS_ = 10_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
@@ -225,8 +225,13 @@ def main():
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'seed.shape: {list(seed_ten.shape)}')
     
     # * load target vox
-    target = Vox().load_from_file(_TARGET_VOX_)
-    target_ten = target.tensor()
+    if _TARGET_VOX_.endswith('vox'):
+        target = Vox().load_from_file(_TARGET_VOX_)
+        target_ten = target.tensor()
+    elif _TARGET_VOX_.endswith('npy'):
+        with open(_TARGET_VOX_, 'rb') as f:
+            target_ten = torch.from_numpy(np.load(f))
+    
     target_ten = func.pad(target_ten, (_PAD_, _PAD_, _PAD_, _PAD_, _PAD_, _PAD_), 'constant')
     target_ten = target_ten.clone().repeat(_BATCH_SIZE_, 1, 1, 1, 1).to(_DEVICE_)
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'target.shape: {list(target_ten.shape)}')
