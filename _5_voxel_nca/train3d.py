@@ -18,8 +18,8 @@ _NAME_ = 'rubiks_black_cube_iso3_v4'
 _NOTE_ = '''
 REtraining cube with old laplacian filter!
 '''
-_SIZE_ = 32
-_PAD_ = 4
+_SIZE_ = 15
+_PAD_ = 5
 _USE_SPHERE_SEED_ = False
 _SEED_POINTS_ = 2
 _SEED_DIST_ = 3
