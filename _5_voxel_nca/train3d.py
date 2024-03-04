@@ -14,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_black_cube_full-iso-v0_v1'
+_NAME_ = 'rubiks_black_cube_quat_v0'
 _NOTE_ = '''
-Trying same training as v0, but doubling epochs to 20_000!
+full iso v1 did not result in isotropic properties, so lets experiment with quaternion-based perception again.
 '''
 _SIZE_ = 15
 _PAD_ = 5
@@ -35,11 +35,11 @@ _SEED_DIC_ = {
 _SEED_HID_INFO_ = False
 _TARGET_VOX_ = '../vox/rubiks_black_cube.vox'
 # * model parameters
-_MODEL_TYPE_ = Perception.FULL_ISO_V0
+_MODEL_TYPE_ = Perception.QUATERNION
 _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
-_EPOCHS_ = 20_000
+_EPOCHS_ = 10_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
