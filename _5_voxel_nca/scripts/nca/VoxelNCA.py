@@ -54,6 +54,9 @@ class VoxelNCA(torch.nn.Module):
             return 3
         else:
             return 0
+        
+    def get_alive_mask(self, _x):
+        return func.max_pool3d(_x[:, 3:4, :, :, :], kernel_size=3, stride=1, padding=1) > 0.1
     
     def forward(self, _x):
         # * get alive mask
@@ -225,9 +228,7 @@ class VoxelNCA(torch.nn.Module):
     #         secs = (datetime.datetime.now()-start).seconds
     #         elapsed_time = str(datetime.timedelta(seconds=secs))
     #         voxutil.logprint(f'_models/{self.name}/{self.log_file}', f'created video: {_filename}, gen-time: {elapsed_time}')
-            
-    # def get_alive_mask(self, _x):
-    #     return func.max_pool3d(_x[:, 3:4, :, :, :], kernel_size=3, stride=1, padding=1) > 0.1
+        
         
     # def forward_comp(self, _x, _print=False, _mask=None, _comp=None):
     #     if _print: print ('init _x.shape:',_x.shape)
