@@ -18,9 +18,10 @@ class Perception(int, Enum):
     YAW_ISO_V2: int = 5
     YAW_ISO_V3: int = 6
     FLAT_ISO: int = 7
+    FULL_ISO_V0: int = 8
 
 # 3D-filters
-X_SOBEL_KERN = torch.tensor([
+X_SOBEL = torch.tensor([
    [[1., 2., 1.], 
     [2., 4., 2.], 
     [1., 2., 1.]],
@@ -33,7 +34,7 @@ X_SOBEL_KERN = torch.tensor([
     [-2., -4., -2.], 
     [-1., -2., -1.]]])
 
-Y_SOBEL_KERN = torch.tensor([
+Y_SOBEL = torch.tensor([
    [[1., 2., 1.], 
     [0., 0., 0.], 
     [-1., -2., -1.]],
@@ -46,7 +47,7 @@ Y_SOBEL_KERN = torch.tensor([
     [0., 0., 0.], 
     [-1., -2., -1.]]])
 
-Z_SOBEL_KERN_DN = torch.tensor([
+Z_SOBEL_DOWN = torch.tensor([
    [[-1., 0., 1.], 
     [-2., 0., 2.], 
     [-1., 0., 1.]],
@@ -59,7 +60,7 @@ Z_SOBEL_KERN_DN = torch.tensor([
     [-2., 0., 2.], 
     [-1., 0., 1.]]])
 
-Z_SOBEL_KERN_UP = torch.tensor([
+Z_SOBEL_UP = torch.tensor([
    [[1., 0., -1.], 
     [2., 0., -2.], 
     [1., 0., -1.]],
@@ -72,7 +73,7 @@ Z_SOBEL_KERN_UP = torch.tensor([
     [2., 0., -2.], 
     [1., 0., -1.]]])
 
-LAP_KERN = torch.tensor([
+LAP_KERN_27 = torch.tensor([
    [[2., 3., 2.], 
     [3., 6., 3.], 
     [2., 3., 2.]],
@@ -85,7 +86,7 @@ LAP_KERN = torch.tensor([
     [3., 6., 3.], 
     [2., 3., 2.]]])/26.0
 
-LAP_KERN_N = torch.tensor([
+LAP_KERN_7 = torch.tensor([
    [[0., 0., 0.], 
     [0., 1., 0.], 
     [0., 0., 0.]],
@@ -99,7 +100,9 @@ LAP_KERN_N = torch.tensor([
     [0., 0., 0.]]])
 
 # (2D) 3D-filters
-X_SOBEL_2D_KERN = torch.tensor([
+
+# * along the XY plane
+X_SOBEL_2D_XY = torch.tensor([
    [[0., 1., 0.], 
     [0., 2., 0.], 
     [0., 1., 0.]],
@@ -112,10 +115,10 @@ X_SOBEL_2D_KERN = torch.tensor([
     [0., -2., 0.], 
     [0., -1., 0.]]])
 
-Y_SOBEL_2D_KERN = torch.tensor([
+Y_SOBEL_2D_XY = torch.tensor([
    [[0., 1., 0.], 
     [0., 0., 0.], 
-    [0., -1., 0.]],
+    [0., -1.,0.]],
    
    [[0., 2., 0.], 
     [0., 0., 0.], 
@@ -123,20 +126,100 @@ Y_SOBEL_2D_KERN = torch.tensor([
    
    [[0., 1., 0.], 
     [0., 0., 0.], 
-    [0., -1., 0.]]])
+    [0., -1.,0.]]])
 
-LAP_2D_KERN = torch.tensor([
+LAP_2D_XY = torch.tensor([
    [[0., 1., 0.], 
     [0., 2., 0.], 
     [0., 1., 0.]],
    
    [[0., 2., 0.], 
-    [0., -12., 0.], 
+    [0.,-12.,0.], 
     [0., 2., 0.]],
    
    [[0., 1., 0.], 
     [0., 2., 0.], 
     [0., 1., 0.]]])
+
+# * along the XZ plane
+X_SOBEL_2D_XZ = torch.tensor([
+   [[0., 0., 0.], 
+    [1., 2., 1.], 
+    [0., 0., 0.]],
+   
+   [[0., 0., 0.], 
+    [0., 0., 0.], 
+    [0., 0., 0.]],
+   
+   [[0., 0., 0.], 
+    [-1.,-2.,-1.], 
+    [0., 0., 0.]]])
+
+Y_SOBEL_2D_XZ = torch.tensor([
+   [[0., 0., 0.], 
+    [1., 0., -1.], 
+    [0., 0.,0.]],
+   
+   [[0., 0., 0.], 
+    [2., 0., -2.], 
+    [0., 0., 0.]],
+   
+   [[0., 0., 0.], 
+    [1., 0., -1.], 
+    [0., 0.,0.]]])
+
+LAP_2D_XZ = torch.tensor([
+   [[0., 0., 0.], 
+    [1., 2., 1.], 
+    [0., 0., 0.]],
+   
+   [[0., 0., 0.], 
+    [2.,-12., 2.], 
+    [0., 0., 0.]],
+   
+   [[0., 0., 0.], 
+    [1., 2., 1.], 
+    [0., 0., 0.]]])
+
+# * along the YZ plane
+X_SOBEL_2D_YZ = torch.tensor([
+   [[0., 0., 0.], 
+    [0., 0., 0.], 
+    [0., 0., 0.]],
+   
+   [[1., 2., 1.], 
+    [0., 0., 0.], 
+    [-1.,-2.,-1.]],
+   
+   [[0., 0., 0.], 
+    [0., 0., 0.], 
+    [0., 0., 0.]]])
+
+Y_SOBEL_2D_YZ = torch.tensor([
+   [[0., 0., 0.], 
+    [0., 0., 0.], 
+    [0., 0.,0.]],
+   
+   [[1., 0., -1.], 
+    [2., 0., -2.], 
+    [1., 0., -1.]],
+   
+   [[0., 0., 0.], 
+    [0., 0., 0.], 
+    [0., 0., 0.]]])
+
+LAP_2D_YZ = torch.tensor([
+   [[0., 0., 0.], 
+    [0., 0., 0.], 
+    [0., 0., 0.]],
+   
+   [[1., 2., 1.], 
+    [2.,-12., 2.], 
+    [1., 2., 1.]],
+   
+   [[0., 0., 0.], 
+    [0., 0., 0.], 
+    [0., 0., 0.]]])
 
 class VoxelPerception():
     def __init__(self, _device='cuda'):
@@ -158,10 +241,10 @@ class VoxelPerception():
     def anisotropic_perception(self, _x):
         _x = _x.to(self.device)
         # * per channel convolutions
-        gx = self.per_channel_conv3d(_x, X_SOBEL_KERN[None, :])
-        gy = self.per_channel_conv3d(_x, Y_SOBEL_KERN[None, :])
-        gz = self.per_channel_conv3d(_x, Z_SOBEL_KERN_DN[None, :])
-        lap = self.per_channel_conv3d(_x, LAP_KERN[None, :])
+        gx = self.per_channel_conv3d(_x, X_SOBEL[None, :])
+        gy = self.per_channel_conv3d(_x, Y_SOBEL[None, :])
+        gz = self.per_channel_conv3d(_x, Z_SOBEL_DOWN[None, :])
+        lap = self.per_channel_conv3d(_x, LAP_KERN_27[None, :])
         return torch.cat([_x, gx, gy, gz, lap], 1)
     
     # * issues:
@@ -191,12 +274,12 @@ class VoxelPerception():
             print (f'angle comp: {res}')
         
         # * calculate gx and gy
-        gx = self.per_channel_conv3d(states, X_SOBEL_KERN[None, :])
-        gy = self.per_channel_conv3d(states, Y_SOBEL_KERN[None, :])
+        gx = self.per_channel_conv3d(states, X_SOBEL[None, :])
+        gy = self.per_channel_conv3d(states, Y_SOBEL[None, :])
         
         if _c != None:
-            c_gx = self.per_channel_conv3d(c_states, X_SOBEL_KERN[None, :])
-            c_gy = self.per_channel_conv3d(c_states, Y_SOBEL_KERN[None, :])
+            c_gx = self.per_channel_conv3d(c_states, X_SOBEL[None, :])
+            c_gy = self.per_channel_conv3d(c_states, Y_SOBEL[None, :])
             
             c_gx_clone = c_gx.detach().clone()
             c_gx_clone = torch.rot90(c_gx_clone, 1, (3, 2))
@@ -260,12 +343,12 @@ class VoxelPerception():
             print (f'py comp: {res}')
         
         # * calculate gz and lap
-        gz = self.per_channel_conv3d(states, Z_SOBEL_KERN_DN[None, :])
-        lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
+        gz = self.per_channel_conv3d(states, Z_SOBEL_DOWN[None, :])
+        lap = self.per_channel_conv3d(states, LAP_KERN_27[None, :])
         
         if _c != None:
-            c_gz = self.per_channel_conv3d(c_states, Z_SOBEL_KERN_DN[None, :])
-            c_lap = self.per_channel_conv3d(c_states, LAP_KERN[None, :])
+            c_gz = self.per_channel_conv3d(c_states, Z_SOBEL_DOWN[None, :])
+            c_lap = self.per_channel_conv3d(c_states, LAP_KERN_27[None, :])
             
             c_gz_clone = c_gz.detach().clone()
             c_gz_clone = torch.rot90(c_gz_clone, 1, (3, 2))
@@ -336,12 +419,12 @@ class VoxelPerception():
             print (f'angle comp: {res}')
         
         # * calculate gx and gy
-        gx = self.per_channel_conv3d(states, X_SOBEL_2D_KERN[None, :])
-        gy = self.per_channel_conv3d(states, Y_SOBEL_2D_KERN[None, :])
+        gx = self.per_channel_conv3d(states, X_SOBEL_2D_XY[None, :])
+        gy = self.per_channel_conv3d(states, Y_SOBEL_2D_XY[None, :])
         
         if _c != None:
-            c_gx = self.per_channel_conv3d(c_states, X_SOBEL_2D_KERN[None, :])
-            c_gy = self.per_channel_conv3d(c_states, Y_SOBEL_2D_KERN[None, :])
+            c_gx = self.per_channel_conv3d(c_states, X_SOBEL_2D_XY[None, :])
+            c_gy = self.per_channel_conv3d(c_states, Y_SOBEL_2D_XY[None, :])
             
             c_gx_clone = c_gx.detach().clone()
             c_gx_clone = torch.rot90(c_gx_clone, 1, (3, 2))
@@ -405,12 +488,12 @@ class VoxelPerception():
             print (f'py comp: {res}')
         
         # * calculate gz and lap
-        gz = self.per_channel_conv3d(states, Z_SOBEL_KERN_DN[None, :])
-        lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
+        gz = self.per_channel_conv3d(states, Z_SOBEL_DOWN[None, :])
+        lap = self.per_channel_conv3d(states, LAP_KERN_27[None, :])
         
         if _c != None:
-            c_gz = self.per_channel_conv3d(c_states, Z_SOBEL_KERN_DN[None, :])
-            c_lap = self.per_channel_conv3d(c_states, LAP_KERN[None, :])
+            c_gz = self.per_channel_conv3d(c_states, Z_SOBEL_DOWN[None, :])
+            c_lap = self.per_channel_conv3d(c_states, LAP_KERN_27[None, :])
             
             c_gz_clone = c_gz.detach().clone()
             c_gz_clone = torch.rot90(c_gz_clone, 1, (3, 2))
@@ -443,12 +526,12 @@ class VoxelPerception():
         states, angle = _x[:, :-1], _x[:, -1:]
         
         # * calculate gx and gy
-        gx = self.per_channel_conv3d(states, X_SOBEL_2D_KERN[None, :])
-        gy = self.per_channel_conv3d(states, Y_SOBEL_2D_KERN[None, :])
+        gx = self.per_channel_conv3d(states, X_SOBEL_2D_XY[None, :])
+        gy = self.per_channel_conv3d(states, Y_SOBEL_2D_XY[None, :])
         
         # * calculate lap2d and lap3d
-        lap2d = self.per_channel_conv3d(states, LAP_2D_KERN[None, :])
-        lap3d = self.per_channel_conv3d(states, LAP_KERN[None, :])
+        lap2d = self.per_channel_conv3d(states, LAP_2D_XY[None, :])
+        lap3d = self.per_channel_conv3d(states, LAP_KERN_7[None, :])
            
         # * compute px and py 
         _cos, _sin = angle.cos(), angle.sin()
@@ -462,9 +545,9 @@ class VoxelPerception():
         states, angle = _x[:, :-1], _x[:, -1:]
         
         # * calculate gx and gy
-        gx = self.per_channel_conv3d(states, X_SOBEL_2D_KERN[None, :])
-        gy = self.per_channel_conv3d(states, Y_SOBEL_2D_KERN[None, :])
-        lap = self.per_channel_conv3d(states, LAP_2D_KERN[None, :])
+        gx = self.per_channel_conv3d(states, X_SOBEL_2D_XY[None, :])
+        gy = self.per_channel_conv3d(states, Y_SOBEL_2D_XY[None, :])
+        lap = self.per_channel_conv3d(states, LAP_2D_XY[None, :])
            
         # * compute px and py 
         _cos, _sin = angle.cos(), angle.sin()
@@ -478,10 +561,10 @@ class VoxelPerception():
         states, ax, ay, az = _x[:, :-3], _x[:, -1:], _x[:, -2:-1], _x[:, -3:-2]
 
         # * per channel convolutions
-        px = self.per_channel_conv3d(states, X_SOBEL_KERN[None, :])
-        py = self.per_channel_conv3d(states, Y_SOBEL_KERN[None, :])
-        pz = self.per_channel_conv3d(states, Z_SOBEL_KERN_DN[None, :])
-        lap = self.per_channel_conv3d(states, LAP_KERN[None, :])
+        px = self.per_channel_conv3d(states, X_SOBEL[None, :])
+        py = self.per_channel_conv3d(states, Y_SOBEL[None, :])
+        pz = self.per_channel_conv3d(states, Z_SOBEL_DOWN[None, :])
+        lap = self.per_channel_conv3d(states, LAP_KERN_27[None, :])
         
         # * get perception tensors
         px = px[..., None]
@@ -511,6 +594,49 @@ class VoxelPerception():
         rz = rxyz[:, :, :, :, :, 2]
         return torch.cat([states, rx, ry, rz, lap], 1)
     
+    def full_isotropic_v0(self, _x):
+        # * separate states and angle channels
+        states, a_xy, a_xz, a_yz = _x[:, :-3], _x[:, -1:], _x[:, -2:-1], _x[:, -3:-2]
+        
+        # * calculate gx_xy and gy_xy
+        gx_xy = self.per_channel_conv3d(states, X_SOBEL_2D_XY[None, :])
+        gy_xy = self.per_channel_conv3d(states, Y_SOBEL_2D_XY[None, :])
+        lap2d_xy = self.per_channel_conv3d(states, LAP_2D_XY[None, :])
+        
+        # * compute px_xy and py_xy 
+        _cos_xy, _sin_xy = a_xy.cos(), a_xy.sin()
+        px_xy = (gx_xy*_cos_xy)+(gy_xy*_sin_xy)
+        py_xy = (gy_xy*_cos_xy)-(gx_xy*_sin_xy)
+        
+        # * calculate gx_xz and gy_xz
+        gx_xz = self.per_channel_conv3d(states, X_SOBEL_2D_XZ[None, :])
+        gy_xz = self.per_channel_conv3d(states, Y_SOBEL_2D_XZ[None, :])
+        lap2d_xz = self.per_channel_conv3d(states, LAP_2D_XZ[None, :])
+        
+        # * compute px_xz and py_xz
+        _cos_xz, _sin_xz = a_xz.cos(), a_xz.sin()
+        px_xz = (gx_xz*_cos_xz)+(gy_xz*_sin_xz)
+        py_xz = (gy_xz*_cos_xz)-(gy_xz*_sin_xz)
+        
+        # * calculate gx_yz and gy_yz
+        gx_yz = self.per_channel_conv3d(states, X_SOBEL_2D_YZ[None, :])
+        gy_yz = self.per_channel_conv3d(states, Y_SOBEL_2D_YZ[None, :])
+        lap2d_yz = self.per_channel_conv3d(states, LAP_2D_YZ[None, :])
+        
+        # * compute px_yz and py_yz 
+        _cos_yz, _sin_yz = a_yz.cos(), a_yz.sin()
+        px_yz = (gx_yz*_cos_yz)+(gy_yz*_sin_yz)
+        py_yz = (gy_yz*_cos_yz)-(gx_yz*_sin_yz)
+        
+        # * calculate lap3d
+        lap3d = self.per_channel_conv3d(states, LAP_KERN_7[None, :])
+        
+        return torch.cat([states, 
+                          lap2d_xy, px_xy, py_xy, 
+                          lap2d_xz, px_xz, py_xz,
+                          lap2d_yz, px_yz, py_yz,
+                          lap3d], 1)
+    
     perception = {
         Perception.ANISOTROPIC: anisotropic_perception,
         Perception.YAW_ISO: yaw_isotropic_perception,
@@ -518,4 +644,5 @@ class VoxelPerception():
         Perception.YAW_ISO_V2: yaw_isotropic_v2_perception,
         Perception.YAW_ISO_V3: yaw_isotropic_v3_perception,
         Perception.FLAT_ISO: flat_isotropic_perception,
+        Perception.FULL_ISO_V0: full_isotropic_v0,
     }
