@@ -216,8 +216,8 @@ def main():
         
     # * use multiple gpus
     if _DEVICE_ == 'cuda':
-        voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'setting model to use multiple GPUs (if available)...')
-        model = torch.nn.DataParallel(model, device_ids=devices)
+        # voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'setting model to use multiple GPUs (if available)...')
+        # model = torch.nn.DataParallel(model, device_ids=devices)
     
     # * create optimizer and learning-rate scheduler
     opt = torch.optim.Adam(model.parameters(), _UPPER_LR_)
