@@ -284,9 +284,7 @@ def main():
             
             # * re-order batch based on loss
             loss_res = voxutil.voxel_wise_loss_function(x, target_np, _dims=(-1, -2, -3, -4))
-            print (f'loss_res: {loss_res}')
             loss_ranks = np.argsort(loss_res)
-            print (f'loss_ranks: {loss_ranks}')
             x = x[loss_ranks]
             
             # * re-add seed into batch
@@ -385,6 +383,9 @@ def main():
             # * save checkpoint
             if i % _SAVE_RATE_ == 0 and i != 0:
                 save_model('_checkpoints', model, _NAME_+'_cp'+str(i))
+        
+        # * clear cuda cache
+        torch.cuda.empty_cache()
                 
     # * print train time
     secs = (datetime.datetime.now()-train_start).seconds
