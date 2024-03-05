@@ -179,6 +179,12 @@ def main():
             _INFO_RATE_ = params['_INFO_RATE_']
             _SAVE_RATE_ = params['_SAVE_RATE_']
     
+    # * print cuda devices
+    devices = [] 
+    for i in range (torch.cuda.device_count()):
+        devices.append(i)
+        print (f'- {i}: {torch.cuda.get_device_name(i)}')
+    
     # * sets the device  
     _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'device: {_DEVICE_}')
@@ -187,9 +193,7 @@ def main():
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
     force_cudnn_initialization()
     
-    devices = [d for d in range(torch.cuda.device_count())] 
-    device_names  = [torch.cuda.get_device_name(d) for d in devices] 
-    print (f'cuda devices: {device_names}')
+    
     
     # * create / load model
     if not load_checkpoint:
@@ -208,7 +212,7 @@ def main():
     # * use multiple gpus
     if _DEVICE_ == 'cuda':
         voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'setting model to use multiple GPUs (if available)...')
-        model = torch.nn.parallel.DistributedDataParallel(model)
+        model = torch.nn.parallel.DistributedDataParallel(model, device_ids=devices)
         model.to(_DEVICE_)
     
     # * create optimizer and learning-rate scheduler
