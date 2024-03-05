@@ -19,7 +19,7 @@ _NOTE_ = '''
 lizard training v1
 '''
 _SIZE_ = 40
-_PAD_ = 12
+_PAD_ = 4
 _USE_SPHERE_SEED_ = False
 _SEED_POINTS_ = 2
 _SEED_DIST_ = 3
