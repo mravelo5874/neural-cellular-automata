@@ -236,13 +236,15 @@ def main():
     # * create seed
     PAD_SIZE = _SIZE_+(2*_PAD_)
     if _USE_SPHERE_SEED_:
-        seed_ten = voxutil.seed_3d(_size=PAD_SIZE, _channels=_CHANNELS_, _points=_SEED_POINTS_, _radius=_SEED_DIST_).unsqueeze(0).to(_DEVICE_)
+        seed_ten = voxutil.seed_3d(_size=PAD_SIZE, _channels=_CHANNELS_, _points=_SEED_POINTS_, _radius=_SEED_DIST_)
+        
     else:
         seed_ten = voxutil.custom_seed(_size=PAD_SIZE, _channels=_CHANNELS_, _dist=_SEED_DIST_, _hidden_info=_SEED_HID_INFO_,
                                     _center=_SEED_DIC_['center'], 
                                     _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
                                     _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
-                                    _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(_DEVICE_)
+                                    _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z'])
+    seed_ten = seed_ten[None, ...]
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'seed.shape: {list(seed_ten.shape)}')
     
     # * load target vox
@@ -259,16 +261,16 @@ def main():
     
     # * create pool
     with torch.no_grad():
-        pool = seed_ten.clone().repeat(_POOL_SIZE_, 1, 1, 1, 1)
+        pool = seed_ten.repeat(_POOL_SIZE_, 1, 1, 1, 1)
         # * randomize channel(s)
         if ISO_TYPE == 1:
             for j in range(_POOL_SIZE_):
-                pool[j, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                pool[j, -1:] = np.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
         elif ISO_TYPE == 3:
             for j in range(_POOL_SIZE_):
-                pool[j, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-                pool[j, -2:-1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-                pool[j, -3:-2] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                pool[j, -1:] = np.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                pool[j, -2:-1] = np.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                pool[j, -3:-2] = np.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
     
     # * model training
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting training w/ {_EPOCHS_+1} epochs...')
@@ -289,11 +291,11 @@ def main():
             x[:1] = seed_ten
             # * randomize last channel
             if ISO_TYPE == 1:
-                x[:1, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                x[:1, -1:] = np.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
             elif ISO_TYPE == 3:
-                x[:1, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-                x[:1, -2:-1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-                x[:1, -3:-2] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                x[:1, -1:] = np.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                x[:1, -2:-1] = np.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                x[:1, -3:-2] = np.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
         
             # * damage lowest loss in batch
             if i % _DAMG_RATE_ == 0:
@@ -303,12 +305,12 @@ def main():
                 # * randomize angles for steerable models
                 if ISO_TYPE == 1:
                     inv_mask = ~mask
-                    x[-_NUM_DAMG_:, -1:] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
+                    x[-_NUM_DAMG_:, -1:] += np.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
                 elif ISO_TYPE == 3:
                     inv_mask = ~mask
-                    x[-_NUM_DAMG_:, -1:] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
-                    x[-_NUM_DAMG_:, -2:-1] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
-                    x[-_NUM_DAMG_:, -3:-2] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
+                    x[-_NUM_DAMG_:, -1:] += np.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
+                    x[-_NUM_DAMG_:, -2:-1] += np.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
+                    x[-_NUM_DAMG_:, -3:-2] += np.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
 
         # * different loss values
         overflow_loss = 0.0
