@@ -9,7 +9,7 @@ from scripts.nca.VoxelPerception import Perception
 from scripts.nca import VoxelUtil as voxutil
     
 class VoxelNCA(torch.nn.Module):
-    def __init__(self, _name, _log_file=None, _channels=16, _hidden=128, _device='cuda', _model_type=Perception.ANISOTROPIC, _update_rate=0.5, _pfunc=None):
+    def __init__(self, _name, _log_file=None, _channels=16, _hidden=128, _device='cuda:0', _model_type=Perception.ANISOTROPIC, _update_rate=0.5, _pfunc=None):
         super().__init__()
         self.device = _device
         self.model_type = _model_type
