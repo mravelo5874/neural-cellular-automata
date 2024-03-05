@@ -190,7 +190,6 @@ def main():
         mpcount = prop.multi_processor_count
         voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'{i}: {torch.cuda.get_device_name(i)}, mem:{mem}MB, mpc:{mpcount}')
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '========================')
-    devices = [0, 1]
     
     # * sets the device  
     _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -215,9 +214,10 @@ def main():
     ISO_TYPE = model.isotropic_type()    
         
     # * use multiple gpus
-    # if _DEVICE_ == 'cuda':
-        # voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'setting model to use multiple GPUs (if available)...')
-        # model = torch.nn.DataParallel(model, device_ids=devices)
+    if _DEVICE_ == 'cuda':
+        voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'setting model to use multiple GPUs (if available)...')
+        devices = [0, 1, 2, 3]
+        model = torch.nn.DataParallel(model, device_ids=devices)
     
     # * create optimizer and learning-rate scheduler
     opt = torch.optim.Adam(model.parameters(), _UPPER_LR_)
