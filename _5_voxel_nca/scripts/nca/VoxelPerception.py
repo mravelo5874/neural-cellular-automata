@@ -235,14 +235,16 @@ class VoxelPerception():
         print (f'_filters.shape: {_filters.shape}')
         
         #x_pad = func.pad(_x, (1, 1, 1, 1, 1, 1), 'constant')
-        y = torch.zeros_like(_x).unsqueeze(2)
+        y = torch.zeros_like(_x)
         
         print (f'y.shape: {y.shape}')
         
         for i in range(batch_size):
-            print (f'_x[i, None, ...].shape: {_x[i, None, ...].shape}')
-            print (f'y[i, None, ...].shape: {y[i, None, ...].shape}')
-            y[i, None, ...] = func.conv3d(_x[i, None, ...], _filters, padding=1)
+            s = _x[i]
+            s = s[:, None, ...]
+            print (f's.shape: {s.shape}')
+            g = func.conv3d(s, _filters, padding=1)
+            print (f'g.shape: {g.shape}')
             
         return y
         
