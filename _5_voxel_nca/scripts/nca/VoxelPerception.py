@@ -222,7 +222,7 @@ LAP_2D_YZ = torch.tensor([
     [0., 0., 0.]]])
 
 class VoxelPerception():
-    def __init__(self, _device='cuda:0'):
+    def __init__(self, _device='cuda'):
         super().__init__()
         self.device = _device
         
