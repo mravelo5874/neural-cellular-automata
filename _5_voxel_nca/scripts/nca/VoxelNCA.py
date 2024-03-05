@@ -34,6 +34,7 @@ class VoxelNCA(torch.nn.Module):
         
         # * model layers
         self.conv1 = torch.nn.Conv3d(self.perception_channels, hidden_channels, 1)
+        self.relu = torch.nn.ReLU(inplace=True)
         self.conv2 = torch.nn.Conv3d(hidden_channels, _channels, 1, bias=False)
         with torch.no_grad():
             self.conv2.weight.data.zero_()
@@ -69,7 +70,9 @@ class VoxelNCA(torch.nn.Module):
         p = self.perception(self.p, _x)
         
         # * update step
-        p = self.conv2(torch.relu(self.conv1(p)))
+        p = self.conv1(p)
+        p = self.relu(p)
+        p = self.conv2(p)
         
         # * create stochastic mask
         stochastic_mask = (torch.rand(_x[:, :1, :, :, :].shape) <= self.update_rate).to(self.device, torch.float32)
