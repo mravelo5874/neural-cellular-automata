@@ -232,9 +232,7 @@ def main():
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'batch-size: {_BATCH_SIZE_}')
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'pool-size: {_POOL_SIZE_}')
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'lr: {_UPPER_LR_}>{_LOWER_LR_} w/ {_LR_STEP_} step')
-
-sdsd
-
+    
     # * create seed
     PAD_SIZE = _SIZE_+(2*_PAD_)
     if _USE_SPHERE_SEED_:
