@@ -240,6 +240,8 @@ class VoxelPerception():
         print (f'y.shape: {y.shape}')
         
         for i in range(batch_size):
+            print (f'_x[i].shape: {_x[i].shape}')
+            print (f'y[i].shape: {y[i].shape}')
             y[i] = func.conv3d(_x[i], _filters, padding=1)
             
         return y
