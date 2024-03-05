@@ -324,7 +324,7 @@ def main():
             prev_x = x
             x = model(x)
             x = x.cpu().detach().numpy()
-            diff_loss += (x - prev_x).abs().mean()
+            diff_loss += np.mean(np.abs(x - prev_x))
             if ISO_TYPE == 1:
                 overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_-1].square().sum()
             elif ISO_TYPE == 3:
