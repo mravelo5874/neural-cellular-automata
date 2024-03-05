@@ -353,7 +353,7 @@ def main():
             opt.zero_grad()
             lr_sched.step()
             # * re-add batch to pool
-            pool[batch_idxs] = x
+            pool[batch_idxs] = x.cpu().detach().numpy()
             # * correctly add to loss log
             _loss = loss.item()
             if torch.isnan(loss) or torch.isinf(loss) or torch.isneginf(loss):
