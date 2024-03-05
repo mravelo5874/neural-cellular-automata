@@ -229,23 +229,23 @@ class VoxelPerception():
     # * performs a convolution per filter per channel
     def per_channel_conv3d(self, _x, _filters):
         batch_size, channels, height, width, depth = _x.shape
-        _filters = _filters.to(self.device)
-        y = torch.zeros_like(_x)
-        for i in range(batch_size):
-            s = _x[i]
-            s = s[:, None, ...]
-            g = func.conv3d(s, _filters[:, None], padding=1)
-            y[i] = g.squeeze(1)
-        return y
-        
-        # # * reshape x to make per-channel convolution possible + pad 1 on each side
-        # y = _x.reshape(batch_size*channels, 1, height, width, depth)
-        # y = func.pad(y, (1, 1, 1, 1, 1, 1), 'constant')
-        # # * perform per-channel convolutions
         # _filters = _filters.to(self.device)
-        # y = func.conv3d(y, _filters[:, None])
-        # y = y.reshape(batch_size, -1, height, width, depth)
+        # y = torch.zeros_like(_x)
+        # for i in range(batch_size):
+        #     s = _x[i]
+        #     s = s[:, None, ...]
+        #     g = func.conv3d(s, _filters[:, None], padding=1)
+        #     y[i] = g.squeeze(1)
         # return y
+        
+        # * reshape x to make per-channel convolution possible + pad 1 on each side
+        y = _x.reshape(batch_size*channels, 1, height, width, depth)
+        y = func.pad(y, (1, 1, 1, 1, 1, 1), 'constant')
+        # * perform per-channel convolutions
+        _filters = _filters.to(self.device)
+        y = func.conv3d(y, _filters[:, None])
+        y = y.reshape(batch_size, -1, height, width, depth)
+        return y
 
     def anisotropic_perception(self, _x):
         _x = _x.to(self.device)
