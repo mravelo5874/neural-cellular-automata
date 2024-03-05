@@ -249,10 +249,10 @@ def main():
     with torch.no_grad():
         pool = seed_ten.clone().repeat(_POOL_SIZE_, 1, 1, 1, 1)
         # * randomize channel(s)
-        if model.isotropic_type() == 1:
+        if ISO_TYPE == 1:
             for j in range(_POOL_SIZE_):
                 pool[j, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-        elif model.isotropic_type() == 3:
+        elif ISO_TYPE == 3:
             for j in range(_POOL_SIZE_):
                 pool[j, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
                 pool[j, -2:-1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
