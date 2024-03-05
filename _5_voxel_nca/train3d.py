@@ -197,6 +197,12 @@ def main():
         model.load_state_dict(torch.load(checkpoint_dir+'/'+checkpoint_model+'.pt', map_location=_DEVICE_))
         model.train()
         voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'loading checkpoint: {checkpoint_dir}/{checkpoint_model}...')
+
+    # * use multiple gpus
+    if _DEVICE_ == 'cuda':
+        voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'setting model to use multiple GPUs (if available)...')
+        model = torch.nn.DataParallel(model)
+        model.to(_DEVICE_)
     
     # * create optimizer and learning-rate scheduler
     opt = torch.optim.Adam(model.parameters(), _UPPER_LR_)
