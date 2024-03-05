@@ -237,7 +237,6 @@ def main():
     PAD_SIZE = _SIZE_+(2*_PAD_)
     if _USE_SPHERE_SEED_:
         seed_ten = voxutil.seed_3d(_size=PAD_SIZE, _channels=_CHANNELS_, _points=_SEED_POINTS_, _radius=_SEED_DIST_)
-        
     else:
         seed_ten = voxutil.custom_seed(_size=PAD_SIZE, _channels=_CHANNELS_, _dist=_SEED_DIST_, _hidden_info=_SEED_HID_INFO_,
                                     _center=_SEED_DIC_['center'], 
@@ -255,6 +254,7 @@ def main():
         with open(_TARGET_VOX_, 'rb') as f:
             target_np = np.load(f)
     
+    print (f'target_np.shape: {target_np.shape}')
     target_np = np.pad(target_np, (_PAD_, _PAD_, _PAD_, _PAD_, _PAD_, _PAD_), 'constant')
     target_np = np.repeat(target_np, _BATCH_SIZE_, axis=0)
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'target.shape: {list(target_np.shape)}')
