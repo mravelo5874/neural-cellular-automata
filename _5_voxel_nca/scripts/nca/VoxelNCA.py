@@ -69,7 +69,9 @@ class VoxelNCA(torch.nn.Module):
         p = self.perception(self.p, _x)
         
         # * update step
-        p = self.conv2(torch.relu(self.conv1(p)))
+        p = self.conv1(p)
+        p = torch.relu(p)
+        p = self.conv2(p)
         
         # * create stochastic mask
         stochastic_mask = (torch.rand(_x[:, :1, :, :, :].shape) <= self.update_rate).to(self.device, torch.float32)
