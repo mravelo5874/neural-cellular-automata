@@ -300,7 +300,7 @@ def main():
         
             # * damage lowest loss in batch
             if i % _DAMG_RATE_ == 0:
-                mask = torch.tensor(voxutil.half_volume_mask(PAD_SIZE, 'rand')).to(_DEVICE_)
+                mask = voxutil.half_volume_mask(PAD_SIZE, 'rand')
                 # * apply mask
                 x[-_NUM_DAMG_:] *= mask
                 # * randomize angles for steerable models
