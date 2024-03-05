@@ -254,7 +254,6 @@ def main():
         with open(_TARGET_VOX_, 'rb') as f:
             target_np = np.load(f)
     
-    print (f'target_np.shape: {target_np.shape}')
     target_np = np.pad(target_np, [(0, 0), (0, 0), (_PAD_, _PAD_), (_PAD_, _PAD_), (_PAD_, _PAD_)], 'constant')
     target_np = np.repeat(target_np, _BATCH_SIZE_, axis=0)
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'target.shape: {list(target_np.shape)}')
@@ -283,7 +282,7 @@ def main():
             x = pool[batch_idxs]
             
             # * re-order batch based on loss
-            loss_ranks = torch.argsort(voxutil.voxel_wise_loss_function(x, target_np, _dims=[-1, -2, -3, -4]), descending=True)
+            loss_ranks = torch.argsort(voxutil.voxel_wise_loss_function(x, target_np, _dims=(-1, -2, -3, -4)), descending=True)
             x = x[loss_ranks]
             
             # * re-add seed into batch
