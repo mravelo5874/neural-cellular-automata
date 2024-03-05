@@ -198,6 +198,9 @@ def main():
         model.train()
         voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'loading checkpoint: {checkpoint_dir}/{checkpoint_model}...')
 
+    # * save model isotropic type
+    ISO_TYPE = model.isotropic_type()    
+        
     # * use multiple gpus
     if _DEVICE_ == 'cuda':
         voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'setting model to use multiple GPUs (if available)...')
@@ -273,9 +276,9 @@ def main():
             # * re-add seed into batch
             x[:1] = seed_ten
             # * randomize last channel
-            if model.isotropic_type() == 1:
+            if ISO_TYPE == 1:
                 x[:1, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-            elif model.isotropic_type() == 3:
+            elif ISO_TYPE == 3:
                 x[:1, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
                 x[:1, -2:-1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
                 x[:1, -3:-2] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
@@ -286,10 +289,10 @@ def main():
                 # * apply mask
                 x[-_NUM_DAMG_:] *= mask
                 # * randomize angles for steerable models
-                if model.isotropic_type() == 1:
+                if ISO_TYPE == 1:
                     inv_mask = ~mask
                     x[-_NUM_DAMG_:, -1:] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
-                elif model.isotropic_type() == 3:
+                elif ISO_TYPE == 3:
                     inv_mask = ~mask
                     x[-_NUM_DAMG_:, -1:] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
                     x[-_NUM_DAMG_:, -2:-1] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
@@ -306,9 +309,9 @@ def main():
             prev_x = x
             x = model(x)
             diff_loss += (x - prev_x).abs().mean()
-            if model.isotropic_type() == 1:
+            if ISO_TYPE == 1:
                 overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_-1].square().sum()
-            elif model.isotropic_type() == 3:
+            elif ISO_TYPE == 3:
                 overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_-3].square().sum()
             else:
                 overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_].square().sum()
