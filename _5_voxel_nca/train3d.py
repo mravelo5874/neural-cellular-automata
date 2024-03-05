@@ -199,8 +199,6 @@ def main():
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
     force_cudnn_initialization()
     
-    
-    
     # * create / load model
     if not load_checkpoint:
         model = NCA(_name=_NAME_, _log_file=_LOG_FILE_, _channels=_CHANNELS_, _hidden=_HIDDEN_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
@@ -215,11 +213,10 @@ def main():
     # * save model isotropic type
     ISO_TYPE = model.isotropic_type()    
         
-    # # * use multiple gpus
-    # if _DEVICE_ == 'cuda':
-    #     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'setting model to use multiple GPUs (if available)...')
-    #     torch.distributed.init_process_group()
-    #     model = torch.nn.parallel.DistributedDataParallel(model)
+    # * use multiple gpus
+    if _DEVICE_ == 'cuda':
+        voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'setting model to use multiple GPUs (if available)...')
+        model = torch.nn.DataParallel(model, device_ids=devices)
     
     # * create optimizer and learning-rate scheduler
     opt = torch.optim.Adam(model.parameters(), _UPPER_LR_)
