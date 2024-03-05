@@ -60,14 +60,14 @@ class VoxelNCA(torch.nn.Module):
         return func.max_pool3d(_x[:, 3:4, :, :, :], kernel_size=3, stride=1, padding=1) > 0.1
     
     def forward(self, _x):
+        # * convert to tensor
+        x = torch.tensor(_x).to(self.device)
+        
         # * get alive mask
-        alive_mask = self.get_alive_mask(_x).to(self.device)
-             
-        # * send to device
-        _x = _x.to(self.device)
+        alive_mask = self.get_alive_mask(x).to(self.device)
     
         # * perception step
-        p = self.perception(self.p, _x)
+        p = self.perception(self.p, x)
         
         # * update step
         p = self.conv1(p)
@@ -78,25 +78,25 @@ class VoxelNCA(torch.nn.Module):
         stochastic_mask = (torch.rand(_x[:, :1, :, :, :].shape) <= self.update_rate).to(self.device, torch.float32)
         
         # * perform stochastic update
-        _x = _x + p * stochastic_mask
+        x = x + p * stochastic_mask
         
         # * final isotropic concatination + apply alive mask
         if self.isotropic_type() == 1:
-            states = _x[:, :-1]*alive_mask
-            angle = _x[:, -1:] % (pi*2.0)
-            _x = torch.cat([states, angle], 1)
+            states = x[:, :-1]*alive_mask
+            angle = x[:, -1:] % (pi*2.0)
+            x = torch.cat([states, angle], 1)
             
         elif self.isotropic_type() == 3:
-            states = _x[:, :-3]*alive_mask
-            ax = _x[:, -1:] % (pi*2.0)
-            ay = _x[:, -2:-1] % (pi*2.0)
-            az = _x[:, -3:-2] % (pi*2.0)
-            _x = torch.cat([states, az, ay, ax], 1)
+            states = x[:, :-3]*alive_mask
+            ax = x[:, -1:] % (pi*2.0)
+            ay = x[:, -2:-1] % (pi*2.0)
+            az = x[:, -3:-2] % (pi*2.0)
+            x = torch.cat([states, az, ay, ax], 1)
             
         else:
-            _x = _x * alive_mask
+            x = x * alive_mask
            
-        return _x
+        return x
     
     # def generate_video(self, _filename, _seed, _size, _delta=4, _zoom=1, _show_grid=False):
     #     assert _filename != None
