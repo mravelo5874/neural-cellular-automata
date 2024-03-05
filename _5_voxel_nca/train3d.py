@@ -335,7 +335,8 @@ def main():
                 overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_].square().sum()
         
         # * calculate losses
-        target_loss += voxutil.voxel_wise_loss_function(x, target_np)
+        x_np = x.cpu().detach().numpy()
+        target_loss += voxutil.voxel_wise_loss_function(x_np, target_np)
         target_loss /= 2.0
         diff_loss *= 10.0
         loss = target_loss + overflow_loss + diff_loss
