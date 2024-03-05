@@ -51,6 +51,9 @@ class Vox(object):
     def tensor(self):
         return torch.tensor(self.rgba, dtype=torch.float32).permute(3, 0, 1, 2)[None, ...]
     
+    def numpy(self):
+        return np.array(self.rgba).transpose(3, 0, 1, 2)[None, ...]
+    
     def expand_coordinates(self, _indices):
         x, y, z = _indices
         x[1::2, :, :] += 1
