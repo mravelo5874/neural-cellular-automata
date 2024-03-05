@@ -40,7 +40,7 @@ _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
 _EPOCHS_ = 10_000
-_BATCH_SIZE_ = 4
+_BATCH_SIZE_ = 3
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
 _LOWER_LR_ = 1e-5
