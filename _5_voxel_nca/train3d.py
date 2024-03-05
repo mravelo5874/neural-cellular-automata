@@ -326,11 +326,11 @@ def main():
             x = x.cpu().detach().numpy()
             diff_loss += np.mean(np.abs(x - prev_x))
             if ISO_TYPE == 1:
-                overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_-1].square().sum()
+                overflow_loss += np.sum(np.square((x - np.clip(x, -2., 2.))[:, :_CHANNELS_-1]))
             elif ISO_TYPE == 3:
-                overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_-3].square().sum()
+                overflow_loss += np.sum(np.square((x - np.clip(x, -2., 2.))[:, :_CHANNELS_-3]))
             else:
-                overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_].square().sum()
+                overflow_loss += np.sum(np.square((x - np.clip(x, -2., 2.))[:, :_CHANNELS_]))
         
         # * calculate losses
         target_loss += voxutil.voxel_wise_loss_function(x, target_np)
