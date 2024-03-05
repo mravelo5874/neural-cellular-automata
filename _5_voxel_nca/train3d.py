@@ -190,6 +190,7 @@ def main():
         mpcount = prop.multi_processor_count
         voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'{i}: {torch.cuda.get_device_name(i)}, mem:{mem}MB, mpc:{mpcount}')
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '========================')
+    devices = [0, 1]
     
     # * sets the device  
     _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
