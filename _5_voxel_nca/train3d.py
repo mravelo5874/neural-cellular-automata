@@ -189,9 +189,7 @@ def main():
     
     devices = [d for d in range(torch.cuda.device_count())] 
     device_names  = [torch.cuda.get_device_name(d) for d in devices] 
-    device_to_name = dict(device_names, devices)
-    
-    print (f'cuda devices: {device_to_name}')
+    print (f'cuda devices: {device_names}')
     
     # * create / load model
     if not load_checkpoint:
