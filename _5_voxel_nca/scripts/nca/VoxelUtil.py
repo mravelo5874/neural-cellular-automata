@@ -10,10 +10,7 @@ def logprint(_path, _str):
     with open(_path, 'a', encoding='utf-8') as f:
         f.write(f'{_str}\n')
         
-def voxel_wise_loss_function(_x, _target, _scale=1e3, _dims=()):
-    return _scale * np.mean(np.square(_x[:, :4] - _target), _dims)
-
-def voxel_wise_loss_function_tensors(_x, _target, _scale=1e3, _dims=[]):
+def voxel_wise_loss_function(_x, _target, _scale=1e3, _dims=[]):
     return _scale * torch.mean(torch.square(_x[:, :4] - _target), _dims)
 
 # * shows a batch before and after a forward pass given two (2) tensors
@@ -98,7 +95,7 @@ def custom_seed(_size=16, _channels=16, _dist=5, _hidden_info=False,
                 _plus_x=None, _minus_x=None, 
                 _plus_y=None, _minus_y=None, 
                 _plus_z=None, _minus_z=None):
-    x = np.zeros([_channels, _size, _size, _size])
+    x = torch.zeros([_channels, _size, _size, _size])
     half = _size//2
     
     if _center != None:
@@ -163,15 +160,16 @@ def custom_seed(_size=16, _channels=16, _dist=5, _hidden_info=False,
         if _hidden_info:
             for i in range(len(chns)):
                 x[chns[i]+4, half, half, half-_dist] = 0.0
+
     return x
 
 def rgb_linspace(n):
     '''Generates n visually distinct rgb combinations'''
-    return np.array([hsv_to_rgb(i / n, 1.0, 1.0) for i in range(n)])
+    return torch.tensor([hsv_to_rgb(i / n, 1.0, 1.0) for i in range(n)], dtype=torch.float32)
 
 def seed_3d(_size=128, _channels=16, _points=3, _radius=4, _xyz=None, _rgb_dist=rgb_linspace):
     '''Generates a uniform p-point structured seed of radius r in 3D'''
-    x = np.zeros(_channels, _size, _size, _size)
+    x = torch.zeros(_channels, _size, _size, _size)
     # Initialize p points equidistant around a sphere of radius r
     indices = np.arange(0, _points, dtype=float) + 0.5
     phi = (np.arccos(1 - 2*indices/_points))
