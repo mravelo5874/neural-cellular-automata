@@ -282,7 +282,10 @@ def main():
             x = pool[batch_idxs]
             
             # * re-order batch based on loss
-            loss_ranks = torch.argsort(voxutil.voxel_wise_loss_function(x, target_np, _dims=(-1, -2, -3, -4)), descending=True)
+            loss_res = voxutil.voxel_wise_loss_function(x, target_np, _dims=(-1, -2, -3, -4))
+            print (f'loss_res: {loss_res}')
+            loss_ranks = np.argsort(loss_res)
+            print (f'loss_ranks: {loss_ranks}')
             x = x[loss_ranks]
             
             # * re-add seed into batch
