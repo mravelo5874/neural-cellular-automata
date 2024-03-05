@@ -318,19 +318,21 @@ def main():
         diff_loss = 0.0
         target_loss = 0.0
         
+        # * convert np array batch to tensor
+        x = torch.tensor(x, dtype=torch.float32)
+        
         # * forward pass
         num_steps = np.random.randint(64, 96)
         for _ in range(num_steps):
             prev_x = x
             x = model(x)
-            x = x.cpu().detach().numpy()
-            diff_loss += np.mean(np.abs(x - prev_x))
+            diff_loss += (x - prev_x).abs().mean()
             if ISO_TYPE == 1:
-                overflow_loss += np.sum(np.square((x - np.clip(x, -2., 2.))[:, :_CHANNELS_-1]))
+                overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_-1].square().sum()
             elif ISO_TYPE == 3:
-                overflow_loss += np.sum(np.square((x - np.clip(x, -2., 2.))[:, :_CHANNELS_-3]))
+                overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_-3].square().sum()
             else:
-                overflow_loss += np.sum(np.square((x - np.clip(x, -2., 2.))[:, :_CHANNELS_]))
+                overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_].square().sum()
         
         # * calculate losses
         target_loss += voxutil.voxel_wise_loss_function(x, target_np)

@@ -60,8 +60,8 @@ class VoxelNCA(torch.nn.Module):
         return func.max_pool3d(_x[:, 3:4, :, :, :], kernel_size=3, stride=1, padding=1) > 0.1
     
     def forward(self, _x):
-        # * convert to tensor
-        x = torch.tensor(_x, dtype=torch.float32).to(self.device)
+        # * send to device
+        x = _x.to(self.device)
         
         # * get alive mask
         alive_mask = self.get_alive_mask(x).to(self.device)
