@@ -65,26 +65,36 @@ class VoxelNCA(torch.nn.Module):
         
         # * get alive mask
         alive_mask = self.get_alive_mask(x).to(self.device)
+        torch.cuda.empty_cache()
     
         # * perception step
         p = self.perception(self.p, x)
+        torch.cuda.empty_cache()
         
         # * update step
         p = self.conv1(p)
+        torch.cuda.empty_cache()
         p = self.relu(p)
+        torch.cuda.empty_cache()
         p = self.conv2(p)
+        torch.cuda.empty_cache()
         
         # * create stochastic mask
         stochastic_mask = (torch.rand(_x[:, :1, :, :, :].shape) <= self.update_rate).to(self.device, torch.float32)
+        torch.cuda.empty_cache()
         
         # * perform stochastic update
         x = x + p * stochastic_mask
+        torch.cuda.empty_cache()
         
         # * final isotropic concatination + apply alive mask
         if self.isotropic_type() == 1:
             states = x[:, :-1]*alive_mask
+            torch.cuda.empty_cache()
             angle = x[:, -1:] % (pi*2.0)
+            torch.cuda.empty_cache()
             x = torch.cat([states, angle], 1)
+            torch.cuda.empty_cache()
             
         elif self.isotropic_type() == 3:
             states = x[:, :-3]*alive_mask
@@ -95,6 +105,7 @@ class VoxelNCA(torch.nn.Module):
             
         else:
             x = x * alive_mask
+            torch.cuda.empty_cache()
            
         return x
     
