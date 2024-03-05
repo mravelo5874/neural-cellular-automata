@@ -261,7 +261,7 @@ def main():
     
     # * create pool
     with torch.no_grad():
-        pool = seed_ten.repeat(_POOL_SIZE_, 1, 1, 1, 1)
+        pool = np.repeat(seed_ten, [_POOL_SIZE_, 1, 1, 1, 1])
         # * randomize channel(s)
         if ISO_TYPE == 1:
             for j in range(_POOL_SIZE_):
