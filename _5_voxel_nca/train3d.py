@@ -255,7 +255,7 @@ def main():
             target_np = np.load(f)
     
     print (f'target_np.shape: {target_np.shape}')
-    target_np = np.pad(target_np, [0, 0, (_PAD_, _PAD_), (_PAD_, _PAD_), (_PAD_, _PAD_)], 'constant')
+    target_np = np.pad(target_np, [0, 0, _PAD_, _PAD_, _PAD_], 'constant')
     target_np = np.repeat(target_np, _BATCH_SIZE_, axis=0)
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'target.shape: {list(target_np.shape)}')
     
