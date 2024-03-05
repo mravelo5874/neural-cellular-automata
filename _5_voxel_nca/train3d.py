@@ -236,15 +236,15 @@ def main():
     # * create seed
     PAD_SIZE = _SIZE_+(2*_PAD_)
     if _USE_SPHERE_SEED_:
-        seed_ten = voxutil.seed_3d(_size=PAD_SIZE, _channels=_CHANNELS_, _points=_SEED_POINTS_, _radius=_SEED_DIST_)
+        seed_np = voxutil.seed_3d(_size=PAD_SIZE, _channels=_CHANNELS_, _points=_SEED_POINTS_, _radius=_SEED_DIST_)
     else:
-        seed_ten = voxutil.custom_seed(_size=PAD_SIZE, _channels=_CHANNELS_, _dist=_SEED_DIST_, _hidden_info=_SEED_HID_INFO_,
+        seed_np = voxutil.custom_seed(_size=PAD_SIZE, _channels=_CHANNELS_, _dist=_SEED_DIST_, _hidden_info=_SEED_HID_INFO_,
                                     _center=_SEED_DIC_['center'], 
                                     _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
                                     _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
                                     _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z'])
-    seed_ten = seed_ten[None, ...]
-    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'seed.shape: {list(seed_ten.shape)}')
+    seed_np = seed_np[None, ...]
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'seed.shape: {list(seed_np.shape)}')
     
     # * load target vox
     if _TARGET_VOX_.endswith('vox'):
@@ -255,12 +255,12 @@ def main():
             target_np = np.load(f)
     
     print (f'target_np.shape: {target_np.shape}')
-    target_np = np.pad(target_np, (_PAD_, _PAD_, _PAD_, _PAD_, _PAD_, _PAD_), 'constant')
+    target_np = np.pad(target_np, [None, None, (_PAD_, _PAD_), (_PAD_, _PAD_), (_PAD_, _PAD_)], 'constant')
     target_np = np.repeat(target_np, _BATCH_SIZE_, axis=0)
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'target.shape: {list(target_np.shape)}')
     
     # * create pool
-    pool = np.repeat(seed_ten, _POOL_SIZE_, axis=0)
+    pool = np.repeat(seed_np, _POOL_SIZE_, axis=0)
     # * randomize channel(s)
     if ISO_TYPE == 1:
         for j in range(_POOL_SIZE_):
@@ -287,7 +287,7 @@ def main():
             x = x[loss_ranks]
             
             # * re-add seed into batch
-            x[:1] = seed_ten
+            x[:1] = seed_np
             # * randomize last channel
             if ISO_TYPE == 1:
                 x[:1, -1:] = np.random.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
