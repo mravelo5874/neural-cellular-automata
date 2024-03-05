@@ -181,12 +181,15 @@ def main():
     
     # * print cuda devices
     devices = []
-    print ('========================')
-    print ('available cuda devices:')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '========================')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'available cuda devices:')
     for i in range (torch.cuda.device_count()):
         devices.append(i)
-        print (f'{i}: {torch.cuda.get_device_name(i)}: {torch.cuda.get_device_properties(i)}')
-    print ('========================')
+        prop = torch.cuda.get_device_properties(i)
+        mem = prop['total_memory']
+        mpcount = prop['multi_processor_count']
+        voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'{i}: {torch.cuda.get_device_name(i)}, mem:{mem}, mp-count:{mpcount}')
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '========================')
     
     # * sets the device  
     _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
