@@ -13,6 +13,9 @@ def logprint(_path, _str):
 def voxel_wise_loss_function(_x, _target, _scale=1e3, _dims=()):
     return _scale * np.mean(np.square(_x[:, :4] - _target), _dims)
 
+def voxel_wise_loss_function_tensors(_x, _target, _scale=1e3, _dims=[]):
+    return _scale * torch.mean(torch.square(_x[:, :4] - _target), _dims)
+
 # * shows a batch before and after a forward pass given two (2) tensors
 def show_batch(_batch_size, _before, _after, _dpi=256):
     fig = plt.figure(figsize=(_batch_size, 2), dpi=_dpi)

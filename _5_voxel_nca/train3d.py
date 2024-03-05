@@ -256,6 +256,7 @@ def main():
     
     target_np = np.pad(target_np, [(0, 0), (0, 0), (_PAD_, _PAD_), (_PAD_, _PAD_), (_PAD_, _PAD_)], 'constant')
     target_np = np.repeat(target_np, _BATCH_SIZE_, axis=0)
+    target_tens = torch.tensor(target_np, dtype=torch.float32)
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'target.shape: {list(target_np.shape)}')
     
     # * create pool
@@ -335,11 +336,10 @@ def main():
                 overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_].square().sum()
         
         # * calculate losses
-        x_np = x.cpu().detach().numpy()
-        target_loss += voxutil.voxel_wise_loss_function(x_np, target_np)
+        target_loss += voxutil.voxel_wise_loss_function_tensors(x, target_tens)
         target_loss /= 2.0
         diff_loss *= 10.0
-        loss = torch.tensor(target_loss) + overflow_loss + diff_loss
+        loss = target_loss + overflow_loss + diff_loss
         
         # * backward pass
         with torch.no_grad():
