@@ -14,12 +14,12 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'burger_iso3_v0'
+_NAME_ = 'lizard_iso3_v1'
 _NOTE_ = '''
 lizard training v1
 '''
-_SIZE_ = 16
-_PAD_ = 4
+_SIZE_ = 40
+_PAD_ = 0
 _USE_SPHERE_SEED_ = False
 _SEED_POINTS_ = 2
 _SEED_DIST_ = 3
@@ -33,7 +33,7 @@ _SEED_DIC_ = {
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/burger.vox'
+_TARGET_VOX_ = '../vox/lizard.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
@@ -190,6 +190,7 @@ def main():
         mpcount = prop.multi_processor_count
         voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'{i}: {torch.cuda.get_device_name(i)}, mem:{mem}MB, mpc:{mpcount}')
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '========================')
+    devices = [0, 1]
     
     # * sets the device  
     _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -213,11 +214,10 @@ def main():
     # * save model isotropic type
     ISO_TYPE = model.isotropic_type()    
         
-    # * use multiple GPUs
-    # if _DEVICE_ == 'cuda':
-    #     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'setting model to use multiple GPUs (if available)...')
-    #     devices = [0, 1, 2, 3]
-    #     model = torch.nn.DataParallel(model, device_ids=devices)
+    # * use multiple gpus
+    if _DEVICE_ == 'cuda':
+        voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'setting model to use multiple GPUs (if available)...')
+        model = torch.nn.DataParallel(model, device_ids=devices)
     
     # * create optimizer and learning-rate scheduler
     opt = torch.optim.Adam(model.parameters(), _UPPER_LR_)
@@ -236,40 +236,39 @@ def main():
     # * create seed
     PAD_SIZE = _SIZE_+(2*_PAD_)
     if _USE_SPHERE_SEED_:
-        seed_np = voxutil.seed_3d(_size=PAD_SIZE, _channels=_CHANNELS_, _points=_SEED_POINTS_, _radius=_SEED_DIST_)
+        seed_ten = voxutil.seed_3d(_size=PAD_SIZE, _channels=_CHANNELS_, _points=_SEED_POINTS_, _radius=_SEED_DIST_).unsqueeze(0).to(_DEVICE_)
     else:
-        seed_np = voxutil.custom_seed(_size=PAD_SIZE, _channels=_CHANNELS_, _dist=_SEED_DIST_, _hidden_info=_SEED_HID_INFO_,
+        seed_ten = voxutil.custom_seed(_size=PAD_SIZE, _channels=_CHANNELS_, _dist=_SEED_DIST_, _hidden_info=_SEED_HID_INFO_,
                                     _center=_SEED_DIC_['center'], 
                                     _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
                                     _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
-                                    _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z'])
-    seed_np = seed_np[None, ...]
-    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'seed.shape: {list(seed_np.shape)}')
+                                    _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(_DEVICE_)
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'seed.shape: {list(seed_ten.shape)}')
     
     # * load target vox
     if _TARGET_VOX_.endswith('vox'):
         target = Vox().load_from_file(_TARGET_VOX_)
-        target_np = target.numpy()
+        target_ten = target.tensor()
     elif _TARGET_VOX_.endswith('npy'):
         with open(_TARGET_VOX_, 'rb') as f:
-            target_np = np.load(f)
+            target_ten = torch.from_numpy(np.load(f))
     
-    target_np = np.pad(target_np, [(0, 0), (0, 0), (_PAD_, _PAD_), (_PAD_, _PAD_), (_PAD_, _PAD_)], 'constant')
-    target_np = np.repeat(target_np, _BATCH_SIZE_, axis=0)
-    target_tens = torch.tensor(target_np, dtype=torch.float32)
-    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'target.shape: {list(target_np.shape)}')
+    target_ten = func.pad(target_ten, (_PAD_, _PAD_, _PAD_, _PAD_, _PAD_, _PAD_), 'constant')
+    target_ten = target_ten.clone().repeat(_BATCH_SIZE_, 1, 1, 1, 1).to(_DEVICE_)
+    voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'target.shape: {list(target_ten.shape)}')
     
     # * create pool
-    pool = np.repeat(seed_np, _POOL_SIZE_, axis=0)
-    # * randomize channel(s)
-    if ISO_TYPE == 1:
-        for j in range(_POOL_SIZE_):
-            pool[j, -1:] = np.random.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-    elif ISO_TYPE == 3:
-        for j in range(_POOL_SIZE_):
-            pool[j, -1:] = np.random.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-            pool[j, -2:-1] = np.random.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-            pool[j, -3:-2] = np.random.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+    with torch.no_grad():
+        pool = seed_ten.clone().repeat(_POOL_SIZE_, 1, 1, 1, 1)
+        # * randomize channel(s)
+        if ISO_TYPE == 1:
+            for j in range(_POOL_SIZE_):
+                pool[j, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+        elif ISO_TYPE == 3:
+            for j in range(_POOL_SIZE_):
+                pool[j, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                pool[j, -2:-1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                pool[j, -3:-2] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
     
     # * model training
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'starting training w/ {_EPOCHS_+1} epochs...')
@@ -283,42 +282,38 @@ def main():
             x = pool[batch_idxs]
             
             # * re-order batch based on loss
-            loss_res = voxutil.voxel_wise_loss_function(x, target_np, _dims=(-1, -2, -3, -4))
-            loss_ranks = np.argsort(loss_res)
+            loss_ranks = torch.argsort(voxutil.voxel_wise_loss_function(x, target_ten, _dims=[-1, -2, -3, -4]), descending=True)
             x = x[loss_ranks]
             
             # * re-add seed into batch
-            x[:1] = seed_np
+            x[:1] = seed_ten
             # * randomize last channel
             if ISO_TYPE == 1:
-                x[:1, -1:] = np.random.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                x[:1, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
             elif ISO_TYPE == 3:
-                x[:1, -1:] = np.random.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-                x[:1, -2:-1] = np.random.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
-                x[:1, -3:-2] = np.random.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                x[:1, -1:] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                x[:1, -2:-1] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
+                x[:1, -3:-2] = torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0
         
             # * damage lowest loss in batch
             if i % _DAMG_RATE_ == 0:
-                mask = voxutil.half_volume_mask(PAD_SIZE, 'rand')
+                mask = torch.tensor(voxutil.half_volume_mask(PAD_SIZE, 'rand')).to(_DEVICE_)
                 # * apply mask
                 x[-_NUM_DAMG_:] *= mask
                 # * randomize angles for steerable models
                 if ISO_TYPE == 1:
                     inv_mask = ~mask
-                    x[-_NUM_DAMG_:, -1:] += np.random.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
+                    x[-_NUM_DAMG_:, -1:] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
                 elif ISO_TYPE == 3:
                     inv_mask = ~mask
-                    x[-_NUM_DAMG_:, -1:] += np.random.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
-                    x[-_NUM_DAMG_:, -2:-1] += np.random.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
-                    x[-_NUM_DAMG_:, -3:-2] += np.random.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
+                    x[-_NUM_DAMG_:, -1:] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
+                    x[-_NUM_DAMG_:, -2:-1] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
+                    x[-_NUM_DAMG_:, -3:-2] += torch.rand(PAD_SIZE, PAD_SIZE, PAD_SIZE)*np.pi*2.0*inv_mask
 
         # * different loss values
         overflow_loss = 0.0
         diff_loss = 0.0
         target_loss = 0.0
-        
-        # * convert np array batch to tensor
-        x = torch.tensor(x, dtype=torch.float32)
         
         # * forward pass
         num_steps = np.random.randint(64, 96)
@@ -334,7 +329,7 @@ def main():
                 overflow_loss += (x - x.clamp(-2.0, 2.0))[:, :_CHANNELS_].square().sum()
         
         # * calculate losses
-        target_loss += voxutil.voxel_wise_loss_function_tensors(x, target_tens)
+        target_loss += voxutil.voxel_wise_loss_function(x, target_ten)
         target_loss /= 2.0
         diff_loss *= 10.0
         loss = target_loss + overflow_loss + diff_loss
@@ -351,7 +346,7 @@ def main():
             opt.zero_grad()
             lr_sched.step()
             # * re-add batch to pool
-            pool[batch_idxs] = x.cpu().detach().numpy()
+            pool[batch_idxs] = x
             # * correctly add to loss log
             _loss = loss.item()
             if torch.isnan(loss) or torch.isinf(loss) or torch.isneginf(loss):
@@ -383,9 +378,6 @@ def main():
             # * save checkpoint
             if i % _SAVE_RATE_ == 0 and i != 0:
                 save_model('_checkpoints', model, _NAME_+'_cp'+str(i))
-        
-        # * clear cuda cache
-        torch.cuda.empty_cache()
                 
     # * print train time
     secs = (datetime.datetime.now()-train_start).seconds
