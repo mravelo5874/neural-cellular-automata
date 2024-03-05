@@ -243,7 +243,7 @@ class VoxelPerception():
             s = _x[i]
             s = s[:, None, ...]
             print (f's.shape: {s.shape}')
-            g = func.conv3d(s, _filters, padding=1)
+            g = func.conv3d(s, _filters[:, None], padding=1)
             print (f'g.shape: {g.shape}')
             
         return y
