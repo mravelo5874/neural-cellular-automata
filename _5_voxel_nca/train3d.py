@@ -19,7 +19,7 @@ _NOTE_ = '''
 lizard training v1
 '''
 _SIZE_ = 40
-_PAD_ = 4
+_PAD_ = 0
 _USE_SPHERE_SEED_ = False
 _SEED_POINTS_ = 2
 _SEED_DIST_ = 3
@@ -40,7 +40,7 @@ _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
 _EPOCHS_ = 10_000
-_BATCH_SIZE_ = 4
+_BATCH_SIZE_ = 2
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
 _LOWER_LR_ = 1e-5
