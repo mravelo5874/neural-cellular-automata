@@ -1,0 +1,1843 @@
+****************
+timestamp: 2024-03-04 22:56:56.915844
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 2
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 64, 64, 64]
+target.shape: [2, 4, 64, 64, 64]
+starting training w/ 20001 epochs...
+****************
+timestamp: 2024-03-04 23:03:30.821786
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 2
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [2, 4, 48, 48, 48]
+starting training w/ 20001 epochs...
+****************
+timestamp: 2024-03-04 23:04:35.335435
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 2
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [2, 4, 48, 48, 48]
+starting training w/ 20001 epochs...
+****************
+timestamp: 2024-03-04 23:23:20.950363
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 2
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [2, 4, 48, 48, 48]
+starting training w/ 20001 epochs...
+****************
+timestamp: 2024-03-04 23:28:13.030016
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 2
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [2, 4, 48, 48, 48]
+starting training w/ 20001 epochs...
+****************
+timestamp: 2024-03-04 23:29:34.158174
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 2
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [2, 4, 48, 48, 48]
+starting training w/ 20001 epochs...
+****************
+timestamp: 2024-03-04 23:31:46.757877
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 2
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [2, 4, 48, 48, 48]
+starting training w/ 20001 epochs...
+****************
+timestamp: 2024-03-04 23:33:31.382200
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 2
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [2, 4, 48, 48, 48]
+starting training w/ 20001 epochs...
+****************
+timestamp: 2024-03-04 23:39:38.755377
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+setting model to use multiple GPUs (if available)...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 2
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [2, 4, 48, 48, 48]
+****************
+timestamp: 2024-03-04 23:42:44.578024
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+setting model to use multiple GPUs (if available)...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 2
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [2, 4, 48, 48, 48]
+****************
+timestamp: 2024-03-04 23:43:27.825622
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+setting model to use multiple GPUs (if available)...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 2
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [2, 4, 48, 48, 48]
+starting training w/ 20001 epochs...
+****************
+timestamp: 2024-03-04 23:44:08.700111
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+setting model to use multiple GPUs (if available)...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 20001 epochs...
+****************
+timestamp: 2024-03-04 23:58:21.202781
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+setting model to use multiple GPUs (if available)...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 20001 epochs...
+****************
+timestamp: 2024-03-04 23:59:01.169078
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+setting model to use multiple GPUs (if available)...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 00:00:11.538785
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+setting model to use multiple GPUs (if available)...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 10:07:21.178322
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+setting model to use multiple GPUs (if available)...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 2
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [2, 4, 40, 40, 40]
+starting training w/ 10001 epochs...
+[10/10001]	 0.147it/s	 time: 0:01:08~18:52:12	 loss: 4.03>4.022	 lr: 1.27e-05 ▲
+[20/10001]	 0.15it/s	 time: 0:02:13~18:26:07	 loss: 4.022>4.021	 lr: 1.514e-05 ▲
+[30/10001]	 0.154it/s	 time: 0:03:15~18:00:05	 loss: 4.022>4.021	 lr: 1.759e-05 ▲
+****************
+timestamp: 2024-03-05 10:13:58.625656
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+****************
+timestamp: 2024-03-05 10:14:52.497883
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+setting model to use multiple GPUs (if available)...
+****************
+timestamp: 2024-03-05 10:17:22.853657
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+setting model to use multiple GPUs (if available)...
+****************
+timestamp: 2024-03-05 10:24:00.033796
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+setting model to use multiple GPUs (if available)...
+****************
+timestamp: 2024-03-05 10:55:01.828810
+initializing training...
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 2
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [2, 4, 40, 40, 40]
+starting training w/ 10001 epochs...
+[10/10001]	 1.25it/s	 time: 0:00:08~2:13:12	 loss: 4.031>4.021	 lr: 1.27e-05 ▲
+[20/10001]	 1.333it/s	 time: 0:00:15~2:04:45	 loss: 4.561>4.021	 lr: 1.514e-05 ▲
+[30/10001]	 1.429it/s	 time: 0:00:21~1:56:19	 loss: 10.163>4.021	 lr: 1.759e-05 ▲
+[40/10001]	 1.379it/s	 time: 0:00:29~2:00:21	 loss: 4.022>4.021	 lr: 2.005e-05 ▲
+[50/10001]	 1.429it/s	 time: 0:00:35~1:56:05	 loss: 4.022>4.021	 lr: 2.25e-05 ▲
+[60/10001]	 1.429it/s	 time: 0:00:42~1:55:58	 loss: 4.022>4.021	 lr: 2.494e-05 ▲
+[70/10001]	 1.429it/s	 time: 0:00:49~1:55:51	 loss: 4.022>4.021	 lr: 2.739e-05 ▲
+[80/10001]	 1.404it/s	 time: 0:00:57~1:57:48	 loss: 4.022>4.021	 lr: 2.985e-05 ▲
+[90/10001]	 1.429it/s	 time: 0:01:03~1:55:37	 loss: 4.022>4.021	 lr: 3.23e-05 ▲
+[100/10001]	 1.429it/s	 time: 0:01:10~1:55:30	 loss: 4.021>4.018	 lr: 3.474e-05 ▲
+[110/10001]	 1.429it/s	 time: 0:01:17~1:55:23	 loss: 4.005>3.971	 lr: 3.719e-05 ▲
+[120/10001]	 1.429it/s	 time: 0:01:24~1:55:16	 loss: 4.634>3.879	 lr: 3.965e-05 ▲
+[130/10001]	 1.429it/s	 time: 0:01:31~1:55:09	 loss: 3.881>3.802	 lr: 4.21e-05 ▲
+[140/10001]	 1.414it/s	 time: 0:01:39~1:56:12	 loss: 4.004>3.79	 lr: 4.454e-05 ▲
+[150/10001]	 1.415it/s	 time: 0:01:46~1:56:00	 loss: 4.105>3.79	 lr: 4.699e-05 ▲
+[160/10001]	 1.416it/s	 time: 0:01:53~1:55:49	 loss: 3.959>3.79	 lr: 4.944e-05 ▲
+[170/10001]	 1.429it/s	 time: 0:01:59~1:54:41	 loss: 3.975>3.79	 lr: 5.19e-05 ▲
+[180/10001]	 1.429it/s	 time: 0:02:06~1:54:34	 loss: 3.92>3.79	 lr: 5.435e-05 ▲
+[190/10001]	 1.429it/s	 time: 0:02:13~1:54:27	 loss: 3.895>3.733	 lr: 5.679e-05 ▲
+[200/10001]	 1.429it/s	 time: 0:02:20~1:54:20	 loss: 3.938>3.658	 lr: 5.924e-05 ▲
+[210/10001]	 1.429it/s	 time: 0:02:27~1:54:13	 loss: 3.966>3.658	 lr: 6.17e-05 ▲
+[220/10001]	 1.429it/s	 time: 0:02:34~1:54:06	 loss: 3.926>3.658	 lr: 6.415e-05 ▲
+[230/10001]	 1.438it/s	 time: 0:02:40~1:53:16	 loss: 3.965>3.658	 lr: 6.659e-05 ▲
+****************
+timestamp: 2024-03-05 10:58:12.225981
+initializing training...
+========================
+available cuda devices:
+****************
+timestamp: 2024-03-05 10:58:40.385182
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:23793106944, mp-count:72
+1: Quadro RTX 6000, mem:23793106944, mp-count:72
+2: Quadro RTX 6000, mem:23793106944, mp-count:72
+3: Quadro RTX 6000, mem:23793106944, mp-count:72
+4: Quadro RTX 6000, mem:23793106944, mp-count:72
+5: Quadro RTX 6000, mem:23793106944, mp-count:72
+6: Quadro RTX 6000, mem:23793106944, mp-count:72
+7: Quadro RTX 6000, mem:23793106944, mp-count:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 2
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [2, 4, 40, 40, 40]
+starting training w/ 10001 epochs...
+[10/10001]	 1.25it/s	 time: 0:00:08~2:13:12	 loss: 4.032>4.021	 lr: 1.27e-05 ▲
+[20/10001]	 1.333it/s	 time: 0:00:15~2:04:45	 loss: 4.022>4.021	 lr: 1.514e-05 ▲
+[30/10001]	 1.304it/s	 time: 0:00:23~2:07:23	 loss: 4.021>4.021	 lr: 1.759e-05 ▲
+[40/10001]	 1.379it/s	 time: 0:00:29~2:00:21	 loss: 4.021>4.021	 lr: 2.005e-05 ▲
+[50/10001]	 1.389it/s	 time: 0:00:36~1:59:24	 loss: 4.021>4.021	 lr: 2.25e-05 ▲
+****************
+timestamp: 2024-03-05 11:02:31.272605
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, total-memory:22690.875MB, multi-processor-count:72
+1: Quadro RTX 6000, total-memory:22690.875MB, multi-processor-count:72
+2: Quadro RTX 6000, total-memory:22690.875MB, multi-processor-count:72
+3: Quadro RTX 6000, total-memory:22690.875MB, multi-processor-count:72
+4: Quadro RTX 6000, total-memory:22690.875MB, multi-processor-count:72
+5: Quadro RTX 6000, total-memory:22690.875MB, multi-processor-count:72
+6: Quadro RTX 6000, total-memory:22690.875MB, multi-processor-count:72
+7: Quadro RTX 6000, total-memory:22690.875MB, multi-processor-count:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 2
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [2, 4, 40, 40, 40]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 11:03:21.013591
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 2
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [2, 4, 40, 40, 40]
+starting training w/ 10001 epochs...
+[10/10001]	 1.25it/s	 time: 0:00:08~2:13:12	 loss: 4.031>4.023	 lr: 1.27e-05 ▲
+[20/10001]	 1.333it/s	 time: 0:00:15~2:04:45	 loss: 4.022>4.021	 lr: 1.514e-05 ▲
+[30/10001]	 1.364it/s	 time: 0:00:22~2:01:51	 loss: 4.022>4.021	 lr: 1.759e-05 ▲
+[40/10001]	 1.379it/s	 time: 0:00:29~2:00:21	 loss: 4.021>4.021	 lr: 2.005e-05 ▲
+[50/10001]	 1.389it/s	 time: 0:00:36~1:59:24	 loss: 4.021>4.021	 lr: 2.25e-05 ▲
+****************
+timestamp: 2024-03-05 11:07:53.726385
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [4, 4, 40, 40, 40]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 11:11:19.517721
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+setting model to use multiple GPUs (if available)...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [4, 4, 40, 40, 40]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 11:13:46.197748
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda:0
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [4, 4, 40, 40, 40]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 11:14:24.017282
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda:0
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [4, 4, 40, 40, 40]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 11:15:19.378080
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda:0
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [4, 4, 40, 40, 40]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 11:17:19.117937
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+setting model to use multiple GPUs (if available)...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [4, 4, 40, 40, 40]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 11:26:33.618546
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+setting model to use multiple GPUs (if available)...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [4, 4, 40, 40, 40]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 11:53:51.378111
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [4, 4, 40, 40, 40]
+****************
+timestamp: 2024-03-05 11:55:02.102201
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [4, 4, 40, 40, 40]
+****************
+timestamp: 2024-03-05 11:56:56.282447
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [4, 4, 40, 40, 40]
+****************
+timestamp: 2024-03-05 12:03:30.340929
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+****************
+timestamp: 2024-03-05 12:07:49.254245
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+****************
+timestamp: 2024-03-05 12:08:39.006069
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+****************
+timestamp: 2024-03-05 12:12:50.654021
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+****************
+timestamp: 2024-03-05 12:13:29.829818
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+****************
+timestamp: 2024-03-05 12:15:29.401999
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+****************
+timestamp: 2024-03-05 12:17:19.009949
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+****************
+timestamp: 2024-03-05 12:17:56.897704
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 12:20:26.085848
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 12:22:16.789950
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 12:23:10.797500
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 12:25:00.465993
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 12:26:09.469732
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 12:27:24.714210
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 12:29:06.181756
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 12:29:41.949601
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 12:30:01.525230
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 12:30:54.178529
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 12:33:13.886353
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 12:35:58.373890
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 12:47:47.601728
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+****************
+timestamp: 2024-03-05 12:48:54.393978
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+****************
+timestamp: 2024-03-05 12:50:22.394039
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+****************
+timestamp: 2024-03-05 12:52:11.461821
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+****************
+timestamp: 2024-03-05 12:52:57.117453
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+****************
+timestamp: 2024-03-05 12:54:57.193979
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+****************
+timestamp: 2024-03-05 12:57:30.621839
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+****************
+timestamp: 2024-03-05 13:03:32.825741
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+****************
+timestamp: 2024-03-05 13:04:11.525696
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 13:05:55.213938
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 13:07:04.250247
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 13:11:08.506243
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 13:13:38.810015
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 13:31:58.002339
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+setting model to use multiple GPUs (if available)...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 48, 48, 48]
+target.shape: [4, 4, 48, 48, 48]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 13:59:28.816763
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+setting model to use multiple GPUs (if available)...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [4, 4, 40, 40, 40]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 14:00:04.416910
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [4, 4, 40, 40, 40]
+starting training w/ 10001 epochs...
+****************
+timestamp: 2024-03-05 14:01:00.829679
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: lizard_iso3_v1
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 2
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 40, 40, 40]
+target.shape: [2, 4, 40, 40, 40]
+starting training w/ 20001 epochs...
+[10/20001]	 1.111it/s	 time: 0:00:09~4:59:51	 loss: 4.031>4.021	 lr: 1.27e-05 ▲
+[20/20001]	 1.111it/s	 time: 0:00:18~4:59:42	 loss: 13.393>4.021	 lr: 1.514e-05 ▲
+[30/20001]	 1.2it/s	 time: 0:00:25~4:37:21	 loss: 4.024>4.021	 lr: 1.759e-05 ▲
