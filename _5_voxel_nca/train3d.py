@@ -186,8 +186,8 @@ def main():
     for i in range (torch.cuda.device_count()):
         devices.append(i)
         prop = torch.cuda.get_device_properties(i)
-        mem = prop['total_memory']
-        mpcount = prop['multi_processor_count']
+        mem = prop.total_memory
+        mpcount = prop.multi_processor_count
         voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'{i}: {torch.cuda.get_device_name(i)}, mem:{mem}, mp-count:{mpcount}')
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '========================')
     
