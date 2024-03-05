@@ -339,7 +339,7 @@ def main():
         target_loss += voxutil.voxel_wise_loss_function(x_np, target_np)
         target_loss /= 2.0
         diff_loss *= 10.0
-        loss = target_loss + overflow_loss + diff_loss
+        loss = torch.tensor(target_loss) + overflow_loss + diff_loss
         
         # * backward pass
         with torch.no_grad():
