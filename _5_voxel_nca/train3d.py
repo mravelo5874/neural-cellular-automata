@@ -14,12 +14,12 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'lizard_iso3_v0'
+_NAME_ = 'lizard_iso3_v1'
 _NOTE_ = '''
-lizard training
+lizard training v1
 '''
 _SIZE_ = 40
-_PAD_ = 0
+_PAD_ = 12
 _USE_SPHERE_SEED_ = False
 _SEED_POINTS_ = 2
 _SEED_DIST_ = 3
@@ -39,7 +39,7 @@ _MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
-_EPOCHS_ = 10_000
+_EPOCHS_ = 20_000
 _BATCH_SIZE_ = 2
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
