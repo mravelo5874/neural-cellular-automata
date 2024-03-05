@@ -231,8 +231,13 @@ class VoxelPerception():
         batch_size, channels, height, width, depth = _x.shape
         _filters = _filters.to(self.device)
         
+        print (f'_x.shape: {_x.shape}')
+        
         x_pad = func.pad(_x, (1, 1, 1, 1, 1, 1), 'constant')
         y = torch.zeros_like(x_pad)
+        
+        print (f'y.shape: {y.shape}')
+        
         for i in range(batch_size):
             y[i] = func.conv3d(x_pad[i], _filters[:, None])
             
