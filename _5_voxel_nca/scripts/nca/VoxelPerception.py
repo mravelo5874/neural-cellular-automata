@@ -229,6 +229,15 @@ class VoxelPerception():
     # * performs a convolution per filter per channel
     def per_channel_conv3d(self, _x, _filters):
         batch_size, channels, height, width, depth = _x.shape
+        _filters = _filters.to(self.device)
+        
+        x_pad = func.pad(_x, (1, 1, 1, 1, 1, 1), 'constant')
+        y = torch.zeros_like(x_pad)
+        for i in range(batch_size):
+            y[i] = func.conv3d(x_pad[i], _filters[:, None])
+            
+        return y
+        
         # * reshape x to make per-channel convolution possible + pad 1 on each side
         y = _x.reshape(batch_size*channels, 1, height, width, depth)
         y = func.pad(y, (1, 1, 1, 1, 1, 1), 'constant')
