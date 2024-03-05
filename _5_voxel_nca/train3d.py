@@ -49,7 +49,7 @@ _NUM_DAMG_ = 2
 _DAMG_RATE_ = 5
 # * logging parameters
 _LOG_FILE_ = 'trainlog.txt'
-_INFO_RATE_ = 10
+_INFO_RATE_ = 100
 _SAVE_RATE_ = 5000
 
 # * load from checkpoint
