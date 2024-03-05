@@ -192,7 +192,7 @@ def main():
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', '========================')
     
     # * sets the device  
-    _DEVICE_ = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+    _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'device: {_DEVICE_}')
     torch.backends.cudnn.benchmark = True
     torch.cuda.empty_cache()
