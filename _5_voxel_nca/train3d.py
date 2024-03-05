@@ -180,10 +180,13 @@ def main():
             _SAVE_RATE_ = params['_SAVE_RATE_']
     
     # * print cuda devices
-    devices = [] 
+    devices = []
+    print ('========================')
+    print ('available cuda devices:')
     for i in range (torch.cuda.device_count()):
         devices.append(i)
-        print (f'- {i}: {torch.cuda.get_device_name(i)}')
+        print (f'{i}: {torch.cuda.get_device_name(i)}: {torch.cuda.get_device_properties(i)}')
+    print ('========================')
     
     # * sets the device  
     _DEVICE_ = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -209,11 +212,11 @@ def main():
     # * save model isotropic type
     ISO_TYPE = model.isotropic_type()    
         
-    # * use multiple gpus
-    if _DEVICE_ == 'cuda':
-        voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'setting model to use multiple GPUs (if available)...')
-        torch.distributed.init_process_group()
-        model = torch.nn.parallel.DistributedDataParallel(model)
+    # # * use multiple gpus
+    # if _DEVICE_ == 'cuda':
+    #     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', f'setting model to use multiple GPUs (if available)...')
+    #     torch.distributed.init_process_group()
+    #     model = torch.nn.parallel.DistributedDataParallel(model)
     
     # * create optimizer and learning-rate scheduler
     opt = torch.optim.Adam(model.parameters(), _UPPER_LR_)
