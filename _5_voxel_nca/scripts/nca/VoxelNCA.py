@@ -61,7 +61,7 @@ class VoxelNCA(torch.nn.Module):
     
     def forward(self, _x):
         # * convert to tensor
-        x = torch.tensor(_x).to(self.device)
+        x = torch.tensor(_x, dtype=torch.cuda.FloatTensor).to(self.device)
         
         # * get alive mask
         alive_mask = self.get_alive_mask(x).to(self.device)
