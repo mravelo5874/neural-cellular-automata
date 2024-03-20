@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import to_hex
 from scripts.Video import VideoWriter, zoom
 import scripts.vox.VoxParser as parser
-from midvoxio.voxio import write_list_to_vox
+# from midvoxio.voxio import write_list_to_vox
 
 class Vox(object):
     def __init__(self):
