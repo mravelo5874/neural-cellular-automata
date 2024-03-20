@@ -9,4 +9,5 @@ pip install matplotlib
 pip install requests
 pip install moviepy
 pip install scipy
+pip install gitpython
 pip install "git+https://github.com/facebookresearch/pytorch3d.git@stable"
