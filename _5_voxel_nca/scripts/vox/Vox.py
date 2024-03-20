@@ -1,4 +1,4 @@
-import git, os
+# import git, os
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,28 +11,28 @@ class Vox(object):
     def __init__(self):
         self.name = 'unnamed_vox'
         self.voxels = None
-        self.repo_root = self.get_git_root()
+        #self.repo_root = self.get_git_root()
     
-    # * find the root of the current repository
-    def get_git_root(self):
-        path = os.getcwd()
-        git_repo = git.Repo(path, search_parent_directories=True)
-        git_root = git_repo.git.rev_parse("--show-toplevel")
-        return git_root
+    # # * find the root of the current repository
+    # def get_git_root(self):
+    #     path = os.getcwd()
+    #     git_repo = git.Repo(path, search_parent_directories=True)
+    #     git_root = git_repo.git.rev_parse("--show-toplevel")
+    #     return git_root
         
     # * saves the current self.voxels to a new .vox file
-    def save_to_vox(self, _path=None):
+    # def save_to_vox(self, _path=None):
         
-        # * return id no voxels found
-        if self.voxels == None:
-            print ('No voxels found in Vox object!')
-            return
+    #     # * return id no voxels found
+    #     if self.voxels == None:
+    #         print ('No voxels found in Vox object!')
+    #         return
         
-        # * default path using repo root and name
-        if _path == None:
-            _path = f'{self.repo_root}/saved_vox/{self.name}.vox'
+    #     # * default path using repo root and name
+    #     if _path == None:
+    #         _path = f'{self.repo_root}/saved_vox/{self.name}.vox'
         
-        write_list_to_vox()
+    #     write_list_to_vox()
     
     def load_from_tensor(self, _tensor, _name=None):
         if _name != None: self.name = _name
