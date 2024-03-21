@@ -1,38 +1,127 @@
-# import git, os
+import git, os
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import to_hex
 from scripts.Video import VideoWriter, zoom
 import scripts.vox.VoxParser as parser
-# from midvoxio.voxio import write_list_to_vox
 
 class Vox(object):
     def __init__(self):
         self.name = 'unnamed_vox'
         self.voxels = None
-        #self.repo_root = self.get_git_root()
+        self.repo_root = self.get_git_root()
     
-    # # * find the root of the current repository
-    # def get_git_root(self):
-    #     path = os.getcwd()
-    #     git_repo = git.Repo(path, search_parent_directories=True)
-    #     git_root = git_repo.git.rev_parse("--show-toplevel")
-    #     return git_root
+    # * find the root of the current repository
+    def get_git_root(self):
+        path = os.getcwd()
+        git_repo = git.Repo(path, search_parent_directories=True)
+        git_root = git_repo.git.rev_parse("--show-toplevel")
+        return git_root
         
     # * saves the current self.voxels to a new .vox file
-    # def save_to_vox(self, _path=None):
+    def save_to_obj(self, _name=None, _voxel_size=1.0):
         
-    #     # * return id no voxels found
-    #     if self.voxels == None:
-    #         print ('No voxels found in Vox object!')
-    #         return
+        # * return id no voxels found
+        if self.voxels is None:
+            print ('No voxels found in Vox object!')
+            return
         
-    #     # * default path using repo root and name
-    #     if _path == None:
-    #         _path = f'{self.repo_root}/saved_vox/{self.name}.vox'
+        # * set name
+        if _name != None:
+            self.name = _name
         
-    #     write_list_to_vox()
+        # * default path using repo root and name
+        path = f'{self.repo_root}/obj/{self.name}'
+        
+        # * filter out voxels that are alive and visible
+        filt_voxels = []
+        size = self.rgba.shape[0]
+        for x in range(size):
+            for y in range(size):
+                for z in range(size):
+                    
+                    # * make sure voxel is alive (alpha > 0.1)
+                    if self.rgba[x, y, z, 3] > 0.1:
+                    
+                        # * make sure not on edge voxel
+                        if x != 0 and x != size-1 and y != 0 and y != size-1 and z != 0 and z != size-1:
+                            
+                            # * check if voxel is completly obstructed
+                            if not (self.rgba[x+1, y, z, 3] > 0.1 and
+                                self.rgba[x+1, y, z, 3] > 0.1 and
+                                self.rgba[x-1, y, z, 3] > 0.1 and
+                                self.rgba[x, y+1, z, 3] > 0.1 and
+                                self.rgba[x, y-1, z, 3] > 0.1 and
+                                self.rgba[x, y, z+1, 3] > 0.1 and
+                                self.rgba[x, y, z-1, 3] > 0.1):
+                                    filt_voxels.append({'pos': [x, z, y], 'color': self.rgba[x, y, z]})
+                        
+                        else:
+                            filt_voxels.append({'pos': [x, z, y], 'color': self.rgba[x, y, z]})
+                            
+        # * create .obj and .mtl files from filtered voxels
+        mtl_file = open(f'{path}.mtl', 'w')
+        obj_file = open(f'{path}.obj', 'w')
+        obj_file.write(f'o {self.name}\n')
+        obj_file.write('\n')
+        obj_file.write(f'mtllib {self.name}.mtl\n')
+        obj_file.write('\n')
+        
+        verts = []
+        faces = []
+        f = 0
+        
+        for i, voxel in enumerate(filt_voxels):
+            pos = np.array(voxel['pos'])
+            color = np.array(voxel['color'])
+
+            mtl_file.write(f'newmtl color{i}\n')
+            mtl_file.write('Ka 0.0 0.0 0.0\n')
+            mtl_file.write(f'Kd {color[0]} {color[1]} {color[2]}\n')
+            mtl_file.write('Ks 0.0 0.0 0.0\n')
+            mtl_file.write('Ns 0.0\n')
+            mtl_file.write(f'd {color[3]}\n')
+            mtl_file.write('illum 0\n')
+            mtl_file.write('\n')
+            
+            o = pos * _voxel_size
+            s = _voxel_size
+            verts.append(f'v {o[0]} {o[1]} {o[2]}\n')
+            verts.append(f'v {o[0]} {o[1]} {o[2] + s}\n')
+            verts.append(f'v {o[0] + s} {o[1]} {o[2] + s}\n')
+            verts.append(f'v {o[0] + s} {o[1]} {o[2]}\n')
+            verts.append(f'v {o[0]} {o[1] + s} {o[2]}\n')
+            verts.append(f'v {o[0]} {o[1] + s} {o[2] + s}\n')
+            verts.append(f'v {o[0] + s} {o[1] + s} {o[2] + s}\n')
+            verts.append(f'v {o[0] + s} {o[1] + s} {o[2]}\n')
+
+            faces.append(f'usemtl color{i}\n')
+            faces.append(f'f {f+1} {f+2} {f+3}\n')
+            faces.append(f'f {f+3} {f+4} {f+1}\n')
+            faces.append(f'f {f+5} {f+6} {f+7}\n')
+            faces.append(f'f {f+7} {f+8} {f+5}\n')
+            faces.append(f'f {f+1} {f+2} {f+6}\n')
+            faces.append(f'f {f+6} {f+5} {f+1}\n')
+            faces.append(f'f {f+4} {f+3} {f+7}\n')
+            faces.append(f'f {f+7} {f+8} {f+4}\n')
+            faces.append(f'f {f+1} {f+5} {f+8}\n')
+            faces.append(f'f {f+8} {f+4} {f+1}\n')
+            faces.append(f'f {f+2} {f+6} {f+7}\n')
+            faces.append(f'f {f+7} {f+3} {f+2}\n')
+            faces.append('\n')
+            
+            f += 8
+            
+        for v in verts:
+            obj_file.write(v)
+        obj_file.write('\n')
+        
+        for f in faces:
+            obj_file.write(f)
+            
+        mtl_file.close()
+        obj_file.close()
     
     def load_from_tensor(self, _tensor, _name=None):
         if _name != None: self.name = _name
