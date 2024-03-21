@@ -68,7 +68,7 @@ class NCASimulator:
         _SEED_DIST_ = params['_SEED_DIST_']
         _SEED_DIC_ = params['_SEED_DIC_']
         _SEED_HID_INFO_ = params['_SEED_HID_INFO_']
-        self.size = int(_SIZE_+(2.5*_PAD_)*2.5)
+        self.size = int(_SIZE_+(3*_PAD_)*3)
         if _USE_SPHERE_SEED_:
             self.seed = voxutil.seed_3d(_size=self.size, _channels=_CHANNELS_, _points=_SEED_POINTS_, _radius=_SEED_DIST_).unsqueeze(0).to(self.device)
         else:

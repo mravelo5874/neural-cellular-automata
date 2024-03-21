@@ -1,0 +1,7 @@
+newmtl mycolor
+Ka 0.0 0.0 0.0
+Kd 1.0 0.0 0.0
+Ks 0.0 0.0 0.0
+Ns 0.0
+illum 0
+

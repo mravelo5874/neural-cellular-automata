@@ -1,0 +1,13 @@
+o test_obj
+
+mtllib test.mtl
+usemtl mycolor
+
+v 0.0 0.0 0.0
+v 0.0 0.0 1.0
+v 1.0 0.0 1.0
+v 1.0 0.0 0.0
+
+g square
+f 1 2 3
+f 3 4 1
