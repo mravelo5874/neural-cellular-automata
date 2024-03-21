@@ -20,7 +20,7 @@ class Vox(object):
         return git_root
         
     # * saves the current self.voxels to a new .vox file
-    def save_to_obj(self, _name=None, _voxel_size=1.0):
+    def save_to_obj(self, _name=None, _dir=None, _voxel_size=0.1):
         
         # * return id no voxels found
         if self.voxels is None:
@@ -30,9 +30,11 @@ class Vox(object):
         # * set name
         if _name != None:
             self.name = _name
-        
-        # * default path using repo root and name
-        path = f'{self.repo_root}/obj/{self.name}'
+            
+        if _dir != None:
+            path = f'{self.repo_root}/obj/{_dir}/{self.name}'
+        else:
+            path = f'{self.repo_root}/obj/{self.name}'
         
         # * filter out voxels that are alive and visible
         filt_voxels = []
@@ -43,22 +45,22 @@ class Vox(object):
                     
                     # * make sure voxel is alive (alpha > 0.1)
                     if self.rgba[x, y, z, 3] > 0.1:
-                    
-                        # * make sure not on edge voxel
-                        if x != 0 and x != size-1 and y != 0 and y != size-1 and z != 0 and z != size-1:
+                        filt_voxels.append({'pos': [x, z, y], 'color': self.rgba[x, y, z]})
+                        # # * make sure not on edge voxel
+                        # if x != 0 and x != size-1 and y != 0 and y != size-1 and z != 0 and z != size-1:
                             
-                            # * check if voxel is completly obstructed
-                            if not (self.rgba[x+1, y, z, 3] > 0.1 and
-                                self.rgba[x+1, y, z, 3] > 0.1 and
-                                self.rgba[x-1, y, z, 3] > 0.1 and
-                                self.rgba[x, y+1, z, 3] > 0.1 and
-                                self.rgba[x, y-1, z, 3] > 0.1 and
-                                self.rgba[x, y, z+1, 3] > 0.1 and
-                                self.rgba[x, y, z-1, 3] > 0.1):
-                                    filt_voxels.append({'pos': [x, z, y], 'color': self.rgba[x, y, z]})
+                        #     # * check if voxel is completly obstructed
+                        #     if not (self.rgba[x+1, y, z, 3] > 0.1 and
+                        #         self.rgba[x+1, y, z, 3] > 0.1 and
+                        #         self.rgba[x-1, y, z, 3] > 0.1 and
+                        #         self.rgba[x, y+1, z, 3] > 0.1 and
+                        #         self.rgba[x, y-1, z, 3] > 0.1 and
+                        #         self.rgba[x, y, z+1, 3] > 0.1 and
+                        #         self.rgba[x, y, z-1, 3] > 0.1):
+                        #             filt_voxels.append({'pos': [x, z, y], 'color': self.rgba[x, y, z]})
                         
-                        else:
-                            filt_voxels.append({'pos': [x, z, y], 'color': self.rgba[x, y, z]})
+                        # else:
+                            
                             
         # * create .obj and .mtl files from filtered voxels
         mtl_file = open(f'{path}.mtl', 'w')
@@ -75,13 +77,17 @@ class Vox(object):
         for i, voxel in enumerate(filt_voxels):
             pos = np.array(voxel['pos'])
             color = np.array(voxel['color'])
+            
+            a = color[3]
+            if a < 0.95:
+                a *= 0.5
 
             mtl_file.write(f'newmtl color{i}\n')
             mtl_file.write('Ka 0.0 0.0 0.0\n')
             mtl_file.write(f'Kd {color[0]} {color[1]} {color[2]}\n')
             mtl_file.write('Ks 0.0 0.0 0.0\n')
             mtl_file.write('Ns 0.0\n')
-            mtl_file.write(f'd {color[3]}\n')
+            mtl_file.write(f'd {a}\n')
             mtl_file.write('illum 0\n')
             mtl_file.write('\n')
             
@@ -125,7 +131,7 @@ class Vox(object):
     
     def load_from_tensor(self, _tensor, _name=None):
         if _name != None: self.name = _name
-        _tensor = _tensor.cpu()
+        _tensor = _tensor.cpu().detach()
         if len(_tensor.shape) == 5:
             _tensor = _tensor[0, ...]
         self.load_from_array(np.array(_tensor))
