@@ -14,11 +14,11 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cactus_iso3_v1'
+_NAME_ = 'thin_shell_sphere17_iso3_v0'
 _NOTE_ = '''
-training cactus vox (experiment with completely solid colored model) for double prev epochs (20_000)
+training thin shelled sphere v0 (20_000 epochs)
 '''
-_SIZE_ = 25
+_SIZE_ = 17
 _PAD_ = 4
 _USE_SPHERE_SEED_ = False
 _SEED_POINTS_ = 2
@@ -33,7 +33,7 @@ _SEED_DIC_ = {
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/cactus.vox'
+_TARGET_VOX_ = '../vox/thin_shell_sphere17.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
