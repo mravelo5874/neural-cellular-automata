@@ -14,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'oak_iso3_v0'
+_NAME_ = 'earth_iso3_v1'
 _NOTE_ = '''
-training oak as iso3 model
+earth_iso_v0 did not work too well (no landmasses formed on the crust. only oceans), lets try again!
 '''
 _SIZE_ = 24
 _PAD_ = 4
@@ -33,13 +33,13 @@ _SEED_DIC_ = {
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/oak.vox'
+_TARGET_VOX_ = '../vox/earth.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
-_EPOCHS_ = 20_000
+_EPOCHS_ = 30_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
