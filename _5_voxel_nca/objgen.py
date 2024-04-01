@@ -8,9 +8,9 @@ from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
-_MODEL_ = 'cowboy16_iso2_v13'
+_MODEL_ = 'gray_cactus_iso3_v0'
 _DEVICE_ = 'cuda'
-_OBJ_DIR_ = f'../obj/{_MODEL_}_1'
+_OBJ_DIR_ = f'../obj/{_MODEL_}_0'
 
 _USE_DELTA_ = False
 _DELTA_ITER_ = 10
@@ -87,10 +87,12 @@ def main():
             if i % _DELTA_ITER_ == 0:
                 Vox().load_from_tensor(x).save_to_obj(_name=f'iter_{i}', _dir=_OBJ_DIR_)
                 print (f'saving .obj for iteration {i}...')
+                Vox().save_nca_state(x.cpu().detach(), _name=f'iter_{i}', _dir=_OBJ_DIR_)
         else:
             if i in _ITER_LIST_:
                 Vox().load_from_tensor(x).save_to_obj(_name=f'iter_{i}', _dir=_OBJ_DIR_)
                 print (f'saving .obj for iteration {i}...')
+                Vox().save_nca_state(x.cpu().detach(), _name=f'iter_{i}', _dir=_OBJ_DIR_)
             
         x = model(x)
     

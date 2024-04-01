@@ -18,6 +18,21 @@ class Vox(object):
         git_repo = git.Repo(path, search_parent_directories=True)
         git_root = git_repo.git.rev_parse("--show-toplevel")
         return git_root
+    
+        # * saves the current state to file
+    def save_nca_state(self, _state, _name, _dir):
+        
+        # * set name
+        if _name != None:
+            self.name = _name
+            
+        if _dir != None:
+            path = f'{self.repo_root}/obj/{_dir}/{self.name}'
+        else:
+            path = f'{self.repo_root}/obj/{self.name}'
+            
+        np_state = np.array(_state)
+        np.save(path, np_state)
         
     # * saves the current self.voxels to a new .vox file
     def save_to_obj(self, _name=None, _dir=None, _voxel_size=0.1):
