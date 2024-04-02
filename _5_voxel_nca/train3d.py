@@ -14,38 +14,38 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'earth_iso3_v1'
+_NAME_ = 'minicube5_ansio_v0'
 _NOTE_ = '''
-earth_iso_v0 did not work too well (no landmasses formed on the crust. only oceans), lets try again!
+first time training a single seed - using minicube too!
 '''
-_SIZE_ = 24
-_PAD_ = 4
+_SIZE_ = 5
+_PAD_ = 2
 _USE_SPHERE_SEED_ = False
 _SEED_POINTS_ = 2
 _SEED_DIST_ = 2
 _SEED_DIC_ = {
-    'center': None,
-    'plus_x': 'green',
+    'center': 'black',
+    'plus_x': None,
     'minus_x': None,
-    'plus_y': 'blue',
-    'minus_y': 'red',
-    'plus_z': 'white',
+    'plus_y': None,
+    'minus_y': None,
+    'plus_z': None,
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/earth.vox'
+_TARGET_VOX_ = '../vox/minicube5.vox'
 # * model parameters
-_MODEL_TYPE_ = Perception.YAW_ISO_V3
+_MODEL_TYPE_ = Perception.ANISOTROPIC
 _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
-_EPOCHS_ = 30_000
-_BATCH_SIZE_ = 4
+_EPOCHS_ = 5_000
+_BATCH_SIZE_ = 8
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
 _LOWER_LR_ = 1e-5
 _LR_STEP_ = 2000
-_NUM_DAMG_ = 2
+_NUM_DAMG_ = 4
 _DAMG_RATE_ = 5
 # * logging parameters
 _LOG_FILE_ = 'trainlog.txt'

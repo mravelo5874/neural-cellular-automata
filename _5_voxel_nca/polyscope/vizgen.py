@@ -3,8 +3,8 @@ import numpy as np
 from matplotlib import colormaps
 
 _ITER_ = 200
-_PATH_ = f'../../obj/rubiks_black_cube_iso3_v3_4/iter_{_ITER_}.npy'
-#_PATH_ = f'../../obj/gray_cactus_iso3_v0_0/iter_{_ITER_}.npy'
+#_PATH_ = f'../../obj/rubiks_black_cube_iso3_v3_4/iter_{_ITER_}.npy'
+_PATH_ = f'../../obj/gray_cactus_iso3_v0_0/iter_{_ITER_}.npy'
 _SCALE_ = 1.0
 
 def main():
