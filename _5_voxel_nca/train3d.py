@@ -14,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'minicube5_quat_v0'
+_NAME_ = 'minicube5_quat_v1'
 _NOTE_ = '''
-training minicube w quaternion perception! (note that v0 is using three seeds!)
+training minicube w quaternion perception! (note that v1 is using three seeds but in a different positions !)
 '''
 _SIZE_ = 5
 _PAD_ = 2
@@ -26,8 +26,8 @@ _SEED_DIST_ = 1
 _SEED_DIC_ = {
     'center': None,
     'plus_x': 'red',
-    'minus_x': 'blue',
-    'plus_y': None,
+    'minus_x': None,
+    'plus_y': 'green',
     'minus_y': None,
     'plus_z': 'green',
     'minus_z': None
