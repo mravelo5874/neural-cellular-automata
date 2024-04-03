@@ -14,19 +14,19 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'minicube5_iso3_v0'
+_NAME_ = 'minicube5_iso3_v1'
 _NOTE_ = '''
-training minicube w iso3 perception! (note that v0 is using a single black seed!)
+training minicube w iso3 perception! (note that v1 is using two seeds!)
 '''
 _SIZE_ = 5
 _PAD_ = 2
 _USE_SPHERE_SEED_ = False
 _SEED_POINTS_ = 2
-_SEED_DIST_ = 2
+_SEED_DIST_ = 1
 _SEED_DIC_ = {
-    'center': 'black',
-    'plus_x': None,
-    'minus_x': None,
+    'center': None,
+    'plus_x': 'red',
+    'minus_x': 'cyan',
     'plus_y': None,
     'minus_y': None,
     'plus_z': None,
