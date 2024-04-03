@@ -14,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'minicube5_iso3_v2'
+_NAME_ = 'minicube5_quat_v0'
 _NOTE_ = '''
-training minicube w iso3 perception! (note that v2 is using three seeds!)
+training minicube w quaternion perception! (note that v0 is using three seeds!)
 '''
 _SIZE_ = 5
 _PAD_ = 2
@@ -35,7 +35,7 @@ _SEED_DIC_ = {
 _SEED_HID_INFO_ = False
 _TARGET_VOX_ = '../vox/minicube5.vox'
 # * model parameters
-_MODEL_TYPE_ = Perception.YAW_ISO_V3
+_MODEL_TYPE_ = Perception.QUATERNION
 _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
