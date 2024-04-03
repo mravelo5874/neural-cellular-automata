@@ -14,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'minicube5_iso3_v1'
+_NAME_ = 'minicube5_iso3_v2'
 _NOTE_ = '''
-training minicube w iso3 perception! (note that v1 is using two seeds!)
+training minicube w iso3 perception! (note that v2 is using three seeds!)
 '''
 _SIZE_ = 5
 _PAD_ = 2
@@ -26,10 +26,10 @@ _SEED_DIST_ = 1
 _SEED_DIC_ = {
     'center': None,
     'plus_x': 'red',
-    'minus_x': 'cyan',
+    'minus_x': 'blue',
     'plus_y': None,
     'minus_y': None,
-    'plus_z': None,
+    'plus_z': 'green',
     'minus_z': None
 }
 _SEED_HID_INFO_ = False

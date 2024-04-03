@@ -354,7 +354,7 @@ class NCASimulator:
                 full=self.seed.shape[2]
                 half=full//2
                 q=half//2
-                d=8
+                d=q//2
      
                 clone = self.seed.detach().clone()[:, :, half-d:half+d, half-d:half+d, half-d:half+d]
                 self.seed = torch.zeros_like(self.seed)
