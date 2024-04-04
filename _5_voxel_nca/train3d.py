@@ -14,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'minicube5_quat_v3'
+_NAME_ = 'minicube5_quat_v3_cont'
 _NOTE_ = '''
-training minicube w quaternion perception! doubled epochs and removed cellular damage in order to improve result.
+training minicube w quaternion perception! started from minicube5_quat_v3_cp10000 to train for another 10_000 epochs.
 '''
 _SIZE_ = 5
 _PAD_ = 2
@@ -53,9 +53,9 @@ _INFO_RATE_ = 100
 _SAVE_RATE_ = 5000
 
 # * load from checkpoint
-load_checkpoint = False
-checkpoint_dir = '_checkpoints/earth_aniso/'
-checkpoint_model = 'earth_aniso_cp10000'
+load_checkpoint = True
+checkpoint_dir = '_checkpoints/minicube5_quat_v3/'
+checkpoint_model = 'minicube5_quat_v3_cp10000'
 
 def force_cudnn_initialization():
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'forcing cuDNN initialization...')
