@@ -54,7 +54,7 @@ _SAVE_RATE_ = 5000
 
 # * load from checkpoint
 load_checkpoint = True
-checkpoint_dir = '_checkpoints/minicube5_quat_v3/'
+checkpoint_dir = '_checkpoints/minicube5_quat_v3'
 checkpoint_model = 'minicube5_quat_v3_cp10000'
 
 def force_cudnn_initialization():
