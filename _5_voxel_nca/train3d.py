@@ -153,7 +153,7 @@ def main():
             global _SAVE_RATE_
             params = json.load(openfile)
             # * target/seed parameters
-            _NAME_ = params['_NAME_']+'_from_checkpoint'
+            # _NAME_ = params['_NAME_']+'_from_checkpoint'
             _SIZE_ = params['_SIZE_']
             _PAD_ = params['_PAD_']
             _USE_SPHERE_SEED_ = params['_USE_SPHERE_SEED_']
