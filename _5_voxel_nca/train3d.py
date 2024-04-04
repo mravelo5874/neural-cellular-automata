@@ -128,7 +128,7 @@ def main():
     # * load model method
     def load_model(_dir, _name):
         # * read params from json file
-        with open(f'{_dir}/{_name}/{_name}_params.json', 'r') as openfile:
+        with open(f'{_dir}/{_name}_params.json', 'r') as openfile:
             global _NAME_
             global _SIZE_
             global _PAD_
