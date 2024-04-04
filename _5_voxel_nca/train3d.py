@@ -14,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'minicube5_quat_v2'
+_NAME_ = 'minicube5_quat_v3'
 _NOTE_ = '''
-training minicube w quaternion perception! (note that v2 is using three seeds but in a different positions !)
+training minicube w quaternion perception! doubled epochs and removed cellular damage in order to improve result.
 '''
 _SIZE_ = 5
 _PAD_ = 2
@@ -39,13 +39,13 @@ _MODEL_TYPE_ = Perception.QUATERNION
 _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
-_EPOCHS_ = 5_000
+_EPOCHS_ = 10_000
 _BATCH_SIZE_ = 8
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
 _LOWER_LR_ = 1e-5
 _LR_STEP_ = 2000
-_NUM_DAMG_ = 4
+_NUM_DAMG_ = 0
 _DAMG_RATE_ = 5
 # * logging parameters
 _LOG_FILE_ = 'trainlog.txt'

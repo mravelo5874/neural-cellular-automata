@@ -360,10 +360,10 @@ class NCASimulator:
                 self.seed = torch.zeros_like(self.seed)
                 
                 # * bottom half
-                self.seed[:, :,         q-d:q+d,            q-d:q+d,            q-d:q+d] = torch.rot90(clone, 1, (2, 3))
-                self.seed[:, :, (q*3)-d:(q*3)+d,            q-d:q+d,            q-d:q+d] = torch.rot90(clone, 2, (2, 3))
-                self.seed[:, :, (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d,            q-d:q+d] = torch.rot90(clone, 3, (2, 3))
-                self.seed[:, :,         q-d:q+d,    (q*3)-d:(q*3)+d,            q-d:q+d] = torch.rot90(clone, 4, (2, 3))
+                self.seed[:, :,         q-d:q+d,            q-d:q+d,            q-d:q+d] = torch.rot90(clone, 1, (4, 3))
+                self.seed[:, :, (q*3)-d:(q*3)+d,            q-d:q+d,            q-d:q+d] = torch.rot90(clone, 2, (4, 3))
+                self.seed[:, :, (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d,            q-d:q+d] = torch.rot90(clone, 3, (4, 3))
+                self.seed[:, :,         q-d:q+d,    (q*3)-d:(q*3)+d,            q-d:q+d] = torch.rot90(clone, 4, (4, 3))
                 # * top half
                 self.seed[:, :,         q-d:q+d,            q-d:q+d,    (q*3)-d:(q*3)+d] = torch.rot90(clone, 3, (2, 3))
                 self.seed[:, :, (q*3)-d:(q*3)+d,            q-d:q+d,    (q*3)-d:(q*3)+d] = torch.rot90(clone, 4, (2, 3))
