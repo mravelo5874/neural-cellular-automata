@@ -14,7 +14,7 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'minicube5_quat_v3_cont'
+_NAME_ = 'minicube5_quat_v3.5'
 _NOTE_ = '''
 training minicube w quaternion perception! started from minicube5_quat_v3_cp10000 to train for another 10_000 epochs.
 '''
