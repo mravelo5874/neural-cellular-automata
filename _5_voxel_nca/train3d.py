@@ -14,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'minicube5_quat_v3.5'
+_NAME_ = 'minicube5_isoRmat_v0'
 _NOTE_ = '''
-training minicube w quaternion perception! started from minicube5_quat_v3_cp10000 to train for another 10_000 epochs.
+training minicube w *new* ISO_ROT_MATRIX perception!
 '''
 _SIZE_ = 5
 _PAD_ = 2
@@ -35,7 +35,7 @@ _SEED_DIC_ = {
 _SEED_HID_INFO_ = False
 _TARGET_VOX_ = '../vox/minicube5.vox'
 # * model parameters
-_MODEL_TYPE_ = Perception.QUATERNION
+_MODEL_TYPE_ = Perception.ISO_ROT_MATRIX
 _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
@@ -53,7 +53,7 @@ _INFO_RATE_ = 100
 _SAVE_RATE_ = 5000
 
 # * load from checkpoint
-load_checkpoint = True
+load_checkpoint = False
 checkpoint_dir = '_checkpoints/minicube5_quat_v3'
 checkpoint_model = 'minicube5_quat_v3_cp10000'
 

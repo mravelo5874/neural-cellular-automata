@@ -216,3 +216,35 @@ def euler_to_quaternion(_ax, _ay, _az):
     
     # * return quat values
     return torch.cat([w, x, y, z], 1)
+
+# * yoinked (and modified) from https://stackoverflow.com/questions/54616049/converting-a-rotation-matrix-to-euler-angles-and-back-special-case
+def eul2rot(ax, ay, az):
+
+    r11 = torch.cos(ay)*torch.cos(az)
+    r12 = torch.sin(ax)*torch.sin(ay)*torch.cos(az) - torch.sin(az)*torch.cos(ax)
+    r13 = torch.sin(ay)*torch.cos(ax)*torch.cos(az) + torch.sin(ax)*torch.sin(az)
+    
+    r21 = torch.sin(az)*torch.cos(ay)
+    r22 = torch.sin(ax)*torch.sin(ay)*torch.sin(az) + torch.cos(ax)*torch.cos(az)
+    r23 = torch.sin(ay)*torch.sin(az)*torch.cos(ax) - torch.sin(ax)*torch.cos(az)
+    
+    r31 = -torch.sin(ax)
+    r32 = torch.sin(ax)*torch.cos(ay)
+    r33 = torch.cos(ax)*torch.cos(ay)
+    
+    b, c = ax.shape
+    R = torch.tensor(np.zeros([b, c, 3, 3]), dtype=torch.float)
+    
+    R[:, :, 0, 0] = r11
+    R[:, :, 0, 1] = r12
+    R[:, :, 0, 2] = r13
+    
+    R[:, :, 1, 0] = r21
+    R[:, :, 1, 1] = r22
+    R[:, :, 1, 2] = r23
+    
+    R[:, :, 2, 0] = r31
+    R[:, :, 2, 1] = r32
+    R[:, :, 2, 2] = r33
+
+    return R

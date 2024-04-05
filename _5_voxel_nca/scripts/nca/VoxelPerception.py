@@ -19,6 +19,7 @@ class Perception(int, Enum):
     YAW_ISO_V3: int = 6
     FLAT_ISO: int = 7
     FULL_ISO_V0: int = 8
+    ISO_ROT_MATRIX: int = 9
 
 # 3D-filters
 X_SOBEL = torch.tensor([
@@ -603,6 +604,44 @@ class VoxelPerception():
         rz = rxyz[:, :, :, :, :, 2]
         return torch.cat([states, rx, ry, rz, lap], 1)
     
+    def isotropic_rotation_matrix_perception(self, _x):
+        # * separate states and angle channels
+        states, ax, ay, az = _x[:, :-3], _x[:, -1:], _x[:, -2:-1], _x[:, -3:-2]
+
+        # * per channel convolutions
+        px = self.per_channel_conv3d(states, X_SOBEL[None, :])
+        py = self.per_channel_conv3d(states, Y_SOBEL[None, :])
+        pz = self.per_channel_conv3d(states, Z_SOBEL_DOWN[None, :])
+        lap = self.per_channel_conv3d(states, LAP_KERN_7[None, :])
+        
+        # * get perception tensors
+        px = px[..., None]
+        py = py[..., None]
+        pz = pz[..., None]
+        pxyz = torch.cat([px, py, pz], 5)
+        bs, hc, sx, sy, sz, p3 = pxyz.shape
+        pxyz = pxyz.reshape([bs, hc, sx*sy*sz, p3])
+        pxyz = pxyz.unsqueeze(-1)
+        
+        # * get quat values
+        bs, _, sx, sy, sz = ax.shape
+        ax = ax.reshape([bs, sx*sy*sz])
+        ay = ay.reshape([bs, sx*sy*sz])
+        az = az.reshape([bs, sx*sy*sz])
+        R_mats = voxutil.eul2rot(ax, ay, az)
+        
+        # * rotate perception tensors
+        rxyz = torch.zeros_like(pxyz)
+        for i in range(hc):
+            rxyz[:, i] = torch.matmul(R_mats, pxyz[:, i])
+        rxyz = rxyz.reshape([bs, hc, sx, sy, sz, p3])
+        
+        # * extract rotated perception tensors
+        rx = rxyz[:, :, :, :, :, 0]
+        ry = rxyz[:, :, :, :, :, 1]
+        rz = rxyz[:, :, :, :, :, 2]
+        return torch.cat([states, rx, ry, rz, lap], 1)
+    
     def full_isotropic_v0(self, _x):
         # * separate states and angle channels
         states, a_xy, a_xz, a_yz = _x[:, :-3], _x[:, -1:], _x[:, -2:-1], _x[:, -3:-2]
@@ -654,4 +693,5 @@ class VoxelPerception():
         Perception.YAW_ISO_V3: yaw_isotropic_v3_perception,
         Perception.FLAT_ISO: flat_isotropic_perception,
         Perception.FULL_ISO_V0: full_isotropic_v0,
+        Perception.ISO_ROT_MATRIX: isotropic_rotation_matrix_perception,
     }
