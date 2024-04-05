@@ -14,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'minicube5_isoRmat_v0'
+_NAME_ = 'minicube5_isoRmat_v1'
 _NOTE_ = '''
-training minicube w *new* ISO_ROT_MATRIX perception! (last training broke due to nan loss, trying again w new parameters!)
+training minicube w *new* ISO_ROT_MATRIX perception! (changed LAP_7 kernel to LAP_27) also slightly increased upper lr.
 '''
 _SIZE_ = 5
 _PAD_ = 2
@@ -42,7 +42,7 @@ _HIDDEN_ = 128
 _EPOCHS_ = 20_000
 _BATCH_SIZE_ = 8
 _POOL_SIZE_ = 32
-_UPPER_LR_ = 25e-5
+_UPPER_LR_ = 3e-4
 _LOWER_LR_ = 1e-5
 _LR_STEP_ = 2000
 _NUM_DAMG_ = 0

@@ -612,7 +612,7 @@ class VoxelPerception():
         px = self.per_channel_conv3d(states, X_SOBEL[None, :])
         py = self.per_channel_conv3d(states, Y_SOBEL[None, :])
         pz = self.per_channel_conv3d(states, Z_SOBEL_DOWN[None, :])
-        lap = self.per_channel_conv3d(states, LAP_KERN_7[None, :])
+        lap = self.per_channel_conv3d(states, LAP_KERN_27[None, :])
         
         # * get perception tensors
         px = px[..., None]
