@@ -14,38 +14,38 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'minicube5_isoRmat_v1'
+_NAME_ = 'oak_aniso_single'
 _NOTE_ = '''
-training minicube w *new* ISO_ROT_MATRIX perception! (changed LAP_7 kernel to LAP_27) also slightly increased upper lr.
+training oak w/ aniso perception with a single seed in order to make beautiful render !!!
 '''
-_SIZE_ = 5
-_PAD_ = 2
+_SIZE_ = 24
+_PAD_ = 4
 _USE_SPHERE_SEED_ = False
 _SEED_POINTS_ = 2
 _SEED_DIST_ = 1
 _SEED_DIC_ = {
-    'center': None,
-    'plus_x': 'red',
+    'center': 'black',
+    'plus_x': None,
     'minus_x': None,
-    'plus_y': 'blue',
+    'plus_y': None,
     'minus_y': None,
-    'plus_z': 'green',
+    'plus_z': None,
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/minicube5.vox'
+_TARGET_VOX_ = '../vox/oak.vox'
 # * model parameters
-_MODEL_TYPE_ = Perception.ISO_ROT_MATRIX
+_MODEL_TYPE_ = Perception.ANISOTROPIC
 _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
 _EPOCHS_ = 20_000
-_BATCH_SIZE_ = 8
+_BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
-_UPPER_LR_ = 3e-4
+_UPPER_LR_ = 5e-4
 _LOWER_LR_ = 1e-5
 _LR_STEP_ = 2000
-_NUM_DAMG_ = 0
+_NUM_DAMG_ = 2
 _DAMG_RATE_ = 5
 # * logging parameters
 _LOG_FILE_ = 'trainlog.txt'
