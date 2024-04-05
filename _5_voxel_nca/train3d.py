@@ -16,7 +16,7 @@ from scripts.vox.Vox import Vox
 # * target/seed parameters
 _NAME_ = 'minicube5_isoRmat_v0'
 _NOTE_ = '''
-training minicube w *new* ISO_ROT_MATRIX perception!
+training minicube w *new* ISO_ROT_MATRIX perception! (last training broke due to nan loss, trying again w new parameters!)
 '''
 _SIZE_ = 5
 _PAD_ = 2
@@ -39,10 +39,10 @@ _MODEL_TYPE_ = Perception.ISO_ROT_MATRIX
 _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
-_EPOCHS_ = 10_000
+_EPOCHS_ = 20_000
 _BATCH_SIZE_ = 8
 _POOL_SIZE_ = 32
-_UPPER_LR_ = 5e-4
+_UPPER_LR_ = 25e-5
 _LOWER_LR_ = 1e-5
 _LR_STEP_ = 2000
 _NUM_DAMG_ = 0
