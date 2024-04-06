@@ -370,6 +370,14 @@ class NCASimulator:
                 self.seed[:, :, (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d] = torch.rot90(clone, 1, (2, 3))
                 self.seed[:, :,         q-d:q+d,    (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d] = torch.rot90(clone, 2, (2, 3))
                 
+                # * randomize channels
+                if self.model.isotropic_type() == 1:
+                        self.seed[:1, -1:] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                elif self.model.isotropic_type() == 3:
+                    self.seed[:1, -1:] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                    self.seed[:1, -2:-1] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                    self.seed[:1, -3:-2] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                
                 self.mutex.acquire()
                 self.x = self.seed.detach().clone()
                 self.mutex.release()
