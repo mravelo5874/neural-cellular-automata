@@ -14,28 +14,28 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'oak_aniso_single'
+_NAME_ = 'rubiks_isoRmat_v0'
 _NOTE_ = '''
-training oak w/ aniso perception with a single seed in order to make beautiful render !!!
+Trying a larger model w/ ISO_ROT_MATRIX perception...
 '''
-_SIZE_ = 24
-_PAD_ = 4
+_SIZE_ = 15
+_PAD_ = 2
 _USE_SPHERE_SEED_ = False
 _SEED_POINTS_ = 2
-_SEED_DIST_ = 1
+_SEED_DIST_ = 2
 _SEED_DIC_ = {
-    'center': 'black',
-    'plus_x': None,
+    'center': None,
+    'plus_x': 'red',
     'minus_x': None,
-    'plus_y': None,
+    'plus_y': 'green',
     'minus_y': None,
-    'plus_z': None,
+    'plus_z': 'blue',
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/oak.vox'
+_TARGET_VOX_ = '../vox/rubiks_black_cube.vox'
 # * model parameters
-_MODEL_TYPE_ = Perception.ANISOTROPIC
+_MODEL_TYPE_ = Perception.ISO_ROT_MATRIX
 _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters

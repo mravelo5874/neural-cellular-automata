@@ -8,7 +8,7 @@ from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
-_MODEL_ = 'gray_cactus_iso3_v0'
+_MODEL_ = 'oak_aniso_single'
 _DEVICE_ = 'cuda'
 _OBJ_DIR_ = f'../obj/{_MODEL_}_0'
 
@@ -16,7 +16,7 @@ _USE_DELTA_ = False
 _DELTA_ITER_ = 10
 _MAX_ITER_ = 60
 
-_ITER_LIST_ = [0, 5, 10, 15, 20, 30, 50, 100, 200]
+_ITER_LIST_ = [0, 5, 10, 15, 20, 30, 50, 100, 200, 500]
 
 def main():
     # * setup cuda if available
@@ -81,20 +81,21 @@ def main():
         _MAX_ITER_ = _ITER_LIST_[-1]
     
     # * save tensor every _DELTA_ITER_ iterations
-    for i in range(_MAX_ITER_+1):
-        
-        if _USE_DELTA_:
-            if i % _DELTA_ITER_ == 0:
-                Vox().load_from_tensor(x).save_to_obj(_name=f'iter_{i}', _dir=_OBJ_DIR_)
-                print (f'saving .obj for iteration {i}...')
-                Vox().save_nca_state(x.cpu().detach(), _name=f'iter_{i}', _dir=_OBJ_DIR_)
-        else:
-            if i in _ITER_LIST_:
-                Vox().load_from_tensor(x).save_to_obj(_name=f'iter_{i}', _dir=_OBJ_DIR_)
-                print (f'saving .obj for iteration {i}...')
-                Vox().save_nca_state(x.cpu().detach(), _name=f'iter_{i}', _dir=_OBJ_DIR_)
+    with torch.no_grad():
+        for i in range(_MAX_ITER_+1):
             
-        x = model(x)
+            if _USE_DELTA_:
+                if i % _DELTA_ITER_ == 0:
+                    Vox().load_from_tensor(x).save_to_obj(_name=f'iter_{i}', _dir=_OBJ_DIR_)
+                    print (f'saving .obj for iteration {i}...')
+                    Vox().save_nca_state(x.cpu().detach(), _name=f'iter_{i}', _dir=_OBJ_DIR_)
+            else:
+                if i in _ITER_LIST_:
+                    Vox().load_from_tensor(x).save_to_obj(_name=f'iter_{i}', _dir=_OBJ_DIR_)
+                    print (f'saving .obj for iteration {i}...')
+                    Vox().save_nca_state(x.cpu().detach(), _name=f'iter_{i}', _dir=_OBJ_DIR_)
+                
+            x = model(x)
     
 if __name__ == '__main__':
     main()
