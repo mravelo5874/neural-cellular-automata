@@ -33,7 +33,7 @@ _SEED_DIC_ = {
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../voxnp/sphere16.vox'
+_TARGET_VOX_ = '../voxnp/sphere16.npy'
 # * model parameters
 _MODEL_TYPE_ = Perception.ISO_ROT_MATRIX
 _CHANNELS_ = 16
