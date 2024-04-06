@@ -94,7 +94,7 @@ class Vox(object):
             color = np.array(voxel['color'])
             
             a = color[3]
-            if a < 0.95:
+            if a < 0.2:
                 a *= 0.5
 
             mtl_file.write(f'newmtl color{i}\n')

@@ -10,7 +10,7 @@ from scripts.vox.Vox import Vox
 
 _MODEL_ = 'oak_aniso_single'
 _DEVICE_ = 'cuda'
-_OBJ_DIR_ = f'../obj/{_MODEL_}_0'
+_OBJ_DIR_ = f'../obj/{_MODEL_}_1'
 
 _USE_DELTA_ = False
 _DELTA_ITER_ = 10
@@ -52,6 +52,7 @@ def main():
     _SEED_DIST_ = params['_SEED_DIST_']
     _SEED_DIC_ = params['_SEED_DIC_']
     _SEED_HID_INFO_ = params['_SEED_HID_INFO_']
+    _TARGET_VOX_ = params['_TARGET_VOX_']
     size = int(_SIZE_+(2*_PAD_))
     if _USE_SPHERE_SEED_:
         seed = voxutil.seed_3d(_size=size, _channels=_CHANNELS_, _points=_SEED_POINTS_, _radius=_SEED_DIST_).unsqueeze(0).to(_DEVICE_)
@@ -79,6 +80,16 @@ def main():
     # * set _MAX_ITER_ if not _USE_DELTA_
     if not _USE_DELTA_:
         _MAX_ITER_ = _ITER_LIST_[-1]
+    
+    # * save target vox
+    print (f'target vox: {_TARGET_VOX_}')
+    if _TARGET_VOX_.endswith('vox'):
+        target = Vox().load_from_file(_TARGET_VOX_).numpy()
+    elif _TARGET_VOX_.endswith('npy'):
+        with open(_TARGET_VOX_, 'rb') as f:
+            target = np.load(f)
+    target = target.squeeze(0)
+    Vox().load_from_array(target).save_to_obj(_name=f'target_obj', _dir=_OBJ_DIR_)
     
     # * save tensor every _DELTA_ITER_ iterations
     with torch.no_grad():
