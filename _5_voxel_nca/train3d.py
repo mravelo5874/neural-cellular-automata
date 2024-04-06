@@ -14,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_isoRmat_v0'
+_NAME_ = 'rubiks_isoRmat_v0.5'
 _NOTE_ = '''
-Trying a larger model w/ ISO_ROT_MATRIX perception...
+Trying a larger model w/ ISO_ROT_MATRIX perception... (starting from 20000 checkpoint)
 '''
 _SIZE_ = 15
 _PAD_ = 2
@@ -53,9 +53,9 @@ _INFO_RATE_ = 100
 _SAVE_RATE_ = 5000
 
 # * load from checkpoint
-load_checkpoint = False
-checkpoint_dir = '_checkpoints/minicube5_quat_v3'
-checkpoint_model = 'minicube5_quat_v3_cp10000'
+load_checkpoint = True
+checkpoint_dir = '_checkpoints/rubiks_isoRmat_v0'
+checkpoint_model = 'rubiks_isoRmat_v0_cp20000'
 
 def force_cudnn_initialization():
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'forcing cuDNN initialization...')
