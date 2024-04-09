@@ -8,15 +8,18 @@ from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
-_MODEL_ = 'oak_aniso_single'
+_MODEL_ = 'earth_aniso'
 _DEVICE_ = 'cuda'
-_OBJ_DIR_ = f'../obj/{_MODEL_}_1'
+_OBJ_DIR_ = f'../obj/{_MODEL_}_regen_0'
 
 _USE_DELTA_ = False
 _DELTA_ITER_ = 10
 _MAX_ITER_ = 60
 
 _ITER_LIST_ = [0, 5, 10, 15, 20, 30, 50, 100, 200, 500]
+
+_REGEN_ = False
+_REGEN_START_ = 100
 
 def main():
     # * setup cuda if available
@@ -28,19 +31,19 @@ def main():
     print (f'model: {_MODEL_}')    
     
     params = {}
-    with open(f'../models/{_MODEL_}/{_MODEL_}_params.json', 'r') as openfile:
+    with open(f'_models/{_MODEL_}/{_MODEL_}_params.json', 'r') as openfile:
         params = json.load(openfile)
     
     # * get perception function
     pfunc = None
-    ppath = f'../models/{_MODEL_}/{_MODEL_}_perception_func.pyc'
+    ppath = f'_models/{_MODEL_}/{_MODEL_}_perception_func.pyc'
     if os.path.exists(ppath):
         with open(ppath, 'rb') as pfile:
             pfunc = pickle.load(pfile)
             pfile.close()
         
     model = NCA(_name=params['_NAME_'], _channels=params['_CHANNELS_'], _hidden=params['_HIDDEN_'], _device=_DEVICE_, _model_type=params['_MODEL_TYPE_'], _pfunc=pfunc)
-    model.load_state_dict(torch.load(f'../models/{_MODEL_}/{_MODEL_}.pt', map_location=_DEVICE_))
+    model.load_state_dict(torch.load(f'_models/{_MODEL_}/{_MODEL_}.pt', map_location=_DEVICE_))
     model.eval()
         
     # * create seed
@@ -93,20 +96,52 @@ def main():
     
     # * save tensor every _DELTA_ITER_ iterations
     with torch.no_grad():
-        for i in range(_MAX_ITER_+1):
-            
-            if _USE_DELTA_:
-                if i % _DELTA_ITER_ == 0:
-                    Vox().load_from_tensor(x).save_to_obj(_name=f'iter_{i}', _dir=_OBJ_DIR_)
-                    print (f'saving .obj for iteration {i}...')
-                    Vox().save_nca_state(x.cpu().detach(), _name=f'iter_{i}', _dir=_OBJ_DIR_)
-            else:
-                if i in _ITER_LIST_:
-                    Vox().load_from_tensor(x).save_to_obj(_name=f'iter_{i}', _dir=_OBJ_DIR_)
-                    print (f'saving .obj for iteration {i}...')
-                    Vox().save_nca_state(x.cpu().detach(), _name=f'iter_{i}', _dir=_OBJ_DIR_)
+        
+        if not _REGEN_:
+            for i in range(_MAX_ITER_+1):
+                if _USE_DELTA_:
+                    if i % _DELTA_ITER_ == 0:
+                        Vox().load_from_tensor(x).save_to_obj(_name=f'iter_{i}', _dir=_OBJ_DIR_)
+                        print (f'saving .obj for iteration {i}...')
+                        Vox().save_nca_state(x.cpu().detach(), _name=f'iter_{i}', _dir=_OBJ_DIR_)
+                else:
+                    if i in _ITER_LIST_:
+                        Vox().load_from_tensor(x).save_to_obj(_name=f'iter_{i}', _dir=_OBJ_DIR_)
+                        print (f'saving .obj for iteration {i}...')
+                        Vox().save_nca_state(x.cpu().detach(), _name=f'iter_{i}', _dir=_OBJ_DIR_)     
+                x = model(x)
+        else:
+            # * get model to regen_start iteration
+            for i in range(_REGEN_START_):
+                x = model(x)
                 
-            x = model(x)
+            # * apply cellular damage
+            mask = torch.tensor(voxutil.half_volume_mask(size, '+x')).to(_DEVICE_)
+            print (f'mask.shape: {mask.shape}')
+            x *= mask
+            
+            # * randomize angles for steerable models
+            if model.isotropic_type() == 1:
+                inv_mask = ~mask
+                x[:, -1:] += torch.rand(size, size, size)*np.pi*2.0*inv_mask
+            elif model.isotropic_type() == 3:
+                inv_mask = ~mask
+                x[:, -1:] += torch.rand(size, size, size)*np.pi*2.0*inv_mask
+                x[:, -2:-1] += torch.rand(size, size, size)*np.pi*2.0*inv_mask
+                x[:, -3:-2] += torch.rand(size, size, size)*np.pi*2.0*inv_mask
+                
+            for i in range(_MAX_ITER_+1):
+                if _USE_DELTA_:
+                    if i % _DELTA_ITER_ == 0:
+                        Vox().load_from_tensor(x).save_to_obj(_name=f'regen_iter_{i}', _dir=_OBJ_DIR_)
+                        print (f'saving .obj for iteration {i}...')
+                        Vox().save_nca_state(x.cpu().detach(), _name=f'regen_iter_{i}', _dir=_OBJ_DIR_)
+                else:
+                    if i in _ITER_LIST_:
+                        Vox().load_from_tensor(x).save_to_obj(_name=f'regen_iter_{i}', _dir=_OBJ_DIR_)
+                        print (f'saving .obj for iteration {i}...')
+                        Vox().save_nca_state(x.cpu().detach(), _name=f'regen_iter_{i}', _dir=_OBJ_DIR_)
+                x = model(x)
     
 if __name__ == '__main__':
     main()

@@ -2,7 +2,7 @@
     "_NAME_": "earth_aniso",
     "_SIZE_": 24,
     "_PAD_": 4,
-    "_SEED_POINTS_": 0,
+    "_SEED_POINTS_": 4,
     "_SEED_DIST_": 4,
     "_SEED_DIC_": {
         "center": "red",

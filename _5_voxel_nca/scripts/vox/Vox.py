@@ -60,7 +60,7 @@ class Vox(object):
                     
                     # * make sure voxel is alive (alpha > 0.1)
                     if self.rgba[x, y, z, 3] > 0.1:
-                        filt_voxels.append({'pos': [x, z, y], 'color': self.rgba[x, y, z]})
+                        filt_voxels.append({'pos': [y, z, x], 'color': self.rgba[x, y, z]})
                         # # * make sure not on edge voxel
                         # if x != 0 and x != size-1 and y != 0 and y != size-1 and z != 0 and z != size-1:
                             
@@ -94,8 +94,8 @@ class Vox(object):
             color = np.array(voxel['color'])
             
             a = color[3]
-            if a < 0.2:
-                a *= 0.5
+            # if a < 0.2:
+            #     a *= 0.5
 
             mtl_file.write(f'newmtl color{i}\n')
             mtl_file.write('Ka 0.0 0.0 0.0\n')
