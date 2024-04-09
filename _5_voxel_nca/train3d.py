@@ -53,7 +53,7 @@ _INFO_RATE_ = 100
 _SAVE_RATE_ = 5000
 
 # * load from checkpoint
-load_checkpoint = True
+load_checkpoint = False
 checkpoint_dir = '_checkpoints/earth_aniso_single'
 checkpoint_model = 'earth_aniso_single_cp20000'
 
