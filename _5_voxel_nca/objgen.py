@@ -8,9 +8,9 @@ from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
-_MODEL_ = 'earth_aniso'
+_MODEL_ = 'earth_aniso_single'
 _DEVICE_ = 'cuda'
-_OBJ_DIR_ = f'../obj/{_MODEL_}_regen_0'
+_OBJ_DIR_ = f'../obj/{_MODEL_}_regen_2'
 
 _USE_DELTA_ = False
 _DELTA_ITER_ = 10
@@ -18,8 +18,8 @@ _MAX_ITER_ = 60
 
 _ITER_LIST_ = [0, 5, 10, 15, 20, 30, 50, 100, 200, 500]
 
-_REGEN_ = False
-_REGEN_START_ = 100
+_REGEN_ = True
+_REGEN_START_ = 200
 
 def main():
     # * setup cuda if available
@@ -115,9 +115,13 @@ def main():
             for i in range(_REGEN_START_):
                 x = model(x)
                 
+            Vox().load_from_tensor(x).save_to_obj(_name=f'init_{_REGEN_START_}', _dir=_OBJ_DIR_)
+            print (f'saving .obj for iteration {_REGEN_START_}...')
+            Vox().save_nca_state(x.cpu().detach(), _name=f'init_{_REGEN_START_}', _dir=_OBJ_DIR_)
+                
             # * apply cellular damage
-            mask = torch.tensor(voxutil.half_volume_mask(size, '+x')).to(_DEVICE_)
-            print (f'mask.shape: {mask.shape}')
+            mask = torch.tensor(voxutil.half_volume_mask(size, 'y-')).to(_DEVICE_)
+            mask = mask[None, None, ...]
             x *= mask
             
             # * randomize angles for steerable models
@@ -141,6 +145,7 @@ def main():
                         Vox().load_from_tensor(x).save_to_obj(_name=f'regen_iter_{i}', _dir=_OBJ_DIR_)
                         print (f'saving .obj for iteration {i}...')
                         Vox().save_nca_state(x.cpu().detach(), _name=f'regen_iter_{i}', _dir=_OBJ_DIR_)
+                        
                 x = model(x)
     
 if __name__ == '__main__':

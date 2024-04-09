@@ -14,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'earth_aniso_single'
+_NAME_ = 'earth_aniso_single_0.5'
 _NOTE_ = '''
-training earth aniso for regeneration showcase
+training earth aniso for regeneration showcase, cont.
 '''
 _SIZE_ = 24
 _PAD_ = 4
@@ -53,9 +53,9 @@ _INFO_RATE_ = 100
 _SAVE_RATE_ = 5000
 
 # * load from checkpoint
-load_checkpoint = False
-checkpoint_dir = '_checkpoints/rubiks_isoRmat_v0'
-checkpoint_model = 'rubiks_isoRmat_v0_cp20000'
+load_checkpoint = True
+checkpoint_dir = '_checkpoints/earth_aniso_single'
+checkpoint_model = 'earth_aniso_single_cp20000'
 
 def force_cudnn_initialization():
     voxutil.logprint(f'_models/{_NAME_}/{_LOG_FILE_}', 'forcing cuDNN initialization...')
