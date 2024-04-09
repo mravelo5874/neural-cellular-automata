@@ -1,0 +1,51 @@
+****************
+timestamp: 2024-04-09 00:37:06.469689
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 80
+nca parameter count: 12416
+nca isotropic type: 0
+loading checkpoint: _checkpoints/earth_aniso_single/earth_aniso_single_cp20000...
+model: earth_aniso_single_0.5
+type: 0
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.001>1e-05 w/ 2000 step
+seed.shape: [1, 16, 32, 32, 32]
+target.shape: [4, 4, 32, 32, 32]
+starting training w/ 20001 epochs...
+[100/20001]	 1.724it/s	 time: 0:00:58~3:12:22	 loss: 4.962>2.902	 lr: 5.999e-05 ▲
+[200/20001]	 1.709it/s	 time: 0:01:57~3:13:03	 loss: 5.167>2.877	 lr: 0.00010949 ▲
+[300/20001]	 1.724it/s	 time: 0:02:54~3:10:26	 loss: 5.484>2.877	 lr: 0.000159 ▲
+[400/20001]	 1.724it/s	 time: 0:03:52~3:09:28	 loss: 5.543>2.877	 lr: 0.00020849 ▲
+[500/20001]	 1.718it/s	 time: 0:04:51~3:09:09	 loss: 7.094>2.877	 lr: 0.000258 ▲
+[600/20001]	 1.724it/s	 time: 0:05:48~3:07:32	 loss: 8.374>2.877	 lr: 0.0003075 ▲
+[700/20001]	 1.724it/s	 time: 0:06:46~3:06:34	 loss: 7.494>2.877	 lr: 0.00035699 ▲
+[800/20001]	 1.724it/s	 time: 0:07:44~3:05:36	 loss: 7.877>2.877	 lr: 0.0004065 ▲
+[900/20001]	 1.721it/s	 time: 0:08:43~3:04:59	 loss: 8.443>2.877	 lr: 0.00045599 ▲
+[1000/20001]	 1.721it/s	 time: 0:09:41~3:03:59	 loss: 9.081>2.877	 lr: 0.00050549 ▲
+[1100/20001]	 1.721it/s	 time: 0:10:39~3:02:59	 loss: 8.543>2.877	 lr: 0.000555 ▲
+[1200/20001]	 1.722it/s	 time: 0:11:37~3:01:59	 loss: 7.917>2.877	 lr: 0.0006045 ▲
+[1300/20001]	 1.72it/s	 time: 0:12:36~3:01:14	 loss: 7.976>2.877	 lr: 0.000654 ▲
+[1400/20001]	 1.72it/s	 time: 0:13:34~3:00:14	 loss: 7.05>2.877	 lr: 0.0007035 ▲
+[1500/20001]	 1.718it/s	 time: 0:14:33~2:59:27	 loss: 7.956>2.877	 lr: 0.00075299 ▲
+[1600/20001]	 1.72it/s	 time: 0:15:30~2:58:15	 loss: 7.984>2.877	 lr: 0.0008025 ▲
+[1700/20001]	 1.719it/s	 time: 0:16:29~2:57:26	 loss: 7.88>2.877	 lr: 0.000852 ▲
+[1800/20001]	 1.719it/s	 time: 0:17:27~2:56:26	 loss: 8.175>2.877	 lr: 0.0009015 ▲
+[1900/20001]	 1.719it/s	 time: 0:18:25~2:55:26	 loss: 8.153>2.877	 lr: 0.000951 ▲
+[2000/20001]	 1.718it/s	 time: 0:19:24~2:54:36	 loss: 9.137>2.877	 lr: 0.00099951 ▲
