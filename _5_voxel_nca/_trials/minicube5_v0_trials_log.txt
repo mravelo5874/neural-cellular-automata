@@ -1,0 +1,4 @@
+****************
+timestamp: 2024-04-09 10:49:37.529974
+initializing trials...
+device: cpu
