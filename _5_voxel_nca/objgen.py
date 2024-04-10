@@ -8,9 +8,9 @@ from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
-_MODEL_ = 'earth_aniso_single_1'
+_MODEL_ = 'rubiks_black_cube_iso3_v4'
 _DEVICE_ = 'cuda'
-_OBJ_DIR_ = f'../obj/{_MODEL_}_regen_4'
+_OBJ_DIR_ = f'../obj/{_MODEL_}_iso_1'
 
 _USE_DELTA_ = False
 _DELTA_ITER_ = 10
@@ -18,8 +18,10 @@ _MAX_ITER_ = 60
 
 _ITER_LIST_ = [0, 5, 10, 15, 20, 30, 50, 100, 200, 500]
 
-_REGEN_ = True
+_REGEN_ = False
 _REGEN_START_ = 100
+
+_ISO_DEMO_ = True
 
 def main():
     # * setup cuda if available
@@ -56,15 +58,47 @@ def main():
     _SEED_DIC_ = params['_SEED_DIC_']
     _SEED_HID_INFO_ = params['_SEED_HID_INFO_']
     _TARGET_VOX_ = params['_TARGET_VOX_']
-    size = int(_SIZE_+(2*_PAD_))
-    if _USE_SPHERE_SEED_:
-        seed = voxutil.seed_3d(_size=size, _channels=_CHANNELS_, _points=_SEED_POINTS_, _radius=_SEED_DIST_).unsqueeze(0).to(_DEVICE_)
+    
+    
+    # place two seeds above and below at different angles
+    if _ISO_DEMO_:     
+        size = int(_SIZE_+(2*_PAD_))
+        if _USE_SPHERE_SEED_:
+            seed = voxutil.seed_3d(_size=size, _channels=_CHANNELS_, _points=_SEED_POINTS_, _radius=_SEED_DIST_).unsqueeze(0).to(_DEVICE_)
+        else:
+            seed = voxutil.custom_seed(_size=size, _channels=_CHANNELS_, _dist=_SEED_DIST_, _hidden_info=_SEED_HID_INFO_,
+                                        _center=_SEED_DIC_['center'], 
+                                        _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
+                                        _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
+                                        _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(_DEVICE_)
+        
+        half=size//2
+        q=half//2
+        d=q//2
+        size *= 2
+        size = int(size)
+        
+        clone = seed.detach().clone()[:, :, half-q:half+q, half-q:half+q, half-q:half+q]
+        seed = torch.zeros([1, _CHANNELS_, size, size, size])
+        
+        h=size//2
+        
+        # * top half
+        seed[:, :, h-q:h+q, h-q:h+q, h+d:h+q+q+d] = torch.rot90(clone, 2, (2, 3))
+        # * bottom half
+        seed[:, :, h-q:h+q, h-q:h+q, h-q-q-d:h-d] = torch.rot90(clone, 1, (2, 3))
+        
     else:
-        seed = voxutil.custom_seed(_size=size, _channels=_CHANNELS_, _dist=_SEED_DIST_, _hidden_info=_SEED_HID_INFO_,
-                                    _center=_SEED_DIC_['center'], 
-                                    _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
-                                    _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
-                                    _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(_DEVICE_)
+        size = int(_SIZE_+(2*_PAD_))
+        if _USE_SPHERE_SEED_:
+            seed = voxutil.seed_3d(_size=size, _channels=_CHANNELS_, _points=_SEED_POINTS_, _radius=_SEED_DIST_).unsqueeze(0).to(_DEVICE_)
+        else:
+            seed = voxutil.custom_seed(_size=size, _channels=_CHANNELS_, _dist=_SEED_DIST_, _hidden_info=_SEED_HID_INFO_,
+                                        _center=_SEED_DIC_['center'], 
+                                        _plus_x=_SEED_DIC_['plus_x'], _minus_x=_SEED_DIC_['minus_x'],
+                                        _plus_y=_SEED_DIC_['plus_y'], _minus_y=_SEED_DIC_['minus_y'],
+                                        _plus_z=_SEED_DIC_['plus_z'], _minus_z=_SEED_DIC_['minus_z']).unsqueeze(0).to(_DEVICE_)   
+
     # * randomize channels
     if model.isotropic_type() == 1:
             seed[:1, -1:] = torch.rand(size, size, size)*np.pi*2.0
@@ -72,6 +106,8 @@ def main():
         seed[:1, -1:] = torch.rand(size, size, size)*np.pi*2.0
         seed[:1, -2:-1] = torch.rand(size, size, size)*np.pi*2.0
         seed[:1, -3:-2] = torch.rand(size, size, size)*np.pi*2.0
+        
+    #Vox().load_from_tensor(seed).render(_show_grid=True)
         
     # * set tensor
     x = seed.detach().clone()
