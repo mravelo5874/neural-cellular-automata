@@ -14,11 +14,11 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'rubiks_iso3'
+_NAME_ = 'cowboy16_iso3'
 _NOTE_ = '''
-training rubiks cube for isotropy showcase, more epochs!
+training cowboy16 for isotropy showcase, more epochs!
 '''
-_SIZE_ = 15
+_SIZE_ = 16
 _PAD_ = 4
 _USE_SPHERE_SEED_ = False
 _SEED_POINTS_ = 2
@@ -33,7 +33,7 @@ _SEED_DIC_ = {
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/rubiks.vox'
+_TARGET_VOX_ = '../vox/cowboy16.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
