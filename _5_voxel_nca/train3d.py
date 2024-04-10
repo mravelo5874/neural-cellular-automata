@@ -14,28 +14,28 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'earth_aniso_single_1'
+_NAME_ = 'rubiks_iso3'
 _NOTE_ = '''
-training earth aniso for regeneration showcase, more epochs!
+training rubiks cube for isotropy showcase, more epochs!
 '''
-_SIZE_ = 24
+_SIZE_ = 15
 _PAD_ = 4
 _USE_SPHERE_SEED_ = False
 _SEED_POINTS_ = 2
-_SEED_DIST_ = 2
+_SEED_DIST_ = 3
 _SEED_DIC_ = {
-    'center': 'black',
-    'plus_x': None,
+    'center': None,
+    'plus_x': 'red',
     'minus_x': None,
-    'plus_y': None,
+    'plus_y': 'green',
     'minus_y': None,
-    'plus_z': None,
+    'plus_z': 'blue',
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/earth.vox'
+_TARGET_VOX_ = '../vox/rubiks.vox'
 # * model parameters
-_MODEL_TYPE_ = Perception.ANISOTROPIC
+_MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters

@@ -8,9 +8,9 @@ from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
-_MODEL_ = 'earth_aniso_single'
+_MODEL_ = 'earth_aniso_single_1'
 _DEVICE_ = 'cuda'
-_OBJ_DIR_ = f'../obj/{_MODEL_}_regen_2'
+_OBJ_DIR_ = f'../obj/{_MODEL_}_regen_4'
 
 _USE_DELTA_ = False
 _DELTA_ITER_ = 10
@@ -19,7 +19,7 @@ _MAX_ITER_ = 60
 _ITER_LIST_ = [0, 5, 10, 15, 20, 30, 50, 100, 200, 500]
 
 _REGEN_ = True
-_REGEN_START_ = 200
+_REGEN_START_ = 100
 
 def main():
     # * setup cuda if available

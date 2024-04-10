@@ -1,3 +1,4 @@
+import os
 import datetime
 import numpy as np
 import torch
@@ -75,11 +76,11 @@ def main():
     for T in range(_TRIALS_):
 
         voxutil.logprint(f'_trials/{_LOG_FILE_}', '------------------------')
-        voxutil.logprint(f'_trials/{_LOG_FILE_}', 'beginning trial {T}...')
+        voxutil.logprint(f'_trials/{_LOG_FILE_}', f'beginning trial {T}...')
         trial_start = datetime.datetime.now()
     
         # * create / load model
-        model = NCA(_name=_NAME_, _log_file=_LOG_FILE_, _channels=_CHANNELS_, _hidden=_HIDDEN_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
+        model = NCA(_name=_NAME_, _log_file=None, _channels=_CHANNELS_, _hidden=_HIDDEN_, _device=_DEVICE_, _model_type=_MODEL_TYPE_)
         voxutil.logprint(f'_trials/{_LOG_FILE_}', 'training new model from scratch...')
 
         # * save model isotropic type
