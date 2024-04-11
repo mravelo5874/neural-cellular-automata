@@ -8,9 +8,9 @@ from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
-_MODEL_ = 'rubiks_iso3'
+_MODEL_ = 'cowboy16_iso3'
 _DEVICE_ = 'cuda'
-_OBJ_DIR_ = f'../obj/{_MODEL_}_0'
+_OBJ_DIR_ = f'../obj/{_MODEL_}_3'
 
 _USE_DELTA_ = False
 _DELTA_ITER_ = 10
@@ -84,9 +84,9 @@ def main():
         h=size//2
         
         # * top half
-        seed[:, :, h-q:h+q, h-q:h+q, h+d+d:h+q+q+d+d] = torch.rot90(clone, 2, (2, 3))
+        seed[:, :, h-q:h+q, h-q:h+q, h+d:h+q+q+d] = torch.rot90(clone, 2, (2, 3))
         # * bottom half
-        seed[:, :, h-q:h+q, h-q:h+q, h-q-q-d-d:h-d-d] = torch.rot90(clone, 1, (2, 3))
+        seed[:, :, h-q:h+q, h-q:h+q, h-q-q-d:h-d] = torch.rot90(clone, 1, (2, 3))
         
     else:
         size = int(_SIZE_+(2*_PAD_))
@@ -107,7 +107,7 @@ def main():
         seed[:1, -2:-1] = torch.rand(size, size, size)*np.pi*2.0
         seed[:1, -3:-2] = torch.rand(size, size, size)*np.pi*2.0
         
-    Vox().load_from_tensor(seed).render(_show_grid=True)
+    # Vox().load_from_tensor(seed).render(_show_grid=True)
         
     # * set tensor
     x = seed.detach().clone()
