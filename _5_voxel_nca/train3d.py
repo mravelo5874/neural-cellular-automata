@@ -14,7 +14,7 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'maze25_iso3_'
+_NAME_ = 'maze25_aniso'
 _NOTE_ = '''
 Trying new complex maze with per-cell color.
 '''
@@ -24,18 +24,18 @@ _USE_SPHERE_SEED_ = False
 _SEED_POINTS_ = 2
 _SEED_DIST_ = 2
 _SEED_DIC_ = {
-    'center': None,
-    'plus_x': 'red',
+    'center': 'black',
+    'plus_x': None,
     'minus_x': None,
-    'plus_y': 'green',
+    'plus_y': None,
     'minus_y': None,
-    'plus_z': 'blue',
+    'plus_z': None,
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
 _TARGET_VOX_ = '../voxnp/maze25.npy'
 # * model parameters
-_MODEL_TYPE_ = Perception.YAW_ISO_V3
+_MODEL_TYPE_ = Perception.ANISOTROPIC
 _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
