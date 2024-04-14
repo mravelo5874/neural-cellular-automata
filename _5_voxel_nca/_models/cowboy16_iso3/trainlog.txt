@@ -347,3 +347,34 @@ train time: 2:11:02
 model [cowboy16_iso3] saved to _models...
 elapsed time: 2:11:04
 ****************
+****************
+timestamp: 2024-04-13 22:58:46.096178
+initializing training...
+========================
+available cuda devices:
+0: Quadro RTX 6000, mem:22690MB, mpc:72
+1: Quadro RTX 6000, mem:22690MB, mpc:72
+2: Quadro RTX 6000, mem:22690MB, mpc:72
+3: Quadro RTX 6000, mem:22690MB, mpc:72
+4: Quadro RTX 6000, mem:22690MB, mpc:72
+5: Quadro RTX 6000, mem:22690MB, mpc:72
+6: Quadro RTX 6000, mem:22690MB, mpc:72
+7: Quadro RTX 6000, mem:22690MB, mpc:72
+========================
+device: cuda
+forcing cuDNN initialization...
+nca perception channels: 75
+nca parameter count: 11776
+nca isotropic type: 1
+training new model from scratch...
+model: cowboy16_iso3
+type: YAW_ISO_V3
+channels: 16
+hidden: 128
+hidden-seed-info: False
+batch-size: 4
+pool-size: 32
+lr: 0.0005>1e-05 w/ 2000 step
+seed.shape: [1, 16, 24, 24, 24]
+target.shape: [4, 4, 24, 24, 24]
+starting training w/ 25001 epochs...
