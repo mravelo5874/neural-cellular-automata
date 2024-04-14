@@ -14,15 +14,15 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_iso3'
+_NAME_ = 'maze25_iso3_'
 _NOTE_ = '''
-training cowboy16 for isotropy showcase, more epochs!
+Trying new complex maze with per-cell color.
 '''
-_SIZE_ = 16
+_SIZE_ = 25
 _PAD_ = 4
 _USE_SPHERE_SEED_ = False
 _SEED_POINTS_ = 2
-_SEED_DIST_ = 3
+_SEED_DIST_ = 2
 _SEED_DIC_ = {
     'center': None,
     'plus_x': 'red',
@@ -33,7 +33,7 @@ _SEED_DIC_ = {
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/cowboy16.vox'
+_TARGET_VOX_ = '../voxnp/maze25.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.YAW_ISO_V3
 _CHANNELS_ = 16
