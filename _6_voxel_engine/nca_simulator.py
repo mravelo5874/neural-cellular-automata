@@ -453,3 +453,109 @@ class NCASimulator:
                 self.mutex.acquire()
                 self.x = self.seed.detach().clone()
                 self.mutex.release()
+            
+            # * eight rotations from 0 to 7/4 pi
+            if _num == 3:
+                
+                full=self.seed.shape[2]
+                half=full//2
+                q=half//2
+                d=q//2
+                
+                # * gather init seed cells
+                clone = self.seed.detach().clone()[:, :, half-d:half+d, half-d:half+d, half-d:half+d]
+                self.seed = torch.zeros_like(self.seed)
+                
+                chn = clone.shape[1]
+                sz = clone.shape[-1]
+                
+                init_seeds = []
+                s = clone.shape[-1]
+                for x in range(s):
+                    for y in range(s):
+                        for z in range(s):
+                            if clone[:, 3, x, y, z] > 0:
+                                init_seeds.append((x, y, z))
+                                
+                # * top half              
+                # * seed 0 -> 0
+                self.seed[:, :,         q-d:q+d,            q-d:q+d,    (q*3)-d:(q*3)+d] = clone
+                
+                # * seed 1 -> 1/4 pi
+                cloney = torch.zeros_like(clone)
+                for i in range(len(init_seeds)):
+                    x, y, z = init_seeds[i]
+                    cell = clone[:, :, x, y, z]
+                    p = utils.rotate_voxel(sz, np.array([x, y, z], dtype=float), 0, 0, np.pi*(1/4))
+                    cloney[:, :, int(p[0]), int(p[1]), int(p[2])] = cell
+                self.seed[:, :, (q*3)-d:(q*3)+d,            q-d:q+d,    (q*3)-d:(q*3)+d] = cloney
+                
+                # * seed 2 -> 1/2 pi
+                cloney = torch.zeros_like(clone)
+                for i in range(len(init_seeds)):
+                    x, y, z = init_seeds[i]
+                    cell = clone[:, :, x, y, z]
+                    p = utils.rotate_voxel(sz, np.array([x, y, z], dtype=float), 0, 0, np.pi*(1/2))
+                    cloney[:, :, int(p[0]), int(p[1]), int(p[2])] = cell
+                self.seed[:, :, (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d] = cloney
+                
+                # * seed 3 -> 3/4 pi
+                cloney = torch.zeros_like(clone)
+                for i in range(len(init_seeds)):
+                    x, y, z = init_seeds[i]
+                    cell = clone[:, :, x, y, z]
+                    p = utils.rotate_voxel(sz, np.array([x, y, z], dtype=float), 0, 0, np.pi*(3/4))
+                    cloney[:, :, int(p[0]), int(p[1]), int(p[2])] = cell
+                    self.seed[:, :,         q-d:q+d,    (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d] = cloney
+                
+                # # * bottom half
+                # * seed 4 -> pi
+                cloney = torch.zeros_like(clone)
+                for i in range(len(init_seeds)):
+                    x, y, z = init_seeds[i]
+                    cell = clone[:, :, x, y, z]
+                    p = utils.rotate_voxel(sz, np.array([x, y, z], dtype=float), 0, 0, np.pi*(1/1))
+                    cloney[:, :, int(p[0]), int(p[1]), int(p[2])] = cell
+                    self.seed[:, :,         q-d:q+d,            q-d:q+d,            q-d:q+d] = cloney
+                
+                # * seed 5 -> 5/4 pi
+                cloney = torch.zeros_like(clone)
+                for i in range(len(init_seeds)):
+                    x, y, z = init_seeds[i]
+                    cell = clone[:, :, x, y, z]
+                    p = utils.rotate_voxel(sz, np.array([x, y, z], dtype=float), 0, 0, np.pi*(5/4))
+                    cloney[:, :, int(p[0]), int(p[1]), int(p[2])] = cell
+                    self.seed[:, :, (q*3)-d:(q*3)+d,            q-d:q+d,            q-d:q+d] = cloney
+                    
+                # * seed 6 -> 3/2 pi
+                cloney = torch.zeros_like(clone)
+                for i in range(len(init_seeds)):
+                    x, y, z = init_seeds[i]
+                    cell = clone[:, :, x, y, z]
+                    p = utils.rotate_voxel(sz, np.array([x, y, z], dtype=float), 0, 0, np.pi*(3/2))
+                    cloney[:, :, int(p[0]), int(p[1]), int(p[2])] = cell
+                    self.seed[:, :, (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d,            q-d:q+d] = cloney
+                    
+                # * seed 7 -> 7/4 pi
+                cloney = torch.zeros_like(clone)
+                for i in range(len(init_seeds)):
+                    x, y, z = init_seeds[i]
+                    cell = clone[:, :, x, y, z]
+                    p = utils.rotate_voxel(sz, np.array([x, y, z], dtype=float), 0, 0, np.pi*(7/4))
+                    cloney[:, :, int(p[0]), int(p[1]), int(p[2])] = cell    
+                    self.seed[:, :,         q-d:q+d,    (q*3)-d:(q*3)+d,            q-d:q+d] = cloney
+                
+                # * randomize channels
+                if self.model.isotropic_type() == 1:
+                        self.seed[:1, -1:] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                elif self.model.isotropic_type() == 3:
+                    self.seed[:1, -1:] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                    self.seed[:1, -2:-1] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                    self.seed[:1, -3:-2] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                    
+                self.mutex.acquire()
+                self.x = self.seed.detach().clone()
+                self.mutex.release()
+                
+                
+                
