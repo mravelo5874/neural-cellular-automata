@@ -14,11 +14,11 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'maze25_aniso_nodmg'
+_NAME_ = 'maze16_aniso'
 _NOTE_ = '''
-Trying new complex maze with per-cell color. NO DAMAGE this time
+trying easier maze16 model
 '''
-_SIZE_ = 25
+_SIZE_ = 16
 _PAD_ = 4
 _USE_SPHERE_SEED_ = False
 _SEED_POINTS_ = 2
@@ -33,19 +33,19 @@ _SEED_DIC_ = {
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../voxnp/maze25.npy'
+_TARGET_VOX_ = '../voxnp/maze16.npy'
 # * model parameters
 _MODEL_TYPE_ = Perception.ANISOTROPIC
 _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
-_EPOCHS_ = 50_000
+_EPOCHS_ = 25_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
 _LOWER_LR_ = 1e-5
 _LR_STEP_ = 2000
-_NUM_DAMG_ = 0
+_NUM_DAMG_ = 2
 _DAMG_RATE_ = 5
 # * logging parameters
 _LOG_FILE_ = 'trainlog.txt'
