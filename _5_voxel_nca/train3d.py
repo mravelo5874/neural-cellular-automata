@@ -36,10 +36,10 @@ _SEED_HID_INFO_ = False
 _TARGET_VOX_ = '../vox/burger.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.ISO_ROT_MATRIX
-_CHANNELS_ = 24
+_CHANNELS_ = 20
 _HIDDEN_ = 128
 # * training parameters
-_EPOCHS_ = 50_000
+_EPOCHS_ = 25_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
 _UPPER_LR_ = 5e-4
