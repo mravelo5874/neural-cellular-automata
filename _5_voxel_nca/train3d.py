@@ -33,7 +33,7 @@ _SEED_DIC_ = {
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/vurger.vox'
+_TARGET_VOX_ = '../vox/burger.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.ISO_ROT_MATRIX
 _CHANNELS_ = 24
