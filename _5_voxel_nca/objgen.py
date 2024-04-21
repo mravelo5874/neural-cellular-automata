@@ -3,25 +3,26 @@ import json
 import torch
 import pickle
 import numpy as np
+import torch.nn.functional as func
 
 from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
-_MODEL_ = 'cowboy16_iso3'
+_MODEL_ = 'cowboy16_isoRmat_v0'
 _DEVICE_ = 'cuda'
-_OBJ_DIR_ = f'../obj/{_MODEL_}_3'
+_OBJ_DIR_ = f'../obj/{_MODEL_}_regen_thesis'
 
 _USE_DELTA_ = False
 _DELTA_ITER_ = 10
 _MAX_ITER_ = 60
 
-_ITER_LIST_ = [0, 5, 10, 15, 20, 30, 50, 100, 200, 500]
+_ITER_LIST_ = [0, 5, 10, 15, 20, 30, 50, 75, 100, 200, 500]
 
-_REGEN_ = False
-_REGEN_START_ = 100
+_REGEN_ = True
+_REGEN_START_ = 200
 
-_ISO_DEMO_ = True
+_ISO_DEMO_ = False
 
 def main():
     # * setup cuda if available
@@ -156,7 +157,7 @@ def main():
             Vox().save_nca_state(x.cpu().detach(), _name=f'init_{_REGEN_START_}', _dir=_OBJ_DIR_)
                 
             # * apply cellular damage
-            mask = torch.tensor(voxutil.half_volume_mask(size, 'y-')).to(_DEVICE_)
+            mask = torch.tensor(voxutil.half_volume_mask(size, 'x+')).to(_DEVICE_)
             mask = mask[None, None, ...]
             x *= mask
             
@@ -183,6 +184,14 @@ def main():
                         Vox().save_nca_state(x.cpu().detach(), _name=f'regen_iter_{i}', _dir=_OBJ_DIR_)
                         
                 x = model(x)
+                
+    # compute L2 loss
+    target = torch.tensor(target, dtype=torch.float32).unsqueeze(0)
+    target = func.pad(target, (_PAD_, _PAD_, _PAD_, _PAD_, _PAD_, _PAD_), 'constant')
+    print (f'x.shape: {x.shape}')
+    print (f'target.shape: {target.shape}')
+    l2_loss = torch.mean(torch.square(x[:, :4] - target))
+    print (f'l2 loss: {l2_loss}')
     
 if __name__ == '__main__':
     main()
