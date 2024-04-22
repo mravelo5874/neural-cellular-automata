@@ -695,3 +695,32 @@ class NCASimulator:
                 self.x = self.seed.detach().clone()
                 self.mutex.release()
                 
+            if _num == 6:
+                full=self.seed.shape[2]
+                half=full//2
+                q=half//2
+                d=q//2
+                
+                # * gather init seed cells
+                clone = self.seed.detach().clone()[:, :, half-d:half+d, half-d:half+d, half-d:half+d]
+                self.seed = torch.zeros_like(self.seed)
+                
+                chn = clone.shape[1]
+                sz = clone.shape[-1]
+                
+                init_seeds = []
+                s = clone.shape[-1]
+                for x in range(s):
+                    for y in range(s):
+                        for z in range(s):
+                            if clone[:, 3, x, y, z] > 0:
+                                init_seeds.append((x, y, z))
+                                
+                # * seed 1 -> 1/4 pi
+                cloney = torch.zeros_like(clone)
+                for i in range(len(init_seeds)):
+                    x, y, z = init_seeds[i]
+                    cell = clone[:, :, x, y, z]
+                    p = utils.rotate_voxel(sz, np.array([x, y, z], dtype=float), np.pi*(1/4), 0, np.pi*(1/4))
+                    cloney[:, :, int(p[0]), int(p[1]), int(p[2])] = cell
+                self.seed[:, :, half-d:half+d, half-d:half+d, half-d:half+d] = cloney
