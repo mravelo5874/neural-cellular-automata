@@ -716,11 +716,15 @@ class NCASimulator:
                             if clone[:, 3, x, y, z] > 0:
                                 init_seeds.append((x, y, z))
                                 
-                # * seed 1 -> 1/4 pi
+
                 cloney = torch.zeros_like(clone)
                 for i in range(len(init_seeds)):
                     x, y, z = init_seeds[i]
                     cell = clone[:, :, x, y, z]
-                    p = utils.rotate_voxel(sz, np.array([x, y, z], dtype=float), np.pi*(1/4), 0, np.pi*(1/4))
+                    p = utils.rotate_voxel(sz, np.array([x, y, z], dtype=float), 0, 0, np.pi*(1/4))
                     cloney[:, :, int(p[0]), int(p[1]), int(p[2])] = cell
                 self.seed[:, :, half-d:half+d, half-d:half+d, half-d:half+d] = cloney
+                
+                self.mutex.acquire()
+                self.x = self.seed.detach().clone()
+                self.mutex.release()
