@@ -68,7 +68,7 @@ class NCASimulator:
         _SEED_DIST_ = params['_SEED_DIST_']
         _SEED_DIC_ = params['_SEED_DIC_']
         _SEED_HID_INFO_ = params['_SEED_HID_INFO_']
-        self.size = int(_SIZE_+(3*_PAD_)*3)
+        self.size = int(_SIZE_+(2*_PAD_+2)*2)
         if _USE_SPHERE_SEED_:
             self.seed = voxutil.seed_3d(_size=self.size, _channels=_CHANNELS_, _points=_SEED_POINTS_, _radius=_SEED_DIST_).unsqueeze(0).to(self.device)
         else:
@@ -557,5 +557,35 @@ class NCASimulator:
                 self.x = self.seed.detach().clone()
                 self.mutex.release()
                 
+            # * copy seed in each quadrant with a different rotation
+            if _num == 4:
+                full=self.seed.shape[2]
+                half=full//2
+                q=half//2
+                d=q//2
+                movy = 8
+                movx = 5
+                subz = 0
+     
+                clone = self.seed.detach().clone()[:, :, half-d:half+d, half-d:half+d, half-d:half+d]
+                self.seed = torch.zeros_like(self.seed)
                 
+                # * bottom half
+                self.seed[:, :,         q-d +movx:q+d +movx,            q-d +movy:q+d +movy,            q-d +subz:q+d +subz] = torch.rot90(clone, 3, (2, 3))
+                self.seed[:, :, (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d,            q-d +subz:q+d +subz] = clone
+                # * top half
+                self.seed[:, :,         q-d +movx:q+d +movx,            q-d +movy:q+d +movy,    (q*3)-d:(q*3)+d] = torch.rot90(clone, 1, (2, 3))
+                self.seed[:, :, (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d] = torch.rot90(clone, 2, (2, 3)) 
+                
+                # * randomize channels
+                if self.model.isotropic_type() == 1:
+                    self.seed[:1, -1:] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                elif self.model.isotropic_type() == 3:
+                    self.seed[:1, -1:] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                    self.seed[:1, -2:-1] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                    self.seed[:1, -3:-2] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                
+                self.mutex.acquire()
+                self.x = self.seed.detach().clone()
+                self.mutex.release()    
                 
