@@ -14,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'burger_isoRmat_v0'
+_NAME_ = 'cowboy_isoRmat_v0'
 _NOTE_ = '''
-trying buger vox with isoRmat perception
+trying cowboy vox with isoRmat perception
 '''
 _SIZE_ = 16
 _PAD_ = 4
@@ -33,7 +33,7 @@ _SEED_DIC_ = {
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/burger.vox'
+_TARGET_VOX_ = '../vox/cowboy.vox'
 # * model parameters
 _MODEL_TYPE_ = Perception.ISO_ROT_MATRIX
 _CHANNELS_ = 20

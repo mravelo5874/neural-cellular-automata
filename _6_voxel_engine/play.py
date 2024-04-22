@@ -128,13 +128,13 @@ class VoxelEngine:
                                               text='0',
                                               manager=self.UIMANAGER,
                                               object_id=obj(object_id='#label_left'))
-        self.iter_text.set_tooltip('The number of iterations the model has performed. One iteration is a single forward function execution.')
+        #self.iter_text.set_tooltip('The number of iterations the model has performed. One iteration is a single forward function execution.')
         # * current mode label
         self.mode_text = gui.elements.UILabel(relative_rect=pg.Rect((w-512, 0), (512, 32)),
                                               text='gui',
                                               manager=self.UIMANAGER,
                                               object_id=obj(object_id='#label_right'))
-        self.mode_text.set_tooltip('If in free cam mode, you can fly around using WASD, Space, and LShift. If in gui mode, you may interact with the gui.')
+        #self.mode_text.set_tooltip('If in free cam mode, you can fly around using WASD, Space, and LShift. If in gui mode, you may interact with the gui.')
         # * current position label
         p = self.player.pos
         pos = '({:.3f}, {:.3f}, {:.3f})'.format(p[0], p[1], p[2])
@@ -142,13 +142,13 @@ class VoxelEngine:
                                               text=f'{pos}', 
                                               manager=self.UIMANAGER,
                                               object_id=obj(object_id='#label_right'))
-        self.pos_text.set_tooltip('Your current position in space.')
+        #self.pos_text.set_tooltip('Your current position in space.')
         # * current mode label
         self.fps_text = gui.elements.UILabel(relative_rect=pg.Rect((0, h-32), (256, 32)),
                                               text='',
                                               manager=self.UIMANAGER,
                                               object_id=obj(object_id='#label_left'))
-        self.fps_text.set_tooltip('The number of frames rendered per second.')
+        #self.fps_text.set_tooltip('The number of frames rendered per second.')
         # * creative mode button
         self.enter_creative_button = gui.elements.UIButton(relative_rect=pg.Rect((260, 0), (w-260, h)),
                                                            text='',
@@ -160,35 +160,35 @@ class VoxelEngine:
                                                  text='toggle axis: _',
                                                  manager=self.UIMANAGER)
         self.GUI_ELEMENTS.append(self.toggle_axis)
-        self.toggle_axis.set_tooltip('Toggle to render axis lines.')
+        #self.toggle_axis.set_tooltip('Toggle to render axis lines.')
 
         # * toggle wireframe border
         self.toggle_border = gui.elements.UIButton(relative_rect=pg.Rect((4, 64+4+32+4+32+4), (256, 32)),
                                                  text='toggle border: _',
                                                  manager=self.UIMANAGER)
         self.GUI_ELEMENTS.append(self.toggle_border)
-        self.toggle_border.set_tooltip('Toggle to render a wire-frame border around the volume.')
+        #self.toggle_border.set_tooltip('Toggle to render a wire-frame border around the volume.')
         
         # * toggle click vector
         self.toggle_vector = gui.elements.UIButton(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4), (256, 32)),
                                                  text='toggle vector: _',
                                                  manager=self.UIMANAGER)
         self.GUI_ELEMENTS.append(self.toggle_vector)
-        self.toggle_vector.set_tooltip('Toggle to render a vector whenever the user clicks in free cam mode.')
+        #self.toggle_vector.set_tooltip('Toggle to render a vector whenever the user clicks in free cam mode.')
         
         # * toggle render modes
         self.render_mode = gui.elements.UIButton(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4), (256, 32)),
                                                  text='render mode: _',
                                                  manager=self.UIMANAGER, )
         self.GUI_ELEMENTS.append(self.render_mode)
-        self.render_mode.set_tooltip('Toggle between rendering voxels or blended.')
+        #self.render_mode.set_tooltip('Toggle between rendering voxels or blended.')
         
         # * toggle raycast volume
         self.raycast_vol = gui.elements.UIButton(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
                                                  text='raycast vol: _',
                                                  manager=self.UIMANAGER, )
         self.GUI_ELEMENTS.append(self.raycast_vol)
-        self.raycast_vol.set_tooltip('Toggle raycasting the volume in order to damage the automata.')
+        #self.raycast_vol.set_tooltip('Toggle raycasting the volume in order to damage the automata.')
         
         # * plane label text
         self.slice_plane_label = gui.elements.UILabel(relative_rect=pg.Rect((4, 64+4+32+4+32+4+32+4+32+4+32+4+32+4), (256, 32)),
@@ -621,6 +621,9 @@ class VoxelEngine:
                 if event.key == pg.K_4:
                     if self.sim != None:
                         self.sim.load_custom(4)
+                if event.key == pg.K_5:
+                    if self.sim != None:
+                        self.sim.load_custom(5)
                     
             # ---------------------------------- #
                     
