@@ -9,9 +9,9 @@ from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
-_MODEL_ = 'cowboy16_isoRmat_v0'
+_MODEL_ = 'minicube5_isoRmat_v1'
 _DEVICE_ = 'cuda'
-_OBJ_DIR_ = f'../obj/{_MODEL_}_regen_thesis'
+_OBJ_DIR_ = f'../obj/{_MODEL_}_thesis'
 
 _USE_DELTA_ = False
 _DELTA_ITER_ = 10
@@ -19,7 +19,7 @@ _MAX_ITER_ = 60
 
 _ITER_LIST_ = [0, 5, 10, 15, 20, 30, 50, 75, 100, 200, 500]
 
-_REGEN_ = True
+_REGEN_ = False
 _REGEN_START_ = 200
 
 _ISO_DEMO_ = False

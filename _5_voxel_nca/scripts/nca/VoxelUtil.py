@@ -248,3 +248,32 @@ def eul2rot(ax, ay, az):
     R[:, :, 2, 2] = r33
 
     return R
+
+def euler2rot_np(ax, ay, az):
+    r11 = np.cos(ay)*np.cos(az)
+    r12 = np.sin(ax)*np.sin(ay)*np.cos(az) - np.sin(az)*np.cos(ax)
+    r13 = np.sin(ay)*np.cos(ax)*np.cos(az) + np.sin(ax)*np.sin(az)
+    
+    r21 = np.sin(az)*np.cos(ay)
+    r22 = np.sin(ax)*np.sin(ay)*np.sin(az) + np.cos(ax)*np.cos(az)
+    r23 = np.sin(ay)*np.sin(az)*np.cos(ax) - np.sin(ax)*np.cos(az)
+    
+    r31 = -np.sin(ax)
+    r32 = np.sin(ax)*np.cos(ay)
+    r33 = np.cos(ax)*np.cos(ay)
+    
+    R = np.zeros([3, 3], dtype=float)
+    
+    R[0, 0] = r11
+    R[0, 1] = r12
+    R[0, 2] = r13
+    
+    R[1, 0] = r21
+    R[1, 1] = r22
+    R[1, 2] = r23
+    
+    R[2, 0] = r31
+    R[2, 1] = r32
+    R[2, 2] = r33
+    
+    return R

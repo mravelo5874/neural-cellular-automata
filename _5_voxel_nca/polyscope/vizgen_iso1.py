@@ -3,8 +3,8 @@ import numpy as np
 from matplotlib import colormaps
 
 _ITER_ = 200
-#_PATH_ = f'../../obj/rubiks_black_cube_iso3_v3_4/iter_{_ITER_}.npy'
-_PATH_ = f'../../obj/gray_cactus_iso3_v0_0/iter_{_ITER_}.npy'
+_PATH_ = f'../../obj/sphere16_iso3_v0_thesis/iter_{_ITER_}.npy'
+# _PATH_ = f'../../obj/sphere16_isoRmat_v0_regen_thesis/init_{_ITER_}.npy'
 _SCALE_ = 1.0
 
 def main():
@@ -25,7 +25,7 @@ def main():
     # * initialize polyscope
     ps.init()
 
-    cm = colormaps['hsv']
+    cm = colormaps['twilight']
     
     # * create orientation
     angles = []
@@ -70,7 +70,7 @@ def main():
             # print (f'angle: {a}')
             # print (f'color: {c}')
             
-            point_cloud.add_vector_quantity('angle', a, enabled=True, radius=0.1, color=c)
+            point_cloud.add_vector_quantity('angle', a, enabled=True, radius=0.05, length=0.03, color=c)
     
     # ### Register a mesh
     # # `verts` is a Nx3 numpy array of vertex positions
