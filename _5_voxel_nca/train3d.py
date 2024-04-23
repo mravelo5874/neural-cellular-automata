@@ -14,9 +14,9 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'maze16_isoRmat_v0'
+_NAME_ = 'sphere16_aniso'
 _NOTE_ = '''
-trying cowboy vox with isoRmat perception
+needed for results section of thesis
 '''
 _SIZE_ = 16
 _PAD_ = 4
@@ -33,17 +33,17 @@ _SEED_DIC_ = {
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../voxnp/maze16.npy'
+_TARGET_VOX_ = '../voxnp/sphere16.npy'
 # * model parameters
-_MODEL_TYPE_ = Perception.ISO_ROT_MATRIX
-_CHANNELS_ = 20
+_MODEL_TYPE_ = Perception.ANISOTROPIC
+_CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
-_EPOCHS_ = 25_000
+_EPOCHS_ = 10_000
 _BATCH_SIZE_ = 4
 _POOL_SIZE_ = 32
-_UPPER_LR_ = 1e-4
-_LOWER_LR_ = 1e-6
+_UPPER_LR_ = 1e-3
+_LOWER_LR_ = 1e-5
 _LR_STEP_ = 2000
 _NUM_DAMG_ = 2
 _DAMG_RATE_ = 5
