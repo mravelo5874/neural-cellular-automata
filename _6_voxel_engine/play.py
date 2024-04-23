@@ -630,6 +630,9 @@ class VoxelEngine:
                 if event.key == pg.K_7:
                     if self.sim != None:
                         self.sim.load_custom(7)
+                if event.key == pg.K_8:
+                    if self.sim != None:
+                        self.sim.load_custom(8)
                     
             # ---------------------------------- #
                     

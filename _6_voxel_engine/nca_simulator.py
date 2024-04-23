@@ -68,7 +68,7 @@ class NCASimulator:
         _SEED_DIST_ = params['_SEED_DIST_']
         _SEED_DIC_ = params['_SEED_DIC_']
         _SEED_HID_INFO_ = params['_SEED_HID_INFO_']
-        self.size = int(_SIZE_+(2*_PAD_+2)*3)
+        self.size = int(_SIZE_+(2*_PAD_+5)*3)
         if _USE_SPHERE_SEED_:
             self.seed = voxutil.seed_3d(_size=self.size, _channels=_CHANNELS_, _points=_SEED_POINTS_, _radius=_SEED_DIST_).unsqueeze(0).to(self.device)
         else:
@@ -754,6 +754,33 @@ class NCASimulator:
                 # self.seed[:, :, (q*3)-d:(q*3)+d,            q-d:q+d,    (q*3)-d:(q*3)+d] = torch.rot90(clone, 4, (2, 3))
                 self.seed[:, :, (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d] = torch.rot90(clone, 4, (4, 3))
                 # self.seed[:, :,         q-d:q+d,    (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d] = torch.rot90(clone, 2, (2, 3))
+                
+                # * randomize channels
+                if self.model.isotropic_type() == 1:
+                    self.seed[:1, -1:] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                elif self.model.isotropic_type() == 3:
+                    self.seed[:1, -1:] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                    self.seed[:1, -2:-1] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                    self.seed[:1, -3:-2] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                
+                self.mutex.acquire()
+                self.x = self.seed.detach().clone()
+                self.mutex.release()
+                
+            if _num == 8:
+                # * copy seed in each quadrant with a different rotation
+                full=self.seed.shape[2]
+                half=full//2
+                
+                r=6
+     
+                clone = self.seed.detach().clone()[:, :, half-r:half+r, half-r:half+r, half-r:half+r]
+                self.seed = torch.zeros_like(self.seed)
+                
+                
+                self.seed[:, :, 2:(r*2)+2, half-r:half+r, half-r:half+r] = clone
+                self.seed[:, :, half-r:half+r, half-r:half+r, half-r:half+r] = torch.rot90(clone, 2, (4, 3))
+                self.seed[:, :, full-1-(r*2):full-1, half-r:half+r, half-r:half+r] = torch.flip(clone, [2])
                 
                 # * randomize channels
                 if self.model.isotropic_type() == 1:
