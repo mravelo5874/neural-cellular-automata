@@ -633,7 +633,7 @@ class NCASimulator:
                 for i in range(len(init_seeds)):
                     x, y, z = init_seeds[i]
                     cell = clone[:, :, x, y, z]
-                    p = utils.rotate_voxel(sz, np.array([x, y, z], dtype=float), np.pi*(1/2), np.pi*(1/2), 0)
+                    p = utils.rotate_voxel(sz, np.array([x, y, z], dtype=float), np.pi*(1/2), np.pi*(1/2), np.pi*(1/2))
                     cloney[:, :, int(p[0]), int(p[1]), int(p[2])] = cell
                 self.seed[:, :, (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d,    (q*3)-d+1:(q*3)+d+1] = cloney
                 
@@ -652,7 +652,7 @@ class NCASimulator:
                 for i in range(len(init_seeds)):
                     x, y, z = init_seeds[i]
                     cell = clone[:, :, x, y, z]
-                    p = utils.rotate_voxel(sz, np.array([x, y, z], dtype=float), np.pi*(3/2), 0, np.pi*(3/2))
+                    p = utils.rotate_voxel(sz, np.array([x, y, z], dtype=float), np.pi*(3/2), np.pi*(3/2), np.pi*(3/2))
                     cloney[:, :, int(p[0]), int(p[1]), int(p[2])] = cell
                     self.seed[:, :,         q-d +movx:q+d +movx,            q-d +movy:q+d +movy,            q-d +subz-1:q+d +subz-1] = cloney
                 
@@ -670,7 +670,7 @@ class NCASimulator:
                 for i in range(len(init_seeds)):
                     x, y, z = init_seeds[i]
                     cell = clone[:, :, x, y, z]
-                    p = utils.rotate_voxel(sz, np.array([x, y, z], dtype=float), 0, np.pi*(1/1), np.pi*(1/1))
+                    p = utils.rotate_voxel(sz, np.array([x, y, z], dtype=float), np.pi*(1/1), np.pi*(1/1), np.pi*(1/1))
                     cloney[:, :, int(p[0]), int(p[1]), int(p[2])] = cell
                     self.seed[:, :, (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d,            q-d +subz:q+d +subz] = cloney
                     
@@ -724,6 +724,44 @@ class NCASimulator:
                     p = utils.rotate_voxel(sz, np.array([x, y, z], dtype=float), 0, 0, np.pi*(1/4))
                     cloney[:, :, int(p[0]), int(p[1]), int(p[2])] = cell
                 self.seed[:, :, half-d:half+d, half-d:half+d, half-d:half+d] = cloney
+                
+                self.mutex.acquire()
+                self.x = self.seed.detach().clone()
+                self.mutex.release()
+                
+            if _num == 7:
+                # * copy seed in each quadrant with a different rotation
+                full=self.seed.shape[2]
+                half=full//2
+                q=half//2
+                d=q//2
+                
+                movy = 4
+                movx = 4
+                subz = 2
+     
+                clone = self.seed.detach().clone()[:, :, half-d:half+d, half-d:half+d, half-d:half+d]
+                self.seed = torch.zeros_like(self.seed)
+                
+                # * bottom half
+                self.seed[:, :,         q-d +movx:q+d +movx,            q-d +movy:q+d +movy,            q-d +subz:q+d +subz] = torch.rot90(clone, 1, (4, 3))
+                #self.seed[:, :, (q*3)-d:(q*3)+d,            q-d:q+d,            q-d:q+d] = torch.rot90(clone, 2, (4, 3))
+                self.seed[:, :, (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d,            q-d +subz:q+d +subz] = torch.rot90(clone, 3, (4, 3))
+                #self.seed[:, :,         q-d:q+d,    (q*3)-d:(q*3)+d,            q-d:q+d] = torch.rot90(clone, 4, (4, 3))
+                
+                # * top half
+                self.seed[:, :,         q-d +movx:q+d +movx,            q-d +movy:q+d +movy,    (q*3)-d:(q*3)+d] = torch.rot90(clone, 2, (4, 3))
+                # self.seed[:, :, (q*3)-d:(q*3)+d,            q-d:q+d,    (q*3)-d:(q*3)+d] = torch.rot90(clone, 4, (2, 3))
+                self.seed[:, :, (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d] = torch.rot90(clone, 4, (4, 3))
+                # self.seed[:, :,         q-d:q+d,    (q*3)-d:(q*3)+d,    (q*3)-d:(q*3)+d] = torch.rot90(clone, 2, (2, 3))
+                
+                # * randomize channels
+                if self.model.isotropic_type() == 1:
+                    self.seed[:1, -1:] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                elif self.model.isotropic_type() == 3:
+                    self.seed[:1, -1:] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                    self.seed[:1, -2:-1] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
+                    self.seed[:1, -3:-2] = torch.rand(self.size, self.size, self.size)*np.pi*2.0
                 
                 self.mutex.acquire()
                 self.x = self.seed.detach().clone()

@@ -14,7 +14,7 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'cowboy16_isoRmat_v0'
+_NAME_ = 'maze16_isoRmat_v0'
 _NOTE_ = '''
 trying cowboy vox with isoRmat perception
 '''
@@ -33,7 +33,7 @@ _SEED_DIC_ = {
     'minus_z': None
 }
 _SEED_HID_INFO_ = False
-_TARGET_VOX_ = '../vox/cowboy16.vox'
+_TARGET_VOX_ = '../voxnp/maze16.npy'
 # * model parameters
 _MODEL_TYPE_ = Perception.ISO_ROT_MATRIX
 _CHANNELS_ = 20
