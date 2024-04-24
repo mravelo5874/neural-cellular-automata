@@ -14,7 +14,7 @@ from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
 # * target/seed parameters
-_NAME_ = 'sphere16_iso3_thesis'
+_NAME_ = 'sphere16_isoRmat_thesis'
 _NOTE_ = '''
 needed for results section of thesis
 '''
@@ -35,7 +35,7 @@ _SEED_DIC_ = {
 _SEED_HID_INFO_ = False
 _TARGET_VOX_ = '../voxnp/sphere16.npy'
 # * model parameters
-_MODEL_TYPE_ = Perception.YAW_ISO_V3
+_MODEL_TYPE_ = Perception.ISO_ROT_MATRIX
 _CHANNELS_ = 16
 _HIDDEN_ = 128
 # * training parameters
