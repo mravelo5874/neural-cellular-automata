@@ -9,9 +9,9 @@ from scripts.nca.VoxelNCA import VoxelNCA as NCA
 from scripts.nca import VoxelUtil as voxutil
 from scripts.vox.Vox import Vox
 
-_MODEL_ = 'minicube5_isoRmat_v1'
+_MODEL_ = 'sphere16_iso3_thesis'
 _DEVICE_ = 'cuda'
-_OBJ_DIR_ = f'../obj/{_MODEL_}_thesis'
+_OBJ_DIR_ = f'../obj/{_MODEL_}_final_thesis'
 
 _USE_DELTA_ = False
 _DELTA_ITER_ = 10
