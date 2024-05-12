@@ -34,7 +34,7 @@ nca_params = {
     '_CHANNELS_': 16,
     '_HIDDEN_': 128,
     # * training parameters
-    '_EPOCHS_': 5_000,
+    '_EPOCHS_': 16,
     '_BATCH_SIZE_': 4,
     '_POOL_SIZE_': 32,
     '_UPPER_LR_': 1e-3,
@@ -44,14 +44,14 @@ nca_params = {
     '_DAMG_RATE_': 5,
     # * logging parameters
     '_LOG_FILE_': 'trainlog.txt',
-    '_INFO_RATE_': 100,
+    '_INFO_RATE_': 1,
     '_SAVE_RATE_': 5000,
 }
 
 def ddp_setup(_rank: int, _world_size: int):
     os.environ['MASTER_ADDR'] = 'localhost'
     os.environ['MASTER_PORT'] = '29500'
-    init_process_group(backend='gloo', rank=_rank, world_size=_world_size)
+    init_process_group(backend='nccl', rank=_rank, world_size=_world_size)
 
 def run(_rank: int, _world_size: int):
     ddp_setup(_rank, _world_size)
@@ -76,8 +76,8 @@ def run(_rank: int, _world_size: int):
     logprintDDP(f'models/{name}/{logf}', '========================', _rank)
     
     # * create model, optimizer, and lr-scheduler
-    vanilla_model = nca_model(_channels=channels, _hidden=hidden, _ptype=ptype)
-    ddp_model = DDP(vanilla_model, device_ids=[])
+    vanilla_model = nca_model(_channels=channels, _hidden=hidden, _ptype=ptype).to(_rank)
+    ddp_model = DDP(vanilla_model, device_ids=[_rank])
     optim = torch.optim.Adam(vanilla_model.parameters(), nca_params['_UPPER_LR_'])
     sched = torch.optim.lr_scheduler.CyclicLR(optim, nca_params['_LOWER_LR_'], nca_params['_UPPER_LR_'], step_size_up=nca_params['_LR_STEP_'], mode='triangular2', cycle_momentum=False)
     
