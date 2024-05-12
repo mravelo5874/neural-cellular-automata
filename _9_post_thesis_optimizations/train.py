@@ -54,16 +54,16 @@ def ddp_setup(_rank: int, _world_size: int):
     init_process_group(backend='nccl', rank=_rank, world_size=_world_size)
 
 def run(_rank: int, _world_size: int):
-    # * setup ddp
-    logprintDDP(f'models/{name}/{logf}', f'running rank: {_rank}', _rank, True)
-    ddp_setup(_rank, _world_size)
-    
-    # * regularly used params
+     # * regularly used params
     name = nca_params['_NAME_']
     logf = nca_params['_LOG_FILE_']
     ptype = nca_params['_PTYPE_']
     channels = nca_params['_CHANNELS_']
     hidden = nca_params['_HIDDEN_']
+    
+    # * setup ddp
+    logprintDDP(f'models/{name}/{logf}', f'running rank: {_rank}', _rank, True)
+    ddp_setup(_rank, _world_size)
     
     # * create model, optimizer, and lr-scheduler
     vanilla_model = nca_model(_channels=channels, _hidden=hidden, _ptype=ptype).to(_rank)
