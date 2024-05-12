@@ -89,6 +89,11 @@ def run(_rank: int, _world_size: int):
     trainer.begin()
     destroy_process_group()
 
+def force_cudnn_initialization():
+    s = 32
+    dev = torch.device('cuda')
+    torch.nn.functional.conv2d(torch.zeros(s, s, s, s, device=dev), torch.zeros(s, s, s, s, device=dev))
+    
 def main():
     # * print cuda devices
     name = nca_params['_NAME_']
@@ -101,6 +106,13 @@ def main():
         mpcount = prop.multi_processor_count
         logprintDDP(f'models/{name}/{logf}', f'{i}: {torch.cuda.get_device_name(i)}, mem:{mem}MB, mpc:{mpcount}', 0)
     logprintDDP(f'models/{name}/{logf}', '========================', 0)
+    
+    # * prepare cuda environment
+    torch.backends.cudnn.benchmark = True
+    torch.cuda.empty_cache()
+    torch.set_default_tensor_type('torch.cuda.FloatTensor')
+    logprintDDP(f'models/{name}/{logf}', 'forcing cuDNN initialization...', 0)
+    force_cudnn_initialization()
     
     # * make directory for model files
     name = nca_params['_NAME_']
