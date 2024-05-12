@@ -62,11 +62,7 @@ def run(_rank: int, _world_size: int):
     ptype = nca_params['_PTYPE_']
     channels = nca_params['_CHANNELS_']
     hidden = nca_params['_HIDDEN_']
-    
-    # * make directory for model files
-    if not os.path.exists(f'models/{name}'):
-        os.mkdir(f'models/{name}')
-    
+
     # * print cuda devices
     devices = []
     logprint(f'models/{name}/{logf}', '========================')
@@ -104,6 +100,11 @@ def run(_rank: int, _world_size: int):
     destroy_process_group()
 
 def main():
+    # * make directory for model files
+    name = nca_params['_NAME_']
+    if not os.path.exists(f'models/{name}'):
+        os.mkdir(f'models/{name}')
+    
     # * setup distributed data parallel and spawn workers
     world_size = torch.cuda.device_count()
     mp.spawn(run, args=(world_size,), nprocs=world_size)
