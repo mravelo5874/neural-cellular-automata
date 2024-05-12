@@ -65,15 +65,15 @@ def run(_rank: int, _world_size: int):
 
     # * print cuda devices
     devices = []
-    logprint(f'models/{name}/{logf}', '========================')
-    logprint(f'models/{name}/{logf}', 'available cuda devices:')
+    logprintDDP(f'models/{name}/{logf}', '========================', _rank)
+    logprintDDP(f'models/{name}/{logf}', 'available cuda devices:', _rank)
     for i in range (torch.cuda.device_count()):
         devices.append(i)
         prop = torch.cuda.get_device_properties(i)
         mem = prop.total_memory // (1024**2)
         mpcount = prop.multi_processor_count
-        logprint(f'models/{name}/{logf}', f'{i}: {torch.cuda.get_device_name(i)}, mem:{mem}MB, mpc:{mpcount}')
-    logprint(f'models/{name}/{logf}', '========================')
+        logprintDDP(f'models/{name}/{logf}', f'{i}: {torch.cuda.get_device_name(i)}, mem:{mem}MB, mpc:{mpcount}', _rank)
+    logprintDDP(f'models/{name}/{logf}', '========================', _rank)
     
     # * create model, optimizer, and lr-scheduler
     vanilla_model = nca_model(_channels=channels, _hidden=hidden, _ptype=ptype)
@@ -84,15 +84,15 @@ def run(_rank: int, _world_size: int):
     # * get seed and target tensors
     seed_ten = generate_seed(nca_params)
     target_ten = load_vox_as_tensor(nca_params)
-    logprint(f'models/{name}/{logf}', f'seed.shape: {list(seed_ten.shape)}')
-    logprint(f'models/{name}/{logf}', f'target.shape: {list(target_ten.shape)}')
+    logprintDDP(f'models/{name}/{logf}', f'seed.shape: {list(seed_ten.shape)}', _rank)
+    logprintDDP(f'models/{name}/{logf}', f'target.shape: {list(target_ten.shape)}', _rank)
     
     # * create pool tensor
     isotype = vanilla_model.pobj.orientation_channels(vanilla_model.ptype)
     pool = generate_pool(nca_params, seed_ten, isotype)
     
     # * print out parameters
-    print_nca_params(nca_params)
+    print_nca_params(nca_params, _rank)
     
     # * create trainer and begin training 
     trainer = nca_trainer(ddp_model, optim, sched, seed_ten, target_ten, pool, nca_params, isotype, _rank)

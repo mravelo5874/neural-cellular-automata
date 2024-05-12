@@ -40,9 +40,9 @@ class nca_trainer():
         
         # * begin logging and start program timer
         start = datetime.datetime.now()
-        logprint(f'models/{name}/{logf}', '****************')
-        logprint(f'models/{name}/{logf}', f'timestamp: {datetime.datetime.now()}')
-        logprint(f'models/{name}/{logf}', f'starting training w/ {epochs+1} epochs...')
+        logprintDDP(f'models/{name}/{logf}', '****************', self.gpu_id)
+        logprintDDP(f'models/{name}/{logf}', f'timestamp: {datetime.datetime.now()}', self.gpu_id)
+        logprintDDP(f'models/{name}/{logf}', f'starting training w/ {epochs+1} epochs...', self.gpu_id)
 
         loss_log = []
         prev_lr = -np.inf
@@ -127,8 +127,8 @@ class nca_trainer():
                                     
                 # * detect invalid loss values :(
                 if torch.isnan(loss) or torch.isinf(loss) or torch.isneginf(loss):
-                    logprint(f'models/{name}/{logf}', f'detected invalid loss value: {loss}')
-                    logprint(f'models/{name}/{logf}', f'overflow loss: {overflow_loss}, diff loss: {diff_loss}, target loss: {target_loss}')
+                    logprintDDP(f'models/{name}/{logf}', f'detected invalid loss value: {loss}', self.gpu_id)
+                    logprintDDP(f'models/{name}/{logf}', f'overflow loss: {overflow_loss}, diff loss: {diff_loss}, target loss: {target_loss}', self.gpu_id)
                     raise ValueError
                 
                 # * print info
@@ -144,24 +144,25 @@ class nca_trainer():
                     if prev_lr > lr:
                         step = '▼'
                     prev_lr = lr
-                    logprint(f'models/{name}/{logf}', f'[{i}/{epochs+1}]\t {np.round(iter_per_sec, 3)}it/s\t time: {time}~{est}\t loss: {np.round(avg, 3)}>{np.round(np.min(loss_log), 3)}\t lr: {lr} {step}')
+                    logprintDDP(f'models/{name}/{logf}', f'[{i}/{epochs+1}]\t {np.round(iter_per_sec, 3)}it/s\t time: {time}~{est}\t loss: {np.round(avg, 3)}>{np.round(np.min(loss_log), 3)}\t lr: {lr} {step}', self.gpu_id)
                 
                 # * save checkpoint
                 if i % save == 0 and i != 0 and self.gpu_id == 0:
                     self.model.save('models/checkpoints', name+'_cp'+str(i), self.nca_params)
-                    logprint(f'models/{name}/{logf}', f'model [{name}] saved to checkpoints...')
+                    logprintDDP(f'models/{name}/{logf}', f'model [{name}] saved to checkpoints...', self.gpu_id)
         
         # * save loss plot
-        pl.plot(loss_log, '.', alpha=0.1)
-        pl.yscale('log')
-        pl.ylim(np.min(loss_log), loss_log[0])
-        pl.savefig(f'models/{name}/{name}_loss_plot.png')
-                    
-        # * save final model
-        self.model.save('models', name+'_final', self.nca_params)
+        if self.gpu_id == 0:
+            pl.plot(loss_log, '.', alpha=0.1)
+            pl.yscale('log')
+            pl.ylim(np.min(loss_log), loss_log[0])
+            pl.savefig(f'models/{name}/{name}_loss_plot.png')
+                        
+            # * save final model
+            self.model.save('models', name+'_final', self.nca_params)
         
-        # * calculate elapsed time
-        secs = (datetime.datetime.now()-start).seconds
-        elapsed_time = str(datetime.timedelta(seconds=secs))
-        logprint(f'models/{name}/{logf}', f'elapsed time: {elapsed_time}')
-        logprint(f'models/{name}/{logf}', '****************')
+            # * calculate elapsed time
+            secs = (datetime.datetime.now()-start).seconds
+            elapsed_time = str(datetime.timedelta(seconds=secs))
+            logprintDDP(f'models/{name}/{logf}', f'elapsed time: {elapsed_time}', self.gpu_id)
+            logprintDDP(f'models/{name}/{logf}', '****************', self.gpu_id)

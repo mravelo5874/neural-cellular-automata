@@ -7,7 +7,9 @@ from matplotlib import pyplot as plt
 # * custom imports
 from vox.Vox import Vox
 
-def logprint(_path, _str):
+def logprintDDP(_path, _str, _gpu_id):
+    if _gpu_id != 0:
+        return
     print (_str)
     with open(_path, 'a', encoding='utf-8') as f:
         f.write(f'{_str}\n')
@@ -324,7 +326,7 @@ def generate_pool(_nca_params, _seed_ten, _isotype):
 
     return pool
 
-def print_nca_params(_nca_params):
+def print_nca_params(_nca_params, _gpu_id):
     name = _nca_params['_NAME_']
     logf = _nca_params['_LOG_FILE_']
     ptype = _nca_params['_PTYPE_']
@@ -337,11 +339,11 @@ def print_nca_params(_nca_params):
     lr_lower = _nca_params['_LOWER_LR_']
     lr_step = _nca_params['_LR_STEP_']
     
-    logprint(f'models/{name}/{logf}', f'model: {name}')
-    logprint(f'models/{name}/{logf}', f'type: {ptype}')
-    logprint(f'models/{name}/{logf}', f'channels: {channels}')
-    logprint(f'models/{name}/{logf}', f'hidden: {hidden}')
-    logprint(f'models/{name}/{logf}', f'hidden-seed-info: {hid_info}')
-    logprint(f'models/{name}/{logf}', f'batch-size: {bsize}')
-    logprint(f'models/{name}/{logf}', f'pool-size: {psize}')
-    logprint(f'models/{name}/{logf}', f'lr: {lr_upper}>{lr_lower} w/ {lr_step} step')
+    logprintDDP(f'models/{name}/{logf}', f'model: {name}', _gpu_id)
+    logprintDDP(f'models/{name}/{logf}', f'type: {ptype}', _gpu_id)
+    logprintDDP(f'models/{name}/{logf}', f'channels: {channels}', _gpu_id)
+    logprintDDP(f'models/{name}/{logf}', f'hidden: {hidden}', _gpu_id)
+    logprintDDP(f'models/{name}/{logf}', f'hidden-seed-info: {hid_info}', _gpu_id)
+    logprintDDP(f'models/{name}/{logf}', f'batch-size: {bsize}', _gpu_id)
+    logprintDDP(f'models/{name}/{logf}', f'pool-size: {psize}', _gpu_id)
+    logprintDDP(f'models/{name}/{logf}', f'lr: {lr_upper}>{lr_lower} w/ {lr_step} step', _gpu_id)
