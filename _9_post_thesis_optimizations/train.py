@@ -67,9 +67,9 @@ def run(_rank: int, _world_size: int):
     
     # * create model, optimizer, and lr-scheduler
     vanilla_model = nca_model(_channels=channels, _hidden=hidden, _ptype=ptype).to(_rank)
-    ddp_model = DDP(vanilla_model, device_ids=[_rank])
     optim = torch.optim.Adam(vanilla_model.parameters(), nca_params['_UPPER_LR_'])
     sched = torch.optim.lr_scheduler.CyclicLR(optim, nca_params['_LOWER_LR_'], nca_params['_UPPER_LR_'], step_size_up=nca_params['_LR_STEP_'], mode='triangular2', cycle_momentum=False)
+    ddp_model = DDP(vanilla_model, device_ids=[_rank])
     
     # * get seed and target tensors
     seed_ten = generate_seed(nca_params)
