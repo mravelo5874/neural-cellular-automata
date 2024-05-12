@@ -1,0 +1,8 @@
+========================
+available cuda devices:
+0: NVIDIA GeForce GTX 1660 Ti, mem:6143MB, mpc:24
+========================
+========================
+available cuda devices:
+0: NVIDIA GeForce GTX 1660 Ti, mem:6143MB, mpc:24
+========================

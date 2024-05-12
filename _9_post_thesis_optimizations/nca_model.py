@@ -1,7 +1,11 @@
 import torch
 import torch.nn.functional as func
+import pathlib
+import pickle
+import json
 from numpy import pi
-from _9_post_thesis_optimizations.nca_perception import ptype, nca_perception
+# * custom imports
+from nca_perception import ptype, nca_perception
 
 class nca_model(torch.nn.Module):
     def __init__(
@@ -29,6 +33,22 @@ class nca_model(torch.nn.Module):
         self.conv2 = torch.nn.Conv3d(hidden_channels, _channels, 1, bias=False)
         with torch.no_grad():
             self.conv2.weight.data.zero_()
+            
+    def save(self, _path, _file_name, _nca_params):
+        # * create directory
+        name = _nca_params['_NAME_']
+        model_path = pathlib.Path(f'{_path}/{name}')
+        model_path.mkdir(parents=True, exist_ok=True)
+        torch.save(self.module.state_dict(), f'{model_path.absolute()}/{_file_name}.pt')
+        
+        # * pickle perception function
+        with open(f'{model_path.absolute()}/{_file_name}_perception_func.pyc', 'ab') as pfile:
+            pickle.dump(self.pfunc, pfile)
+
+        # * save model parameters
+        json_object = json.dumps(dict, indent=4)
+        with open(f'{model_path.absolute()}/{_file_name}_params.json', 'w') as outfile:
+            outfile.write(json_object)
             
     def get_alive_mask(self, _x):
         return func.max_pool3d(_x[:, 3:4, :, :, :], kernel_size=3, stride=1, padding=1) > 0.1

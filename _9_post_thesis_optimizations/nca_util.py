@@ -1,9 +1,11 @@
 import torch
+import torch.nn.functional as func
 import numpy as np
 import matplotlib.gridspec as gridspec
 from colorsys import hsv_to_rgb
 from matplotlib import pyplot as plt
-from scripts.vox.Vox import Vox
+# * custom imports
+from vox.Vox import Vox
 
 def logprint(_path, _str):
     print (_str)
@@ -277,3 +279,46 @@ def euler2rot_np(ax, ay, az):
     R[2, 2] = r33
     
     return R
+
+def generate_seed(_nca_params):
+    PAD_SIZE = _nca_params['_SIZE_']+(2*_nca_params['_PAD_'])
+    if _nca_params['_USE_SPHERE_SEED_']:
+        seed_ten = seed_3d(_size=PAD_SIZE, _channels=_nca_params['_CHANNELS_'], _points=_nca_params['_SEED_POINTS_'], _radius=_nca_params['_SEED_DIST_']).unsqueeze(0)
+    else:
+        seed_dic = _nca_params['_SEED_DIC_']
+        seed_ten = custom_seed(_size=PAD_SIZE, _channels=_nca_params['_CHANNELS_'], _dist=_nca_params['_SEED_DIST_'], _hidden_info=_nca_params['_SEED_HID_INFO_'],
+                                    _center=seed_dic['center'], 
+                                    _plus_x=seed_dic['plus_x'], _minus_x=seed_dic['minus_x'],
+                                    _plus_y=seed_dic['plus_y'], _minus_y=seed_dic['minus_y'],
+                                    _plus_z=seed_dic['plus_z'], _minus_z=seed_dic['minus_z']).unsqueeze(0)
+    return seed_ten
+
+def load_vox_as_tensor(_nca_params):
+    target_vox = _nca_params['_TARGET_VOX_']
+    if target_vox.endswith('vox'):
+        target = Vox().load_from_file(target_vox)
+        target_ten = target.tensor()
+    elif target_vox.endswith('npy'):
+        with open(target_vox, 'rb') as f:
+            target_ten = torch.from_numpy(np.load(f))
+    
+    pad = _nca_params['_PAD_']
+    target_ten = func.pad(target_ten, (pad, pad, pad, pad, pad, pad), 'constant')
+    target_ten = target_ten.clone().repeat(_nca_params['_BATCH_SIZE_'], 1, 1, 1, 1)
+    
+def generate_pool(_nca_params, _seed_ten, _isotype):
+    pool_size = _nca_params['_POOL_SIZE_']
+    pad = _nca_params['PAD_SIZE']
+    with torch.no_grad():
+        pool = _seed_ten.clone().repeat(pool_size, 1, 1, 1, 1)
+        # * randomize channel(s)
+        if _isotype == 1:
+            for j in range(pool_size):
+                pool[j, -1:] = torch.rand(pad, pad, pad)*np.pi*2.0
+        elif _isotype == 3:
+            for j in range(pool_size):
+                pool[j, -1:] = torch.rand(pad, pad, pad)*np.pi*2.0
+                pool[j, -2:-1] = torch.rand(pad, pad, pad)*np.pi*2.0
+                pool[j, -3:-2] = torch.rand(pad, pad, pad)*np.pi*2.0
+
+    return pool

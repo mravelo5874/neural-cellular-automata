@@ -1,7 +1,8 @@
 import torch
 import torch.nn.functional as func
 from enum import Enum
-from util import eul2rot
+# * custom imports
+from nca_util import eul2rot
 
 class ptype(int, Enum):
     def __str__(self):
@@ -134,13 +135,13 @@ class nca_perception():
         y = _x.reshape(batch_size*channels, 1, height, width, depth)
         y = func.pad(y, (1, 1, 1, 1, 1, 1), 'constant')
         # * perform per-channel convolutions
-        _filters = _filters.to(self.device)
+        _filters = _filters
         y = func.conv3d(y, _filters[:, None])
         y = y.reshape(batch_size, -1, height, width, depth)
         return y
 
     def anisotropic_perception(self, _x):
-        _x = _x.to(self.device)
+        _x = _x
         # * per channel convolutions
         gx = self.per_channel_conv3d(_x, X_SOBEL[None, :])
         gy = self.per_channel_conv3d(_x, Y_SOBEL[None, :])
