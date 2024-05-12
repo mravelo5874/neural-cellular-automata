@@ -66,20 +66,20 @@ def run(_rank: int, _world_size: int):
     ddp_setup(_rank, _world_size)
     
     # * create model, optimizer, and lr-scheduler
-    vanilla_model = nca_model(_channels=channels, _hidden=hidden, _ptype=ptype).to(_rank)
+    vanilla_model = nca_model(_device=_rank, _channels=channels, _hidden=hidden, _ptype=ptype).to(_rank)
     optim = torch.optim.Adam(vanilla_model.parameters(), nca_params['_UPPER_LR_'])
     sched = torch.optim.lr_scheduler.CyclicLR(optim, nca_params['_LOWER_LR_'], nca_params['_UPPER_LR_'], step_size_up=nca_params['_LR_STEP_'], mode='triangular2', cycle_momentum=False)
     ddp_model = DDP(vanilla_model, device_ids=[_rank])
     
     # * get seed and target tensors
-    seed_ten = generate_seed(nca_params)
-    target_ten = load_vox_as_tensor(nca_params)
+    seed_ten = generate_seed(nca_params).to(_rank)
+    target_ten = load_vox_as_tensor(nca_params).to(_rank)
     logprintDDP(f'models/{name}/{logf}', f'seed.shape: {list(seed_ten.shape)}', _rank)
     logprintDDP(f'models/{name}/{logf}', f'target.shape: {list(target_ten.shape)}', _rank)
     
     # * create pool tensor
     isotype = vanilla_model.pobj.orientation_channels(vanilla_model.ptype)
-    pool = generate_pool(nca_params, seed_ten, isotype)
+    pool = generate_pool(nca_params, seed_ten, isotype).to(_rank)
     
     # * print out parameters
     print_nca_params(nca_params, _rank)

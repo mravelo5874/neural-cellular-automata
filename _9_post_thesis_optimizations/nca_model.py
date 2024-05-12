@@ -9,28 +9,31 @@ from nca_perception import ptype, nca_perception
 
 class nca_model(torch.nn.Module):
     def __init__(
-        self, 
+        self,
+        _device=0,
         _channels=16, 
         _hidden=128, 
         _rate=0.5, 
-        _ptype=ptype.ANISOTROPIC):
+        _ptype=ptype.ANISOTROPIC,
+        ):
         super().__init__()
         
         # * save variables
+        self.device = _device
         self.rate = _rate
         self.ptype = _ptype
         self.pobj = nca_perception()
         self.pfunc = self.pobj.get_function[_ptype]
         
         # * calculate hidden channel values
-        perception_channels = self.pfunc(self.pobj, torch.zeros([1, _channels, 8, 8, 8])).shape[1]
+        perception_channels = self.pfunc(self.pobj, torch.zeros([1, _channels, 8, 8, 8]).to(self.device)).shape[1]
         hidden_channels = 8*1024 // (perception_channels+_channels)
         hidden_channels = (_hidden+31) // 32*32
         
         # * model layers
-        self.conv1 = torch.nn.Conv3d(perception_channels, hidden_channels, 1)
-        self.relu = torch.nn.ReLU(inplace=True)
-        self.conv2 = torch.nn.Conv3d(hidden_channels, _channels, 1, bias=False)
+        self.conv1 = torch.nn.Conv3d(perception_channels, hidden_channels, 1).to(self.device)
+        self.relu = torch.nn.ReLU(inplace=True).to(self.device)
+        self.conv2 = torch.nn.Conv3d(hidden_channels, _channels, 1, bias=False).to(self.device)
         with torch.no_grad():
             self.conv2.weight.data.zero_()
             
