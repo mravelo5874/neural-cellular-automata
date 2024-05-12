@@ -111,7 +111,7 @@ def main():
     torch.backends.cudnn.benchmark = True
     torch.cuda.empty_cache()
     torch.set_default_device('cuda')
-    torch.set_default_dtype(torch.FloatTensor)
+    torch.set_default_dtype(torch.float)
     logprintDDP(f'models/{name}/{logf}', 'forcing cuDNN initialization...', 0)
     force_cudnn_initialization()
     
