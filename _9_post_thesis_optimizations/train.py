@@ -54,6 +54,8 @@ def ddp_setup(_rank: int, _world_size: int):
     init_process_group(backend='nccl', rank=_rank, world_size=_world_size)
 
 def run(_rank: int, _world_size: int):
+    # * setup ddp
+    logprintDDP(f'models/{name}/{logf}', f'running rank: {_rank}', _rank, True)
     ddp_setup(_rank, _world_size)
     
     # * regularly used params
