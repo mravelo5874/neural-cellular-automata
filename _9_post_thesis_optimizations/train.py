@@ -62,18 +62,6 @@ def run(_rank: int, _world_size: int):
     ptype = nca_params['_PTYPE_']
     channels = nca_params['_CHANNELS_']
     hidden = nca_params['_HIDDEN_']
-
-    # * print cuda devices
-    devices = []
-    logprintDDP(f'models/{name}/{logf}', '========================', _rank)
-    logprintDDP(f'models/{name}/{logf}', 'available cuda devices:', _rank)
-    for i in range (torch.cuda.device_count()):
-        devices.append(i)
-        prop = torch.cuda.get_device_properties(i)
-        mem = prop.total_memory // (1024**2)
-        mpcount = prop.multi_processor_count
-        logprintDDP(f'models/{name}/{logf}', f'{i}: {torch.cuda.get_device_name(i)}, mem:{mem}MB, mpc:{mpcount}', _rank)
-    logprintDDP(f'models/{name}/{logf}', '========================', _rank)
     
     # * create model, optimizer, and lr-scheduler
     vanilla_model = nca_model(_channels=channels, _hidden=hidden, _ptype=ptype).to(_rank)
@@ -100,6 +88,18 @@ def run(_rank: int, _world_size: int):
     destroy_process_group()
 
 def main():
+    # * print cuda devices
+    name = nca_params['_NAME_']
+    logf = nca_params['_LOG_FILE_']
+    logprintDDP(f'models/{name}/{logf}', '========================', 0)
+    logprintDDP(f'models/{name}/{logf}', 'available cuda devices:', 0)
+    for i in range (torch.cuda.device_count()):
+        prop = torch.cuda.get_device_properties(i)
+        mem = prop.total_memory // (1024**2)
+        mpcount = prop.multi_processor_count
+        logprintDDP(f'models/{name}/{logf}', f'{i}: {torch.cuda.get_device_name(i)}, mem:{mem}MB, mpc:{mpcount}', 0)
+    logprintDDP(f'models/{name}/{logf}', '========================', 0)
+    
     # * make directory for model files
     name = nca_params['_NAME_']
     if not os.path.exists(f'models/{name}'):
