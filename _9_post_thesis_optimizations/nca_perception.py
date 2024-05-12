@@ -135,8 +135,7 @@ class nca_perception():
         y = _x.reshape(batch_size*channels, 1, height, width, depth)
         y = func.pad(y, (1, 1, 1, 1, 1, 1), 'constant')
         # * perform per-channel convolutions
-        _filters = _filters # .to(self.device)
-        y = func.conv3d(y, _filters[:, None])
+        y = func.conv3d(y, _filters[:, None].to(self.device))
         y = y.reshape(batch_size, -1, height, width, depth)
         return y
 
