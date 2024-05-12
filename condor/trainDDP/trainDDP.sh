@@ -3,4 +3,4 @@ source ~/.bashrc
 cd /u/marco/github/neural-cellular-automata
 source venv/bin/activate
 cd /u/marco/github/neural-cellular-automata/_9_post_thesis_optimizations
-TORCH_USE_CUDA_DSA=1 python3 train.py
+TORCH_USE_CUDA_DSA=1 CUDA_LAUNCH_BLOCKING=1 python3 train.py
