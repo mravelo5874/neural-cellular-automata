@@ -41,7 +41,7 @@ class nca_trainer():
         # * begin logging and start program timer
         start = datetime.datetime.now()
         logprintDDP(f'models/{name}/{logf}', '****************', self.gpu_id)
-        logprintDDP(f'models/{name}/{logf}', f'timestamp: {datetime.datetime.now()}', self.gpu_id)
+        logprintDDP(f'models/{name}/{logf}', f'GPU-id: {self.gpu_id}, timestamp: {datetime.datetime.now()}', self.gpu_id, True)
         logprintDDP(f'models/{name}/{logf}', f'starting training w/ {epochs+1} epochs...', self.gpu_id)
 
         loss_log = []

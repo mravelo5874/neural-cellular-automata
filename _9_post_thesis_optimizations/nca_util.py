@@ -7,8 +7,8 @@ from matplotlib import pyplot as plt
 # * custom imports
 from vox.Vox import Vox
 
-def logprintDDP(_path, _str, _gpu_id):
-    if _gpu_id != 0:
+def logprintDDP(_path, _str, _gpu_id, _allow_any_gpu=False):
+    if not _allow_any_gpu and _gpu_id != 0:
         return
     print (_str)
     with open(_path, 'a', encoding='utf-8') as f:
