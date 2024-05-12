@@ -116,9 +116,9 @@ LAP_KERN_7 = torch.tensor([
     [0., 0., 0.]]])
 
 class nca_perception():
-    
-    def __init__(self):
+    def __init__(self, _device):
         super().__init__()
+        self.device = _device
         
     def orientation_channels(self, _ptype):
         if _ptype == ptype.ANISOTROPIC:
@@ -135,13 +135,13 @@ class nca_perception():
         y = _x.reshape(batch_size*channels, 1, height, width, depth)
         y = func.pad(y, (1, 1, 1, 1, 1, 1), 'constant')
         # * perform per-channel convolutions
-        _filters = _filters
+        _filters = _filters.to(self.device)
         y = func.conv3d(y, _filters[:, None])
         y = y.reshape(batch_size, -1, height, width, depth)
         return y
 
     def anisotropic_perception(self, _x):
-        _x = _x
+        _x = _x.to(self.device)
         # * per channel convolutions
         gx = self.per_channel_conv3d(_x, X_SOBEL[None, :])
         gy = self.per_channel_conv3d(_x, Y_SOBEL[None, :])

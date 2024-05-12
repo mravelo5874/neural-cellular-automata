@@ -22,7 +22,7 @@ class nca_model(torch.nn.Module):
         self.device = _device
         self.rate = _rate
         self.ptype = _ptype
-        self.pobj = nca_perception()
+        self.pobj = nca_perception(_device)
         self.pfunc = self.pobj.get_function[_ptype]
         
         # * calculate hidden channel values
