@@ -110,7 +110,7 @@ def main():
     # * prepare cuda environment
     torch.backends.cudnn.benchmark = True
     torch.cuda.empty_cache()
-    torch.set_default_dtype(torch.cuda.FloatTensor)
+    torch.set_default_tensor_type(torch.cuda.FloatTensor)
     logprintDDP(f'models/{name}/{logf}', 'forcing cuDNN initialization...', 0)
     force_cudnn_initialization()
     
