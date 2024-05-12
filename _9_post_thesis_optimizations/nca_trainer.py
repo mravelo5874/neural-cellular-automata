@@ -15,6 +15,7 @@ class nca_trainer():
         _pool:  torch.Tensor,
         _nca_params: dict,
         _isotype: int,
+        _gpu_id: int
         ):
         self.model = _model
         self.optim = _optim
@@ -24,15 +25,16 @@ class nca_trainer():
         self.pool  = _pool
         self.nca_params = _nca_params
         self.isotype = _isotype
+        self.gpu_id = _gpu_id
         
     def begin(self):
         # * regularly used params
         name = self.nca_params['_NAME_']
         logf = self.nca_params['_LOG_FILE_']
         epochs = self.nca_params['_EPOCHS_']
-        size = self.nca_params['_PAD_SIZE_']
-        ndamg = self._nca_params['_NUM_DAMG_']
-        chnls = self._nca_params['_CHANNELS_']
+        size = self.nca_params['_SIZE_']+(2*self.nca_params['_PAD_'])
+        ndamg = self.nca_params['_NUM_DAMG_']
+        chnls = self.nca_params['_CHANNELS_']
         info = self.nca_params['_INFO_RATE_']
         save = self.nca_params['_SAVE_RATE_']
         
@@ -51,7 +53,7 @@ class nca_trainer():
                 x = self.pool[batch_idxs]
                 
                 # * re-order batch based on loss
-                loss_ranks = torch.argsort(voxel_wise_loss_function(x, self.target_ten, _dims=[-1, -2, -3, -4]), descending=True)
+                loss_ranks = torch.argsort(voxel_wise_loss_function(x, self.trgt, _dims=[-1, -2, -3, -4]), descending=True)
                 x = x[loss_ranks]
                 
                 # * re-add seed into batch
@@ -65,7 +67,7 @@ class nca_trainer():
                     x[:1, -3:-2] = torch.rand(size, size, size)*np.pi*2.0
             
                 # * damage lowest loss in batch
-                if i % self._nca_params['_DAMG_RATE_'] == 0:
+                if i % self.nca_params['_DAMG_RATE_'] == 0:
                     mask = torch.tensor(half_volume_mask(size, 'rand'))
                     # * apply mask
                     x[-ndamg:] *= mask

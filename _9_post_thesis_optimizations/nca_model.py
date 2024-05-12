@@ -55,13 +55,13 @@ class nca_model(torch.nn.Module):
     
     def forward(self, _x):
         # * send to device
-        x = _x.to(self.device)
+        x = _x
         
         # * get alive mask
-        alive_mask = self.get_alive_mask(x).to(self.device)
+        alive_mask = self.get_alive_mask(x)
     
         # * perception step
-        p = self.pfunc(self.p, x)
+        p = self.pfunc(self.pobj, x)
         
         # * update step
         p = self.conv1(p)
@@ -69,7 +69,7 @@ class nca_model(torch.nn.Module):
         p = self.conv2(p)
         
         # * create stochastic mask
-        stochastic_mask = (torch.rand(_x[:, :1, :, :, :].shape) <= self.rate).to(self.device, torch.float32)
+        stochastic_mask = (torch.rand(_x[:, :1, :, :, :].shape) <= self.rate)
         
         # * perform stochastic update
         x = x + p * stochastic_mask

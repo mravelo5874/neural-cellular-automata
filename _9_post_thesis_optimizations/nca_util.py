@@ -305,20 +305,43 @@ def load_vox_as_tensor(_nca_params):
     pad = _nca_params['_PAD_']
     target_ten = func.pad(target_ten, (pad, pad, pad, pad, pad, pad), 'constant')
     target_ten = target_ten.clone().repeat(_nca_params['_BATCH_SIZE_'], 1, 1, 1, 1)
+    return target_ten
     
 def generate_pool(_nca_params, _seed_ten, _isotype):
     pool_size = _nca_params['_POOL_SIZE_']
-    pad = _nca_params['PAD_SIZE']
+    size = _nca_params['_SIZE_']+(2*_nca_params['_PAD_'])
     with torch.no_grad():
         pool = _seed_ten.clone().repeat(pool_size, 1, 1, 1, 1)
         # * randomize channel(s)
         if _isotype == 1:
             for j in range(pool_size):
-                pool[j, -1:] = torch.rand(pad, pad, pad)*np.pi*2.0
+                pool[j, -1:] = torch.rand(size, size, size)*np.pi*2.0
         elif _isotype == 3:
             for j in range(pool_size):
-                pool[j, -1:] = torch.rand(pad, pad, pad)*np.pi*2.0
-                pool[j, -2:-1] = torch.rand(pad, pad, pad)*np.pi*2.0
-                pool[j, -3:-2] = torch.rand(pad, pad, pad)*np.pi*2.0
+                pool[j, -1:] = torch.rand(size, size, size)*np.pi*2.0
+                pool[j, -2:-1] = torch.rand(size, size, size)*np.pi*2.0
+                pool[j, -3:-2] = torch.rand(size, size, size)*np.pi*2.0
 
     return pool
+
+def print_nca_params(_nca_params):
+    name = _nca_params['_NAME_']
+    logf = _nca_params['_LOG_FILE_']
+    ptype = _nca_params['_PTYPE_']
+    channels = _nca_params['_CHANNELS_']
+    hidden = _nca_params['_HIDDEN_']
+    hid_info = _nca_params['_SEED_HID_INFO_']
+    bsize = _nca_params['_BATCH_SIZE_']
+    psize = _nca_params['_POOL_SIZE_']
+    lr_upper = _nca_params['_UPPER_LR_']
+    lr_lower = _nca_params['_LOWER_LR_']
+    lr_step = _nca_params['_LR_STEP_']
+    
+    logprint(f'models/{name}/{logf}', f'model: {name}')
+    logprint(f'models/{name}/{logf}', f'type: {ptype}')
+    logprint(f'models/{name}/{logf}', f'channels: {channels}')
+    logprint(f'models/{name}/{logf}', f'hidden: {hidden}')
+    logprint(f'models/{name}/{logf}', f'hidden-seed-info: {hid_info}')
+    logprint(f'models/{name}/{logf}', f'batch-size: {bsize}')
+    logprint(f'models/{name}/{logf}', f'pool-size: {psize}')
+    logprint(f'models/{name}/{logf}', f'lr: {lr_upper}>{lr_lower} w/ {lr_step} step')

@@ -50,8 +50,8 @@ nca_params = {
 
 def ddp_setup(_rank: int, _world_size: int):
     os.environ['MASTER_ADDR'] = 'localhost'
-    os.environ['MASTER_PORT'] = '11235'
-    init_process_group(backend='nccl', rank=_rank, world_size=_world_size)
+    os.environ['MASTER_PORT'] = '29500'
+    init_process_group(backend='gloo', rank=_rank, world_size=_world_size)
 
 def run(_rank: int, _world_size: int):
     ddp_setup(_rank, _world_size)
@@ -59,6 +59,9 @@ def run(_rank: int, _world_size: int):
     # * regularly used params
     name = nca_params['_NAME_']
     logf = nca_params['_LOG_FILE_']
+    ptype = nca_params['_PTYPE_']
+    channels = nca_params['_CHANNELS_']
+    hidden = nca_params['_HIDDEN_']
     
     # * make directory for model files
     if not os.path.exists(f'models/{name}'):
@@ -77,7 +80,7 @@ def run(_rank: int, _world_size: int):
     logprint(f'models/{name}/{logf}', '========================')
     
     # * create model, optimizer, and lr-scheduler
-    vanilla_model = nca_model(_channels=nca_params['_CHANNELS_'], _hidden=nca_params['_HIDDEN_'], _ptype=nca_params['_PTYPE_'])
+    vanilla_model = nca_model(_channels=channels, _hidden=hidden, _ptype=ptype)
     ddp_model = DDP(vanilla_model, device_ids=[])
     optim = torch.optim.Adam(vanilla_model.parameters(), nca_params['_UPPER_LR_'])
     sched = torch.optim.lr_scheduler.CyclicLR(optim, nca_params['_LOWER_LR_'], nca_params['_UPPER_LR_'], step_size_up=nca_params['_LR_STEP_'], mode='triangular2', cycle_momentum=False)
@@ -92,15 +95,18 @@ def run(_rank: int, _world_size: int):
     isotype = vanilla_model.pobj.orientation_channels(vanilla_model.ptype)
     pool = generate_pool(nca_params, seed_ten, isotype)
     
+    # * print out parameters
+    print_nca_params(nca_params)
+    
     # * create trainer and begin training 
-    trainer = nca_trainer(ddp_model, optim, sched, seed_ten, target_ten, pool, nca_params, isotype)
+    trainer = nca_trainer(ddp_model, optim, sched, seed_ten, target_ten, pool, nca_params, isotype, _rank)
     trainer.begin()
     destroy_process_group()
 
 def main():
     # * setup distributed data parallel and spawn workers
     world_size = torch.cuda.device_count()
-    mp.spawn(run, args=(world_size), nprocs=world_size)
+    mp.spawn(run, args=(world_size,), nprocs=world_size)
 
 if __name__ == '__main__':
     main()
