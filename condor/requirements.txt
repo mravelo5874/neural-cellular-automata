@@ -4,6 +4,6 @@ torchvision
 torchaudio
 matplotlib
 requests
-moviepy
+# moviepy
 scipy
 gitpython
