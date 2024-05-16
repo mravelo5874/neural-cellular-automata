@@ -51,7 +51,7 @@ nca_params = {
 def ddp_setup(_rank: int, _world_size: int):
     os.environ['MASTER_ADDR'] = 'localhost'
     os.environ['MASTER_PORT'] = '29500'
-    init_process_group(backend='nccl', rank=_rank, world_size=_world_size)
+    init_process_group(backend='gloo', rank=_rank, world_size=_world_size)
 
 def run(_rank: int, _world_size: int):
      # * regularly used params
