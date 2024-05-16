@@ -125,4 +125,5 @@ def main():
     mp.spawn(run, args=(world_size,), nprocs=world_size)
 
 if __name__ == '__main__':
+    print(f'torch version: {torch.__version__}')
     main()
