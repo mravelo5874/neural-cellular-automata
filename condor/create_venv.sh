@@ -4,3 +4,4 @@ cd /u/marco/github/neural-cellular-automata
 python3 -m venv venv
 source venv/bin/activate
 pip install --no-cache-dir -r condor/requirements.txt
+pip install --no-cache-dir "git+https://github.com/facebookresearch/pytorch3d.git@stable"
