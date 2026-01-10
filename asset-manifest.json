@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/static/css/main.f648d629.css",
+    "main.js": "/static/js/main.a966f3ff.js",
+    "static/js/806.e09c2faa.chunk.js": "/static/js/806.e09c2faa.chunk.js",
+    "static/js/284.01e5d91a.chunk.js": "/static/js/284.01e5d91a.chunk.js",
+    "static/media/ort-wasm-simd-threaded.wasm": "/static/media/ort-wasm-simd-threaded.5726a4787647bcd72cb9.wasm",
+    "index.html": "/index.html",
+    "main.f648d629.css.map": "/static/css/main.f648d629.css.map",
+    "main.a966f3ff.js.map": "/static/js/main.a966f3ff.js.map",
+    "806.e09c2faa.chunk.js.map": "/static/js/806.e09c2faa.chunk.js.map",
+    "284.01e5d91a.chunk.js.map": "/static/js/284.01e5d91a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f648d629.css",
+    "static/js/main.a966f3ff.js"
+  ]
+}
