@@ -30,7 +30,7 @@ def load_model(_model, _dir, _device):
     p = params['pad']
     tensor = Utils.make_seed(params['size'], params['n_channels']).to(_device)
     tensor = nn.functional.pad(tensor, (p, p, p, p), 'constant', 0)
-    
+    print (f'model shape: {tensor.shape}')
     return model, tensor, params
     
 def main(argv=None):
@@ -98,6 +98,14 @@ def main(argv=None):
     # * start infinite game loop
     running = True
     mouse_down = False
+    # * recording functionality
+    record_tensor = False
+    record_start = None
+    record_duration_sec = 5
+    recording_directory = None
+    recording_iter = 1
+
+    # * main loop
     while running:
         # empty cache
         torch.cuda.empty_cache()
@@ -106,6 +114,19 @@ def main(argv=None):
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_q:
+                    # reset current model
+                    tensor = Utils.make_seed(params['size'], params['n_channels']).to(device)
+                    tensor = nn.functional.pad(tensor, (p, p, p, p), 'constant', 0)
+                    # create new directory for recordings
+                    record_start = datetime.datetime.now()
+                    timestamp = record_start.strftime('%b.%d.%Y_%H.%M.%S')
+                    recording_directory = f'{model_list[curr]}_rec_{timestamp}'
+                    os.mkdir(f'tensor_recordings/{recording_directory}')
+                    # start recording tensor values to file
+                    record_tensor = True
+                    recording_iter = 1
+                    print (f'starting tensor recording! will record for {record_duration_sec} seconds')
                 if event.key == pygame.K_r:
                     tensor = Utils.make_seed(params['size'], params['n_channels']).to(device)
                     tensor = nn.functional.pad(tensor, (p, p, p, p), 'constant', 0)
@@ -151,6 +172,19 @@ def main(argv=None):
         # * update tensor
         with torch.no_grad():
             tensor = model(tensor, angle * np.pi)
+
+        # * record tensor to file
+        if record_tensor:
+            now = datetime.datetime.now()
+            delta_sec = (now - record_start).seconds
+            # * stop recording if total duration exceeded
+            if delta_sec >= record_duration_sec:
+                record_tensor = False
+                print(f'stopping tensor recording! recording files saved to: /tensor_recordings/{recording_directory}/...')
+            # * save tensor values to file
+            tensor_np = tensor.clone().numpy()
+            np.save(f'tensor_recordings/{recording_directory}/{recording_iter}', tensor_np)
+            recording_iter += 1
         
         # * draw tensor to window
         window.fill((255, 255, 255))
@@ -161,8 +195,6 @@ def main(argv=None):
             torch.set_printoptions(threshold=10_000)
             torch.set_printoptions(profile="full")
             img = img.permute(1, 2, 0)
-            print ('img.shape: ', img.shape)
-            print ('img @ step 64: ', img)
         pixel = pygame.Surface((scale, scale))
         for j in range(size):
             for i in range(size):
