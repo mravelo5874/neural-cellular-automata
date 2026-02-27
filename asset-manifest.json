@@ -1,18 +1,18 @@
 {
   "files": {
     "main.css": "/neural-cellular-automata/static/css/main.f648d629.css",
-    "main.js": "/neural-cellular-automata/static/js/main.e00280b2.js",
-    "static/js/806.5f8941f0.chunk.js": "/neural-cellular-automata/static/js/806.5f8941f0.chunk.js",
+    "main.js": "/neural-cellular-automata/static/js/main.3d936609.js",
+    "static/js/806.199f712a.chunk.js": "/neural-cellular-automata/static/js/806.199f712a.chunk.js",
     "static/js/284.0806c023.chunk.js": "/neural-cellular-automata/static/js/284.0806c023.chunk.js",
     "static/media/ort-wasm-simd-threaded.wasm": "/neural-cellular-automata/static/media/ort-wasm-simd-threaded.5726a4787647bcd72cb9.wasm",
     "index.html": "/neural-cellular-automata/index.html",
     "main.f648d629.css.map": "/neural-cellular-automata/static/css/main.f648d629.css.map",
-    "main.e00280b2.js.map": "/neural-cellular-automata/static/js/main.e00280b2.js.map",
-    "806.5f8941f0.chunk.js.map": "/neural-cellular-automata/static/js/806.5f8941f0.chunk.js.map",
+    "main.3d936609.js.map": "/neural-cellular-automata/static/js/main.3d936609.js.map",
+    "806.199f712a.chunk.js.map": "/neural-cellular-automata/static/js/806.199f712a.chunk.js.map",
     "284.0806c023.chunk.js.map": "/neural-cellular-automata/static/js/284.0806c023.chunk.js.map"
   },
   "entrypoints": [
     "neural-cellular-automata/static/css/main.f648d629.css",
-    "neural-cellular-automata/static/js/main.e00280b2.js"
+    "neural-cellular-automata/static/js/main.3d936609.js"
   ]
 }
