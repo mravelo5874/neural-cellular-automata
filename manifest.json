@@ -1,7 +1,7 @@
 {
   "short_name": "nca",
   "name": "neural cellular automata",
-  "start_url": "./neural-cellular-automata",
+  "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
