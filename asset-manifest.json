@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/neural-cellular-automata/static/css/main.f648d629.css",
-    "main.js": "/neural-cellular-automata/static/js/main.a966f3ff.js",
-    "/neural-cellular-automatastatic/js/806.e09c2faa.chunk.js": "/neural-cellular-automata/static/js/806.e09c2faa.chunk.js",
-    "/neural-cellular-automatastatic/js/284.01e5d91a.chunk.js": "/neural-cellular-automata/static/js/284.01e5d91a.chunk.js",
-    "/neural-cellular-automatastatic/media/ort-wasm-simd-threaded.wasm": "/neural-cellular-automata/static/media/ort-wasm-simd-threaded.5726a4787647bcd72cb9.wasm",
+    "main.css": "/static/css/main.f648d629.css",
+    "main.js": "/static/js/main.85918d11.js",
+    "static/js/806.2d0f513e.chunk.js": "/static/js/806.2d0f513e.chunk.js",
+    "static/js/284.0806c023.chunk.js": "/static/js/284.0806c023.chunk.js",
+    "static/media/ort-wasm-simd-threaded.wasm": "/static/media/ort-wasm-simd-threaded.5726a4787647bcd72cb9.wasm",
     "index.html": "/index.html",
-    "main.f648d629.css.map": "/neural-cellular-automata/static/css/main.f648d629.css.map",
-    "main.a966f3ff.js.map": "/neural-cellular-automata/static/js/main.a966f3ff.js.map",
-    "806.e09c2faa.chunk.js.map": "/neural-cellular-automata/static/js/806.e09c2faa.chunk.js.map",
-    "284.01e5d91a.chunk.js.map": "/neural-cellular-automata/static/js/284.01e5d91a.chunk.js.map"
+    "main.f648d629.css.map": "/static/css/main.f648d629.css.map",
+    "main.85918d11.js.map": "/static/js/main.85918d11.js.map",
+    "806.2d0f513e.chunk.js.map": "/static/js/806.2d0f513e.chunk.js.map",
+    "284.0806c023.chunk.js.map": "/static/js/284.0806c023.chunk.js.map"
   },
   "entrypoints": [
-    "neural-cellular-automata/static/css/main.f648d629.css",
-    "neural-cellular-automata/static/js/main.a966f3ff.js"
+    "static/css/main.f648d629.css",
+    "static/js/main.85918d11.js"
   ]
 }
